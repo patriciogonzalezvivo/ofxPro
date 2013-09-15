@@ -1,12 +1,12 @@
 //
-//  GridComposition.cpp
+//  UIGrid.cpp
 //  Basic
 //
 //  Created by Patricio Gonzalez Vivo on 8/31/13.
 //
 //
 
-#include "GridComposition.h"
+#include "UIGrid.h"
 
 //  1cm     =   28.3 px.
 //  1inch   =   2.54 cm
@@ -17,7 +17,7 @@ float cmToInches = 2.54;
 float inchesToCm = 0.393701;
 float pixelToInches = pixelToCm*cmToInches;
 
-GridComposition::GridComposition(){
+UIGrid::UIGrid(){
     
     refRow = 0;
     refCol = 0;
@@ -37,7 +37,7 @@ GridComposition::GridComposition(){
     gui = NULL;
 }
 
-GridComposition::~GridComposition(){
+UIGrid::~UIGrid(){
 
     UIClass::~UIClass();
     
@@ -58,19 +58,19 @@ GridComposition::~GridComposition(){
     
 }
 
-void GridComposition::setResolutionToCm(){
+void UIGrid::setResolutionToCm(){
     
     subLineResolution = 10.0;
     setResolution(pixelToCm*subLineResolution);
 }
 
-void GridComposition::setResolutionToInches(){
+void UIGrid::setResolutionToInches(){
     
     setResolution(pixelToInches);
     subLineResolution = 8.0;
 }
 
-void GridComposition::setupUI(){
+void UIGrid::setupUI(){
     
     gui->addLabel("Lines");
     colorSampler =  gui->addImageSampler("Lines_Color", &colorSampleImage, (float)colorSampleImage.getWidth()/2, (float)colorSampleImage.getHeight()/2 );
@@ -95,7 +95,7 @@ void GridComposition::setupUI(){
     
 }
 
-void GridComposition::guiEvent(ofxUIEventArgs &e){
+void UIGrid::guiEvent(ofxUIEventArgs &e){
     
     if (gui != NULL){
         string name = e.widget->getName();
@@ -130,7 +130,7 @@ void GridComposition::guiEvent(ofxUIEventArgs &e){
     }
 }
 
-void GridComposition::makeGrid(){
+void UIGrid::makeGrid(){
     margins = marginScale*resolution;
     
     skip.clear();
@@ -166,7 +166,7 @@ void GridComposition::makeGrid(){
     cross.makeGrid();
 };
 
-void GridComposition::print(int _layerNumber){
+void UIGrid::print(int _layerNumber){
     
     if (bEnable){
         if (_layerNumber == -1 || _layerNumber == 0){
@@ -205,7 +205,7 @@ void GridComposition::print(int _layerNumber){
     }
 }
 
-void GridComposition::draw(){
+void UIGrid::draw(){
     
     if (bEnable){
         cross.draw();

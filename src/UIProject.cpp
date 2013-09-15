@@ -454,8 +454,7 @@ void UIProject::setupCoreGuis(){
     setupSystemGui();
     setupRenderGui();
     
-//    setupBackgroundGui();
-    background = new Background();
+    background = new UIBackground();
     background->setLinkedUIs( &guis );
     addGuiClass( *background );
     

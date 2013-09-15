@@ -1,6 +1,5 @@
 //
-//  PostRender.h
-//  LeapMotion
+//  UIPostRender.h
 //
 //  Created by Patricio Gonzalez Vivo on 9/6/13.
 //
@@ -10,10 +9,10 @@
 
 #include "UIClass.h"
 
-class PostRender : public UIClass {
+class UIPostRender : public UIClass {
 public:
     
-    PostRender();
+    UIPostRender();
     
     string getClassName(){return "POST-RENDER"; }
     void setupUI();

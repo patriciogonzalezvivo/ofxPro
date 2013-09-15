@@ -1,5 +1,5 @@
 //
-//  GridComposition.h
+//  UIGrid.h
 //
 //  Created by Patricio Gonzalez Vivo on 8/30/13.
 //
@@ -10,11 +10,11 @@
 #include "GridBox.h"
 #include "UIClass.h"
 
-class GridComposition : public Grid, public UIClass {
+class UIGrid : public Grid, public UIClass {
 public:
     
-    GridComposition();
-    ~GridComposition();
+    UIGrid();
+    ~UIGrid();
     
     void    setResolutionToCm();
     void    setResolutionToInches();

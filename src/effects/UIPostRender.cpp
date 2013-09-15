@@ -1,16 +1,15 @@
 //
-//  PostRender.cpp
-//  LeapMotion
+//  UIPostRender.cpp
 //
 //  Created by Patricio Gonzalez Vivo on 9/6/13.
 //
 //
 
-#include "PostRender.h"
+#include "UIPostRender.h"
 
 #define STRINGIFY(A) #A
 
-PostRender::PostRender(){
+UIPostRender::UIPostRender(){
 
     string fragShader = STRINGIFY(
                                   uniform sampler2DRect tex0;
@@ -119,7 +118,7 @@ PostRender::PostRender(){
     bEnable = true;
 }
 
-void PostRender::setupUI(){
+void UIPostRender::setupUI(){
 
 //  colorSampler =  gui->addImageSampler("color", &colorSampleImage, (float)colorSampleImage.getWidth()/2, (float)colorSampleImage.getHeight()/2 );
     
@@ -129,7 +128,7 @@ void PostRender::setupUI(){
     gui->addSlider("Grain_Freq", 0.0, 0.1, &grainFreq);
 }
 
-void PostRender::guiEvent(ofxUIEventArgs &e){
+void UIPostRender::guiEvent(ofxUIEventArgs &e){
     
     if (gui != NULL){
         string name = e.widget->getName();
@@ -142,7 +141,7 @@ void PostRender::guiEvent(ofxUIEventArgs &e){
     }
 }
 
-void PostRender::begin(){
+void UIPostRender::begin(){
     
     if (bEnable){
         shader.begin();
@@ -157,7 +156,7 @@ void PostRender::begin(){
     }
 }
 
-void PostRender::end(){
+void UIPostRender::end(){
     if (bEnable){
         shader.end();
     }

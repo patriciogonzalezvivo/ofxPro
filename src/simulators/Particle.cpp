@@ -27,6 +27,10 @@ void Particle::addForce(ofPoint _force){
     acc += _force;
 };
 
+void Particle::addForceTo(ofPoint _target, bool _slowdown){
+    acc += steer(_target, _slowdown);
+}
+
 void Particle::addRepulsionForce(ofPoint posOfForce, float radius, float scale){
     
 	// ----------- (2) calculate the difference & length

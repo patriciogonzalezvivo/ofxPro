@@ -4,7 +4,7 @@
 
 #include "Light.h"
 #include "Material.h"
-#include "Background.h"
+#include "UIBackground.h"
 
 #include "UIClass.h"
 
@@ -170,7 +170,7 @@ protected:
 	
     //  BACKGROUND
     //
-    Background      *background;
+    UIBackground      *background;
     
 	ofxUIRadio      *presetRadio;
 	

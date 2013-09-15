@@ -11,11 +11,11 @@
 #include "UIClass.h"
 #include "Particle.h"
 
-class Background : public UIClass{
+class UIBackground : public UIClass{
 public:
 
-    Background();
-    ~Background();
+    UIBackground();
+    ~UIBackground();
     
     void    setupUI();
     void    setLinkedUIs( vector<ofxUISuperCanvas *> *_guis );
@@ -43,4 +43,6 @@ protected:
     ofxUISlider     *hueSlider;
     ofxUISlider     *satSlider;
     ofxUISlider     *briSlider;
+    
+    bool            bChange;
 };

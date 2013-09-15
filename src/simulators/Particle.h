@@ -16,6 +16,7 @@ public:
     ofPoint getVel();
     
     void    addForce(ofPoint _force);
+    void    addForceTo( ofPoint _target, bool _slowdown = false);
     
     void    addRepulsionForce(ofPoint p, float radius, float scale);
     void    addRepulsionForce(Particle *p, float radius, float scale);
