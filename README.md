@@ -1,3 +1,8 @@
+# UIProject for openFrameworks
+
+Prototyping tool based on Reza Ali's Rezonator
+
+
 ### Included Addons
 	
 * [ofxCameraSaveLoad](https://github.com/roymacdonald/ofxCameraSaveLoad) by Roy MacDonald

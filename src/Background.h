@@ -21,8 +21,10 @@ public:
     void    setLinkedUIs( vector<ofxUISuperCanvas *> *_guis );
     string  getClassName(){return "BACKGROUND"; }
     
-    
     void    draw();
+    
+    ofFloatColor    color;
+    ofFloatColor    color2;
     
 protected:
     
@@ -31,12 +33,10 @@ protected:
     vector<ofxUISuperCanvas *> *guis;
     
     int             gradientMode;
-	
-    ofFloatColor    color;
+	    
     Particle        HSB;
     ofPoint         HSBTarget;
-    
-    ofFloatColor    color2;
+
     Particle        HSB2;
     ofPoint         HSBTarget2;
     

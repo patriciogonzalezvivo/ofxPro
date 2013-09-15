@@ -49,7 +49,7 @@ EdgeDetection::EdgeDetection(){
     bEnable = true;
 }
 
-void EdgeDetection::setupGui(){
+void EdgeDetection::setupUI(){
 
 }
 

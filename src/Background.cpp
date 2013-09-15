@@ -67,6 +67,13 @@ void Background::guiEvent(ofxUIEventArgs &e){
     
     color.setHsb(HSB.x, HSB.y, HSB.z);
     color2.setHsb(HSB2.x, HSB2.y, HSB2.z);
+//    
+//    if (guis != NULL){
+//        for(int i = 0; i < guis->size(); i++){
+//            (*guis)[i]->setWidgetColor(OFX_UI_WIDGET_COLOR_BACK, ofColor(HSB.z*255,OFX_UI_COLOR_BACK_ALPHA*4.0));
+//            (*guis)[i]->setColorBack( ofColor((1.0-HSB.z)*255, OFX_UI_COLOR_BACK_ALPHA*4.0));
+//        }
+//    }
 }
 
 void Background::draw(){

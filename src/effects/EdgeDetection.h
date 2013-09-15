@@ -15,7 +15,7 @@ public:
     EdgeDetection();
     
     string getClassName(){return "EDGE_DETECTION"; }
-    void setupGui();
+    void setupUI();
     
     void begin();
     void end();
