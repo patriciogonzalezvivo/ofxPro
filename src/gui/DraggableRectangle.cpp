@@ -148,8 +148,8 @@ void DraggableRectangle::draw(){
     ofPushMatrix();
     ofTranslate(x, y);
     ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL);
-    ofSetColor( 0 );
-    ofDrawBitmapString(name,15,-15);
+    ofSetColor(255,0,0,150);
+    ofDrawBitmapString(name,15,-5);
     
     ofNoFill();
     ofSetColor(255,0,0,150);
@@ -169,7 +169,6 @@ void DraggableRectangle::draw(){
 void DraggableRectangle::drawBrakets(ofRectangle _rect, float size, float margin){
     
     ofPushStyle();
-    ofSetLineWidth(2);
     
     ofPushMatrix();
     ofTranslate(_rect.getTopLeft() + ofPoint(-margin,-margin));

@@ -29,5 +29,5 @@ public:
     string  name;
     
 protected:
-    void drawBrakets(ofRectangle _rect, float size, float margin);
+    void    drawBrakets(ofRectangle _rect, float size, float margin);
 };
