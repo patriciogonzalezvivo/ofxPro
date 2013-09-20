@@ -11,12 +11,8 @@
 #include "UIClass.h"
 
 #include "PingPong.h"
+#include "Uniform.h"
 
-enum UniformType{
-	UNIFORM_SAMPLE2DRECT = 0,
-    UNIFORM_VEC2,
-    UNIFORM_FLOAT
-};
 
 class UIShader : public UIClass {
 public:
@@ -35,7 +31,7 @@ protected:
     bool reloadShader(string _filePath = "none");
     
     void addUniform(UniformType _type, string _name);
-    void reloadUniforms(string &_text);
+//    void reloadUniforms(string &_text);
     
     std::time_t getLastModified( ofFile& _file );
     
@@ -46,7 +42,7 @@ protected:
     int                 lastTimeCheckMillis;
     int                 millisBetweenFileCheck;
     
-//    vector<TextBox*>        uniforms;
+    vector<Uniform*>        uniforms;
     
     int                 width, height, nTex;
 };

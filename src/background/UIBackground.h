@@ -1,6 +1,5 @@
 //
 //  Background.h
-//  Thesis
 //
 //  Created by Patricio Gonzalez Vivo on 9/14/13.
 //
@@ -17,20 +16,23 @@ public:
     UIBackground();
     ~UIBackground();
     
-    void    setupUI();
-    void    setLinkedUIs( vector<ofxUISuperCanvas *> *_guis );
+    virtual void    setupUI();
+    
+    void    linkUIs( vector<ofxUISuperCanvas *> *_guis );
+    void    linkCamera( ofEasyCam *_cam );
+    
     string  getClassName(){return "BACKGROUND"; }
     
-    void    draw();
+    virtual void    draw();
     
     ofFloatColor    color;
     ofFloatColor    color2;
     
 protected:
-    
-    void    guiEvent(ofxUIEventArgs &e);
+    virtual void    guiEvent(ofxUIEventArgs &e);
     
     vector<ofxUISuperCanvas *> *guis;
+    ofEasyCam       *cam;
     
     int             gradientMode;
 	    

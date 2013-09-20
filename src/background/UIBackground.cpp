@@ -1,6 +1,5 @@
 //
 //  UIBackground.cpp
-//  Thesis
 //
 //  Created by Patricio Gonzalez Vivo on 9/14/13.
 //
@@ -10,6 +9,7 @@
 
 UIBackground::UIBackground(){
     guis = NULL;
+    cam = NULL;
     
     hueSlider = NULL;
     satSlider = NULL;
@@ -61,8 +61,12 @@ void UIBackground::setupUI(){
     gui->autoSizeToFitWidgets();
 }
 
-void UIBackground::setLinkedUIs( vector<ofxUISuperCanvas *> *_guis ){
+void UIBackground::linkUIs( vector<ofxUISuperCanvas *> *_guis ){
     guis = _guis;
+}
+
+void UIBackground::linkCamera( ofEasyCam *_cam ){
+    cam = _cam;
 }
 
 void UIBackground::guiEvent(ofxUIEventArgs &e){

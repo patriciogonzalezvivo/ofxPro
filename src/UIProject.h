@@ -4,10 +4,9 @@
 
 #include "Light.h"
 #include "Material.h"
-#include "UIBackground.h"
 
 #include "UIClass.h"
-
+#include "UIBackground.h"
 
 //  ADDONS
 //
@@ -65,7 +64,7 @@ class UIProject {
 	//APP CYCLE EVENTS
 	//pre allocate any assets that will cause freezes
 	virtual void setup();
-	
+    
 	//these events are registered only when running the simulation
 	virtual void update(ofEventArgs & args);
 	virtual void draw(ofEventArgs & args);
@@ -87,11 +86,6 @@ class UIProject {
 	virtual void play();
 	virtual void stop();
 
-    //Drawing Helpers
-    void billBoard(ofVec3f globalCamPosition, ofVec3f globelObjectPosition);
-    void drawTexturedQuad();
-    void drawNormalizedTexturedQuad();
-	
     //Core Param Setup
     void setupAppParams();
     void setupDebugParams();
@@ -119,6 +113,8 @@ class UIProject {
 	void setupPresetGui();
 	void guiPresetEvent(ofxUIEventArgs &e);
 	
+    virtual void setupBackground();
+    
     void setupMaterial(string name, Material *m);
     void guiMaterialEvent(ofxUIEventArgs &e);
 	

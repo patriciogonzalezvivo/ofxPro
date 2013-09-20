@@ -53,8 +53,6 @@ void UIProject::play(){
 
 void UIProject::stop(){
     
-    selfEnd();
-    
     hideGUIS();
     saveGUIS();
     cam.disableMouseInput();
@@ -66,6 +64,8 @@ void UIProject::stop(){
     ofUnregisterKeyEvents(this);
     ofRemoveListener(ofEvents().update, this, &UIProject::update);
     ofRemoveListener(ofEvents().draw, this, &UIProject::draw);
+    
+    selfEnd();
 }
 
 void UIProject::update(ofEventArgs & args){
@@ -454,14 +454,13 @@ void UIProject::setupCoreGuis(){
     setupSystemGui();
     setupRenderGui();
     
-    background = new UIBackground();
-    background->setLinkedUIs( &guis );
-    addGuiClass( *background );
+    setupBackground();
     
     setupLightingGui();
     setupCameraGui();
     setupMaterial("MATERIAL 1", mat);
     setupPointLight("POINT LIGHT 1");
+    
     setupPresetGui();
 }
 
@@ -770,6 +769,13 @@ void UIProject::guiPresetEvent(ofxUIEventArgs &e){
     if(t->getValue()){
         loadPresetGUISFromName(e.widget->getName());
     }
+}
+
+void UIProject::setupBackground(){
+    background = new UIBackground();
+    background->linkUIs( &guis );
+    background->linkCamera( &cam );
+    addGuiClass( *background );
 }
 
 void UIProject::setupMaterial(string name, Material *m){
@@ -1127,42 +1133,6 @@ ofFbo& UIProject::getRenderTarget(){
     }
     
     return renderTarget;
-}
-
-void UIProject::billBoard(ofVec3f globalCamPosition, ofVec3f globelObjectPosition){
-    ofVec3f objectLookAt = ofVec3f(0,0,1);
-    ofVec3f objToCam = globalCamPosition - globelObjectPosition;
-    objToCam.normalize();
-    float theta = objectLookAt.angle(objToCam);
-    ofVec3f axisOfRotation = objToCam.crossed(objectLookAt);
-    axisOfRotation.normalize();
-    glRotatef(-theta, axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
-}
-
-void UIProject::drawTexturedQuad(){
-    glBegin (GL_QUADS);
-    glTexCoord2f (0.0, 0.0);
-    glVertex3f (0.0, 0.0, 0.0);
-    glTexCoord2f (ofGetWidth(), 0.0);
-    glVertex3f (ofGetWidth(), 0.0, 0.0);
-    glTexCoord2f (ofGetWidth(), ofGetHeight());
-    glVertex3f (ofGetWidth(), ofGetHeight(), 0.0);
-    glTexCoord2f (0.0, ofGetHeight());
-    glVertex3f (0.0, ofGetHeight(), 0.0);
-    glEnd ();
-}
-
-void UIProject::drawNormalizedTexturedQuad(){
-    glBegin (GL_QUADS);
-    glTexCoord2f (0.0, 0.0);
-    glVertex3f (0.0, 0.0, 0.0);
-    glTexCoord2f (1.0, 0.0);
-    glVertex3f (ofGetWidth(), 0.0, 0.0);
-    glTexCoord2f (1.0, 1.0);
-    glVertex3f (ofGetWidth(), ofGetHeight(), 0.0);
-    glTexCoord2f (0.0, 1.0);
-    glVertex3f (0.0, ofGetHeight(), 0.0);
-    glEnd ();
 }
 
 void UIProject::selfPostDraw(){
