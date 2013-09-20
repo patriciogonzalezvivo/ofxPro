@@ -9,7 +9,6 @@
 #pragma once
 
 #include "UIClass.h"
-#include "UIBackground.h"
 
 class UIFog : public UIClass{
 public:
@@ -25,6 +24,7 @@ public:
     
     ofFloatColor *color;
     
+    float   density_exponent;
     float   density;
     
 protected:
