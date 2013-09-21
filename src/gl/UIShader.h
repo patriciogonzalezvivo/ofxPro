@@ -16,11 +16,13 @@
 
 class UIShader : public UIClass {
 public:
+    UIShader();
     
     string getClassName(){return "SHADER"; }
     void setupUI();
     
     void loadFrag(string _fragShader );
+    void setTexture(ofBaseDraws& tex, int _texNum = 0);
     
     void begin();
     void end();
@@ -29,9 +31,7 @@ protected:
     void guiEvent(ofxUIEventArgs &e);
     void checkShaderFile();
     bool reloadShader(string _filePath = "none");
-    
     void addUniform(UniformType _type, string _name);
-//    void reloadUniforms(string &_text);
     
     std::time_t getLastModified( ofFile& _file );
     
@@ -42,7 +42,9 @@ protected:
     int                 lastTimeCheckMillis;
     int                 millisBetweenFileCheck;
     
-    vector<Uniform*>        uniforms;
+    vector<Uniform*>    uniforms;
+    ofFbo               *textures;
     
-    int                 width, height, nTex;
+    int                 nTextures;
+    int                 textureCounter;
 };

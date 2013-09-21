@@ -100,8 +100,6 @@ void UIGrid::guiEvent(ofxUIEventArgs &e){
     if (gui != NULL){
         string name = e.widget->getName();
         
-        cout << "HERE " << name << endl;
-        
         if( name == "Cross_Color"){
             ofxUIImageSampler* sampler = (ofxUIImageSampler *) e.widget;
             float alpha = cross.color.a;

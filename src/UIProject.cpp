@@ -168,8 +168,6 @@ void UIProject::draw(ofEventArgs & args){
 }
 
 void UIProject::exit(ofEventArgs & args){
-//    delete bgColor;
-//    delete bgColor2;
     
     saveGUIS();
     
@@ -452,16 +450,19 @@ void UIProject::setupCoreGuis(){
     
     setupGui();
     setupSystemGui();
+    
     setupRenderGui();
+    
+    setupLightingGui();
+    
+    setupCameraGui();
+    
+    setupPresetGui();
     
     setupBackground();
     
-    setupLightingGui();
-    setupCameraGui();
     setupMaterial("MATERIAL 1", mat);
     setupPointLight("POINT LIGHT 1");
-    
-    setupPresetGui();
 }
 
 void UIProject::setupGui(){
@@ -840,8 +841,7 @@ void UIProject::guiMaterialEvent(ofxUIEventArgs &e){
 void UIProject::setupPointLight(string name){
     Light *l = new Light();
     l->light.setPointLight();
-	//removes light until we are active
-	l->light.destroy();
+//	l->light.destroy();
 	
     lights[name] = l;
     
@@ -872,7 +872,7 @@ void UIProject::setupPointLight(string name){
 void UIProject::setupSpotLight(string name){
     Light *l = new Light();
     l->light.setSpotlight();
-	l->light.destroy();
+//	l->light.destroy();
 	
     lights[name] = l;
     
@@ -1125,7 +1125,19 @@ ofFbo& UIProject::getRenderTarget(){
     
     if(!renderTarget.isAllocated() || renderTarget.getWidth() != ofGetWidth() || renderTarget.getHeight() != ofGetHeight()){
         
-        renderTarget.allocate(ofGetWidth(), ofGetHeight(), GL_RGB);
+        ofFbo::Settings settings;
+        settings.width = ofGetWidth();
+        settings.height = ofGetHeight();
+        settings.internalformat = GL_RGB;
+        settings.numSamples = 0;
+        settings.useDepth = true;
+        settings.useStencil = true;
+        settings.depthStencilAsTexture = true;
+        settings.textureTarget = ofGetUsingArbTex() ? GL_TEXTURE_RECTANGLE_ARB : GL_TEXTURE_2D;
+        
+        renderTarget.allocate(settings);
+//        renderTarget.allocate(ofGetWidth(), ofGetHeight(), GL_RGB);
+        
 		renderTarget.begin();
 		ofClear(0,0,0,0);
 		renderTarget.end();

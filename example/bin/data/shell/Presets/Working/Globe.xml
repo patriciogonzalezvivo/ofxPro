@@ -1,0 +1,57 @@
+<Canvas>
+    <Kind>42</Kind>
+    <Name>Globe</Name>
+    <IsMinified>1</IsMinified>
+    <XPosition>1.000000000</XPosition>
+    <YPosition>24.000000000</YPosition>
+</Canvas>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Globe_Coast_Alpha</Name>
+    <Value>1.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Globe_Rivers_Alpha</Name>
+    <Value>1.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Globe_Halo_Scale</Name>
+    <Value>0.295566499</Value>
+</Widget>
+<Widget>
+    <Kind>28</Kind>
+    <Name>Globe_Halo_Color</Name>
+    <XValue>0.210937500</XValue>
+    <YValue>0.515625000</YValue>
+    <RColor>61</RColor>
+    <GColor>255</GColor>
+    <BColor>255</BColor>
+    <AColor>255</AColor>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Globe_Halo_Alpha</Name>
+    <Value>1.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Globe_Solid_Scale</Name>
+    <Value>0.290640384</Value>
+</Widget>
+<Widget>
+    <Kind>28</Kind>
+    <Name>Globe_Solid_Color</Name>
+    <XValue>0.515625000</XValue>
+    <YValue>0.484375000</YValue>
+    <RColor>22</RColor>
+    <GColor>0</GColor>
+    <BColor>21</BColor>
+    <AColor>255</AColor>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Globe_Solid_Alpha</Name>
+    <Value>1.000000000</Value>
+</Widget>

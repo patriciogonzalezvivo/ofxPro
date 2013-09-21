@@ -1,0 +1,14 @@
+<positions>
+    <element name="Camera">
+        <x>4.000000000</x>
+        <y>940.000000000</y>
+        <width>1672.000000000</width>
+        <height>40.000000000</height>
+    </element>
+    <element name="Intro-Outro">
+        <x>4.000000000</x>
+        <y>986.000000000</y>
+        <width>1672.000000000</width>
+        <height>40.000000000</height>
+    </element>
+</positions>

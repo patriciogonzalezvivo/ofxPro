@@ -1,0 +1,5 @@
+ofxCameraSaveLoad
+ofxGenerative
+ofxUI
+ofxUIProject
+ofxXmlSettings

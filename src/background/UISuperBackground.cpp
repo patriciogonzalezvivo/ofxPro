@@ -142,6 +142,7 @@ void UISuperBackground::draw(){
             shader.setUniform1f("freq", 0.001);
             fbo.draw(0, 0);
             shader.end();
+
             
         } else {
             ofSetSmoothLighting(false);
@@ -150,14 +151,4 @@ void UISuperBackground::draw(){
         
         ofPopStyle();
     }
-}
-
-void UISuperBackground::billBoard(ofVec3f globalCamPosition){
-    ofVec3f objectLookAt = ofVec3f(0,0,1);
-    ofVec3f objToCam = globalCamPosition;
-    objToCam.normalize();
-    float theta = objectLookAt.angle(objToCam);
-    ofVec3f axisOfRotation = objToCam.crossed(objectLookAt);
-    axisOfRotation.normalize();
-    glRotatef(-theta, axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 }

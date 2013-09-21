@@ -20,8 +20,6 @@ public:
 protected:
 	virtual void update(ofEventArgs & args);
     
-    void        billBoard( ofVec3f globalCamPosition );
-    
     ofFbo       fbo;
     ofShader    shader;
     ofMesh      mesh;

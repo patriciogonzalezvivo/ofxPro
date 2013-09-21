@@ -72,14 +72,7 @@ void UIBackground::linkCamera( ofEasyCam *_cam ){
 void UIBackground::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
     
-    if(name == "BRI"){
-        if (guis != NULL){
-            for(int i = 0; i < guis->size(); i++){
-                (*guis)[i]->setWidgetColor(OFX_UI_WIDGET_COLOR_BACK, ofColor(HSBTarget.z*255,OFX_UI_COLOR_BACK_ALPHA*4.0));
-                (*guis)[i]->setColorBack( ofColor((1.0-HSBTarget.z)*255, OFX_UI_COLOR_BACK_ALPHA*4.0));
-            }
-        }
-    } else if(name == "GRADIENT"){
+    if(name == "GRADIENT"){
         ofxUIToggle *t = (ofxUIToggle *) e.widget;
         if(t->getValue()){
             gradientMode = OF_GRADIENT_CIRCULAR;
@@ -96,6 +89,24 @@ void UIBackground::guiEvent(ofxUIEventArgs &e){
             satSlider->setVisible(false);
             briSlider->setVisible(false);
             gui->autoSizeToFitWidgets();
+        }
+    }
+    
+    if(name == "BRI" || name == "BRI2" || name == "GRADIENT"){
+        if (guis != NULL){
+            float guiBgBrigtness = 0;
+            
+            if(gradientMode == OF_GRADIENT_CIRCULAR){
+                guiBgBrigtness = HSBTarget2.z;
+            }else {
+                guiBgBrigtness = HSBTarget.z;
+            }
+            
+            for(int i = 0; i < guis->size(); i++){
+                (*guis)[i]->setWidgetColor(OFX_UI_WIDGET_COLOR_BACK, ofColor(guiBgBrigtness*255,OFX_UI_COLOR_BACK_ALPHA*4.0));
+                (*guis)[i]->setColorBack( ofColor((1.0-guiBgBrigtness)*255, OFX_UI_COLOR_BACK_ALPHA*4.0));
+            }
+            
         }
     }
     
@@ -126,8 +137,6 @@ void UIBackground::draw(){
                 bChange = false;
             }
         }
-        
-        
         
         ofPushStyle();
         ofClear(0,0,0);
