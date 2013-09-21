@@ -3,7 +3,7 @@
     <Name>SystemSettings</Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>174.000000000</YPosition>
+    <YPosition>149.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -13,25 +13,25 @@
 <Widget>
     <Kind>4</Kind>
     <Name>Buffer</Name>
-    <Value>102.952720642</Value>
+    <Value>117.290641785</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Noise</Name>
-    <Value>0.886699498</Value>
+    <Value>0.295566499</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Radio</Name>
-    <Value>11.330049515</Value>
+    <Value>13.300492287</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Rotation</Name>
-    <Value>9.290639877</Value>
+    <Value>7.827586174</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Translation</Name>
-    <Value>0.461280882</Value>
+    <Value>0.561576366</Value>
 </Widget>

@@ -18,6 +18,7 @@
 		369d5a63422511201f70eaade1683ad5 /* ofxElectroStaticBehavior.cpp in Sources */ = {isa = PBXBuildFile; fileRef = c17d5a1b9272ef9e52204f48061b6de8 /* ofxElectroStaticBehavior.cpp */; };
 		37b0487e1f8517b8278f36c860ebfcb4 /* ofxRParticleGlowieRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = d2dac925a888bb60a301a32b89b9dc2b /* ofxRParticleGlowieRenderer.cpp */; };
 		38a7cb165dcfbf60ecf65b289f8aa0be /* ofxSwarmBehavior.cpp in Sources */ = {isa = PBXBuildFile; fileRef = abd06242539292bb6bf7aa388274a6d8 /* ofxSwarmBehavior.cpp */; };
+		3D27E1E217EE5336002BB580 /* UILight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D27E1E117EE5336002BB580 /* UILight.cpp */; };
 		53655c7ced2821910f86571b1507446f /* ofxBehavior.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04f8447d49347c1f6ed21f2c6afc2855 /* ofxBehavior.cpp */; };
 		55a08d3e7f4a572c38886546f5288957 /* ofxPerlinBehavior.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96d901f19738236af901c8b5003ee1ef /* ofxPerlinBehavior.cpp */; };
 		580f5f8c76d3a8082aa03d5bb9c817bc /* Page.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99e76aad240a09a17511c7831f1eeaed /* Page.cpp */; };
@@ -127,6 +128,7 @@
 		32fa0a7095256e3744900a394c912dab /* Grid.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Grid.cpp; path = ../../../addons/ofxUIProject/src/grids/Grid.cpp; sourceTree = SOURCE_ROOT; };
 		334840ca6b3402c8c30cac4e645376bb /* ofxUIOFWrapper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIOFWrapper.h; path = ../../../addons/ofxUI/src/ofxUIOFWrapper.h; sourceTree = SOURCE_ROOT; };
 		375b3c175823cb54d59b1335cffa200a /* ofxBehavior.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxBehavior.h; path = ../../../addons/ofxGenerative/src/ofxBehavior.h; sourceTree = SOURCE_ROOT; };
+		3D27E1E117EE5336002BB580 /* UILight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UILight.cpp; path = ../src/gl/UILight.cpp; sourceTree = "<group>"; };
 		3abf9f0fb0891b9477e6d4bba2290fde /* UIPostRender.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UIPostRender.h; path = ../../../addons/ofxUIProject/src/gl/UIPostRender.h; sourceTree = SOURCE_ROOT; };
 		4117b8c24d49837d3df9c23bd2405bdc /* ofxUIToggle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIToggle.h; path = ../../../addons/ofxUI/src/ofxUIToggle.h; sourceTree = SOURCE_ROOT; };
 		42e97e3d4b7f2b73adda01ddb2128f50 /* ofxDamperBehavior.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxDamperBehavior.cpp; path = ../../../addons/ofxGenerative/src/ofxDamperBehavior.cpp; sourceTree = SOURCE_ROOT; };
@@ -275,7 +277,7 @@
 		f9df961b5e7d4c4e1e5d029c1616b439 /* ofxUITextArea.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUITextArea.h; path = ../../../addons/ofxUI/src/ofxUITextArea.h; sourceTree = SOURCE_ROOT; };
 		fa9dd5aefd2f18312e7d95e7891e0c22 /* Boid.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Boid.cpp; path = ../../../addons/ofxUIProject/src/simulators/Boid.cpp; sourceTree = SOURCE_ROOT; };
 		fb75141bde12f8a908e30c2a9eda35e3 /* ofxFieldAgitator.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxFieldAgitator.h; path = ../../../addons/ofxGenerative/src/ofxFieldAgitator.h; sourceTree = SOURCE_ROOT; };
-		fbba95ee112f076880c6de4bb4dfa0b0 /* Light.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Light.h; path = ../../../addons/ofxUIProject/src/gl/Light.h; sourceTree = SOURCE_ROOT; };
+		fbba95ee112f076880c6de4bb4dfa0b0 /* UILight.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UILight.h; path = ../../../addons/ofxUIProject/src/gl/UILight.h; sourceTree = SOURCE_ROOT; };
 		fbe1b379902b3c585dc8f7a21175a71f /* ofxUILabelButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUILabelButton.h; path = ../../../addons/ofxUI/src/ofxUILabelButton.h; sourceTree = SOURCE_ROOT; };
 		fc5da1c87211d4f6377da7199d8c5a1e /* tinyxmlparser.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = tinyxmlparser.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxmlparser.cpp; sourceTree = SOURCE_ROOT; };
 		fccbdb55b98da36682809f0348522eab /* ofxUIWaveform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIWaveform.h; path = ../../../addons/ofxUI/src/ofxUIWaveform.h; sourceTree = SOURCE_ROOT; };
@@ -332,11 +334,12 @@
 		51449f13e55ce9b0b40374503d96c1bf /* gl */ = {
 			isa = PBXGroup;
 			children = (
-				fbba95ee112f076880c6de4bb4dfa0b0 /* Light.h */,
+				fbba95ee112f076880c6de4bb4dfa0b0 /* UILight.h */,
+				3D27E1E117EE5336002BB580 /* UILight.cpp */,
 				929811e60e5ec05b3f2fedd89735a146 /* Material.h */,
 				f8538ab05571d76d232e9482dd8444d9 /* PingPong.h */,
-				a1e7a7f265682a1f56d0feb629a93e77 /* UIFog.cpp */,
 				954e1109e35a5924b898f4c2513a7026 /* UIFog.h */,
+				a1e7a7f265682a1f56d0feb629a93e77 /* UIFog.cpp */,
 				f9b83b0abbd877d57d50638e4c03c10a /* UIPostRender.cpp */,
 				3abf9f0fb0891b9477e6d4bba2290fde /* UIPostRender.h */,
 				f84c0d38b417b1653a5bb5da0f322507 /* UIShader.cpp */,
@@ -777,6 +780,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D27E1E217EE5336002BB580 /* UILight.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				cf0b6820b0448da6782deb6e075c8117 /* ShellExample.cpp in Sources */,

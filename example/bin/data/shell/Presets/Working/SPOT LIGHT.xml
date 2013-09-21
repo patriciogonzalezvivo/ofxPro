@@ -1,9 +1,9 @@
 <Canvas>
     <Kind>42</Kind>
-    <Name>POINT LIGHT 1Settings</Name>
-    <IsMinified>1</IsMinified>
-    <XPosition>1.000000000</XPosition>
-    <YPosition>318.000000000</YPosition>
+    <Name>SPOT LIGHT</Name>
+    <IsMinified>0</IsMinified>
+    <XPosition>1411.000000000</XPosition>
+    <YPosition>424.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -11,49 +11,74 @@
     <Value>1</Value>
 </Widget>
 <Widget>
+    <Kind>4</Kind>
+    <Name>CUT OFF</Name>
+    <Value>0.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>EXPONENT</Name>
+    <Value>0.000000000</Value>
+</Widget>
+<Widget>
     <Kind>25</Kind>
     <Name>X</Name>
-    <Value>1000.000000000</Value>
+    <Value>5.235534668</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>Y</Name>
-    <Value>-989.528930664</Value>
+    <Value>-801.045837402</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>Z</Name>
-    <Value>-1000.000000000</Value>
+    <Value>-445.027465820</Value>
+</Widget>
+<Widget>
+    <Kind>25</Kind>
+    <Name>OX</Name>
+    <Value>8.952880859</Value>
+</Widget>
+<Widget>
+    <Kind>25</Kind>
+    <Name>OY</Name>
+    <Value>-7.067947388</Value>
+</Widget>
+<Widget>
+    <Kind>25</Kind>
+    <Name>OZ</Name>
+    <Value>-3.298545837</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>AR</Name>
-    <Value>-0.005759165</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>AG</Name>
-    <Value>-0.033507928</Value>
+    <Value>0.083770268</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>AB</Name>
-    <Value>-0.042408541</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>DR</Name>
-    <Value>0.235602096</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>DG</Name>
-    <Value>0.319371641</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>DB</Name>
-    <Value>0.136125490</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>

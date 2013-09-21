@@ -1,9 +1,9 @@
 <Canvas>
     <Kind>42</Kind>
     <Name>POST-RENDER</Name>
-    <IsMinified>0</IsMinified>
-    <XPosition>1313.000000000</XPosition>
-    <YPosition>175.000000000</YPosition>
+    <IsMinified>1</IsMinified>
+    <XPosition>1.000000000</XPosition>
+    <YPosition>26.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -18,12 +18,12 @@
 <Widget>
     <Kind>4</Kind>
     <Name>Displacement</Name>
-    <Value>0.000000000</Value>
+    <Value>0.001231527</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Grain</Name>
-    <Value>0.000000000</Value>
+    <Value>0.051724140</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>

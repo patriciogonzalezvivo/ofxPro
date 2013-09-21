@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 
-#include "Light.h"
+#include "UILight.h"
 #include "Material.h"
 
 #include "UIClass.h"
@@ -98,7 +98,6 @@ class UIProject {
     void setupCoreGuis();
     
     void setupGui();
-    void addGuiClass( UIClass &_uiClass );
     void guiEvent(ofxUIEventArgs &e);
     
     void setupSystemGui();
@@ -109,20 +108,22 @@ class UIProject {
     
     virtual void setupCameraGui();
     virtual void guiCameraEvent(ofxUIEventArgs &e);
-	
+    
 	void setupPresetGui();
 	void guiPresetEvent(ofxUIEventArgs &e);
-	
-    virtual void setupBackground();
     
     void setupMaterial(string name, Material *m);
     void guiMaterialEvent(ofxUIEventArgs &e);
 	
-    void setupPointLight(string name);
-    void setupSpotLight(string name);
-    void setupBeamLight(string name);
-    void setupGenericLightProperties(ofxUISuperCanvas *g, Light *l);
-    void guiLightEvent(ofxUIEventArgs &e);
+    virtual void setupBackground();
+    void addLight( string _name, ofLightType _type );
+    void addGuiClass( UIClass &_uiClass );
+    
+//    void setupPointLight(string name);
+//    void setupSpotLight(string name);
+//    void setupBeamLight(string name);
+//    void setupGenericLightProperties(ofxUISuperCanvas *g, Light *l);
+//    void guiLightEvent(ofxUIEventArgs &e);
 	
     virtual void guiAllEvents(ofxUIEventArgs &e);
     
@@ -188,7 +189,7 @@ protected:
 	
     //  LIGHTS
     //
-    map<string, Light *>            lights;
+    map<string, UILight *>            lights;
     map<string, ofxUISuperCanvas *> lightGuis;
 	
     //  APP

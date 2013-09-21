@@ -34,8 +34,10 @@ void ShellExample::selfSetupGui(){
     addGuiClass(fog);
     
 //    setupPointLight("LIGHT2");
-    setupPointLight("POINT LIGHT 2");
-    setupSpotLight("SPOT LIGHT");
+//    setupPointLight("POINT LIGHT 2");
+    addLight("POINT LIGHT 2", OF_LIGHT_POINT);
+//    setupSpotLight("SPOT LIGHT");
+    addLight("SPOT LIGHT", OF_LIGHT_SPOT);
 }
 
 void ShellExample::selfGuiEvent(ofxUIEventArgs &e){
