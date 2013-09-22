@@ -463,8 +463,7 @@ void UIProject::setupCoreGuis(){
     setupBackground();
     
     setupMaterial("MATERIAL 1", mat);
-//    setupPointLight("POINT LIGHT 1");
-    addLight("POINT LIGHT 1", OF_LIGHT_POINT);
+    lightAdd("POINT LIGHT 1", OF_LIGHT_POINT);
 }
 
 void UIProject::setupGui(){
@@ -778,7 +777,7 @@ void UIProject::setupBackground(){
     background = new UIBackground();
     background->linkUIs( &guis );
     background->linkCamera( &cam );
-    addGuiClass( *background );
+    guiAdd( *background );
 }
 
 void UIProject::setupMaterial(string name, Material *m){
@@ -839,179 +838,6 @@ void UIProject::setupMaterial(string name, Material *m){
 void UIProject::guiMaterialEvent(ofxUIEventArgs &e){
     
 }
-//
-//void UIProject::setupPointLight(string name){
-//    Light *l = new Light();
-//    l->light.setPointLight();
-////	l->light.destroy();
-//	
-//    lights[name] = l;
-//    
-//    ofxUISuperCanvas* g = new ofxUISuperCanvas(name, gui);
-//    lightGuis[name] = g;
-//    g->copyCanvasStyle(gui);
-//    g->copyCanvasProperties(gui);
-//    g->setName(name+"Settings");
-//    g->setWidgetFontSize(OFX_UI_FONT_SMALL);
-//    
-//    ofxUIToggle *toggle = g->addToggle("ENABLE", &l->bEnabled);
-//    toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
-//    g->resetPlacer();
-//    g->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
-//    g->addWidgetToHeader(toggle);
-//    g->addSpacer();
-//    
-//    setupGenericLightProperties(g, l);
-//    
-//    g->autoSizeToFitWidgets();
-//    g->setPosition(ofGetWidth()*.5-g->getRect()->getHalfWidth(), ofGetHeight()*.5 - g->getRect()->getHalfHeight());
-//    
-//    ofAddListener(g->newGUIEvent,this,&UIProject::guiLightEvent);
-//    guis.push_back(g);
-//    guimap[g->getName()] = g;
-//}
-//
-//void UIProject::setupSpotLight(string name){
-//    Light *l = new Light();
-//    l->light.setSpotlight();
-////	l->light.destroy();
-//	
-//    lights[name] = l;
-//    
-//    ofxUISuperCanvas* g = new ofxUISuperCanvas(name, gui);
-//    lightGuis[name] = g;
-//    g->copyCanvasStyle(gui);
-//    g->copyCanvasProperties(gui);
-//    g->setName(name+"Settings");
-//    g->setWidgetFontSize(OFX_UI_FONT_SMALL);
-//    
-//    ofxUIToggle *toggle = g->addToggle("ENABLE", &l->bEnabled);
-//    toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
-//    g->resetPlacer();
-//    g->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
-//    g->addWidgetToHeader(toggle);
-//    g->addSpacer();
-//    
-//    g->addSlider("CUT OFF", 0, 90, &l->lightSpotCutOff);
-//    g->addSlider("EXPONENT", 0.0, 128.0, &l->lightExponent);
-//    g->addSpacer();
-//    
-//    setupGenericLightProperties(g, l);
-//    
-//    g->autoSizeToFitWidgets();
-//    g->setPosition(ofGetWidth()*.5-g->getRect()->getHalfWidth(), ofGetHeight()*.5 - g->getRect()->getHalfHeight());
-//    
-//    ofAddListener(g->newGUIEvent,this,&UIProject::guiLightEvent);
-//    guis.push_back(g);
-//    guimap[g->getName()] = g;
-//}
-//
-//void UIProject::setupBeamLight(string name){
-//    Light *l = new Light();
-//    l->light.setDirectional();
-////	l->light.destroy();
-//	
-//    lights[name] = l;
-//    
-//    ofxUISuperCanvas* g = new ofxUISuperCanvas(name, gui);
-//    lightGuis[name] = g;
-//    g->copyCanvasStyle(gui);
-//    g->copyCanvasProperties(gui);
-//    g->setName(name+"Settings");
-//    g->setWidgetFontSize(OFX_UI_FONT_SMALL);
-//    
-//    ofxUIToggle *toggle = g->addToggle("ENABLE", &l->bEnabled);
-//    toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
-//    g->resetPlacer();
-//    g->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
-//    g->addWidgetToHeader(toggle);
-//    g->addSpacer();
-//    
-//    setupGenericLightProperties(g, l);
-//    
-//    g->autoSizeToFitWidgets();
-//    g->setPosition(ofGetWidth()*.5-g->getRect()->getHalfWidth(), ofGetHeight()*.5 - g->getRect()->getHalfHeight());
-//    
-//    ofAddListener(g->newGUIEvent,this,&UIProject::guiLightEvent);
-//    guis.push_back(g);
-//    guimap[g->getName()] = g;
-//}
-//
-//void UIProject::setupGenericLightProperties(ofxUISuperCanvas *g, Light *l){
-//    float length = (g->getGlobalCanvasWidth()-g->getWidgetSpacing()*5)/3.;
-//    float dim = g->getGlobalSliderHeight();
-//    
-//    switch(l->light.getType()){
-//        case OF_LIGHT_POINT:{
-//            g->addLabel("POSITION", OFX_UI_FONT_SMALL);
-//            g->addMinimalSlider("X", -1000.0, 1000.0, &l->lightPos.x, length, dim)->setShowValue(false);
-//            g->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-//            g->addMinimalSlider("Y", -1000.0, 1000.0, &l->lightPos.y, length, dim)->setShowValue(false);
-//            g->addMinimalSlider("Z", -1000.0, 1000.0, &l->lightPos.z, length, dim)->setShowValue(false);
-//            g->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-//            g->addSpacer();
-//        }
-//            break;
-//            
-//        case OF_LIGHT_SPOT:{
-//            g->addLabel("POSITION", OFX_UI_FONT_SMALL);
-//            g->addMinimalSlider("X", -1000.0, 1000.0, &l->lightPos.x, length, dim)->setShowValue(false);
-//            g->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-//            g->addMinimalSlider("Y", -1000.0, 1000.0, &l->lightPos.y, length, dim)->setShowValue(false);
-//            g->addMinimalSlider("Z", -1000.0, 1000.0, &l->lightPos.z, length, dim)->setShowValue(false);
-//            g->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-//            g->addSpacer();
-//            
-//            g->addLabel("ORIENTATION", OFX_UI_FONT_SMALL);
-//            g->addMinimalSlider("OX", -90.0, 90.0, &l->lightOrientation.x, length, dim)->setShowValue(false);
-//            g->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-//            g->addMinimalSlider("OY", -90.0, 90.0, &l->lightOrientation.y, length, dim)->setShowValue(false);
-//            g->addMinimalSlider("OZ", -90.0, 90.0, &l->lightOrientation.z, length, dim)->setShowValue(false);
-//            g->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-//            g->addSpacer();
-//        }
-//            break;
-//            
-//        case OF_LIGHT_DIRECTIONAL:{
-//            g->addLabel("ORIENTATION", OFX_UI_FONT_SMALL);
-//            g->addMinimalSlider("OX", -90.0, 90.0, &l->lightOrientation.x, length, dim)->setShowValue(false);
-//            g->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-//            g->addMinimalSlider("OY", -90.0, 90.0, &l->lightOrientation.y, length, dim)->setShowValue(false);
-//            g->addMinimalSlider("OZ", -90.0, 90.0, &l->lightOrientation.z, length, dim)->setShowValue(false);
-//            g->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-//            g->addSpacer();
-//        }
-//            break;
-//    }
-//    
-//    g->addLabel("AMBIENT", OFX_UI_FONT_SMALL);
-//    g->addMinimalSlider("AR", 0.0, 1.0, &l->lightAmbient.r, length, dim)->setShowValue(false);
-//    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-//    g->addMinimalSlider("AG", 0.0, 1.0, &l->lightAmbient.g, length, dim)->setShowValue(false);
-//    g->addMinimalSlider("AB", 0.0, 1.0, &l->lightAmbient.b, length, dim)->setShowValue(false);
-//    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-//    
-//    g->addSpacer();
-//    g->addLabel("DIFFUSE", OFX_UI_FONT_SMALL);
-//    g->addMinimalSlider("DR", 0.0, 1.0, &l->lightDiffuse.r, length, dim)->setShowValue(false);
-//    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-//    g->addMinimalSlider("DG", 0.0, 1.0, &l->lightDiffuse.g, length, dim)->setShowValue(false);
-//    g->addMinimalSlider("DB", 0.0, 1.0, &l->lightDiffuse.b, length, dim)->setShowValue(false);
-//    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-//    
-//    g->addSpacer();
-//    g->addLabel("SPECULAR", OFX_UI_FONT_SMALL);
-//    g->addMinimalSlider("SR", 0.0, 1.0, &l->lightSpecular.r, length, dim)->setShowValue(false);
-//    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-//    g->addMinimalSlider("SG", 0.0, 1.0, &l->lightSpecular.g, length, dim)->setShowValue(false);
-//    g->addMinimalSlider("SB", 0.0, 1.0, &l->lightSpecular.b, length, dim)->setShowValue(false);
-//    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-//    g->addSpacer();
-//}
-//
-//void UIProject::guiLightEvent(ofxUIEventArgs &e){
-//    
-//}
 
 void UIProject::guiAllEvents(ofxUIEventArgs &e){
 
@@ -1032,6 +858,15 @@ void UIProject::lightsEnd(){
         ofDisableLighting();
         for(map<string, UILight *>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->disable();
+        }
+    }
+}
+
+void UIProject::lightsDraw(){
+    if(bEnableLights){
+        ofDisableLighting();
+        for(map<string, UILight *>::iterator it = lights.begin(); it != lights.end(); ++it){
+            it->second->draw();
         }
     }
 }
@@ -1164,13 +999,13 @@ string UIProject::getSystemName(){
     return "Abstract";
 }
 
-void UIProject::addGuiClass(UIClass &_uiClass){
+void UIProject::guiAdd(UIClass &_uiClass){
     ofxUISuperCanvas* uiClass = _uiClass.getUI(gui);
 	guis.push_back(uiClass);
 	guimap[uiClass->getName()] = uiClass;
 }
 
-void UIProject::addLight( string _name, ofLightType _type ){
+void UIProject::lightAdd( string _name, ofLightType _type ){
     UILight *newLight = new UILight(_name, _type);
     
     lights[_name] = newLight;

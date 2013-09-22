@@ -177,3 +177,14 @@ void UILight::play(){
 void UILight::stop(){
     light.destroy();
 }
+
+void UILight::draw(){
+    
+    
+    ofPushMatrix();
+    ofScale(1,-1,1);
+    light.draw();
+    ofTranslate(lightPos);
+    ofDrawBitmapString(name, ofPoint(10,10,10));
+    ofPopMatrix();
+}

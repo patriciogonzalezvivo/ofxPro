@@ -116,19 +116,14 @@ class UIProject {
     void guiMaterialEvent(ofxUIEventArgs &e);
 	
     virtual void setupBackground();
-    void addLight( string _name, ofLightType _type );
-    void addGuiClass( UIClass &_uiClass );
     
-//    void setupPointLight(string name);
-//    void setupSpotLight(string name);
-//    void setupBeamLight(string name);
-//    void setupGenericLightProperties(ofxUISuperCanvas *g, Light *l);
-//    void guiLightEvent(ofxUIEventArgs &e);
-	
+    void guiAdd( UIClass &_uiClass );
     virtual void guiAllEvents(ofxUIEventArgs &e);
     
     //Lighting Helpers
+    void lightAdd( string _name, ofLightType _type );
     void lightsBegin();
+    void lightsDraw();
     void lightsEnd();
     
     //UI Helpers
@@ -151,7 +146,6 @@ class UIProject {
 	virtual bool        cursorIsOverGUI();
 	
 protected:
-	
 	//  UI
     //
     ofxUISuperCanvas *gui;

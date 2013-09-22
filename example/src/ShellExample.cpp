@@ -29,15 +29,12 @@ void ShellExample::selfSetup(){
 
 void ShellExample::selfSetupGui(){
     
-    addGuiClass(grid);
-    addGuiClass(post);
-    addGuiClass(fog);
+    guiAdd(grid);
+    guiAdd(post);
+    guiAdd(fog);
     
-//    setupPointLight("LIGHT2");
-//    setupPointLight("POINT LIGHT 2");
-    addLight("POINT LIGHT 2", OF_LIGHT_POINT);
-//    setupSpotLight("SPOT LIGHT");
-    addLight("SPOT LIGHT", OF_LIGHT_SPOT);
+    lightAdd("POINT LIGHT 2", OF_LIGHT_POINT);
+    lightAdd("SPOT LIGHT", OF_LIGHT_SPOT);
 }
 
 void ShellExample::selfGuiEvent(ofxUIEventArgs &e){
@@ -233,7 +230,7 @@ void ShellExample::selfDraw(){
 }
 
 void ShellExample::selfDrawDebug(){
-	
+	lightsDraw();
 }
 
 void ShellExample::selfDrawBackground(){

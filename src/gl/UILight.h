@@ -47,6 +47,8 @@ public:
     void    enable();
     void    disable();
     
+    void    draw();
+    
 protected:
     void    guiEvent(ofxUIEventArgs &e);
     
