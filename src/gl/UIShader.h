@@ -18,7 +18,7 @@ class UIShader : public UIClass {
 public:
     UIShader();
     
-    string getClassName(){return "SHADER"; }
+    string getClassName();
     void setupUI();
     
     void loadFrag(string _fragShader );
@@ -47,4 +47,5 @@ protected:
     
     int                 nTextures;
     int                 textureCounter;
+    bool                bOpen;
 };

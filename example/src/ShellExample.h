@@ -13,7 +13,7 @@
 #include "UISuperBackground.h"
 #include "UIGrid.h"
 #include "UIFog.h"
-#include "UIPostRender.h"
+#include "UIShader.h"
 
 class ShellExample : public UIProject {
 public:
@@ -56,11 +56,12 @@ public:
     void selfMousePressed(ofMouseEventArgs& data);
     void selfMouseReleased(ofMouseEventArgs& data);
     
+//    void setupBackground();
 protected:
 
-    UIPostRender    post;
     UIGrid          grid;
     UIFog           fog;
+    UIShader        shader;
     
     //  Shell
     //

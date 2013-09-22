@@ -24,8 +24,6 @@ protected:
     
     void        guiEvent(ofxUIEventArgs &e);
     
-    //  Post
-    //
     ofShader    shader;
     ofTexture   texture;
     float       chromaDist;

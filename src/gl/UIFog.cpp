@@ -14,16 +14,39 @@ UIFog::UIFog(){
 
 void UIFog::setupUI(){
     
-//    if (color == NULL){
-//        color = new ofFloatColor(0.8);
-//    
-//        gui->addSlider("Red", 0.0, 1.0, &color->r);
-//        gui->addSlider("Green", 0.0, 1.0, &color->g);
-//        gui->addSlider("Blue", 0.0, 1.0, &color->b);
-//    }
-    
     gui->addSlider("Density", 0.0, 1.0, &density);
     gui->addSlider("Density_EXP", -3.0, 3.0, &density_exponent);
+    
+    if (color == NULL){
+        color = new ofFloatColor(0.8);
+        
+        gui->addSlider("Red", 0.0, 1.0, &color->r);
+        gui->addSlider("Green", 0.0, 1.0, &color->g);
+        gui->addSlider("Blue", 0.0, 1.0, &color->b);
+    }
+}
+
+void UIFog::setColor( ofColor *_color ){
+    if (color == NULL){
+        color = new ofFloatColor( *_color );
+    }
+}
+
+void UIFog::linkColor( UIBackground *_background ){
+    if (color != NULL){
+        delete color;
+        
+        ofxUISlider* red = (ofxUISlider *) gui->getWidget("Red");
+        red->setVisible(false);
+        ofxUISlider* green = (ofxUISlider *) gui->getWidget("Green");
+        green->setVisible(false);
+        ofxUISlider* blue = (ofxUISlider *) gui->getWidget("Blue");
+        blue->setVisible(false);
+        
+        gui->autoSizeToFitWidgets();
+    }
+    
+    color = &_background->color;
 }
 
 void UIFog::guiEvent(ofxUIEventArgs &e){

@@ -345,8 +345,8 @@
 				a1e7a7f265682a1f56d0feb629a93e77 /* UIFog.cpp */,
 				f9b83b0abbd877d57d50638e4c03c10a /* UIPostRender.cpp */,
 				3abf9f0fb0891b9477e6d4bba2290fde /* UIPostRender.h */,
-				f84c0d38b417b1653a5bb5da0f322507 /* UIShader.cpp */,
 				c3f9167fbce336cb4885c7b60204143d /* UIShader.h */,
+				f84c0d38b417b1653a5bb5da0f322507 /* UIShader.cpp */,
 				b99a1d0272f7e187e45c4aa4a4f7e5fb /* Uniform.h */,
 			);
 			name = gl;

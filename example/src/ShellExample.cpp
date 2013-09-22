@@ -25,13 +25,15 @@ void ShellExample::selfSetup(){
     bufferSize = 512;
     shellBuffer = 100;
     mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+    
+    shader.loadFrag(getDataPath()+"shaders/shader.frag");
 }
 
 void ShellExample::selfSetupGui(){
     
     guiAdd(grid);
-    guiAdd(post);
     guiAdd(fog);
+    guiAdd(shader);
     
     lightAdd("DIR LIGHT ", OF_LIGHT_DIRECTIONAL );
     lightAdd("SPOT LIGHT", OF_LIGHT_SPOT);
@@ -62,12 +64,19 @@ void ShellExample::guiRenderEvent(ofxUIEventArgs &e){
     
 }
 
+//void ShellExample::setupBackground(){
+//    background = new UISuperBackground();
+//    background->linkUIs( &guis );
+//    background->linkCamera( &cam );
+//    guiAdd( *background );
+//}
+
 void ShellExample::selfPresetLoaded(string presetPath){
 	
 }
 
 void ShellExample::selfBegin(){
-
+    fog.linkColor( background );
 }
 
 //--------------------------------------------------------------
@@ -190,9 +199,6 @@ void ShellExample::selfUpdate(){
     
     createSkin(lineWidth);
     
-    if (fog.color != &(background->color)){
-        fog.color = &(background->color);
-    }
 }
 
 void ShellExample::selfDraw(){
@@ -242,9 +248,11 @@ void ShellExample::selfDrawBackground(){
 }
 
 void ShellExample::selfPostDraw(){
-    post.begin();
+    shader.setTexture( UIProject::getRenderTarget(), 0 );
+    shader.setTexture( UIProject::getRenderTarget().getDepthTexture(), 1 );
+    shader.begin();
     UIProject::selfPostDraw();
-    post.end();
+    shader.end();
 }
 
 void ShellExample::selfEnd(){

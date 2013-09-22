@@ -52,15 +52,14 @@ public:
 protected:
     void    guiEvent(ofxUIEventArgs &e);
     
-    float lightSpotCutOff;
-    float lightExponent;
-    
-    string  name;
     ofLight light;
-    ofVec3f lightPos;
-    ofVec3f lightOrientation;
-    ofFloatColor lightAmbient;
-    ofFloatColor lightDiffuse;
-    ofFloatColor lightSpecular;
+    string  name;
+    ofFloatColor ambient;
+    ofFloatColor diffuse;
+    ofFloatColor specular;
+    ofVec3f position;
+    ofVec3f orientation;
+    float   spotCutOff;
+    float   exponent;
     
 };

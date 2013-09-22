@@ -120,6 +120,7 @@ void UISuperBackground::update(ofEventArgs & args){
                 
                 fbo.begin();
                 ofClear( color2 );
+                ofSetColor(255);
                 mesh.draw();
                 fbo.end();
             }
@@ -140,6 +141,7 @@ void UISuperBackground::draw(){
             shader.setUniform1f("time", ofGetElapsedTimef());
             shader.setUniform1f("pct", grainPct);
             shader.setUniform1f("freq", 0.001);
+            ofSetColor(255);
             fbo.draw(0, 0);
             shader.end();
 

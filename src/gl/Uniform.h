@@ -21,10 +21,17 @@ struct Uniform {
     Uniform(UniformType _type, string _name){
         type = _type;
         name = _name;
+        bUpdated = false;
+        bNeedUI = true;
     }
     
     UniformType type;
     string      name;
     
     bool        bUpdated;
+    bool        bNeedUI;
+    
+    ofVec3f     vValue;
+    float       fValue;
+    
 };

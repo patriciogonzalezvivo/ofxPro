@@ -30,10 +30,34 @@ UIShader::UIShader(){
 
 void UIShader::setupUI(){
     
+    for(int i = 0; i < uniforms.size(); i++){
+        if ( uniforms[i]->bNeedUI ){
+            if (uniforms[i]->type == UNIFORM_FLOAT){
+                gui->addSlider( uniforms[i]->name, 0.0, 1.0, &uniforms[i]->fValue );
+            }
+        }
+    }
+    
+    gui->addButton("OPEN",&bOpen);
 }
 
 void UIShader::loadFrag(string _fragShader){
     reloadShader( _fragShader );
+}
+
+string UIShader::getClassName(){
+    return shaderFile.getBaseName();
+}
+
+void UIShader::guiEvent(ofxUIEventArgs &e){
+    if (gui != NULL){
+        string name = e.widget->getName();
+        
+        if( name == "OPEN"){
+            string comand = "open " + shaderFilename ;
+            system(comand.c_str());
+        }
+    }
 }
 
 bool UIShader::reloadShader(string _filePath){
@@ -167,18 +191,19 @@ void UIShader::addUniform(UniformType _type, string _name){
         //  Predefine uniforms
         //
         if (_name == "time" && _type == UNIFORM_FLOAT){
-            
+            newUniform->bNeedUI = false;
         } else if (_name == "mouse" && _type == UNIFORM_VEC2){
-            
+            newUniform->bNeedUI = false;
         } else if ( (_name == "resolution" || _name == "windows" ) && _type == UNIFORM_VEC2 ){
-            
+            newUniform->bNeedUI = false;
         } else if ( _name == "screen" && _type == UNIFORM_VEC2 ){
-            
+            newUniform->bNeedUI = false;
         } else if ( _name == "backBuffer" && _type == UNIFORM_SAMPLE2DRECT ){
-            
+            newUniform->bNeedUI = false;
         } else if ( _name == "frontBuffer" && _type == UNIFORM_SAMPLE2DRECT ){
-            
+            newUniform->bNeedUI = false;
         } else if ( _name == "tex"+ofToString( textureCounter ) && _type == UNIFORM_SAMPLE2DRECT ){
+            newUniform->bNeedUI = false;
             textureCounter++;
         }
     
@@ -211,10 +236,6 @@ std::time_t UIShader::getLastModified( ofFile& _file ){
 	} else {
 		return 0;
 	}
-}
-
-void UIShader::guiEvent(ofxUIEventArgs &e){
-    
 }
 
 // A simplified way of filling the insides texture
@@ -264,7 +285,9 @@ void UIShader::begin(){
                 if (uniforms[i]->name == "time"){
                     shader.setUniform1f(uniforms[i]->name.c_str(), ofGetElapsedTimef());
                 } else {
-                    
+//                    ofxUISlider* widget = (ofxUISlider *) gui->getWidget("Red");
+//                    shader.setUniform1f(uniforms[i]->name.c_str(), widget->getValue() );
+                    shader.setUniform1f(uniforms[i]->name.c_str(), uniforms[i]->fValue );
                 }
                
             } else if (uniforms[i]->type == UNIFORM_VEC2){
@@ -275,6 +298,8 @@ void UIShader::begin(){
                     shader.setUniform2f(uniforms[i]->name.c_str(), ofGetScreenWidth(), ofGetScreenHeight() );
                 } else if (uniforms[i]->name == "windows" || uniforms[i]->name == "resolution" ){
                     shader.setUniform2f(uniforms[i]->name.c_str(), ofGetWidth(), ofGetHeight() );
+                } else {
+                    shader.setUniform2f(uniforms[i]->name.c_str(), uniforms[i]->vValue.x, uniforms[i]->vValue.y );
                 }
                 
             }
