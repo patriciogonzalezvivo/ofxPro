@@ -1,6 +1,15 @@
 
 #include "UIProject.h"
 
+string UIProject::getSystemName(){
+    return "Abstract";
+}
+
+string UIProject::getDataPath(){
+    string path = "../../../data/"+getSystemName()+"/";
+    return path;
+}
+
 void UIProject::setup(){
 	
 	cout << "SETTING UP SYSTEM " << getSystemName() << endl;
@@ -23,7 +32,6 @@ void UIProject::setup(){
     setupDebugParams();
     setupCameraParams();
 	setupLightingParams();
-	setupMaterialParams();
     
     selfSetup();
     setupCoreGuis();
@@ -184,8 +192,8 @@ void UIProject::exit(ofEventArgs & args){
     }
     lights.clear();
     
-    for(map<string, Material *>::iterator it = materials.begin(); it != materials.end(); ++it){
-        Material *m = it->second;
+    for(map<string, UIMaterial *>::iterator it = materials.begin(); it != materials.end(); ++it){
+        UIMaterial *m = it->second;
         delete m;
     }
     materials.clear();
@@ -443,10 +451,6 @@ void UIProject::setupLightingParams(){
     globalAmbientColor[3] = 1.0;
 }
 
-void UIProject::setupMaterialParams(){
-    mat = new Material();
-}
-
 void UIProject::setupCoreGuis(){
     
     setupGui();
@@ -462,7 +466,9 @@ void UIProject::setupCoreGuis(){
     
     setupBackground();
     
-    setupMaterial("MATERIAL 1", mat);
+    mat = new UIMaterial();
+    materialAdd( mat );
+    
     lightAdd("POINT LIGHT 1", OF_LIGHT_POINT);
 }
 
@@ -780,63 +786,28 @@ void UIProject::setupBackground(){
     guiAdd( *background );
 }
 
-void UIProject::setupMaterial(string name, Material *m){
-    materials[name] = m;
-    ofxUISuperCanvas* g = new ofxUISuperCanvas(name, gui);
-    materialGuis[name] = g;
-    g->copyCanvasStyle(gui);
-    g->copyCanvasProperties(gui);
-    g->setName(name+"Settings");
-    g->addSpacer();
-    g->setWidgetFontSize(OFX_UI_FONT_SMALL);
-    
-    float length = (g->getGlobalCanvasWidth()-g->getWidgetSpacing()*5)/3.;
-    float dim = g->getGlobalSliderHeight();
-    
-    g->addLabel("AMBIENT", OFX_UI_FONT_SMALL);
-    g->addMinimalSlider("AR", 0.0, 1.0, &m->getAmbientColor().r, length, dim)->setShowValue(false);
-    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    g->addMinimalSlider("AG", 0.0, 1.0, &m->getAmbientColor().g, length, dim)->setShowValue(false);
-    g->addMinimalSlider("AB", 0.0, 1.0, &m->getAmbientColor().b, length, dim)->setShowValue(false);
-    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    g->addSpacer();
-    
-    g->addLabel("DIFFUSE", OFX_UI_FONT_SMALL);
-    g->addMinimalSlider("AR", 0.0, 1.0, &m->getDiffuseColor().r, length, dim)->setShowValue(false);
-    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    g->addMinimalSlider("AG", 0.0, 1.0, &m->getDiffuseColor().g, length, dim)->setShowValue(false);
-    g->addMinimalSlider("AB", 0.0, 1.0, &m->getDiffuseColor().b, length, dim)->setShowValue(false);
-    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    g->addSpacer();
-    
-    g->addLabel("EMISSIVE", OFX_UI_FONT_SMALL);
-    g->addMinimalSlider("ER", 0.0, 1.0, &m->getEmissiveColor().r, length, dim)->setShowValue(false);
-    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    g->addMinimalSlider("EG", 0.0, 1.0, &m->getEmissiveColor().g, length, dim)->setShowValue(false);
-    g->addMinimalSlider("EB", 0.0, 1.0, &m->getEmissiveColor().b, length, dim)->setShowValue(false);
-    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    g->addSpacer();
-    
-    g->addLabel("SPECULAR", OFX_UI_FONT_SMALL);
-    g->addMinimalSlider("SR", 0.0, 1.0, &m->getSpecularColor().r, length, dim)->setShowValue(false);
-    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    g->addMinimalSlider("SG", 0.0, 1.0, &m->getSpecularColor().g, length, dim)->setShowValue(false);
-    g->addMinimalSlider("SB", 0.0, 1.0, &m->getSpecularColor().b, length, dim)->setShowValue(false);
-    g->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    g->addSpacer();
-    
-    g->addMinimalSlider("SHINY", 0.0, 128.0, &(m->getShininess()))->setShowValue(false);
-    
-    g->autoSizeToFitWidgets();
-    g->setPosition(ofGetWidth()*.5-g->getRect()->getHalfWidth(), ofGetHeight()*.5 - g->getRect()->getHalfHeight());
-    
-    ofAddListener(g->newGUIEvent,this,&UIProject::guiMaterialEvent);
-    guis.push_back(g);
-    guimap[g->getName()] = g;
+void UIProject::guiAdd(UIClass &_uiClass){
+    ofxUISuperCanvas* uiClass = _uiClass.getUI(gui);
+	guis.push_back(uiClass);
+	guimap[uiClass->getName()] = uiClass;
 }
 
-void UIProject::guiMaterialEvent(ofxUIEventArgs &e){
+void UIProject::lightAdd( string _name, ofLightType _type ){
+    UILight *newLight = new UILight(_name, _type);
     
+    lights[_name] = newLight;
+    
+    guiAdd( *newLight );
+}
+
+void UIProject::materialAdd( UIMaterial *_newMaterial ){
+    
+    if ( _newMaterial->getClassName() == "MATERIAL" ){
+        _newMaterial->setName("MATERIAL " + ofToString( materials.size() + 1));
+    }
+    
+    materials[ _newMaterial->getClassName() ] = _newMaterial;
+    guiAdd( *_newMaterial );
 }
 
 void UIProject::guiAllEvents(ofxUIEventArgs &e){
@@ -988,29 +959,4 @@ ofFbo& UIProject::getRenderTarget(){
 
 void UIProject::selfPostDraw(){
 	UIProject::getRenderTarget().draw(0, 0,UIProject::getRenderTarget().getWidth(), UIProject::getRenderTarget().getHeight());
-}
-
-string UIProject::getDataPath(){
-    string path = "../../../data/"+getSystemName()+"/";
-    return path;
-}
-
-string UIProject::getSystemName(){
-    return "Abstract";
-}
-
-void UIProject::guiAdd(UIClass &_uiClass){
-    ofxUISuperCanvas* uiClass = _uiClass.getUI(gui);
-	guis.push_back(uiClass);
-	guimap[uiClass->getName()] = uiClass;
-}
-
-void UIProject::lightAdd( string _name, ofLightType _type ){
-    UILight *newLight = new UILight(_name, _type);
-    
-    lights[_name] = newLight;
-    
-    ofxUISuperCanvas* uiClass = newLight->getUI(gui);
-	guis.push_back(uiClass);
-	guimap[uiClass->getName()] = uiClass;
 }

@@ -27,7 +27,7 @@ void UIFog::setupUI(){
 }
 
 void UIFog::guiEvent(ofxUIEventArgs &e){
-    
+
 }
 
 void UIFog::begin(){

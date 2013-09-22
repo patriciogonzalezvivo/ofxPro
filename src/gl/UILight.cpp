@@ -180,11 +180,13 @@ void UILight::stop(){
 
 void UILight::draw(){
     
-    
-    ofPushMatrix();
-    ofScale(1,-1,1);
-    light.draw();
-    ofTranslate(lightPos);
-    ofDrawBitmapString(name, ofPoint(10,10,10));
-    ofPopMatrix();
+    if (bEnable){
+        ofSetColor( lightDiffuse);
+        ofPushMatrix();
+//        ofScale(1,-1,1);
+        light.draw();
+        ofTranslate(lightPos);
+        ofDrawBitmapString(name, ofPoint(20,20,20));
+        ofPopMatrix();
+    }
 }

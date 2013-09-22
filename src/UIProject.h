@@ -3,7 +3,7 @@
 #include "ofMain.h"
 
 #include "UILight.h"
-#include "Material.h"
+#include "UIMaterial.h"
 
 #include "UIClass.h"
 #include "UIBackground.h"
@@ -91,7 +91,6 @@ class UIProject {
     void setupDebugParams();
     void setupCameraParams();
     void setupLightingParams();
-    void setupMaterialParams();
     void setupTimeLineParams();
 	
     //Core UI[S]
@@ -112,20 +111,17 @@ class UIProject {
 	void setupPresetGui();
 	void guiPresetEvent(ofxUIEventArgs &e);
     
-    void setupMaterial(string name, Material *m);
-    void guiMaterialEvent(ofxUIEventArgs &e);
-	
     virtual void setupBackground();
     
     void guiAdd( UIClass &_uiClass );
     virtual void guiAllEvents(ofxUIEventArgs &e);
     
-    //Lighting Helpers
+    void materialAdd( UIMaterial *m);
     void lightAdd( string _name, ofLightType _type );
     void lightsBegin();
     void lightsDraw();
     void lightsEnd();
-    
+
     //UI Helpers
 	vector<string> getPresets();
 	
@@ -171,8 +167,8 @@ protected:
 	
     //  MATERIAL
     //
-    Material                        *mat;
-    map<string, Material *>         materials;
+    UIMaterial                      *mat;
+    map<string, UIMaterial *>       materials;
     map<string, ofxUISuperCanvas *> materialGuis;
 	
     //  LIGHTING

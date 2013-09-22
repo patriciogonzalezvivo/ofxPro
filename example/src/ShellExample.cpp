@@ -33,7 +33,7 @@ void ShellExample::selfSetupGui(){
     guiAdd(post);
     guiAdd(fog);
     
-    lightAdd("POINT LIGHT 2", OF_LIGHT_POINT);
+    lightAdd("DIR LIGHT ", OF_LIGHT_DIRECTIONAL );
     lightAdd("SPOT LIGHT", OF_LIGHT_SPOT);
 }
 
@@ -108,7 +108,7 @@ ofPolyline ShellExample::freqArc( vector<float> &_vector, const ofPoint &_center
 //--------------------------------------------------------------
 
 void addFace(ofMesh& mesh, ofVec3f a, ofVec3f b, ofVec3f c) {
-	ofVec3f normal = ((b - a).cross(c - a)).normalize() * -1.0;
+	ofVec3f normal = ((b - a).cross(c - a)).normalize();
 	mesh.addNormal(normal);
 	mesh.addVertex(a);
 	mesh.addNormal(normal);
@@ -216,6 +216,9 @@ void ShellExample::selfDraw(){
         ofRotate(-90, 0, 0, 1);
         ofSetColor(255,250,240);
         mesh.drawFaces();
+        
+//        ofSetColor(255);
+//        ofDrawSphere(200);
         
         mat->end();
         fog.end();

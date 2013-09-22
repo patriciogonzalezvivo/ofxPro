@@ -1,39 +1,14 @@
 <Canvas>
     <Kind>42</Kind>
-    <Name>SPOT LIGHT</Name>
+    <Name>DIR LIGHT </Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>101.000000000</YPosition>
+    <YPosition>76.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
     <Name>ENABLE</Name>
     <Value>1</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>CUT OFF</Name>
-    <Value>27.931034088</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>EXPONENT</Name>
-    <Value>114.128082275</Value>
-</Widget>
-<Widget>
-    <Kind>25</Kind>
-    <Name>X</Name>
-    <Value>5.235534668</Value>
-</Widget>
-<Widget>
-    <Kind>25</Kind>
-    <Name>Y</Name>
-    <Value>486.912231445</Value>
-</Widget>
-<Widget>
-    <Kind>25</Kind>
-    <Name>Z</Name>
-    <Value>-5.236938477</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -43,12 +18,12 @@
 <Widget>
     <Kind>25</Kind>
     <Name>OY</Name>
-    <Value>-90.000000000</Value>
+    <Value>-35.340202332</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>OZ</Name>
-    <Value>-90.000000000</Value>
+    <Value>-14.607444763</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -73,12 +48,12 @@
 <Widget>
     <Kind>25</Kind>
     <Name>DG</Name>
-    <Value>1.000000000</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>DB</Name>
-    <Value>0.000000000</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>

@@ -19,6 +19,7 @@
 		37b0487e1f8517b8278f36c860ebfcb4 /* ofxRParticleGlowieRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = d2dac925a888bb60a301a32b89b9dc2b /* ofxRParticleGlowieRenderer.cpp */; };
 		38a7cb165dcfbf60ecf65b289f8aa0be /* ofxSwarmBehavior.cpp in Sources */ = {isa = PBXBuildFile; fileRef = abd06242539292bb6bf7aa388274a6d8 /* ofxSwarmBehavior.cpp */; };
 		3D27E1E217EE5336002BB580 /* UILight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D27E1E117EE5336002BB580 /* UILight.cpp */; };
+		3DD13A9A17EF29A500FA13BC /* UIMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DD13A9917EF29A500FA13BC /* UIMaterial.cpp */; };
 		53655c7ced2821910f86571b1507446f /* ofxBehavior.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04f8447d49347c1f6ed21f2c6afc2855 /* ofxBehavior.cpp */; };
 		55a08d3e7f4a572c38886546f5288957 /* ofxPerlinBehavior.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96d901f19738236af901c8b5003ee1ef /* ofxPerlinBehavior.cpp */; };
 		580f5f8c76d3a8082aa03d5bb9c817bc /* Page.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99e76aad240a09a17511c7831f1eeaed /* Page.cpp */; };
@@ -129,6 +130,7 @@
 		334840ca6b3402c8c30cac4e645376bb /* ofxUIOFWrapper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIOFWrapper.h; path = ../../../addons/ofxUI/src/ofxUIOFWrapper.h; sourceTree = SOURCE_ROOT; };
 		375b3c175823cb54d59b1335cffa200a /* ofxBehavior.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxBehavior.h; path = ../../../addons/ofxGenerative/src/ofxBehavior.h; sourceTree = SOURCE_ROOT; };
 		3D27E1E117EE5336002BB580 /* UILight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UILight.cpp; path = ../src/gl/UILight.cpp; sourceTree = "<group>"; };
+		3DD13A9917EF29A500FA13BC /* UIMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UIMaterial.cpp; path = ../src/gl/UIMaterial.cpp; sourceTree = "<group>"; };
 		3abf9f0fb0891b9477e6d4bba2290fde /* UIPostRender.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UIPostRender.h; path = ../../../addons/ofxUIProject/src/gl/UIPostRender.h; sourceTree = SOURCE_ROOT; };
 		4117b8c24d49837d3df9c23bd2405bdc /* ofxUIToggle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIToggle.h; path = ../../../addons/ofxUI/src/ofxUIToggle.h; sourceTree = SOURCE_ROOT; };
 		42e97e3d4b7f2b73adda01ddb2128f50 /* ofxDamperBehavior.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxDamperBehavior.cpp; path = ../../../addons/ofxGenerative/src/ofxDamperBehavior.cpp; sourceTree = SOURCE_ROOT; };
@@ -182,7 +184,7 @@
 		885850b62fad08eb1d2f0bf4a56e5e01 /* ofxUIRotarySlider.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIRotarySlider.h; path = ../../../addons/ofxUI/src/ofxUIRotarySlider.h; sourceTree = SOURCE_ROOT; };
 		885ceba7bba0335eb5fa3b0d4d8c83d0 /* ofxSpringSystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxSpringSystem.h; path = ../../../addons/ofxGenerative/src/ofxSpringSystem.h; sourceTree = SOURCE_ROOT; };
 		8f4736b4dde175468f2e71793ed91e85 /* ofxVerletSolver.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxVerletSolver.h; path = ../../../addons/ofxGenerative/src/ofxVerletSolver.h; sourceTree = SOURCE_ROOT; };
-		929811e60e5ec05b3f2fedd89735a146 /* Material.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Material.h; path = ../../../addons/ofxUIProject/src/gl/Material.h; sourceTree = SOURCE_ROOT; };
+		929811e60e5ec05b3f2fedd89735a146 /* UIMaterial.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UIMaterial.h; path = ../../../addons/ofxUIProject/src/gl/UIMaterial.h; sourceTree = SOURCE_ROOT; };
 		92fa01a549a466398b56256655555c9c /* ofxParticleTouch.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxParticleTouch.h; path = ../../../addons/ofxGenerative/src/ofxParticleTouch.h; sourceTree = SOURCE_ROOT; };
 		9389cb53abc43948fc25d99ff12fbd55 /* ofxHOCParticle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxHOCParticle.h; path = ../../../addons/ofxGenerative/src/ofxHOCParticle.h; sourceTree = SOURCE_ROOT; };
 		954e1109e35a5924b898f4c2513a7026 /* UIFog.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UIFog.h; path = ../../../addons/ofxUIProject/src/gl/UIFog.h; sourceTree = SOURCE_ROOT; };
@@ -336,7 +338,8 @@
 			children = (
 				fbba95ee112f076880c6de4bb4dfa0b0 /* UILight.h */,
 				3D27E1E117EE5336002BB580 /* UILight.cpp */,
-				929811e60e5ec05b3f2fedd89735a146 /* Material.h */,
+				929811e60e5ec05b3f2fedd89735a146 /* UIMaterial.h */,
+				3DD13A9917EF29A500FA13BC /* UIMaterial.cpp */,
 				f8538ab05571d76d232e9482dd8444d9 /* PingPong.h */,
 				954e1109e35a5924b898f4c2513a7026 /* UIFog.h */,
 				a1e7a7f265682a1f56d0feb629a93e77 /* UIFog.cpp */,
@@ -670,8 +673,8 @@
 				e99abe18f22cbd19fbc95ac95a18bc4c /* simulators */,
 				baa69f62ba08b1e6cefa3511cba74061 /* UIClass.h */,
 				d48670cbcd25026071c713971ea7ceb5 /* UIClass.cpp */,
-				ab9b60428a0a1071de859ea5d161b34f /* UIProject.cpp */,
 				a7cd549baed5afba55f0a00aa2fc1909 /* UIProject.h */,
+				ab9b60428a0a1071de859ea5d161b34f /* UIProject.cpp */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -808,6 +811,7 @@
 				9316dd9c0e2c814e402b0d2b68c24927 /* UIFog.cpp in Sources */,
 				607578bf11203095fa64c670079d6a27 /* UIPostRender.cpp in Sources */,
 				66232392d8bafadd73d6fb46e40d2dd4 /* UIShader.cpp in Sources */,
+				3DD13A9A17EF29A500FA13BC /* UIMaterial.cpp in Sources */,
 				8a8d0b0c5641725bd3b59e6ea66fe192 /* Grid.cpp in Sources */,
 				7232bd2b0184e6b6c168ae685f11edcc /* UIGrid.cpp in Sources */,
 				90537f3efc54071a208a810c28ef8d1c /* DraggableRectangle.cpp in Sources */,
