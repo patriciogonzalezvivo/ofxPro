@@ -17,9 +17,9 @@ public:
     UIClass();
     ~UIClass();
     
-    virtual void        setupUI() = 0;
+    virtual void        setupUI( ) = 0;
     virtual string      getClassName(){ return "GUICLASS_DEFAULT"; };
-    ofxUISuperCanvas*   getUI();
+    ofxUISuperCanvas*   getUI( ofxUICanvas *_parent );
     
     bool                bEnable;
     

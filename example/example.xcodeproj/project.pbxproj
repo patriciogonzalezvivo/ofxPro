@@ -668,8 +668,8 @@
 				ad9b05f7a6f90ff8764dcfeeac838817 /* gui */,
 				57cc3b29c6d3f7a0bb8c72b5e7ab52a6 /* objects */,
 				e99abe18f22cbd19fbc95ac95a18bc4c /* simulators */,
-				d48670cbcd25026071c713971ea7ceb5 /* UIClass.cpp */,
 				baa69f62ba08b1e6cefa3511cba74061 /* UIClass.h */,
+				d48670cbcd25026071c713971ea7ceb5 /* UIClass.cpp */,
 				ab9b60428a0a1071de859ea5d161b34f /* UIProject.cpp */,
 				a7cd549baed5afba55f0a00aa2fc1909 /* UIProject.h */,
 			);

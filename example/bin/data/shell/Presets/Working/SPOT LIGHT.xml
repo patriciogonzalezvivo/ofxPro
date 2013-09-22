@@ -1,9 +1,9 @@
 <Canvas>
     <Kind>42</Kind>
     <Name>SPOT LIGHT</Name>
-    <IsMinified>0</IsMinified>
-    <XPosition>1411.000000000</XPosition>
-    <YPosition>424.000000000</YPosition>
+    <IsMinified>1</IsMinified>
+    <XPosition>1.000000000</XPosition>
+    <YPosition>101.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -13,42 +13,42 @@
 <Widget>
     <Kind>4</Kind>
     <Name>CUT OFF</Name>
-    <Value>0.000000000</Value>
+    <Value>13.743843079</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>EXPONENT</Name>
-    <Value>0.000000000</Value>
+    <Value>128.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>X</Name>
-    <Value>5.235534668</Value>
+    <Value>-57.591613770</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>Y</Name>
-    <Value>-801.045837402</Value>
+    <Value>235.603271484</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>Z</Name>
-    <Value>-445.027465820</Value>
+    <Value>1000.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>OX</Name>
-    <Value>8.952880859</Value>
+    <Value>-5.183242798</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>OY</Name>
-    <Value>-7.067947388</Value>
+    <Value>-1.413497925</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>OZ</Name>
-    <Value>-3.298545837</Value>
+    <Value>-0.471321106</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -58,7 +58,7 @@
 <Widget>
     <Kind>25</Kind>
     <Name>AG</Name>
-    <Value>0.083770268</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -68,17 +68,17 @@
 <Widget>
     <Kind>25</Kind>
     <Name>DR</Name>
-    <Value>0.000000000</Value>
+    <Value>0.659685850</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>DG</Name>
-    <Value>0.000000000</Value>
+    <Value>0.853403747</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>DB</Name>
-    <Value>0.000000000</Value>
+    <Value>0.670156419</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>

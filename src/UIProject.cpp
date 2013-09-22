@@ -170,6 +170,7 @@ void UIProject::draw(ofEventArgs & args){
 void UIProject::exit(ofEventArgs & args){
     
     saveGUIS();
+//    deleteGUIS();
     
     for(vector<ofx1DExtruder *>::iterator it = extruders.begin(); it != extruders.end(); ++it){
         ofx1DExtruder *e = (*it);
@@ -180,9 +181,6 @@ void UIProject::exit(ofEventArgs & args){
     for(map<string, UILight *>::iterator it = lights.begin(); it != lights.end(); ++it){
         UILight *l = it->second;
         delete l;
-        
-        l = NULL;
-        it->second = NULL;
     }
     lights.clear();
     
@@ -195,7 +193,7 @@ void UIProject::exit(ofEventArgs & args){
 
     selfExit();
     
-    deleteGUIS();
+    
 }
 
 void UIProject::keyPressed(ofKeyEventArgs & args){
@@ -1167,7 +1165,7 @@ string UIProject::getSystemName(){
 }
 
 void UIProject::addGuiClass(UIClass &_uiClass){
-    ofxUISuperCanvas* uiClass = _uiClass.getUI();
+    ofxUISuperCanvas* uiClass = _uiClass.getUI(gui);
 	guis.push_back(uiClass);
 	guimap[uiClass->getName()] = uiClass;
 }
@@ -1177,7 +1175,7 @@ void UIProject::addLight( string _name, ofLightType _type ){
     
     lights[_name] = newLight;
     
-    ofxUISuperCanvas* uiClass = newLight->getUI();
+    ofxUISuperCanvas* uiClass = newLight->getUI(gui);
 	guis.push_back(uiClass);
 	guimap[uiClass->getName()] = uiClass;
 }

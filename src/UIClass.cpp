@@ -20,12 +20,12 @@ UIClass::~UIClass(){
     }
 }
 
-ofxUISuperCanvas* UIClass::getUI(){
+ofxUISuperCanvas* UIClass::getUI( ofxUICanvas *_parent ){
     
     if (gui == NULL){
-        gui = new ofxUISuperCanvas( getClassName() , gui);
-        gui->copyCanvasStyle(gui);
-        gui->copyCanvasProperties(gui);
+        gui = new ofxUISuperCanvas( getClassName() , _parent);
+        gui->copyCanvasStyle(_parent);
+        gui->copyCanvasProperties(_parent);
         gui->setName( getClassName() );
         gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
         
