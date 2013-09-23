@@ -55,7 +55,6 @@ UIGrid::~UIGrid(){
         delete refColorSampler;
         refColorSampler = NULL;
     }
-    
 }
 
 void UIGrid::setResolutionToCm(){
