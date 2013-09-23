@@ -156,8 +156,6 @@ void ShellExample::selfSceneTransformation(){
 }
 
 void ShellExample::selfUpdate(){
-    
-//	leap.update();
 
     vector<float> newAverage;
     for (int i = 0; i < bufferSize; i++) {
@@ -243,8 +241,7 @@ void ShellExample::selfDrawDebug(){
 }
 
 void ShellExample::selfDrawBackground(){
-	//turn the background refresh off
-	//bClearBackground = false;
+
 }
 
 void ShellExample::selfPostDraw(){
