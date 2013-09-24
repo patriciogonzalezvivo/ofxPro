@@ -6,44 +6,48 @@ string UIProject::getSystemName(){
 }
 
 string UIProject::getDataPath(){
+    #ifdef TARGET_OSX
     string path = "../../../data/"+getSystemName()+"/";
+    #else
+    string path = getSystemName()+"/";
+    #endif
     return path;
 }
 
 void UIProject::setup(){
-	
+
 	cout << "SETTING UP SYSTEM " << getSystemName() << endl;
 	background = NULL;
-    
+
 	ofAddListener(ofEvents().exit, this, &UIProject::exit);
-	
+
     ofDirectory dir;
     string directoryName = getDataPath()+"Presets/";
     if(!dir.doesDirectoryExist(directoryName)){
         dir.createDirectory(directoryName);
     }
-    
+
     string workingDirectoryName = directoryName+"Working/";
     if(!dir.doesDirectoryExist(workingDirectoryName)){
         dir.createDirectory(workingDirectoryName);
     }
-    
+
     setupAppParams();
     setupDebugParams();
     setupCameraParams();
 	setupLightingParams();
-    
+
     selfSetup();
     setupCoreGuis();
     selfSetupGuis();
-    
+
 	hideGUIS();
-    
+
     ofRegisterMouseEvents(this);
     ofRegisterKeyEvents(this);
     ofAddListener(ofEvents().update, this, &UIProject::update);
     ofAddListener(ofEvents().draw, this, &UIProject::draw);
-    
+
     loadGUIS();
     hideGUIS();
 }
@@ -53,26 +57,26 @@ void UIProject::play(){
     for(map<string, UILight *>::iterator it = lights.begin(); it != lights.end(); ++it){
         it->second->play();
     }
-    
+
     selfBegin();
-    
+
     bDebug = false;
 }
 
 void UIProject::stop(){
-    
+
     hideGUIS();
     saveGUIS();
     cam.disableMouseInput();
     for(map<string, UILight *>::iterator it = lights.begin(); it != lights.end(); ++it){
         it->second->stop();
     }
-    
+
     ofUnregisterMouseEvents(this);
     ofUnregisterKeyEvents(this);
     ofRemoveListener(ofEvents().update, this, &UIProject::update);
     ofRemoveListener(ofEvents().draw, this, &UIProject::draw);
-    
+
     selfEnd();
 }
 
@@ -82,27 +86,27 @@ void UIProject::update(ofEventArgs & args){
         for(vector<ofx1DExtruder *>::iterator it = extruders.begin(); it != extruders.end(); ++it){
             (*it)->update();
         }
-        
+
         selfUpdate();
     }
-    
+
 }
 
 void UIProject::draw(ofEventArgs & args){
     ofPushStyle();
-    
+
     if(bRenderSystem){
-        
+
         {
             UIProject::getRenderTarget().begin();
-            
-            
+
+
             //  Background
             //
             if ( background != NULL ){
                 background->draw();
             }
-            
+
             {
                 ofPushStyle();
                 ofPushMatrix();
@@ -110,51 +114,51 @@ void UIProject::draw(ofEventArgs & args){
                 ofPopMatrix();
                 ofPopStyle();
             }
-            
+
             //  Start 3D scene
             //
             {
                 getCameraRef().begin();
-                
+
                 //  Rotate Camera
                 //
                 ofRotateX(xRot->getPos());
                 ofRotateY(yRot->getPos());
                 ofRotateZ(zRot->getPos());
-                
+
                 //  Scene Setup
                 //
                 selfSceneTransformation();
                 glEnable(GL_DEPTH_TEST);
-            
+
                 //  Draw Debug
                 //
                 if( bDebug ){
                     ofPushStyle();
                     ofPushMatrix();
                     ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-                    
+
                     selfDrawDebug();
-                    
+
                     ofPopMatrix();
                     ofPopStyle();
                 }
-                
+
                 //  Draw Scene
                 //
                 {
                     lightsBegin();
                     ofPushStyle();
-                    
+
                     selfDraw();
-                    
+
                     ofPopStyle();
                     lightsEnd();
                 }
-                
+
                 getCameraRef().end();
             }
-            
+
             //  Draw Overlay
             //
             {
@@ -164,10 +168,10 @@ void UIProject::draw(ofEventArgs & args){
                 ofPopMatrix();
                 ofPopStyle();
             }
-            
+
             UIProject::getRenderTarget().end();
         }
-        
+
         //  Post-Draw ( shader time )
         //
         selfPostDraw();
@@ -176,22 +180,22 @@ void UIProject::draw(ofEventArgs & args){
 }
 
 void UIProject::exit(ofEventArgs & args){
-    
+
     saveGUIS();
 //    deleteGUIS();
-    
+
     for(vector<ofx1DExtruder *>::iterator it = extruders.begin(); it != extruders.end(); ++it){
         ofx1DExtruder *e = (*it);
         delete e;
     }
     extruders.clear();
-    
+
     for(map<string, UILight *>::iterator it = lights.begin(); it != lights.end(); ++it){
         UILight *l = it->second;
         delete l;
     }
     lights.clear();
-    
+
     for(map<string, UIMaterial *>::iterator it = materials.begin(); it != materials.end(); ++it){
         UIMaterial *m = it->second;
         delete m;
@@ -200,19 +204,19 @@ void UIProject::exit(ofEventArgs & args){
     materialGuis.clear();
 
     selfExit();
-    
-    
+
+
 }
 
 void UIProject::keyPressed(ofKeyEventArgs & args){
-	
+
     for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
         if((*it)->hasKeyboardFocus())
         {
             return;
         }
     }
-	
+
     switch (args.key){
         case '1':
             toggleGuiAndPosition(gui);
@@ -232,7 +236,7 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
         case '0':
             toggleGuiAndPosition(camGui);
             break;
-            
+
         case 'u':{
             bUpdateSystem = !bUpdateSystem;
         }
@@ -247,25 +251,25 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
             img.saveImage(getDataPath()+"snapshots/" + getSystemName() + " " + ofGetTimestampString() + ".png");
         }
             break;
-            
+
         case 'h':{
 			toggleGUIS();
         }
             break;
-            
+
         case 'f':{
             cout << "FULLSCREEN" << endl;
             ofToggleFullscreen();
         }
             break;
-            
+
         case 'p':{
             for(int i = 0; i < guis.size(); i++){
                 guis[i]->setDrawWidgetPadding(true);
             }
         }
             break;
-            
+
         case 'e':{
 			ofxUISuperCanvas *last = NULL;
             for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
@@ -273,7 +277,7 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
                 if(last != NULL){
                     (*it)->getRect()->setX(last->getRect()->getX());
                     (*it)->getRect()->setY(last->getRect()->getY()+last->getRect()->getHeight()+1);
-                    
+
                     if((*it)->getRect()->getY()+(*it)->getRect()->getHeight() > ofGetHeight() ){
                         (*it)->getRect()->setX(last->getRect()->getX()+last->getRect()->getWidth()+1);
                         (*it)->getRect()->setY(1);
@@ -286,7 +290,7 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
             }
         }
             break;
-            
+
         case 'r':{
             float maxY = 0;
             ofxUISuperCanvas *last = NULL;
@@ -294,29 +298,29 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
                 if(last != NULL){
                     (*it)->getRect()->setX( last->getRect()->getX()+last->getRect()->getWidth()+1 );
                     (*it)->getRect()->setY( last->getRect()->getY() );
-                    
+
                     if((*it)->getRect()->getX()+(*it)->getRect()->getWidth() > ofGetWidth() ){
                         (*it)->getRect()->setX(1);
                         (*it)->getRect()->setY(maxY+1);
                     }
-                    
+
                 } else {
                     (*it)->getRect()->setX(1);
                     (*it)->getRect()->setY(1);
-                    
+
                 }
                 last = (*it);
                 last->setMinified(false);
-                
+
                 float totalY = last->getRect()->getY()+last->getRect()->getHeight();
                 if ( totalY > maxY ){
                     maxY = totalY;
                 }
-                
+
             }
         }
             break;
-            
+
         case 't':{
             ofxUISuperCanvas *last = NULL;
             for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
@@ -332,7 +336,7 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
             }
         }
             break;
-            
+
         case 'y':{
             float x = ofGetWidth()*.5;
             float y = ofGetHeight()*.5;
@@ -347,7 +351,7 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
             }
         }
             break;
-            
+
         case '=':{
             for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
                 (*it)->toggleMinified();
@@ -369,7 +373,7 @@ void UIProject::keyReleased(ofKeyEventArgs & args){
             }
         }
 		break;
-            
+
         default:
             selfKeyReleased(args);
             break;
@@ -392,19 +396,19 @@ void UIProject::mousePressed(ofMouseEventArgs & args){
 }
 
 bool UIProject::cursorIsOverGUI(){
-	
+
     for(int i = 0; i < guis.size(); i++){
 		if(guis[i]->isHit(ofGetMouseX(), ofGetMouseY())){
 			return true;
 		}
 	}
-    
+
 	return false;
 }
 
 void UIProject::mouseReleased(ofMouseEventArgs & args){
     cam.enableMouseInput();
-    
+
     selfMouseReleased(args);
 }
 
@@ -434,7 +438,7 @@ void UIProject::setupCameraParams(){
     xRot->setPhysics(.9, 5.0, 25.0);
     yRot->setPhysics(.9, 5.0, 25.0);
     zRot->setPhysics(.9, 5.0, 25.0);
-    
+
     extruders.push_back(xRot);
     extruders.push_back(yRot);
     extruders.push_back(zRot);
@@ -452,23 +456,23 @@ void UIProject::setupLightingParams(){
 }
 
 void UIProject::setupCoreGuis(){
-    
+
     setupGui();
     setupSystemGui();
-    
+
     setupRenderGui();
-    
+
     setupLightingGui();
-    
+
     setupCameraGui();
-    
+
     setupPresetGui();
-    
+
     setupBackground();
-    
+
     mat = new UIMaterial();
     materialAdd( mat );
-    
+
     lightAdd("POINT LIGHT 1", OF_LIGHT_POINT);
 }
 
@@ -476,12 +480,12 @@ void UIProject::setupGui(){
     gui = new ofxUISuperCanvas(ofToUpper(getSystemName()));
     gui->setName("Settings");
     gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
-    
+
     ofxUIFPS *fps = gui->addFPS();
     gui->resetPlacer();
     gui->addWidgetDown(fps, OFX_UI_ALIGN_RIGHT, true);
     gui->addWidgetToHeader(fps);
-    
+
     gui->addSpacer();
     gui->addButton("SAVE", false);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
@@ -506,7 +510,7 @@ vector<string> UIProject::getPresets(){
 	string presetPath = getDataPath()+"Presets/";
 	ofDirectory presetsFolder = ofDirectory(presetPath);
 	cout << "PRESET PATH AT " << presetPath << endl;
-	
+
 	if(presetsFolder.exists()){
 		presetsFolder.listDir();
 		cout << " found " << presetsFolder.size() << " files " << endl;
@@ -545,9 +549,9 @@ void UIProject::guiEvent(ofxUIEventArgs &e){
             }
         }
     }
-    
 
-	
+
+
     selfGuiEvent(e);
 }
 
@@ -558,14 +562,14 @@ void UIProject::setupSystemGui(){
     sysGui->setPosition(guis[guis.size()-1]->getRect()->x+guis[guis.size()-1]->getRect()->getWidth()+1, 0);
     sysGui->setName("SystemSettings");
     sysGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
-    
+
     ofxUIToggle *toggle = sysGui->addToggle("DEBUG", &bDebug);
     toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
     sysGui->resetPlacer();
     sysGui->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
     sysGui->addWidgetToHeader(toggle);
     sysGui->addSpacer();
-    
+
     selfSetupSystemGui();
     sysGui->autoSizeToFitWidgets();
     ofAddListener(sysGui->newGUIEvent,this,&UIProject::guiSystemEvent);
@@ -580,10 +584,10 @@ void UIProject::setupRenderGui(){
     rdrGui->setPosition(guis[guis.size()-1]->getRect()->x+guis[guis.size()-1]->getRect()->getWidth()+1, 0);
     rdrGui->setName("RenderSettings");
     rdrGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
-    
+
     rdrGui->addSpacer();
     selfSetupRenderGui();
-    
+
     rdrGui->autoSizeToFitWidgets();
     ofAddListener(rdrGui->newGUIEvent,this,&UIProject::guiRenderEvent);
     guis.push_back(rdrGui);
@@ -597,13 +601,13 @@ void UIProject::setupLightingGui(){
     lgtGui->setName("LightSettings");
     lgtGui->setPosition(guis[guis.size()-1]->getRect()->x+guis[guis.size()-1]->getRect()->getWidth()+1, 0);
     lgtGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
-    
+
     ofxUIToggle *toggle = lgtGui->addToggle("ENABLE", &bEnableLights);
     toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
     lgtGui->resetPlacer();
     lgtGui->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
     lgtGui->addWidgetToHeader(toggle);
-    
+
     lgtGui->addSpacer();
     lgtGui->addToggle("SMOOTH", &bSmoothLighting);
     lgtGui->addSpacer();
@@ -640,7 +644,7 @@ void UIProject::setupCameraGui(){
     camGui->setName("CamSettings");
     camGui->setPosition(guis[guis.size()-1]->getRect()->x+guis[guis.size()-1]->getRect()->getWidth()+1, 0);
     camGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
-    
+
     ofxUIButton *button = camGui->addButton("RESET", false);
     button->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
     camGui->resetPlacer();
@@ -652,7 +656,7 @@ void UIProject::setupCameraGui(){
     camGui->addSlider("ROT-X", 0, 360.0, xRot->getPosPtr())->setIncrement(1.0);
     camGui->addSlider("ROT-Y", 0, 360.0, yRot->getPosPtr())->setIncrement(1.0);
     camGui->addSlider("ROT-Z", 0, 360.0, zRot->getPosPtr())->setIncrement(1.0);
-    
+
     camGui->addSpacer();
     vector<string> views;
     views.push_back("TOP");
@@ -663,12 +667,12 @@ void UIProject::setupCameraGui(){
     views.push_back("LEFT");
     views.push_back("3D");
     views.push_back("DISABLE");
-    
+
     ofxUIDropDownList *ddl = camGui->addDropDownList("VIEW", views);
     ddl->setAutoClose(false);
     ddl->setShowCurrentSelected(true);
-    ddl->activateToggle("DISABLE"); 
-    
+    ddl->activateToggle("DISABLE");
+
     camGui->autoSizeToFitWidgets();
     ofAddListener(camGui->newGUIEvent,this,&UIProject::guiCameraEvent);
     guis.push_back(camGui);
@@ -735,7 +739,7 @@ void UIProject::guiCameraEvent(ofxUIEventArgs &e){
             xRot->setHome(-90);
             yRot->setHome(0);
             zRot->setHome(-90);
-            
+
         }
     } else if(name == "3D") {
         ofxUIToggle *t = (ofxUIToggle *) e.widget;
@@ -755,17 +759,17 @@ void UIProject::setupPresetGui(){
 	presetGui->copyCanvasStyle(gui);
     presetGui->copyCanvasProperties(gui);
     presetGui->addSpacer();
-    
+
     vector<string> empty; empty.clear();
 	presetRadio = presetGui->addRadio("PRESETS", empty);
-	
+
 	presetGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
     vector<string> presets = getPresets();
     for(vector<string>::iterator it = presets.begin(); it != presets.end(); ++it){
         ofxUIToggle *t = presetGui->addToggle((*it), false);
         presetRadio->addToggle(t);
     }
-	
+
 	presetGui->autoSizeToFitWidgets();
     ofAddListener(presetGui->newGUIEvent,this,&UIProject::guiPresetEvent);
     guis.push_back(presetGui);
@@ -794,18 +798,18 @@ void UIProject::guiAdd(UIClass &_uiClass){
 
 void UIProject::lightAdd( string _name, ofLightType _type ){
     UILight *newLight = new UILight(_name, _type);
-    
+
     lights[_name] = newLight;
-    
+
     guiAdd( *newLight );
 }
 
 void UIProject::materialAdd( UIMaterial *_newMaterial ){
-    
+
     if ( _newMaterial->getClassName() == "MATERIAL" ){
         _newMaterial->setName("MATERIAL " + ofToString( materials.size() + 1));
     }
-    
+
     materials[ _newMaterial->getClassName() ] = _newMaterial;
     guiAdd( *_newMaterial );
 }
@@ -862,13 +866,13 @@ void UIProject::loadPresetGUISFromName(string presetName){
 }
 
 void UIProject::loadPresetGUISFromPath(string presetPath){
-	
+
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(presetPath+"/"+guis[i]->getName()+".xml");
     }
     cam.reset();
     ofxLoadCamera(cam, presetPath+"/ofEasyCamSettings");
-	
+
 	selfPresetLoaded(presetPath);
 }
 
@@ -880,7 +884,7 @@ void UIProject::savePresetGUIS(string presetName){
         presetRadio->addToggle(presetGui->addToggle(presetName, true));
         presetGui->autoSizeToFitWidgets();
     }
-    
+
     for(int i = 0; i < guis.size(); i++){
         guis[i]->saveSettings(presetDirectory+guis[i]->getName()+".xml");
     }
@@ -932,9 +936,9 @@ ofCamera& UIProject::getCameraRef(){
 }
 
 ofFbo& UIProject::getRenderTarget(){
-    
+
     if(!renderTarget.isAllocated() || renderTarget.getWidth() != ofGetWidth() || renderTarget.getHeight() != ofGetHeight()){
-        
+
         ofFbo::Settings settings;
         settings.width = ofGetWidth();
         settings.height = ofGetHeight();
@@ -944,16 +948,16 @@ ofFbo& UIProject::getRenderTarget(){
         settings.useStencil = true;
         settings.depthStencilAsTexture = true;
         settings.textureTarget = ofGetUsingArbTex() ? GL_TEXTURE_RECTANGLE_ARB : GL_TEXTURE_2D;
-        
+
         renderTarget.allocate(settings);
 //        renderTarget.allocate(ofGetWidth(), ofGetHeight(), GL_RGB);
-        
+
 		renderTarget.begin();
 		ofClear(0,0,0,0);
 		renderTarget.end();
-        
+
     }
-    
+
     return renderTarget;
 }
 
