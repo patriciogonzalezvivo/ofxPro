@@ -17,7 +17,7 @@ UIText::UIText(){
 void UIText::setupUI(){
     gui->addSlider("font_size",4.0,80.0,&fontSize);
     gui->addSlider("font_scale",0.0,2.0,&fontScale);
-    gui->addTextInput("content", "_content_", OFX_UI_FONT_SMALL);
+//    gui->addTextInput("content", "_content_", OFX_UI_FONT_SMALL);
     
     vector<string> horizontal;
     horizontal.push_back("LEFT");
@@ -43,6 +43,17 @@ void UIText::setupUI(){
         }
         gui->addDropDownList("FONTS", fonts );
     }
+}
+
+void UIText::setText(string _text){
+    text =_text;
+    if(shape!=NULL){
+        shape->setText(text);
+    }
+}
+
+string UIText::getText(){
+    return text;
 }
 
 void UIText::guiEvent(ofxUIEventArgs &e){

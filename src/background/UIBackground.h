@@ -26,7 +26,13 @@ public:
     virtual void    draw();
     
     ofFloatColor    color;
+    ofPoint         HSBTarget;
+    
     ofFloatColor    color2;
+    ofPoint         HSBTarget2;
+    
+    
+    bool            bChange;
     
 protected:
     virtual void    guiEvent(ofxUIEventArgs &e);
@@ -37,14 +43,11 @@ protected:
     int             gradientMode;
 	    
     Particle        HSB;
-    ofPoint         HSBTarget;
-
     Particle        HSB2;
-    ofPoint         HSBTarget2;
     
     ofxUISlider     *hueSlider;
     ofxUISlider     *satSlider;
     ofxUISlider     *briSlider;
     
-    bool            bChange;
+    float           speed;
 };

@@ -17,6 +17,8 @@ public:
     void        setupUI();
     void        draw();
     
+    float       grainPct;
+    
 protected:
 	virtual void update(ofEventArgs & args);
     
@@ -24,5 +26,5 @@ protected:
     ofShader    shader;
     ofMesh      mesh;
     
-    float       grainPct;
+    
 };

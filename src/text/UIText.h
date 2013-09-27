@@ -19,9 +19,11 @@ public:
     UIText();
     
     void    setupUI();
-    
+    void    setText(string _text);
     void    setFontsDir( string _dir );
+    
     string  getClassName(){ return name; }
+    string  getText();
     
     void    mouseDragged(ofPoint _mouse);
     

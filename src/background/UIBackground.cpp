@@ -24,6 +24,8 @@ UIBackground::UIBackground(){
     color2.set(0);
     HSB2.set(0,0,0);
     HSBTarget2.set(0,0,0);
+    
+    speed = 0.1;
 }
 
 UIBackground::~UIBackground(){
@@ -48,6 +50,9 @@ UIBackground::~UIBackground(){
 
 void UIBackground::setupUI(){
     
+    gui->addSlider("change_Speed", 0.0, 0.1, &speed);
+    
+    gui->addLabel("Colors");
     gui->addSlider("HUE", 0.0, 1.0, &HSBTarget.x );
     gui->addSlider("SAT", 0.0, 1.0, &HSBTarget.y );
     gui->addSlider("BRI", 0.0, 1.0, &HSBTarget.z );
@@ -118,10 +123,10 @@ void UIBackground::draw(){
     if(bEnable){
         
         if(bChange){
-            
+        
             if (HSBTarget.distance( HSB ) >= 0.00001  ){
                 HSB.addForceTo( HSBTarget, true );
-                HSB.update(0.1);
+                HSB.update(speed);
                 color.setHsb(HSB.x, HSB.y, HSB.z);
                 bChange = true;
             } else {
@@ -130,7 +135,7 @@ void UIBackground::draw(){
             
             if (HSBTarget2.distance( HSB2 ) >= 0.00001 ){
                 HSB2.addForceTo( HSBTarget2, true );
-                HSB2.update(0.1);
+                HSB2.update(speed);
                 color2.setHsb(HSB2.x, HSB2.y, HSB2.z);
                 bChange = true;
             } else {
