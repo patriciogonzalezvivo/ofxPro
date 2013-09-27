@@ -34,7 +34,7 @@ void UIFog::setColor( ofColor *_color ){
 
 void UIFog::linkColor( UIBackground *_background ){
     if (color != NULL){
-        delete color;
+        //delete color;
         
         ofxUISlider* red = (ofxUISlider *) gui->getWidget("Red");
         red->setVisible(false);

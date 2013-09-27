@@ -23,7 +23,7 @@ UIGrid::UIGrid(){
     refCol = 0;
     bJump = false;
 
-    colorSampler = NULL;
+//    colorSampler = NULL;
 
     subLines.bJump = false;
     cross.bJump = true;
@@ -35,23 +35,6 @@ UIGrid::UIGrid(){
     colorSampleImage.loadImage("GUI/defaultColorPalette.png");
 
     gui = NULL;
-}
-
-UIGrid::~UIGrid(){
-    if (colorSampler != NULL){
-        delete colorSampler;
-        colorSampler = NULL;
-    }
-
-    if ( crossColorSampler != NULL ){
-        delete crossColorSampler;
-        crossColorSampler = NULL;
-    }
-
-    if ( refColorSampler != NULL ){
-        delete refColorSampler;
-        refColorSampler = NULL;
-    }
 }
 
 void UIGrid::setResolutionToCm(){
@@ -69,16 +52,15 @@ void UIGrid::setResolutionToInches(){
 void UIGrid::setupUI(){
 
     gui->addLabel("Lines");
-    colorSampler =  gui->addImageSampler("Lines_Color", &colorSampleImage, (float)colorSampleImage.getWidth()/2, (float)colorSampleImage.getHeight()/2 );
+    gui->addImageSampler("Lines_Color", &colorSampleImage, (float)colorSampleImage.getWidth()/2, (float)colorSampleImage.getHeight()/2 );
     gui->addSlider("Lines_Alpha", 0.0, 1.0, &color.a);
-    //        gui->addSlider("SubLine_Resolution", 0.1,100.0, &subLineResolution);
     gui->addSlider("SubLine_Alpha", 0.0, 1.0, &subLineAlpha);
 
     gui->addLabel("Cross");
     gui->addSlider("Cross_Resolution", 0.1, 100.0, &crossResolution);
     gui->addSlider("Cross_Size", 0.0, 1.0, &cross.crossSize);
 
-    crossColorSampler =  gui->addImageSampler("Cross_Color", &colorSampleImage, (float)colorSampleImage.getWidth()/2, (float)colorSampleImage.getHeight()/2 );
+    gui->addImageSampler("Cross_Color", &colorSampleImage, (float)colorSampleImage.getWidth()/2, (float)colorSampleImage.getHeight()/2 );
 
     gui->addSlider("Cross_Alpha", 0.0, 1.0, &cross.color.a);
     gui->addLabel("References");
@@ -86,7 +68,7 @@ void UIGrid::setupUI(){
     gui->addSlider("Reference_Min", -1.0, 0.1, &refNumOffset);
     gui->addSlider("Col_Reference", 0.0, 1.0, &refCol);
     gui->addSlider("Row_Reference", 0.0, 1.0, &refRow);
-    refColorSampler =  gui->addImageSampler("Reference_Color", &colorSampleImage, (float)colorSampleImage.getWidth()/2, (float)colorSampleImage.getHeight()/2 );
+    gui->addImageSampler("Reference_Color", &colorSampleImage, (float)colorSampleImage.getWidth()/2, (float)colorSampleImage.getHeight()/2 );
     gui->addSlider("Reference_Color_Alpha", 0.0, 1.0, &fontColor.a);
 
 }

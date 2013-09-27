@@ -14,7 +14,6 @@ class UIGrid : public Grid, public UIClass {
 public:
     
     UIGrid();
-    ~UIGrid();
     
     void    setResolutionToCm();
     void    setResolutionToInches();
@@ -32,9 +31,6 @@ protected:
     //  Gui
     //
     void                guiEvent(ofxUIEventArgs &e);
-    ofxUIImageSampler*  colorSampler;
-    ofxUIImageSampler*  crossColorSampler;
-    ofxUIImageSampler*  refColorSampler;
     
     ofImage             colorSampleImage;
     
