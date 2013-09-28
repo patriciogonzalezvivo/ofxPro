@@ -12,12 +12,29 @@ UIText::UIText(){
     shape = NULL;
     fontDir = "none";
     bEnable = true;
+    
+    colorSampleImage.loadImage("GUI/defaultColorPalette.png");
 }
 
 void UIText::setupUI(){
+    
+//    gui->addTextInput("content", "_content_", OFX_UI_FONT_SMALL);
+    
     gui->addSlider("font_size",4.0,80.0,&fontSize);
     gui->addSlider("font_scale",0.0,2.0,&fontScale);
-//    gui->addTextInput("content", "_content_", OFX_UI_FONT_SMALL);
+    
+    ofDirectory dir;
+    dir.open( fontDir );
+    if (dir.listDir()){
+        fonts.clear();
+        for(int i = 0; i < dir.getFiles().size(); i++ ){
+            fonts.push_back( dir.getFiles()[i].getFileName() );
+        }
+        gui->addDropDownList("FONTS", fonts );
+    }
+    
+    gui->addImageSampler("font_color", &colorSampleImage, (float)colorSampleImage.getWidth()/2, (float)colorSampleImage.getHeight()/2 );
+    gui->addSlider("font_alpha",0.0,1.0,&fontColor.a);
     
     vector<string> horizontal;
     horizontal.push_back("LEFT");
@@ -34,15 +51,11 @@ void UIText::setupUI(){
     
     gui->addDropDownList("VERTICAL_ALIGN", vertical);
     
-    ofDirectory dir;
-    dir.open( fontDir );
-    if (dir.listDir()){
-        vector<string> fonts;
-        for(int i = 0; i < dir.getFiles().size(); i++ ){
-            fonts.push_back( dir.getFiles()[i].getFileName() );
-        }
-        gui->addDropDownList("FONTS", fonts );
-    }
+    vector<string> type;
+    type.push_back("ARC");
+    type.push_back("BLOCK");
+    gui->addDropDownList("TYPE", type);
+    gui->addSlider("arc_angle", -PI, PI, &arcAngle);
 }
 
 void UIText::setText(string _text){
@@ -60,9 +73,52 @@ void UIText::guiEvent(ofxUIEventArgs &e){
     if (gui != NULL || shape != NULL){
         string name = e.widget->getName();
         
-        if( name == "font_size" || name == "font_scale"){
+        if( name == "BLOCK" ){
+            shapeType = TEXT_SHAPE_BLOCK;
+            
+            if ( shape != NULL ){
+                delete shape;
+            }
+            
+            shape = new TextBlock();
+            ((TextBlock*)(shape))->setWrapping(false);
+            shape->set(*this);
             shape->loadFont( fontDir+"/"+fontName, fontSize );
             shape->setScale( fontScale );
+            shape->setAlignment( textAlignH , textAlignV );
+            shape->setText(text);
+            
+            ofxUIWidget *angWidget =  gui->getWidget("arc_angle");
+            angWidget->setVisible(false);
+            gui->autoSizeToFitWidgets();
+            
+        } else if( name == "ARC"){
+            shapeType = TEXT_SHAPE_ARC;
+            
+            if ( shape != NULL ){
+                delete shape;
+            }
+            
+            shape = new TextArc();
+            shape->set(*this);
+            shape->loadFont( fontDir+"/"+fontName, fontSize );
+            shape->setScale( fontScale );
+            shape->setAlignment( textAlignH , textAlignV );
+            shape->setText(text);
+            ((TextArc*)(shape))->setRadius(arcAngle);
+            
+            ofxUIWidget *angWidget =  gui->getWidget("arc_angle");
+            angWidget->setVisible(true);
+            gui->autoSizeToFitWidgets();
+            
+        } else if( name == "font_size" || name == "font_scale"){
+            shape->loadFont( fontDir+"/"+fontName, fontSize );
+            shape->setScale( fontScale );
+        } else if ( name == "font_color"){
+            ofxUIImageSampler* sampler = (ofxUIImageSampler *) e.widget;
+            float alpha = fontColor.a;
+            fontColor = sampler->getColor();
+            fontColor.a = alpha;
         } else if ( name == "content"){
             ofxUITextInput *widget = (ofxUITextInput *)e.widget;
             text = widget->getTextString();
@@ -92,9 +148,18 @@ void UIText::guiEvent(ofxUIEventArgs &e){
             shape->setAlignment( textAlignH , textAlignV );
         } else if ( name == "ENABLE" || name == "FONTS" || name == "VERTICAL_ALIGN" || name == "HORIZONTAL_ALIGN"){
             
+        } else if ( name == "arc_angle"){
+            if (shapeType == TEXT_SHAPE_ARC) {
+                ((TextArc*)(shape))->setAngle(arcAngle);
+            }
         } else {
-            fontName = name;
-            shape->loadFont( fontDir+fontName, fontSize );
+            for(int i = 0; i < fonts.size(); i++ ){
+                if (name == fonts[i]){
+                    fontName = name;
+                    shape->loadFont( fontDir+fontName, fontSize );
+                    break;
+                }
+            }
         }
     }
 }
@@ -102,14 +167,27 @@ void UIText::guiEvent(ofxUIEventArgs &e){
 void UIText::setFontsDir( string _dir ){
     fontDir = _dir;
     if ( shape != NULL ){
-        shape->loadFont( fontDir+"/"+fontName, fontSize );
+        
+        ofDirectory dir;
+        dir.open( fontDir );
+        if (dir.listDir()){
+            fonts.clear();
+            for(int i = 0; i < dir.getFiles().size(); i++ ){
+                fonts.push_back( dir.getFiles()[i].getFileName() );
+            }
+            
+            shape->loadFont( fontDir+"/"+fontName, fontSize );
+        }
     }
 }
 
 void UIText::draw(){
     if (bEnable){
         if ( shape != NULL ){
+            ofPushStyle();
+            ofSetColor(fontColor);
             shape->draw();
+            ofPopStyle();
         }
     }
 }
@@ -137,6 +215,7 @@ void UIText::loadCustomValues(ofxXmlSettings &_XML){
     if (fontDir == "none"){
         fontDir = _XML.getValue("font:dir", "path/");
     }
+    
     fontName = _XML.getValue("font:name", "non.ttf");
     fontSize  = _XML.getValue("font:size", 12);
     fontScale = _XML.getValue("font:scale", 1.0);
@@ -150,6 +229,12 @@ void UIText::loadCustomValues(ofxXmlSettings &_XML){
     
     text = _XML.getValue("text","default_text");
     shape->setText( text );
+    
+    arcAngle = _XML.getValue("arc:angle", 0);
+    
+    if ( shapeType == TEXT_SHAPE_ARC){
+        ((TextArc*)(shape))->setAngle(arcAngle);
+    }
 }
 
 void UIText::saveCustomValues(ofxXmlSettings &_XML){
@@ -161,6 +246,7 @@ void UIText::saveCustomValues(ofxXmlSettings &_XML){
     _XML.setValue("text",text);
     _XML.setValue("align:ver",textAlignV);
     _XML.setValue("align:hor",textAlignH);
+    _XML.setValue("arc:angle", arcAngle);
 }
 
 void UIText::mouseDragged(ofPoint _mouse){

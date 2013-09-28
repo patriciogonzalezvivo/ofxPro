@@ -36,6 +36,10 @@ protected:
     
     void    guiEvent(ofxUIEventArgs &e);
     string  fontDir;
+    vector<string> fonts;
+    
+    ofImage colorSampleImage;
+    ofFloatColor    fontColor;
     
     string  fontName;
     float   fontSize;
@@ -47,4 +51,6 @@ protected:
     
     TextShapeType       shapeType;
     TextShape           *shape;
+    
+    float               arcAngle;
 };
