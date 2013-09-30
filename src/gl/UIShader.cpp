@@ -24,16 +24,31 @@ void eraseSemiColon(string &_word){
 }
 
 UIShader::UIShader(){
-    textures = NULL;
-    nTextures = 0;
 }
 
 void UIShader::setupUI(){
+    float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
+    float dim = gui->getGlobalSliderHeight();
     
     for(int i = 0; i < uniforms.size(); i++){
         if ( uniforms[i]->bNeedUI ){
             if (uniforms[i]->type == UNIFORM_FLOAT){
-                gui->addSlider( uniforms[i]->name, 0.0, 1.0, &uniforms[i]->fValue );
+                gui->addSlider( uniforms[i]->name, 0.0, 1.0, &uniforms[i]->value.x );
+            } else if (uniforms[i]->type == UNIFORM_VEC2){
+                gui->addLabel( uniforms[i]->name, OFX_UI_FONT_SMALL);
+                gui->addMinimalSlider("x", 0.0, 1.0, &uniforms[i]->value.x,length/2.0, dim);//->setShowValue(false);
+                gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+                gui->addMinimalSlider("y", 0.0, 1.0, &uniforms[i]->value.y, length/2.0, dim);//->setShowValue(false);
+                gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+                gui->addSpacer();
+            } else if (uniforms[i]->type == UNIFORM_VEC3){
+                gui->addLabel( uniforms[i]->name, OFX_UI_FONT_SMALL);
+                gui->addMinimalSlider("x", 0.0, 1.0, &uniforms[i]->value.x,length/3.0, dim);//->setShowValue(false);
+                gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+                gui->addMinimalSlider("y", 0.0, 1.0, &uniforms[i]->value.y, length/3.0, dim);//->setShowValue(false);
+                gui->addMinimalSlider("z", 0.0, 1.0, &uniforms[i]->value.z, length/3.0, dim);//->setShowValue(false);
+                gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+                gui->addSpacer();
             }
         }
     }
@@ -47,6 +62,10 @@ void UIShader::loadFrag(string _fragShader){
 
 string UIShader::getClassName(){
     return shaderFile.getBaseName();
+}
+
+ofShader& UIShader::getShader(){
+    return shader;
 }
 
 void UIShader::guiEvent(ofxUIEventArgs &e){
@@ -89,10 +108,6 @@ bool UIShader::reloadShader(string _filePath){
             uniforms[i]->bUpdated = false;
         }
         
-        //  reset the counter of unifrom textures
-        //
-        textureCounter = 0;
-        
         //  Read the shader and check what needs to be added;
         //
         string fragmentShaderText = shaderBuffer.getText();
@@ -105,10 +120,10 @@ bool UIShader::reloadShader(string _filePath){
                 if (words[j] == "uniform"){
                     jumpNextWord(j,words);
 
-                    if (words[j] == "sampler2DRect"){
+                    if (words[j] == "vec3"){
                         jumpNextWord(j,words);
                         eraseSemiColon(words[j]);
-                        addUniform(UNIFORM_SAMPLE2DRECT,words[j]);
+                        addUniform(UNIFORM_VEC3,words[j]);
                     } else if (words[j] == "vec2"){
                         jumpNextWord(j,words);
                         eraseSemiColon(words[j]);
@@ -125,30 +140,6 @@ bool UIShader::reloadShader(string _filePath){
             }
         }
         
-        if ( textureCounter != nTextures ){
-            // If the number of textures it´s different
-            if (textures != NULL ){
-                if (nTextures > 0) {
-                    delete [] textures;
-                }
-            }
-            // And initialate the right amount of textures
-            nTextures = textureCounter;
-            if (nTextures > 0){
-                textures = new ofFbo[nTextures];
-            } else if ( nTextures == 0 ){
-                textures = NULL;
-            }
-            
-            // In any case it will allocate the total amount of textures with the internalFormat need
-            for( int i = 0; i < nTextures; i++){
-                textures[i].allocate(ofGetScreenWidth(), ofGetScreenHeight());
-                textures[i].begin();
-                ofClear(0,0);
-                textures[i].end();
-            }
-        }
-
         //  Get rid of extra uniforms
         //
         for (int i = uniforms.size()-1; i >= 0; i--) {
@@ -174,11 +165,6 @@ void UIShader::addUniform(UniformType _type, string _name){
     for(int i = 0; i < uniforms.size(); i++){
         if ( uniforms[i]->name == _name ){
             uniforms[i]->bUpdated = true;
-            
-            if ( uniforms[i]->name == "tex"+ofToString( textureCounter ) && uniforms[i]->type == UNIFORM_SAMPLE2DRECT ){
-                textureCounter++;
-            }
-            
             bExist = true;
             break;
         }
@@ -198,15 +184,8 @@ void UIShader::addUniform(UniformType _type, string _name){
             newUniform->bNeedUI = false;
         } else if ( _name == "screen" && _type == UNIFORM_VEC2 ){
             newUniform->bNeedUI = false;
-        } else if ( _name == "backBuffer" && _type == UNIFORM_SAMPLE2DRECT ){
-            newUniform->bNeedUI = false;
-        } else if ( _name == "frontBuffer" && _type == UNIFORM_SAMPLE2DRECT ){
-            newUniform->bNeedUI = false;
-        } else if ( _name == "tex"+ofToString( textureCounter ) && _type == UNIFORM_SAMPLE2DRECT ){
-            newUniform->bNeedUI = false;
-            textureCounter++;
         }
-    
+        
         uniforms.push_back(newUniform);
     }
 }
@@ -238,56 +217,20 @@ std::time_t UIShader::getLastModified( ofFile& _file ){
 	}
 }
 
-// A simplified way of filling the insides texture
-void UIShader::setTexture(ofBaseDraws& tex, int _texNum){
-    if ((_texNum < nTextures) && ( _texNum >= 0)){
-        
-        if (textures[_texNum].getWidth() != tex.getWidth() ||
-            textures[_texNum].getHeight() != tex.getHeight() ){
-            textures[_texNum].allocate(tex.getWidth(), tex.getHeight());
-        }
-        
-        textures[_texNum].begin();
-        ofClear(0,0);
-        ofSetColor(255);
-        tex.draw(0,0);
-        textures[_texNum].end();
-    }
-};
-
 void UIShader::begin(){
     if (bEnable){
         checkShaderFile();
         
         shader.begin();
         
-        int texLoc = 0;
         for (int i = 0; i < uniforms.size(); i++){
             
-            //  TEXTURES
-            //
-            if (uniforms[i]->type == UNIFORM_SAMPLE2DRECT) {
-
-//                if ( uniforms[i]->name == "backBuffer" ){
-//                    shader.setUniformTexture(uniforms[i]->name.c_str(),
-//                                             pingpong.src->getTextureReference(),
-//                                             nTex - texLoc);
-//                    
-//                }
-                
-                if ( uniforms[i]->name == "tex"+ofToString(texLoc)){
-                    shader.setUniformTexture(uniforms[i]->name.c_str(),textures[texLoc].getTextureReference(), nTextures-texLoc );
-                }
-                texLoc++;
-                
-            } else if (uniforms[i]->type == UNIFORM_FLOAT){
+            if (uniforms[i]->type == UNIFORM_FLOAT){
                 
                 if (uniforms[i]->name == "time"){
                     shader.setUniform1f(uniforms[i]->name.c_str(), ofGetElapsedTimef());
                 } else {
-//                    ofxUISlider* widget = (ofxUISlider *) gui->getWidget("Red");
-//                    shader.setUniform1f(uniforms[i]->name.c_str(), widget->getValue() );
-                    shader.setUniform1f(uniforms[i]->name.c_str(), uniforms[i]->fValue );
+                    shader.setUniform1f(uniforms[i]->name.c_str(), uniforms[i]->value.x );
                 }
                
             } else if (uniforms[i]->type == UNIFORM_VEC2){
@@ -299,8 +242,12 @@ void UIShader::begin(){
                 } else if (uniforms[i]->name == "windows" || uniforms[i]->name == "resolution" ){
                     shader.setUniform2f(uniforms[i]->name.c_str(), ofGetWidth(), ofGetHeight() );
                 } else {
-                    shader.setUniform2f(uniforms[i]->name.c_str(), uniforms[i]->vValue.x, uniforms[i]->vValue.y );
+                    shader.setUniform2f(uniforms[i]->name.c_str(), uniforms[i]->value.x, uniforms[i]->value.y );
                 }
+                
+            } else if (uniforms[i]->type == UNIFORM_VEC3){
+                
+                shader.setUniform3f(uniforms[i]->name.c_str(), uniforms[i]->value.x, uniforms[i]->value.y, uniforms[i]->value.z );
                 
             }
         }

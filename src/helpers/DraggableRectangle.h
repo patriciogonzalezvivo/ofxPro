@@ -14,8 +14,8 @@
 class DraggableRectangle: public ofRectangle{
 public:
     
-    bool loadSettings(string _fileConfig, string _tagName = "rect", int _num = 0 );
-    bool saveSettings(string _fileConfig, string _tagName = "rect", int _num = 0 );
+    virtual bool loadSettings(string _fileConfig, string _tagName = "rect", int _num = 0 );
+    virtual bool saveSettings(string _fileConfig, string _tagName = "rect", int _num = 0 );
     
     void mouseDragged(ofPoint _mouse);
     
@@ -29,7 +29,4 @@ protected:
     void    drawBrakets(ofRectangle _rect, float size, float margin);
     string  name;
     
-private:
-    void loadCommonValues(ofxXmlSettings &_XML);
-    void saveCommonValues(ofxXmlSettings &_XML);
 };

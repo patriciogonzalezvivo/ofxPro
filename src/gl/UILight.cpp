@@ -11,7 +11,7 @@
 UILight::UILight(){
     gui = NULL;
     light.setup();
-    position.set(0.0f,0.0f,0.0f);
+//    position.set(0.0f,0.0f,0.0f);
     orientation.set(0.0f,0.0f,0.0f);
     ambient = ofFloatColor(.5f,.5f,.5f,1.f);
     diffuse = ofFloatColor(.5f,.5f,.5f,1.f);
@@ -62,10 +62,10 @@ void UILight::setupUI(){
     switch( light.getType() ){
         case OF_LIGHT_POINT:{
             gui->addLabel("POSITION", OFX_UI_FONT_SMALL);
-            gui->addMinimalSlider("X", -1000.0, 1000.0, &position.x, length, dim)->setShowValue(false);
+            gui->addMinimalSlider("X", -1000.0, 1000.0, &x, length, dim)->setShowValue(false);
             gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-            gui->addMinimalSlider("Y", -1000.0, 1000.0, &position.y, length, dim)->setShowValue(false);
-            gui->addMinimalSlider("Z", -1000.0, 1000.0, &position.z, length, dim)->setShowValue(false);
+            gui->addMinimalSlider("Y", -1000.0, 1000.0, &y, length, dim)->setShowValue(false);
+            gui->addMinimalSlider("Z", -1000.0, 1000.0, &z, length, dim)->setShowValue(false);
             gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
             gui->addSpacer();
         }
@@ -77,10 +77,10 @@ void UILight::setupUI(){
             gui->addSpacer();
             
             gui->addLabel("POSITION", OFX_UI_FONT_SMALL);
-            gui->addMinimalSlider("X", -1000.0, 1000.0, &position.x, length, dim)->setShowValue(false);
+            gui->addMinimalSlider("X", -1000.0, 1000.0, &x, length, dim)->setShowValue(false);
             gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-            gui->addMinimalSlider("Y", -1000.0, 1000.0, &position.y, length, dim)->setShowValue(false);
-            gui->addMinimalSlider("Z", -1000.0, 1000.0, &position.z, length, dim)->setShowValue(false);
+            gui->addMinimalSlider("Y", -1000.0, 1000.0, &y, length, dim)->setShowValue(false);
+            gui->addMinimalSlider("Z", -1000.0, 1000.0, &z, length, dim)->setShowValue(false);
             gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
             gui->addSpacer();
             
@@ -139,11 +139,11 @@ void UILight::enable(){
     if(bEnable){
         switch(light.getType()){
             case OF_LIGHT_POINT:{
-                light.setPosition(position);
+                light.setPosition(*this);
             }
                 break;
             case OF_LIGHT_SPOT:{
-                light.setPosition(position);
+                light.setPosition(*this);
                 light.setOrientation(orientation);
                 light.setSpotlightCutOff(spotCutOff);
                 light.setSpotConcentration(exponent);
@@ -183,7 +183,7 @@ void UILight::draw(){
         ofSetColor( diffuse );
         ofPushMatrix();
         light.draw();
-        ofTranslate( position );
+        ofTranslate( *this );
         ofDrawBitmapString(name, ofPoint(20,20,20));
         ofPopMatrix();
     }

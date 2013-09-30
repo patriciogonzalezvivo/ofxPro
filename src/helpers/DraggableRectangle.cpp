@@ -29,10 +29,6 @@ bool DraggableRectangle::loadSettings(string _fileConfig, string _name, int _num
     return fileFound;
 }
 
-void DraggableRectangle::loadCommonValues(ofxXmlSettings &_XML){
-    
-}
-
 bool DraggableRectangle::saveSettings(string _fileConfig, string _name, int _num ){
     bool fileFound = false;
     

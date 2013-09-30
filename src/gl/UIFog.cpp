@@ -46,7 +46,7 @@ void UIFog::linkColor( UIBackground *_background ){
         gui->autoSizeToFitWidgets();
     }
     
-    color = &_background->color;
+    color = &_background->getColor();
 }
 
 void UIFog::guiEvent(ofxUIEventArgs &e){

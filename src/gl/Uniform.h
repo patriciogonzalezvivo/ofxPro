@@ -12,7 +12,7 @@
 #include "ofxUI.h"
 
 enum UniformType{
-	UNIFORM_SAMPLE2DRECT = 0,
+	UNIFORM_VEC3,
     UNIFORM_VEC2,
     UNIFORM_FLOAT
 };
@@ -27,11 +27,8 @@ struct Uniform {
     
     UniformType type;
     string      name;
+    ofVec3f     value;
     
     bool        bUpdated;
     bool        bNeedUI;
-    
-    ofVec3f     vValue;
-    float       fValue;
-    
 };

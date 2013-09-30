@@ -18,21 +18,18 @@ public:
     
     virtual void    setupUI();
     
+    void    setColor( ofFloatColor _color );
+    void    setColor2( ofFloatColor _color );
+    
     void    linkUIs( vector<ofxUISuperCanvas *> *_guis );
     void    linkCamera( ofEasyCam *_cam );
     
     string  getClassName(){return "BACKGROUND"; }
     
+    ofFloatColor&    getColor();
+    ofFloatColor&    getColor2();
+    
     virtual void    draw();
-    
-    ofFloatColor    color;
-    ofPoint         HSBTarget;
-    
-    ofFloatColor    color2;
-    ofPoint         HSBTarget2;
-    
-    
-    bool            bChange;
     
 protected:
     virtual void    guiEvent(ofxUIEventArgs &e);
@@ -41,13 +38,19 @@ protected:
     ofEasyCam       *cam;
     
     int             gradientMode;
-	    
+	   
+    ofFloatColor    color;
     Particle        HSB;
+    ofPoint         HSBTarget;
+    
+    ofFloatColor    color2;
     Particle        HSB2;
+    ofPoint         HSBTarget2;
     
     ofxUISlider     *hueSlider;
     ofxUISlider     *satSlider;
     ofxUISlider     *briSlider;
     
     float           speed;
+    bool            bChange;
 };

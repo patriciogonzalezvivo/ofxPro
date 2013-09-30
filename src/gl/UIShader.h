@@ -22,7 +22,7 @@ public:
     void setupUI();
     
     void loadFrag(string _fragShader );
-    void setTexture(ofBaseDraws& tex, int _texNum = 0);
+    ofShader& getShader();
     
     void begin();
     void end();
@@ -43,9 +43,5 @@ protected:
     int                 millisBetweenFileCheck;
     
     vector<Uniform*>    uniforms;
-    ofFbo               *textures;
-    
-    int                 nTextures;
-    int                 textureCounter;
     bool                bOpen;
 };

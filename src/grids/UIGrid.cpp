@@ -184,6 +184,7 @@ void UIGrid::print(int _layerNumber){
 void UIGrid::draw(){
 
     if (bEnable){
+        ofPushStyle();
         cross.draw();
 
         ofTranslate(0, 0, 0.1);
@@ -213,5 +214,6 @@ void UIGrid::draw(){
 
         ofTranslate(0, 0, 0.1);
         boxes.draw();
+        ofPopStyle();
     }
 }

@@ -23,11 +23,9 @@
  **********************************************************************************/
 
 #pragma once
-
 #include "UIClass.h"
 
-
-class UILight : public UIClass {
+class UILight : public UIClass, public ofPoint {
 public:
     
     UILight();
@@ -57,7 +55,7 @@ protected:
     ofFloatColor ambient;
     ofFloatColor diffuse;
     ofFloatColor specular;
-    ofVec3f position;
+//    ofVec3f position;
     ofVec3f orientation;
     float   spotCutOff;
     float   exponent;

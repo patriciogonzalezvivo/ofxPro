@@ -66,6 +66,20 @@ void UIBackground::setupUI(){
     gui->autoSizeToFitWidgets();
 }
 
+void UIBackground::setColor( ofFloatColor _color ){
+    HSBTarget.x = _color.getHue();
+    HSBTarget.y = _color.getSaturation();
+    HSBTarget.z = _color.getBrightness();
+    bChange = true;
+}
+
+void UIBackground::setColor2( ofFloatColor _color ){
+    HSBTarget2.x = _color.getHue();
+    HSBTarget2.y = _color.getSaturation();
+    HSBTarget2.z = _color.getBrightness();
+    bChange = true;
+}
+
 void UIBackground::linkUIs( vector<ofxUISuperCanvas *> *_guis ){
     guis = _guis;
 }
@@ -116,6 +130,14 @@ void UIBackground::guiEvent(ofxUIEventArgs &e){
     }
     
     bChange = true;
+}
+
+ofFloatColor& UIBackground::getColor(){
+    return color;
+}
+
+ofFloatColor& UIBackground::getColor2(){
+    return color2;
 }
 
 void UIBackground::draw(){

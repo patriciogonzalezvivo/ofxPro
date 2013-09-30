@@ -179,8 +179,8 @@ protected:
 	
     //  LIGHTS
     //
-    map<string, UILight *>            lights;
-    map<string, ofxUISuperCanvas *> lightGuis;
+    map<string, UILight* >          lights;
+    map<string, ofxUISuperCanvas* > lightGuis;
 	
     //  APP
     //
