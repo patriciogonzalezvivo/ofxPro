@@ -10,20 +10,22 @@
 
 #include "ofxUI.h"
 
+typedef shared_ptr<ofxUISuperCanvas> UIReference;
+
 class UIClass {
 public:
 
-    UIClass();
-    ~UIClass();
+    UIClass(){ }
+    virtual ~UIClass(){ }
 
     virtual void        setupUI( ) = 0;
     virtual string      getClassName(){ return "GUICLASS_DEFAULT"; };
-    ofxUISuperCanvas*   getUI( ofxUICanvas *_parent );
+    UIReference         getUIReference( ofxUICanvas *_parent );
 
     bool                bEnable;
 
 protected:
-
+    UIReference         gui;
     virtual void        guiEvent(ofxUIEventArgs &e) = 0;
-    ofxUISuperCanvas*   gui;
 };
+

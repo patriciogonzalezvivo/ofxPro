@@ -9,7 +9,7 @@
 #include "UILight.h"
 
 UILight::UILight(){
-    gui = NULL;
+    
     light.setup();
 //    position.set(0.0f,0.0f,0.0f);
     orientation.set(0.0f,0.0f,0.0f);

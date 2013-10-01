@@ -7,38 +7,26 @@
 
 #include "UIClass.h"
 
-UIClass::UIClass(){
-    gui = NULL;
-}
+UIReference UIClass::getUIReference( ofxUICanvas *_parent ){
 
-UIClass::~UIClass(){
-    if (gui != NULL){
-        gui->disable();
-        ofRemoveListener(gui->newGUIEvent, this, &UIClass::guiEvent);
-        delete gui;
-    }
-}
+    UIReference tmp( new ofxUISuperCanvas(getClassName() , _parent) );
+    gui = tmp;
+    
+    gui->copyCanvasStyle( _parent );
+    gui->copyCanvasProperties( _parent );
+    gui->setName( getClassName() );
+    gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
 
-ofxUISuperCanvas* UIClass::getUI( ofxUICanvas *_parent ){
+    ofxUIToggle *toggle = gui->addToggle("ENABLE", &bEnable);
+    toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
+    gui->resetPlacer();
+    gui->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
+    gui->addWidgetToHeader(toggle);
+    gui->addSpacer();
 
-    if (gui == NULL){
-        gui = new ofxUISuperCanvas( getClassName() , _parent);
-        gui->copyCanvasStyle(_parent);
-        gui->copyCanvasProperties(_parent);
-        gui->setName( getClassName() );
-        gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
+    setupUI();
 
-        ofxUIToggle *toggle = gui->addToggle("ENABLE", &bEnable);
-        toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
-        gui->resetPlacer();
-        gui->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
-        gui->addWidgetToHeader(toggle);
-        gui->addSpacer();
-
-        setupUI();
-
-        ofAddListener(gui->newGUIEvent, this, &UIClass::guiEvent);
-    }
+    ofAddListener(gui->newGUIEvent, this, &UIClass::guiEvent);
 
     return gui;
 }

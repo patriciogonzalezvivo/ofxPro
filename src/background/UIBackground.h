@@ -21,7 +21,7 @@ public:
     void    setColor( ofFloatColor _color );
     void    setColor2( ofFloatColor _color );
     
-    void    linkUIs( vector<ofxUISuperCanvas *> *_guis );
+    void    linkUIs( vector<UIReference> *_guis );
     void    linkCamera( ofEasyCam *_cam );
     
     string  getClassName(){return "BACKGROUND"; }
@@ -34,7 +34,7 @@ public:
 protected:
     virtual void    guiEvent(ofxUIEventArgs &e);
     
-    vector<ofxUISuperCanvas *> *guis;
+    vector<UIReference> *guis;
     ofEasyCam       *cam;
     
     int             gradientMode;

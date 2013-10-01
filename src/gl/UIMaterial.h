@@ -47,3 +47,5 @@ protected:
 	float prev_shininess, prev_shininess_back;
     float shininess;
 };
+
+typedef shared_ptr<UIMaterial> UIMaterialReference;

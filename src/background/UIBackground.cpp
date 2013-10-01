@@ -32,7 +32,6 @@ UIBackground::~UIBackground(){
     if (gui != NULL){
         gui->disable();
         ofRemoveListener(gui->newGUIEvent, this, &UIBackground::guiEvent);
-        delete gui;
     }
     
     if ( hueSlider != NULL ){
@@ -80,7 +79,7 @@ void UIBackground::setColor2( ofFloatColor _color ){
     bChange = true;
 }
 
-void UIBackground::linkUIs( vector<ofxUISuperCanvas *> *_guis ){
+void UIBackground::linkUIs( vector<UIReference> *_guis ){
     guis = _guis;
 }
 

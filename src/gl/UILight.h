@@ -61,3 +61,5 @@ protected:
     float   exponent;
     
 };
+
+typedef shared_ptr<UILight> UILightReference;

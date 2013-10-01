@@ -116,7 +116,7 @@ class UIProject {
     void guiAdd( UIClass &_uiClass );
     virtual void guiAllEvents(ofxUIEventArgs &e);
     
-    void materialAdd( UIMaterial *m);
+    void materialAdd( string _name );
     void lightAdd( string _name, ofLightType _type );
     void lightsBegin();
     void lightsDraw();
@@ -134,7 +134,7 @@ class UIProject {
     void showGUIS();
     void hideGUIS();
     virtual void toggleGUIS();
-    void toggleGuiAndPosition(ofxUISuperCanvas *g);
+    void toggleGuiAndPosition( UIReference &g);
     void deleteGUIS();
     
     virtual ofCamera&   getCameraRef();
@@ -144,20 +144,21 @@ class UIProject {
 protected:
 	//  UI
     //
-    ofxUISuperCanvas *gui;
-    ofxUISuperCanvas *sysGui;
-    ofxUISuperCanvas *rdrGui;
-    ofxUISuperCanvas *bgGui;
-    ofxUISuperCanvas *lgtGui;
-    ofxUISuperCanvas *camGui;
-    ofxUISuperCanvas *presetGui;
-    ofxUISuperCanvas *tlGui;
-    vector<ofxUISuperCanvas *> guis;
-    map<string, ofxUICanvas *> guimap;
+    ofxUISuperCanvas *guiTemplate;
+    
+    UIReference gui;
+    UIReference sysGui;
+    UIReference rdrGui;
+    UIReference bgGui;
+    UIReference lgtGui;
+    UIReference camGui;
+    UIReference presetGui;
+    UIReference tlGui;
+    vector<UIReference> guis;
 	
     //  BACKGROUND
     //
-    UIBackground      *background;
+    UIBackground    *background;
     
 	ofxUIRadio      *presetRadio;
 	
@@ -165,22 +166,16 @@ protected:
     //
     vector<ofx1DExtruder *>         extruders;
 	
-    //  MATERIAL
-    //
-    UIMaterial                      *mat;
-    map<string, UIMaterial *>       materials;
-    map<string, ofxUISuperCanvas *> materialGuis;
-	
     //  LIGHTING
     //
     float   *globalAmbientColor;
     bool    bSmoothLighting;
     bool    bEnableLights;
 	
-    //  LIGHTS
+    //  LIGHTS & Materials
     //
-    map<string, UILight* >          lights;
-    map<string, ofxUISuperCanvas* > lightGuis;
+    map<string, UILightReference >  lights;
+    map<string, UIMaterialReference> materials;
 	
     //  APP
     //

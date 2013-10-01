@@ -33,8 +33,7 @@ UIGrid::UIGrid(){
     //
     font.loadFont("GUI/NewMedia Fett.ttf",12,true, true, true,false);
     colorSampleImage.loadImage("GUI/defaultColorPalette.png");
-
-    gui = NULL;
+    
 }
 
 void UIGrid::setResolutionToCm(){

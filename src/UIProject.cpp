@@ -54,7 +54,7 @@ void UIProject::setup(){
 
 void UIProject::play(){
     cam.enableMouseInput();
-    for(map<string, UILight *>::iterator it = lights.begin(); it != lights.end(); ++it){
+    for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
         it->second->play();
     }
 
@@ -68,7 +68,7 @@ void UIProject::stop(){
     hideGUIS();
     saveGUIS();
     cam.disableMouseInput();
-    for(map<string, UILight *>::iterator it = lights.begin(); it != lights.end(); ++it){
+    for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
         it->second->stop();
     }
 
@@ -149,8 +149,9 @@ void UIProject::draw(ofEventArgs & args){
                 {
                     lightsBegin();
                     ofPushStyle();
-
+                    materials["MATERIAL 1"]->begin();
                     selfDraw();
+                    materials["MATERIAL 1"]->end();
 
                     ofPopStyle();
                     lightsEnd();
@@ -183,6 +184,7 @@ void UIProject::exit(ofEventArgs & args){
 
     saveGUIS();
 //    deleteGUIS();
+    
 
     for(vector<ofx1DExtruder *>::iterator it = extruders.begin(); it != extruders.end(); ++it){
         ofx1DExtruder *e = (*it);
@@ -190,27 +192,26 @@ void UIProject::exit(ofEventArgs & args){
     }
     extruders.clear();
 
-    for(map<string, UILight *>::iterator it = lights.begin(); it != lights.end(); ++it){
-        UILight *l = it->second;
-        delete l;
-    }
+//    for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
+//        UILightReference l = it->second;
+//        delete l;
+//    }
     lights.clear();
 
-    for(map<string, UIMaterial *>::iterator it = materials.begin(); it != materials.end(); ++it){
-        UIMaterial *m = it->second;
-        delete m;
-    }
+//    for(map<string, UIMaterialReference>::iterator it = materials.begin(); it != materials.end(); ++it){
+//        UIMaterial *m = it->second;
+//        delete m;
+//    }
     materials.clear();
-    materialGuis.clear();
+//    materialGuis.clear();
 
+    guis.clear();
     selfExit();
-
-
 }
 
 void UIProject::keyPressed(ofKeyEventArgs & args){
 
-    for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
+    for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         if((*it)->hasKeyboardFocus())
         {
             return;
@@ -219,7 +220,7 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
 
     switch (args.key){
         case '1':
-            toggleGuiAndPosition(gui);
+//            toggleGuiAndPosition(gui);
             break;
         case '2':
             toggleGuiAndPosition(sysGui);
@@ -271,8 +272,8 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
             break;
 
         case 'e':{
-			ofxUISuperCanvas *last = NULL;
-            for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
+			UIReference last;
+            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
                 (*it)->setMinified(false);
                 if(last != NULL){
                     (*it)->getRect()->setX(last->getRect()->getX());
@@ -293,8 +294,8 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
 
         case 'r':{
             float maxY = 0;
-            ofxUISuperCanvas *last = NULL;
-            for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
+            UIReference last;
+            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
                 if(last != NULL){
                     (*it)->getRect()->setX( last->getRect()->getX()+last->getRect()->getWidth()+1 );
                     (*it)->getRect()->setY( last->getRect()->getY() );
@@ -322,8 +323,8 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
             break;
 
         case 't':{
-            ofxUISuperCanvas *last = NULL;
-            for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
+            UIReference last;
+            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
                 (*it)->setMinified(true);
                 if(last != NULL){
                     (*it)->getRect()->setX(1);
@@ -343,7 +344,7 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
             float tempRadius = gui->getGlobalCanvasWidth()*2.0;
             float stepSize = TWO_PI/(float)guis.size();
             float theta = 0;
-            for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it)
+            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it)
             {
                 (*it)->getRect()->setX(x+sin(theta)*tempRadius - (*it)->getRect()->getHalfWidth());
                 (*it)->getRect()->setY(y+cos(theta)*tempRadius - (*it)->getRect()->getHalfHeight());
@@ -353,7 +354,7 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
             break;
 
         case '=':{
-            for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
+            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
                 (*it)->toggleMinified();
             }
         }
@@ -368,7 +369,7 @@ void UIProject::keyPressed(ofKeyEventArgs & args){
 void UIProject::keyReleased(ofKeyEventArgs & args){
     switch (args.key){
         case 'p':{
-            for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
+            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
                 (*it)->setDrawWidgetPadding(false);
             }
         }
@@ -470,17 +471,19 @@ void UIProject::setupCoreGuis(){
 
     setupBackground();
 
-    mat = new UIMaterial();
-    materialAdd( mat );
+    materialAdd( "MATERIAL" );
 
     lightAdd("POINT LIGHT 1", OF_LIGHT_POINT);
 }
 
 void UIProject::setupGui(){
-    gui = new ofxUISuperCanvas(ofToUpper(getSystemName()));
-    gui->setName("Settings");
-    gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
+    
+    guiTemplate = new ofxUISuperCanvas(ofToUpper(getSystemName()));
+    guiTemplate->setName("TEMPLATE");
+    guiTemplate->setWidgetFontSize(OFX_UI_FONT_SMALL);
 
+    UIReference tmp( new ofxUISuperCanvas(getSystemName(), guiTemplate) );
+    gui = tmp;
     ofxUIFPS *fps = gui->addFPS();
     gui->resetPlacer();
     gui->addWidgetDown(fps, OFX_UI_ALIGN_RIGHT, true);
@@ -501,8 +504,9 @@ void UIProject::setupGui(){
     selfSetupGui();
     gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent,this,&UIProject::guiEvent);
+    
     guis.push_back(gui);
-    guimap[gui->getName()] = gui;
+//    guimap[gui->getName()] = gui;
 }
 
 vector<string> UIProject::getPresets(){
@@ -556,9 +560,11 @@ void UIProject::guiEvent(ofxUIEventArgs &e){
 }
 
 void UIProject::setupSystemGui(){
-    sysGui = new ofxUISuperCanvas("SYSTEM", gui);
-    sysGui->copyCanvasStyle(gui);
-    sysGui->copyCanvasProperties(gui);
+    UIReference tmp( new ofxUISuperCanvas("SYSTEM", guiTemplate) );
+    
+    sysGui = tmp;
+    sysGui->copyCanvasStyle( guiTemplate );
+    sysGui->copyCanvasProperties( guiTemplate );
     sysGui->setPosition(guis[guis.size()-1]->getRect()->x+guis[guis.size()-1]->getRect()->getWidth()+1, 0);
     sysGui->setName("SystemSettings");
     sysGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
@@ -574,13 +580,14 @@ void UIProject::setupSystemGui(){
     sysGui->autoSizeToFitWidgets();
     ofAddListener(sysGui->newGUIEvent,this,&UIProject::guiSystemEvent);
     guis.push_back(sysGui);
-    guimap[sysGui->getName()] = sysGui;
+//    guimap[sysGui->getName()] = sysGui;
 }
 
 void UIProject::setupRenderGui(){
-    rdrGui = new ofxUISuperCanvas("RENDER", gui);
-    rdrGui->copyCanvasStyle(gui);
-    rdrGui->copyCanvasProperties(gui);
+    UIReference tmp( new ofxUISuperCanvas("RENDER", guiTemplate ) );
+    rdrGui = tmp;
+    rdrGui->copyCanvasStyle( guiTemplate );
+    rdrGui->copyCanvasProperties( guiTemplate );
     rdrGui->setPosition(guis[guis.size()-1]->getRect()->x+guis[guis.size()-1]->getRect()->getWidth()+1, 0);
     rdrGui->setName("RenderSettings");
     rdrGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
@@ -591,13 +598,14 @@ void UIProject::setupRenderGui(){
     rdrGui->autoSizeToFitWidgets();
     ofAddListener(rdrGui->newGUIEvent,this,&UIProject::guiRenderEvent);
     guis.push_back(rdrGui);
-    guimap[rdrGui->getName()] = rdrGui;
+//    guimap[rdrGui->getName()] = rdrGui;
 }
 
 void UIProject::setupLightingGui(){
-    lgtGui = new ofxUISuperCanvas("LIGHT", gui);
-    lgtGui->copyCanvasStyle(gui);
-    lgtGui->copyCanvasProperties(gui);
+    UIReference tmp( new ofxUISuperCanvas("LIGHT", guiTemplate) );
+    lgtGui = tmp;
+    lgtGui->copyCanvasStyle(guiTemplate);
+    lgtGui->copyCanvasProperties(guiTemplate);
     lgtGui->setName("LightSettings");
     lgtGui->setPosition(guis[guis.size()-1]->getRect()->x+guis[guis.size()-1]->getRect()->getWidth()+1, 0);
     lgtGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
@@ -622,7 +630,7 @@ void UIProject::setupLightingGui(){
     lgtGui->autoSizeToFitWidgets();
     ofAddListener(lgtGui->newGUIEvent,this,&UIProject::guiLightingEvent);
     guis.push_back(lgtGui);
-    guimap[lgtGui->getName()] = lgtGui;
+//    guimap[lgtGui->getName()] = lgtGui;
 }
 
 void UIProject::guiLightingEvent(ofxUIEventArgs &e){
@@ -638,9 +646,11 @@ void UIProject::guiLightingEvent(ofxUIEventArgs &e){
 
 
 void UIProject::setupCameraGui(){
-    camGui = new ofxUISuperCanvas("CAMERA", gui);
-    camGui->copyCanvasStyle(gui);
-    camGui->copyCanvasProperties(gui);
+    UIReference tmp( new ofxUISuperCanvas("CAMERA", guiTemplate) );
+    
+    camGui = tmp;
+    camGui->copyCanvasStyle(guiTemplate);
+    camGui->copyCanvasProperties(guiTemplate);
     camGui->setName("CamSettings");
     camGui->setPosition(guis[guis.size()-1]->getRect()->x+guis[guis.size()-1]->getRect()->getWidth()+1, 0);
     camGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
@@ -676,7 +686,7 @@ void UIProject::setupCameraGui(){
     camGui->autoSizeToFitWidgets();
     ofAddListener(camGui->newGUIEvent,this,&UIProject::guiCameraEvent);
     guis.push_back(camGui);
-    guimap[camGui->getName()] = camGui;
+//    guimap[camGui->getName()] = camGui;
 }
 
 void UIProject::guiCameraEvent(ofxUIEventArgs &e){
@@ -753,11 +763,12 @@ void UIProject::guiCameraEvent(ofxUIEventArgs &e){
 }
 
 void UIProject::setupPresetGui(){
-	presetGui = new ofxUISuperCanvas("PRESETS");
+    UIReference tmp( new ofxUISuperCanvas("PRESENTS", guiTemplate) );
+	presetGui = tmp;
     presetGui->setTriggerWidgetsUponLoad(false);
 	presetGui->setName("Presets");
-	presetGui->copyCanvasStyle(gui);
-    presetGui->copyCanvasProperties(gui);
+	presetGui->copyCanvasStyle(guiTemplate);
+    presetGui->copyCanvasProperties(guiTemplate);
     presetGui->addSpacer();
 
     vector<string> empty; empty.clear();
@@ -773,7 +784,7 @@ void UIProject::setupPresetGui(){
 	presetGui->autoSizeToFitWidgets();
     ofAddListener(presetGui->newGUIEvent,this,&UIProject::guiPresetEvent);
     guis.push_back(presetGui);
-    guimap[presetGui->getName()] = presetGui;
+//    guimap[presetGui->getName()] = presetGui;
 }
 
 void UIProject::guiPresetEvent(ofxUIEventArgs &e){
@@ -791,27 +802,26 @@ void UIProject::setupBackground(){
 }
 
 void UIProject::guiAdd(UIClass &_uiClass){
-    ofxUISuperCanvas* uiClass = _uiClass.getUI(gui);
+    UIReference uiClass = _uiClass.getUIReference(guiTemplate);
 	guis.push_back(uiClass);
-	guimap[uiClass->getName()] = uiClass;
+//	guimap[uiClass->getName()] = uiClass;
 }
 
 void UIProject::lightAdd( string _name, ofLightType _type ){
-    UILight *newLight = new UILight(_name, _type);
-
+    UILightReference newLight( new UILight(_name, _type) );
     lights[_name] = newLight;
-
-    guiAdd( *newLight );
+	guis.push_back( newLight->getUIReference(guiTemplate) );
 }
 
-void UIProject::materialAdd( UIMaterial *_newMaterial ){
-
-    if ( _newMaterial->getClassName() == "MATERIAL" ){
-        _newMaterial->setName("MATERIAL " + ofToString( materials.size() + 1));
+void UIProject::materialAdd( string _name ){
+    UIMaterialReference newMaterial( new UIMaterial() );
+    
+    if ( newMaterial->getClassName()  == "MATERIAL" ){
+        newMaterial->setName("MATERIAL " + ofToString( materials.size() + 1));
     }
 
-    materials[ _newMaterial->getClassName() ] = _newMaterial;
-    guiAdd( *_newMaterial );
+    materials[ newMaterial->getClassName() ] = newMaterial;
+    guis.push_back( newMaterial->getUIReference(guiTemplate) );
 }
 
 void UIProject::guiAllEvents(ofxUIEventArgs &e){
@@ -821,7 +831,7 @@ void UIProject::guiAllEvents(ofxUIEventArgs &e){
 void UIProject::lightsBegin(){
     ofSetSmoothLighting(bSmoothLighting);
     if(bEnableLights){
-        for(map<string, UILight *>::iterator it = lights.begin(); it != lights.end(); ++it){
+        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             ofEnableLighting();
             it->second->enable();
         }
@@ -831,7 +841,7 @@ void UIProject::lightsBegin(){
 void UIProject::lightsEnd(){
     if(!bEnableLights){
         ofDisableLighting();
-        for(map<string, UILight *>::iterator it = lights.begin(); it != lights.end(); ++it){
+        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->disable();
         }
     }
@@ -840,7 +850,7 @@ void UIProject::lightsEnd(){
 void UIProject::lightsDraw(){
     if(bEnableLights){
         ofDisableLighting();
-        for(map<string, UILight *>::iterator it = lights.begin(); it != lights.end(); ++it){
+        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->draw();
         }
     }
@@ -894,35 +904,35 @@ void UIProject::savePresetGUIS(string presetName){
 }
 
 void UIProject::deleteGUIS(){
-    for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
-        ofxUICanvas *g = (*it);
-        if (g != NULL ){
-            delete g;
-            *it = NULL;
-        }
-    }
+//    for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
+//        ofxUICanvas *g = (*it);
+//        if (g != NULL ){
+//            delete g;
+//            *it = NULL;
+//        }
+//    }
     guis.clear();
 }
 
 void UIProject::showGUIS(){
-    for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
+    for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         (*it)->enable();
     }
 }
 
 void UIProject::hideGUIS(){
-    for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
+    for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         (*it)->disable();
     }
 }
 
 void UIProject::toggleGUIS(){
-    for(vector<ofxUISuperCanvas *>::iterator it = guis.begin(); it != guis.end(); ++it){
+    for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         (*it)->toggleVisible();
     }
 }
 
-void UIProject::toggleGuiAndPosition(ofxUISuperCanvas *g){
+void UIProject::toggleGuiAndPosition(UIReference &g){
     if(g->isMinified()){
         g->setMinified(false);
         g->setPosition(ofGetMouseX(), ofGetMouseY());
