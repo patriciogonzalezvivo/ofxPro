@@ -214,7 +214,7 @@ void ShellExample::selfDraw(){
         ofPushMatrix();
         ofPushStyle();
         fog.begin();
-        mat->begin();
+        materials["MATERIAL 1"]->begin();
         
         ofTranslate(0,offSet.x*0.7);
         ofRotate(-90, 0, 0, 1);
@@ -224,7 +224,7 @@ void ShellExample::selfDraw(){
 //        ofSetColor(255);
 //        ofDrawSphere(200);
         
-        mat->end();
+        materials["MATERIAL 1"]->end();
         fog.end();
         ofPushStyle();
         ofPopMatrix();
@@ -245,9 +245,8 @@ void ShellExample::selfDrawBackground(){
 }
 
 void ShellExample::selfPostDraw(){
-    shader.setTexture( UIProject::getRenderTarget(), 0 );
-    shader.setTexture( UIProject::getRenderTarget().getDepthTexture(), 1 );
     shader.begin();
+    shader.getShader().setUniformTexture("tex1", UIProject::getRenderTarget().getDepthTexture(), 1);
     UIProject::selfPostDraw();
     shader.end();
 }

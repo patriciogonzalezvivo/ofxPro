@@ -135,7 +135,6 @@ class UIProject {
     void hideGUIS();
     virtual void toggleGUIS();
     void toggleGuiAndPosition( UIReference &g);
-    void deleteGUIS();
     
     virtual ofCamera&   getCameraRef();
     virtual ofFbo&      getRenderTarget();
@@ -164,7 +163,7 @@ protected:
 	
     //  ANIMATORS
     //
-    vector<ofx1DExtruder *>         extruders;
+    vector<ofx1DExtruder *> extruders;
 	
     //  LIGHTING
     //
