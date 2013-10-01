@@ -141,49 +141,23 @@ class UIProject {
 	virtual bool        cursorIsOverGUI();
 	
 protected:
-	//  UI
+	//  UI and control tools
     //
     ofxUISuperCanvas *guiTemplate;
+    ofxUIRadio       *presetRadio;
     
-    UIReference gui;
-    UIReference sysGui;
-    UIReference rdrGui;
-    UIReference bgGui;
-    UIReference lgtGui;
-    UIReference camGui;
-    UIReference presetGui;
-    UIReference tlGui;
+    UIReference gui, sysGui, rdrGui, bgGui, lgtGui, camGui, presetGui, tlGui;
     vector<UIReference> guis;
 	
+    //  RENDER
+    //
+    ofFbo           renderTarget;
+    
     //  BACKGROUND
     //
     UIBackground    *background;
-    
-	ofxUIRadio      *presetRadio;
 	
-    //  ANIMATORS
-    //
-    vector<ofx1DExtruder *> extruders;
-	
-    //  LIGHTING
-    //
-    float   *globalAmbientColor;
-    bool    bSmoothLighting;
-    bool    bEnableLights;
-	
-    //  LIGHTS & Materials
-    //
-    map<string, UILightReference >  lights;
-    map<string, UIMaterialReference> materials;
-	
-    //  APP
-    //
-    bool    bRenderSystem;
-    bool    bUpdateSystem;
-    bool    bDebug;
-    bool    bCameraMouse;
-	
-    //  CAM
+    //  CAMERA
     //
     float           camDistance;
     float           camFOV;
@@ -191,8 +165,22 @@ protected:
     ofx1DExtruder   *xRot;
     ofx1DExtruder   *yRot;
     ofx1DExtruder   *zRot;
-
-    //  RENDER
+    
+    //  ANIMATORS
     //
-    ofFbo           renderTarget;
+    vector<ofx1DExtruder *> extruders;
+	
+    //  LIGHTS & MATERIALs
+    //
+    map<string, UILightReference >  lights;
+    map<string, UIMaterialReference> materials;
+    float   *globalAmbientColor;
+    bool    bSmoothLighting;
+    bool    bEnableLights;
+	
+    //  APP
+    //
+    bool    bRenderSystem;
+    bool    bUpdateSystem;
+    bool    bDebug;
 };
