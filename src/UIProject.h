@@ -162,9 +162,7 @@ protected:
     float           camDistance;
     float           camFOV;
     ofEasyCam       cam;
-    ofx1DExtruder   *xRot;
-    ofx1DExtruder   *yRot;
-    ofx1DExtruder   *zRot;
+    ofx1DExtruder   *xRot, *yRot, *zRot;
     
     //  ANIMATORS
     //
