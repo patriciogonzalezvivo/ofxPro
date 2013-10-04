@@ -1,6 +1,5 @@
 //
 //  ShellExample.cpp
-//  LeapMotion
 //
 //  Created by Patricio Gonzalez Vivo on 9/6/13.
 //
