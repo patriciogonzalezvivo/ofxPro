@@ -49,7 +49,7 @@ UIBackground::~UIBackground(){
 
 void UIBackground::setupUI(){
     
-    gui->addSlider("change_Speed", 0.0, 0.1, &speed);
+    gui->addSlider("change_Speed", 0.0, 0.5, &speed);
     
     gui->addLabel("Colors");
     gui->addSlider("HUE", 0.0, 1.0, &HSBTarget.x );
