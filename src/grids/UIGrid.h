@@ -24,7 +24,7 @@ public:
     void    makeGrid();
     
     void    print(int _layerNumber = -1 );
-    void    draw();
+    void    draw( );
     
 protected:
     

@@ -182,6 +182,8 @@ void UIGrid::print(int _layerNumber){
 
 void UIGrid::draw(){
 
+    bool bFlip = true;
+    
     if (bEnable){
         ofPushStyle();
         cross.draw();
@@ -192,23 +194,46 @@ void UIGrid::draw(){
         ofTranslate(0, 0, 0.1);
         Grid::draw();
 
-        ofTranslate(0, 0, 0.1);
-        ofSetColor(fontColor);
-        for(int i = 0; i <= cols-1; i++){
-            string number = ofToString(i+(int)(cols*refNumOffset));
-            ofRectangle box = font.getStringBoundingBox( number ,0,0);
-            ofPoint pos = offset + ofPoint(x+i*resolution+resolution*0.5,y+(rows*refCol)*resolution) - box.getCenter();
-            pos *= ofPoint(1,-1);
-            font.drawStringAsShapes(number,pos.x,pos.y);
-        }
-
-        int A = char('A');
-        for(int i = 0; i <= rows-1; i++){
-            string letter = ofToString(char(A+i));
-            ofRectangle box = font.getStringBoundingBox( letter , 0,0);
-            ofPoint pos = offset + ofPoint(x+(cols*refRow)*resolution,y+i*resolution+resolution*0.5) - box.getCenter();
-            pos *= ofPoint(1,-1);
-            font.drawStringAsShapes(letter,pos.x, pos.y);
+        if (bFlip){
+            ofTranslate(0, 0, 0.1);
+            ofSetColor(fontColor);
+            for(int i = 0; i <= cols-1; i++){
+                int value = i+(int)(cols*refNumOffset);
+                string number = ofToString( (value<0)?value+1:value );
+                ofRectangle box = font.getStringBoundingBox( number ,0,0);
+                ofPoint pos = offset + ofPoint(x+i*resolution+resolution*0.5,y+(rows*refCol)*resolution) - box.getCenter()*ofPoint(1,-1);
+                pos *= ofPoint(1,-1);
+                font.drawStringAsShapes(number,pos.x,pos.y);
+            }
+            
+            int A = char('A');
+            for(int i = 0; i <= rows-1; i++){
+                string letter = ofToString(char(A+(rows-1-i)));
+                ofRectangle box = font.getStringBoundingBox( letter , 0,0);
+                ofPoint pos = offset + ofPoint(x+(cols*refRow)*resolution,y+i*resolution+resolution*0.5) - box.getCenter()*ofPoint(1,-1);
+                pos *= ofPoint(1,-1);
+                font.drawStringAsShapes(letter,pos.x, pos.y);
+            }
+        } else {
+            ofTranslate(0, 0, 0.1);
+            ofSetColor(fontColor);
+            for(int i = 0; i <= cols-1; i++){
+                int value = i+(int)(cols*refNumOffset);
+                string number = ofToString(  (value<0)?value+1:value );
+                ofRectangle box = font.getStringBoundingBox( number ,0,0);
+                ofPoint pos = offset + ofPoint(x+i*resolution+resolution*0.5,y+(rows*refCol)*resolution) - box.getCenter();
+                pos *= ofPoint(1,-1);
+                font.drawStringAsShapes(number,pos.x,pos.y);
+            }
+            
+            int A = char('A');
+            for(int i = 0; i <= rows-1; i++){
+                string letter = ofToString(char(A+i));
+                ofRectangle box = font.getStringBoundingBox( letter , 0,0);
+                ofPoint pos = offset + ofPoint(x+(cols*refRow)*resolution,y+i*resolution+resolution*0.5) - box.getCenter();
+                pos *= ofPoint(1,-1);
+                font.drawStringAsShapes(letter,pos.x, pos.y);
+            }
         }
 
         ofTranslate(0, 0, 0.1);
