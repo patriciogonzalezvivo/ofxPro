@@ -18,14 +18,14 @@ public:
     UIClass(){ }
     virtual ~UIClass(){ }
 
-    virtual void        setupUI( ) = 0;
     virtual string      getClassName(){ return "GUICLASS_DEFAULT"; };
     UIReference         getUIReference( ofxUICanvas *_parent );
-
     bool                bEnable;
 
 protected:
-    UIReference         gui;
+    virtual void        setupUI( ) = 0;
     virtual void        guiEvent(ofxUIEventArgs &e) = 0;
+    UIReference         gui;
+    
 };
 
