@@ -25,8 +25,11 @@ void UI3DProject::setup(){
         dir.createDirectory(workingDirectoryName);
     }
     
-    setupAppParams();
-    setupDebugParams();
+    ofSetSphereResolution(30);
+    bRenderSystem = true;
+    bUpdateSystem = true;
+    bDebug = false;
+    
     setupCameraParams();
 	setupLightingParams();
     
@@ -73,7 +76,7 @@ void UI3DProject::stop(){
 
 void UI3DProject::update(ofEventArgs & args){
     if(bUpdateSystem){
-        for(vector<ofx1DExtruder *>::iterator it = extruders.begin(); it != extruders.end(); ++it){
+        for(vector<ExtruderRef>::iterator it = extruders.begin(); it != extruders.end(); ++it){
             (*it)->update();
         }
         selfUpdate();
@@ -171,15 +174,12 @@ void UI3DProject::draw(ofEventArgs & args){
 }
 
 void UI3DProject::exit(ofEventArgs & args){
-    
     saveGUIS();
-    for(vector<ofx1DExtruder *>::iterator it = extruders.begin(); it != extruders.end(); ++it){
-        ofx1DExtruder *e = (*it);
-        delete e;
-    }
+    
     extruders.clear();
     lights.clear();
     materials.clear();
+    
     guis.clear();
     selfExit();
 }
@@ -348,6 +348,11 @@ void UI3DProject::mousePressed(ofMouseEventArgs & args){
     selfMousePressed(args);
 }
 
+void UI3DProject::mouseReleased(ofMouseEventArgs & args){
+    cam.enableMouseInput();
+    selfMouseReleased(args);
+}
+
 //------------------------------------------------------------ CORE SETUP
 
 void UI3DProject::setupCoreGuis(){
@@ -438,9 +443,13 @@ void UI3DProject::setupCameraParams(){
     cam.setDistance(camDistance);
     cam.setFov(camFOV);
     
-    xRot = new ofx1DExtruder(0);
-    yRot = new ofx1DExtruder(0);
-    zRot = new ofx1DExtruder(0);
+    ExtruderRef newXRot( new Extruder(0) );
+    xRot = newXRot;
+    ExtruderRef newYRot( new Extruder(0) );
+    yRot = newYRot;
+    ExtruderRef newZRot( new Extruder(0) );
+    zRot = newZRot;
+    
     xRot->setPhysics(.9, 5.0, 25.0);
     yRot->setPhysics(.9, 5.0, 25.0);
     zRot->setPhysics(.9, 5.0, 25.0);
@@ -567,9 +576,9 @@ void UI3DProject::guiCameraEvent(ofxUIEventArgs &e){
 }
 
 void UI3DProject::lightAdd( string _name, ofLightType _type ){
-    UILightReference newLight( new UILight(_name, _type) );
+    UILightReference newLight(new UILight(_name, _type));
     lights[_name] = newLight;
-	guis.push_back( newLight->getUIReference(guiTemplate) );
+	guis.push_back(newLight->getUIReference(guiTemplate));
 }
 
 void UI3DProject::materialAdd( string _name ){

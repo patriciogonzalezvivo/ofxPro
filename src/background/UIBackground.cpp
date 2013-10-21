@@ -116,7 +116,7 @@ void UIBackground::guiEvent(ofxUIEventArgs &e){
             
             if(gradientMode == OF_GRADIENT_CIRCULAR){
                 guiBgBrigtness = HSBTarget2.z;
-            }else {
+            } else {
                 guiBgBrigtness = HSBTarget.z;
             }
             
@@ -145,7 +145,7 @@ void UIBackground::draw(){
         
         if(bChange){
         
-            if (HSBTarget.distance( HSB ) >= 0.00001  ){
+            if (HSBTarget.distance( HSB ) != 0.0  ){
                 HSB.addForceTo( HSBTarget, true );
                 HSB.update(speed);
                 color.setHsb(HSB.x, HSB.y, HSB.z);
@@ -154,7 +154,7 @@ void UIBackground::draw(){
                 bChange = false;
             }
             
-            if (HSBTarget2.distance( HSB2 ) >= 0.00001 ){
+            if (HSBTarget2.distance( HSB2 ) != 0.0 ){
                 HSB2.addForceTo( HSBTarget2, true );
                 HSB2.update(speed);
                 color2.setHsb(HSB2.x, HSB2.y, HSB2.z);

@@ -34,8 +34,10 @@ void UI2DProject::setup(){
         dir.createDirectory(workingDirectoryName);
     }
     
-    setupAppParams();
-    setupDebugParams();
+    ofSetSphereResolution(30);
+    bRenderSystem = true;
+    bUpdateSystem = true;
+    bDebug = false;
     
     selfSetup();
     setupCoreGuis();
@@ -327,17 +329,6 @@ void UI2DProject::mouseReleased(ofMouseEventArgs & args){
 }
 
 //------------------------------------------------------------ SETUP
-
-void UI2DProject::setupAppParams(){
-    ofSetSphereResolution(30);
-    bRenderSystem = true;
-    bUpdateSystem = true;
-}
-
-void UI2DProject::setupDebugParams(){
-    //DEBUG
-    bDebug = false;
-}
 
 void UI2DProject::setupCoreGuis(){
     

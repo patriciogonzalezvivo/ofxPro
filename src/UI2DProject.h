@@ -19,7 +19,7 @@ class UI2DProject {
 public:
     
 	UI2DProject(){};
-	~UI2DProject(){};
+	virtual ~UI2DProject(){};
 	
 	//--------------------- VIRTUAL CLASSES TO EDIT
     //
@@ -39,13 +39,13 @@ public:
     virtual void selfBegin(){};
 	virtual void selfEnd(){};
 	
-    virtual void selfKeyPressed(ofKeyEventArgs & args){};
-    virtual void selfKeyReleased(ofKeyEventArgs & args){};
+    virtual void selfKeyPressed(ofKeyEventArgs &args){};
+    virtual void selfKeyReleased(ofKeyEventArgs &args){};
     
-    virtual void selfMouseDragged(ofMouseEventArgs& data){};
-    virtual void selfMouseMoved(ofMouseEventArgs& data){};
-    virtual void selfMousePressed(ofMouseEventArgs& data){};
-    virtual void selfMouseReleased(ofMouseEventArgs& data){};
+    virtual void selfMouseDragged(ofMouseEventArgs &data){};
+    virtual void selfMouseMoved(ofMouseEventArgs &data){};
+    virtual void selfMousePressed(ofMouseEventArgs &data){};
+    virtual void selfMouseReleased(ofMouseEventArgs &data){};
     
     virtual void selfSetupGui(){};
     virtual void selfGuiEvent(ofxUIEventArgs &e){};
@@ -64,12 +64,12 @@ public:
     virtual void play();
 	virtual void stop();
     
-    //Data Folder Path
+    //  Data Folder Path
     //
     string  getDataPath();
     virtual ofFbo& getRenderTarget();
-    
-	//  These events are registered only when running the simulation
+
+	//  These events are registered to be call automatically
     //
 	virtual void update(ofEventArgs & args);
 	virtual void draw(ofEventArgs & args);
@@ -82,11 +82,8 @@ public:
 	virtual void mousePressed(ofMouseEventArgs & args);
 	virtual void mouseReleased(ofMouseEventArgs & args);
     
-    //  Core Setup
-    //
-    virtual void setupAppParams();
-    virtual void setupDebugParams();
-	
+protected:
+    
     //  Core GUI
     //
     virtual void setupGui();
@@ -117,8 +114,6 @@ public:
     
 	virtual bool cursorIsOverGUI();
 
-protected:
-    
     //  GUI
     ofxUISuperCanvas *guiTemplate;
     ofxUIRadio       *presetRadio;

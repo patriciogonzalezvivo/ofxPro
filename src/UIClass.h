@@ -18,8 +18,8 @@ public:
     UIClass(){ }
     virtual ~UIClass(){ }
 
-    virtual string      getClassName(){ return "GUICLASS_DEFAULT"; };
-    UIReference         getUIReference( ofxUICanvas *_parent );
+    virtual string      getClassName(){return "GUICLASS_DEFAULT";};
+    UIReference         getUIReference(ofxUICanvas *_parent);
     bool                bEnable;
 
 protected:

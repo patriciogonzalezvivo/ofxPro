@@ -10,17 +10,17 @@
 #include "UI2DProject.h"
 #include "UILight.h"
 #include "UIMaterial.h"
+#include "Extruder.h"
 
 //  ADDONS
 //
-#include "ofxGenerative.h"
 #include "ofxCameraSaveLoad.h"
 
 class UI3DProject : public UI2DProject {
 public:
     
 	UI3DProject(){};
-	~UI3DProject(){};
+	virtual ~UI3DProject(){};
 	
 	//--------------------- VIRTUAL CLASSES TO EDIT
     //
@@ -37,18 +37,21 @@ public:
     virtual void play();
 	virtual void stop();
     
-	// these events are registered only when running the simulation
+	//  These events are registered to be call automatically
+    //
 	virtual void update(ofEventArgs & args);
 	virtual void draw(ofEventArgs & args);
 	virtual void exit(ofEventArgs & args);
     
 	virtual void keyPressed(ofKeyEventArgs & args);
 	virtual void mousePressed(ofMouseEventArgs & args);
+    virtual void mouseReleased(ofMouseEventArgs & args);
     
 	virtual void keyReleased(ofKeyEventArgs & args){UI2DProject::keyReleased(args);};
 	virtual void mouseDragged(ofMouseEventArgs & args){UI2DProject::mouseDragged(args);};
 	virtual void mouseMoved(ofMouseEventArgs & args){UI2DProject::mouseMoved(args);};
-	virtual void mouseReleased(ofMouseEventArgs & args){UI2DProject::mouseReleased(args);};
+	
+protected:
     
     // CORE
     virtual void setupCoreGuis();
@@ -75,24 +78,22 @@ public:
     
     virtual void materialAdd( string _name );
     
-    virtual ofCamera&   getCameraRef();
-	
-protected:
-    
+    virtual ofCamera& getCameraRef();
+	   
     //  GUI
     UIReference     lgtGui, camGui;
 	
     //  CAMERA
     //
-    float           camDistance,camFOV;
-    ofx1DExtruder   *xRot, *yRot, *zRot;
-    vector<ofx1DExtruder *> extruders;
-    ofEasyCam       cam;
+    float               camDistance,camFOV;
+    ExtruderRef         xRot, yRot, zRot;
+    vector<ExtruderRef> extruders;
+    ofEasyCam           cam;
 	
     //  LIGHTS & MATERIALs
     //
-    map<string, UILightReference >  lights;
-    map<string, UIMaterialReference> materials;
+    map<string,UILightReference>    lights;
+    map<string,UIMaterialReference> materials;
     float   *globalAmbientColor;
     bool    bSmoothLighting;
     bool    bEnableLights;
