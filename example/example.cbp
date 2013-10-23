@@ -296,9 +296,6 @@
 		<Unit filename="../../../addons/ofxUIProject/src/simulators/SuperParticle.h">
 			<Option virtualFolder="addons/ofxUIProject/src/simulators" />
 		</Unit>
-		<Unit filename="../../../addons/ofxUIProject/src/text/Font.h">
-			<Option virtualFolder="addons/ofxUIProject/src/text" />
-		</Unit>
 		<Unit filename="../../../addons/ofxUIProject/src/text/TextArc.cpp">
 			<Option virtualFolder="addons/ofxUIProject/src/text" />
 		</Unit>
@@ -309,6 +306,9 @@
 			<Option virtualFolder="addons/ofxUIProject/src/text" />
 		</Unit>
 		<Unit filename="../../../addons/ofxUIProject/src/text/TextBlock.h">
+			<Option virtualFolder="addons/ofxUIProject/src/text" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/text/TextFont.h">
 			<Option virtualFolder="addons/ofxUIProject/src/text" />
 		</Unit>
 		<Unit filename="../../../addons/ofxUIProject/src/text/TextShape.cpp">
