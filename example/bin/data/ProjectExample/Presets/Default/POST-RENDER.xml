@@ -1,0 +1,32 @@
+<Canvas>
+    <Kind>42</Kind>
+    <Name>POST-RENDER</Name>
+    <IsMinified>1</IsMinified>
+    <XPosition>1.000000000</XPosition>
+    <YPosition>26.000000000</YPosition>
+</Canvas>
+<Widget>
+    <Kind>2</Kind>
+    <Name>ENABLE</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Chroma</Name>
+    <Value>-0.048029557</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Displacement</Name>
+    <Value>0.001231527</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Grain</Name>
+    <Value>0.051724140</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Grain_Freq</Name>
+    <Value>0.000000000</Value>
+</Widget>

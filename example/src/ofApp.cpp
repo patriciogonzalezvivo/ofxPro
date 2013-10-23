@@ -4,7 +4,7 @@
 void ofApp::setup(){
     ofSetVerticalSync(true);
 	
-	project = new ShellExample();
+	project = new ProjectExample();
     project->setup();
     project->play();
     
@@ -23,11 +23,11 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    if( key == '1'){
+    if( key == OF_KEY_F1){
         project->stop();
         project = NULL;
         
-        project = new ShellExample();
+        project = new ProjectExample();
         project->setup();
         project->play();
     } 
