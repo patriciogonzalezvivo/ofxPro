@@ -243,33 +243,33 @@ void Boid::drawTriangle(ofColor * c, int alpha){
 	ofRotateZ(ofRadToDeg(asin(vel.y/vel.length())));	
 	
 	
-	ofSetColor(c->r,c->g,c->b,alpha);
-	glBegin(GL_TRIANGLES);
-	glVertex3f(3*sc,0,0);
-	glVertex3f(-3*sc,2*sc,0);
-	glVertex3f(-3*sc,-2*sc,0);
-	glEnd();
-	
-	ofSetColor(c->r-40,c->g-40,c->b-40,alpha);
-	glBegin(GL_TRIANGLES);
-	glVertex3f(3*sc,0,0);
-	glVertex3f(-3*sc,2*sc,0);
-	glVertex3f(-3*sc,0,2*sc);
-	glEnd();
-    
-	ofSetColor(c->r+20,c->g+20,c->b+20,alpha);
-	glBegin(GL_TRIANGLES);
-	glVertex3f(3*sc,0,0);
-	glVertex3f(-3*sc,0,2*sc);
-	glVertex3f(-3*sc,-2*sc,0);
-	glEnd();
-	
-	ofSetColor(c->r-35,c->g-35,c->b-35,alpha);
-	glBegin(GL_TRIANGLES);
-	glVertex3f(-3*sc,0,2*sc);
-	glVertex3f(-3*sc,2*sc,0);
-	glVertex3f(-3*sc,-2*sc,0);
-	glEnd();
+//	ofSetColor(c->r,c->g,c->b,alpha);
+//	glBegin(GL_TRIANGLES);
+//	glVertex3f(3*sc,0,0);
+//	glVertex3f(-3*sc,2*sc,0);
+//	glVertex3f(-3*sc,-2*sc,0);
+//	glEnd();
+//	
+//	ofSetColor(c->r-40,c->g-40,c->b-40,alpha);
+//	glBegin(GL_TRIANGLES);
+//	glVertex3f(3*sc,0,0);
+//	glVertex3f(-3*sc,2*sc,0);
+//	glVertex3f(-3*sc,0,2*sc);
+//	glEnd();
+//    
+//	ofSetColor(c->r+20,c->g+20,c->b+20,alpha);
+//	glBegin(GL_TRIANGLES);
+//	glVertex3f(3*sc,0,0);
+//	glVertex3f(-3*sc,0,2*sc);
+//	glVertex3f(-3*sc,-2*sc,0);
+//	glEnd();
+//	
+//	ofSetColor(c->r-35,c->g-35,c->b-35,alpha);
+//	glBegin(GL_TRIANGLES);
+//	glVertex3f(-3*sc,0,2*sc);
+//	glVertex3f(-3*sc,2*sc,0);
+//	glVertex3f(-3*sc,-2*sc,0);
+//	glEnd();
 	
     ofPopMatrix();
 	ofDisableAlphaBlending();
