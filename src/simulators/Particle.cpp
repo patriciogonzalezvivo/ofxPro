@@ -274,15 +274,10 @@ void Particle::draw(){
     
     {
         ofSetColor(color);
-        
-#ifndef TARGET_OPENGLES
-        
-#else
-        glBegin(GL_POINTS);
-        glNormal3f(1, 0, 0);
-        glVertex3f(x,y,z);
-        glEnd();
-#endif
+//        glBegin(GL_POINTS);
+//        glNormal3f(1, 0, 0);
+//        glVertex3f(x,y,z);
+//        glEnd();
     }
     
     ofPopStyle();
