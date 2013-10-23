@@ -57,29 +57,18 @@ void ProjectExample::selfUpdate(){
 
 void ProjectExample::selfDraw(){
     glEnable(GL_DEPTH_TEST);
-    
-    ofPushMatrix();
-    ofPushStyle();
-    
-    ofSetColor(255);
-    
-    ofSetColor(0);
-    
     {
         ofPushMatrix();
         ofPushStyle();
         materials["MATERIAL 1"]->begin();
         
+        ofSetColor(255);
         ofDrawSphere(0, 0, 300);
         
         materials["MATERIAL 1"]->end();
         ofPushStyle();
         ofPopMatrix();
     }
-    
-	ofPopStyle();
-    ofPopMatrix();
-    
     glDisable(GL_DEPTH_TEST);
 }
 

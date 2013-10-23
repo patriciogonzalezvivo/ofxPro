@@ -3,7 +3,7 @@
     <Name>MATERIAL 1</Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>295.000000000</YPosition>
+    <YPosition>220.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -58,7 +58,7 @@
 <Widget>
     <Kind>25</Kind>
     <Name>SR</Name>
-    <Value>0.109947644</Value>
+    <Value>0.078534029</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
