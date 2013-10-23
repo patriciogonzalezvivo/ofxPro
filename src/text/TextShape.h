@@ -8,7 +8,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Font.h"
+#include "TextFont.h"
 #include "TextSyles.h"
 
 class TextShape : public ofRectangle {
@@ -37,7 +37,7 @@ protected:
     virtual void _loadWords(){};
     virtual void _subsChars(string & origString);
     
-    Font                font;
+    TextFont            font;
     TextAlignHorizontal hAlignment;
     TextAlignVertical   vAlignment;
     string              rawText;

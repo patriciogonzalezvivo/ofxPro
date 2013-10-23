@@ -7,7 +7,7 @@
 
 #pragma once
 
-class Font: public ofTrueTypeFont {
+class TextFont: public ofTrueTypeFont {
 public:
     
     float getCharacterWidth(char ch){
