@@ -274,7 +274,8 @@ void Particle::draw(){
     
     {
         ofSetColor(color);
-#ifdef TARGET_RASPBERRY_PI
+        
+#ifdef TARGET_OPENGLES
         
 #else
         glBegin(GL_POINTS);

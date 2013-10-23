@@ -242,7 +242,7 @@ void Boid::drawTriangle(ofColor * c, int alpha){
 	ofRotateY(ofRadToDeg(atan2(-vel.z,vel.x)));
 	ofRotateZ(ofRadToDeg(asin(vel.y/vel.length())));	
 	
-#ifdef TARGET_RASPBERRY_PI
+#ifdef TARGET_OPENGLES
     
 #else    
 	ofSetColor(c->r,c->g,c->b,alpha);
@@ -280,7 +280,7 @@ void Boid::drawTriangle(ofColor * c, int alpha){
 //-------------------------------------------------------- Asking
 bool Boid::isOver(int x, int y){
     
-#ifdef TARGET_RASPBERRY_PI
+#ifdef TARGET_OPENGLES
     return false;
 #else
     
