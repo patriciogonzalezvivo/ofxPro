@@ -82,7 +82,11 @@ void UI2DProject::draw(ofEventArgs & args){
     ofPushStyle();
     if(bRenderSystem){
         
+#ifdef TARGET_RASPBERRY_PI
+        
+#else
         UI2DProject::getRenderTarget().begin();
+#endif
         {
             //  Background
             //
@@ -120,11 +124,15 @@ void UI2DProject::draw(ofEventArgs & args){
                 ofPopStyle();
             }
         }
+#ifdef TARGET_RASPBERRY_PI
+        
+#else
         UI2DProject::getRenderTarget().end();
         
         //  Post-Draw ( shader time )
         //
         selfPostDraw();
+#endif
 	}
     ofPopStyle();
 }
@@ -512,19 +520,12 @@ void UI2DProject::loadGUIS(){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
     }
-    
-//    cam.reset();
-//    ofxLoadCamera(cam, getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
-    
 }
 
 void UI2DProject::saveGUIS(){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->saveSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
     }
-    
-//    ofxSaveCamera(cam, getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
-    
 }
 
 void UI2DProject::loadPresetGUISFromName(string presetName){
@@ -536,9 +537,6 @@ void UI2DProject::loadPresetGUISFromPath(string presetPath){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(presetPath+"/"+guis[i]->getName()+".xml");
     }
-    
-//    cam.reset();
-//    ofxLoadCamera(cam, presetPath+"/ofEasyCamSettings");
     
 	selfPresetLoaded(presetPath);
 }
@@ -555,9 +553,6 @@ void UI2DProject::savePresetGUIS(string presetName){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->saveSettings(presetDirectory+guis[i]->getName()+".xml");
     }
-    
-//    ofxSaveCamera(cam, getDataPath()+"Presets/"+presetName+"/ofEasyCamSettings");
-//    cam.enableMouseInput();
 }
 
 void UI2DProject::showGUIS(){

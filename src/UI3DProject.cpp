@@ -89,8 +89,11 @@ void UI3DProject::draw(ofEventArgs & args){
     if(bRenderSystem){
         
         {
-            UI3DProject::getRenderTarget().begin();
+#ifdef TARGET_RASPBERRY_PI
             
+#else
+            UI3DProject::getRenderTarget().begin();
+#endif
             
             //  Background
             //
@@ -162,13 +165,18 @@ void UI3DProject::draw(ofEventArgs & args){
                 ofPopMatrix();
                 ofPopStyle();
             }
+#ifdef TARGET_RASPBERRY_PI
             
+#else
             UI3DProject::getRenderTarget().end();
+            
+            //  Post-Draw ( shader time )
+            //
+            selfPostDraw();
+#endif
         }
         
-        //  Post-Draw ( shader time )
-        //
-        selfPostDraw();
+        
 	}
     ofPopStyle();
 }
