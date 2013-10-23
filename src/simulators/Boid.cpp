@@ -276,27 +276,27 @@ void Boid::drawTriangle(ofColor * c, int alpha){
 }
 //-------------------------------------------------------- Asking
 bool Boid::isOver(int x, int y){
-	GLdouble _x = 0;
-	GLdouble _y = 0;
-	GLdouble _z = 0;
+//	GLdouble _x = 0;
+//	GLdouble _y = 0;
+//	GLdouble _z = 0;
+//	
+//	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//	
+//	GLint viewport[4];
+//	GLdouble mvmatrix[16], projmatrix[16];
+//	
+//	glGetIntegerv(GL_VIEWPORT, viewport);
+//	glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
+//	glGetDoublev(GL_PROJECTION_MATRIX, projmatrix);
+//	
+//	gluProject(loc.x, loc.y, loc.z,
+//			   mvmatrix, projmatrix, viewport,
+//			   &_x, &_y, &_z);
 	
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	GLint viewport[4];
-	GLdouble mvmatrix[16], projmatrix[16];
-	
-	glGetIntegerv(GL_VIEWPORT, viewport);
-	glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
-	glGetDoublev(GL_PROJECTION_MATRIX, projmatrix);
-	
-	gluProject(loc.x, loc.y, loc.z,
-			   mvmatrix, projmatrix, viewport,
-			   &_x, &_y, &_z);
-	
-	_y = ofGetHeight() - _y;
-	
-	if ( ofDist(x,y,_x,_y) <= sc * ofMap(loc.z,0,-5000,9,1) ) selected = true;
-	else selected = false;
-	
-	return selected; 
+//	_y = ofGetHeight() - _y;
+//	
+//	if ( ofDist(x,y,_x,_y) <= sc * ofMap(loc.z,0,-5000,9,1) ) selected = true;
+//	else selected = false;
+//	
+//	return selected; 
 }
