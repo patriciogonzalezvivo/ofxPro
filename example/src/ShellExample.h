@@ -9,11 +9,6 @@
 
 #include "UIProject.h"
 
-#include "UISuperBackground.h"
-#include "UIGrid.h"
-#include "UIFog.h"
-#include "UIShader.h"
-
 class ShellExample : public UIProject {
 public:
 
@@ -40,9 +35,6 @@ public:
 
     void selfDraw();
 	void selfDrawDebug();
-	void selfDrawBackground();
-
-    void selfPostDraw();
 
 	void selfEnd();
     void selfExit();
@@ -55,13 +47,8 @@ public:
     void selfMousePressed(ofMouseEventArgs& data);
     void selfMouseReleased(ofMouseEventArgs& data);
 
-//    void setupBackground();
 protected:
-
-    UIGrid          grid;
-    UIFog           fog;
-    UIShader        shader;
-
+    
     //  Shell
     //
     void    createSkin( int _width );
