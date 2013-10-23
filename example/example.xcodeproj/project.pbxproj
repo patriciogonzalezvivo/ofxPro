@@ -392,8 +392,8 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-				146c892e1670bcc0e81b2d1ce8e39e34 /* ShellExample.cpp */,
 				8032bddaa03e5e3fb7bc9f06b9e120e5 /* ShellExample.h */,
+				146c892e1670bcc0e81b2d1ce8e39e34 /* ShellExample.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
