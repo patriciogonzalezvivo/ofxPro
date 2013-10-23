@@ -274,10 +274,14 @@ void Particle::draw(){
     
     {
         ofSetColor(color);
-//        glBegin(GL_POINTS);
-//        glNormal3f(1, 0, 0);
-//        glVertex3f(x,y,z);
-//        glEnd();
+#ifdef TARGET_RASPBERRY_PI
+        
+#else
+        glBegin(GL_POINTS);
+        glNormal3f(1, 0, 0);
+        glVertex3f(x,y,z);
+        glEnd();
+#endif
     }
     
     ofPopStyle();

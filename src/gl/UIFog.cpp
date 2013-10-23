@@ -62,6 +62,9 @@ void UIFog::begin(){
         
         float FogCol[3]={ color->r, color->g, color->b};
         
+#ifdef TARGET_RASPBERRY_PI
+        
+#else
         GLuint fogfilter= 1;
         GLuint fogMode[]= { GL_EXP, GL_EXP2, GL_LINEAR };
         
@@ -70,12 +73,17 @@ void UIFog::begin(){
         glFogfv(GL_FOG_COLOR, FogCol);              // Set the fog color
         glFogf(GL_FOG_DENSITY, powf(10.0, (int)density_exponent) * density);             // Thin the fog out a little
         glHint(GL_FOG_HINT, GL_DONT_CARE);          // Fog Hint Value
+#endif
     }
 }
 
 void UIFog::end(){
     if (bEnable){
+#ifdef TARGET_RASPBERRY_PI
+        
+#else
         glDisable(GL_FOG);
+#endif
     }
     
 }

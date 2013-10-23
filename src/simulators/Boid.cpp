@@ -242,61 +242,70 @@ void Boid::drawTriangle(ofColor * c, int alpha){
 	ofRotateY(ofRadToDeg(atan2(-vel.z,vel.x)));
 	ofRotateZ(ofRadToDeg(asin(vel.y/vel.length())));	
 	
+#ifdef TARGET_RASPBERRY_PI
+    
+#else    
+	ofSetColor(c->r,c->g,c->b,alpha);
+	glBegin(GL_TRIANGLES);
+	glVertex3f(3*sc,0,0);
+	glVertex3f(-3*sc,2*sc,0);
+	glVertex3f(-3*sc,-2*sc,0);
+	glEnd();
 	
-//	ofSetColor(c->r,c->g,c->b,alpha);
-//	glBegin(GL_TRIANGLES);
-//	glVertex3f(3*sc,0,0);
-//	glVertex3f(-3*sc,2*sc,0);
-//	glVertex3f(-3*sc,-2*sc,0);
-//	glEnd();
-//	
-//	ofSetColor(c->r-40,c->g-40,c->b-40,alpha);
-//	glBegin(GL_TRIANGLES);
-//	glVertex3f(3*sc,0,0);
-//	glVertex3f(-3*sc,2*sc,0);
-//	glVertex3f(-3*sc,0,2*sc);
-//	glEnd();
-//    
-//	ofSetColor(c->r+20,c->g+20,c->b+20,alpha);
-//	glBegin(GL_TRIANGLES);
-//	glVertex3f(3*sc,0,0);
-//	glVertex3f(-3*sc,0,2*sc);
-//	glVertex3f(-3*sc,-2*sc,0);
-//	glEnd();
-//	
-//	ofSetColor(c->r-35,c->g-35,c->b-35,alpha);
-//	glBegin(GL_TRIANGLES);
-//	glVertex3f(-3*sc,0,2*sc);
-//	glVertex3f(-3*sc,2*sc,0);
-//	glVertex3f(-3*sc,-2*sc,0);
-//	glEnd();
+	ofSetColor(c->r-40,c->g-40,c->b-40,alpha);
+	glBegin(GL_TRIANGLES);
+	glVertex3f(3*sc,0,0);
+	glVertex3f(-3*sc,2*sc,0);
+	glVertex3f(-3*sc,0,2*sc);
+	glEnd();
+    
+	ofSetColor(c->r+20,c->g+20,c->b+20,alpha);
+	glBegin(GL_TRIANGLES);
+	glVertex3f(3*sc,0,0);
+	glVertex3f(-3*sc,0,2*sc);
+	glVertex3f(-3*sc,-2*sc,0);
+	glEnd();
+	
+	ofSetColor(c->r-35,c->g-35,c->b-35,alpha);
+	glBegin(GL_TRIANGLES);
+	glVertex3f(-3*sc,0,2*sc);
+	glVertex3f(-3*sc,2*sc,0);
+	glVertex3f(-3*sc,-2*sc,0);
+	glEnd();
+#endif
 	
     ofPopMatrix();
 	ofDisableAlphaBlending();
 }
 //-------------------------------------------------------- Asking
 bool Boid::isOver(int x, int y){
-//	GLdouble _x = 0;
-//	GLdouble _y = 0;
-//	GLdouble _z = 0;
-//	
-//	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//	
-//	GLint viewport[4];
-//	GLdouble mvmatrix[16], projmatrix[16];
-//	
-//	glGetIntegerv(GL_VIEWPORT, viewport);
-//	glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
-//	glGetDoublev(GL_PROJECTION_MATRIX, projmatrix);
-//	
-//	gluProject(loc.x, loc.y, loc.z,
-//			   mvmatrix, projmatrix, viewport,
-//			   &_x, &_y, &_z);
+    
+#ifdef TARGET_RASPBERRY_PI
+    return false;
+#else
+    
+	GLdouble _x = 0;
+	GLdouble _y = 0;
+	GLdouble _z = 0;
 	
-//	_y = ofGetHeight() - _y;
-//	
-//	if ( ofDist(x,y,_x,_y) <= sc * ofMap(loc.z,0,-5000,9,1) ) selected = true;
-//	else selected = false;
-//	
-//	return selected; 
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	GLint viewport[4];
+	GLdouble mvmatrix[16], projmatrix[16];
+	
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
+	glGetDoublev(GL_PROJECTION_MATRIX, projmatrix);
+	
+	gluProject(loc.x, loc.y, loc.z,
+			   mvmatrix, projmatrix, viewport,
+			   &_x, &_y, &_z);
+	
+	_y = ofGetHeight() - _y;
+	
+	if ( ofDist(x,y,_x,_y) <= sc * ofMap(loc.z,0,-5000,9,1) ) selected = true;
+	else selected = false;
+	
+	return selected;
+#endif
 }
