@@ -244,10 +244,10 @@ void ShellExample::selfDrawBackground(){
 }
 
 void ShellExample::selfPostDraw(){
-    shader.begin();
-    shader.getShader().setUniformTexture("tex1", UIProject::getRenderTarget().getDepthTexture(), 1);
+//    shader.begin();
+//    shader.getShader().setUniformTexture("tex1", UIProject::getRenderTarget().getDepthTexture(), 1);
     UIProject::selfPostDraw();
-    shader.end();
+//    shader.end();
 }
 
 void ShellExample::selfEnd(){

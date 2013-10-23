@@ -591,10 +591,6 @@ ofFbo& UI2DProject::getRenderTarget(){
     
     if(!renderTarget.isAllocated() || renderTarget.getWidth() != ofGetWidth() || renderTarget.getHeight() != ofGetHeight()){
         
-        
-#ifdef TARGET_OPENGLES
-        renderTarget.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA );
-#else
         ofFbo::Settings settings;
         settings.width = ofGetWidth();
         settings.height = ofGetHeight();
@@ -603,6 +599,9 @@ ofFbo& UI2DProject::getRenderTarget(){
         settings.useDepth = true;
         settings.useStencil = true;
         settings.depthStencilAsTexture = true;
+#ifdef TARGET_OPENGLES
+        settings.textureTarget = GL_TEXTURE_2D;
+#else
         settings.textureTarget = ofGetUsingArbTex() ? GL_TEXTURE_RECTANGLE_ARB : GL_TEXTURE_2D;
         renderTarget.allocate(settings);
 #endif
