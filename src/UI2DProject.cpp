@@ -593,7 +593,7 @@ ofFbo& UI2DProject::getRenderTarget(){
         
         
 #ifdef TARGET_OPENGLES
-        rgbaFboFloat.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA );
+        renderTarget.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA );
 #else
         ofFbo::Settings settings;
         settings.width = ofGetWidth();
