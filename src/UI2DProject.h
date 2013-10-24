@@ -48,6 +48,7 @@ public:
     
 //#ifdef TARGET_RASPBERRY_PI
     void onCharacterReceived(SSHKeyListenerEventData& e){
+         cout << "You just pressed " << char(e.character) << endl;
         ofKeyEventArgs arg;
         arg.key = (int)e.character;
         keyPressed(arg);

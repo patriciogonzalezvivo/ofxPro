@@ -149,9 +149,7 @@ void UI2DProject::exit(ofEventArgs & args){
 
 //------------------------------------------------------- KEYBOARD
 void UI2DProject::keyPressed(ofKeyEventArgs & args){
-    
-    cout << "You just pressed " << char(args.key) << endl;
-    
+
     for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         if((*it)->hasKeyboardFocus()){
             return;
