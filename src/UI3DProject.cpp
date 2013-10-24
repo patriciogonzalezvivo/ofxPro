@@ -30,6 +30,10 @@ void UI3DProject::setup(){
     bUpdateSystem = true;
     bDebug = false;
     
+//#ifdef TARGET_RASPBERRY_PI
+    consoleListener.setup(this);
+//#endif
+    
     setupCameraParams();
 	setupLightingParams();
     

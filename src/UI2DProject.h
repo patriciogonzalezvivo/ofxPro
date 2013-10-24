@@ -15,7 +15,11 @@
 //
 #include "ofxUI.h"
 
-class UI2DProject {
+//#ifdef TARGET_RASPBERRY_PI
+#include "ConsoleListener.h"
+//#endif
+
+class UI2DProject : public SSHKeyListener {
 public:
     
 	UI2DProject(){};
@@ -41,6 +45,15 @@ public:
 	
     virtual void selfKeyPressed(ofKeyEventArgs &args){};
     virtual void selfKeyReleased(ofKeyEventArgs &args){};
+    
+//#ifdef TARGET_RASPBERRY_PI
+    void onCharacterReceived(SSHKeyListenerEventData& e){
+        ofKeyEventArgs arg;
+        arg.key = (int)e.character;
+        keyPressed(arg);
+    }
+    ConsoleListener consoleListener;
+//#endif
     
     virtual void selfMouseDragged(ofMouseEventArgs &data){};
     virtual void selfMouseMoved(ofMouseEventArgs &data){};

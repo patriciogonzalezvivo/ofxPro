@@ -39,6 +39,10 @@ void UI2DProject::setup(){
     bUpdateSystem = true;
     bDebug = false;
     
+//#ifdef TARGET_RASPBERRY_PI
+    consoleListener.setup(this);
+//#endif    
+    
     selfSetup();
     setupCoreGuis();
     selfSetupGuis();
@@ -146,9 +150,10 @@ void UI2DProject::exit(ofEventArgs & args){
 //------------------------------------------------------- KEYBOARD
 void UI2DProject::keyPressed(ofKeyEventArgs & args){
     
+    cout << "You just pressed " << char(args.key) << endl;
+    
     for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-        if((*it)->hasKeyboardFocus())
-        {
+        if((*it)->hasKeyboardFocus()){
             return;
         }
     }
