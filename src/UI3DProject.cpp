@@ -92,7 +92,7 @@ void UI3DProject::draw(ofEventArgs & args){
 #ifdef TARGET_RASPBERRY_PI
             
 #else
-            UI3DProject::getRenderTarget().begin();
+            getRenderTarget().begin();
 #endif
             
             //  Background
@@ -168,7 +168,7 @@ void UI3DProject::draw(ofEventArgs & args){
 #ifdef TARGET_RASPBERRY_PI
             
 #else
-            UI3DProject::getRenderTarget().end();
+            getRenderTarget().end();
             
             //  Post-Draw ( shader time )
             //

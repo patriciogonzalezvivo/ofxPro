@@ -108,6 +108,7 @@
 		32bd050a579633adbca5af6b202f651b /* ofxUIWidget.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIWidget.h; path = ../../../addons/ofxUI/src/ofxUIWidget.h; sourceTree = SOURCE_ROOT; };
 		32fa0a7095256e3744900a394c912dab /* Grid.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Grid.cpp; path = ../../../addons/ofxUIProject/src/grids/Grid.cpp; sourceTree = SOURCE_ROOT; };
 		334840ca6b3402c8c30cac4e645376bb /* ofxUIOFWrapper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIOFWrapper.h; path = ../../../addons/ofxUI/src/ofxUIOFWrapper.h; sourceTree = SOURCE_ROOT; };
+		3D8D16D91819724900AD1628 /* ConsoleListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConsoleListener.h; path = ../src/helpers/ConsoleListener.h; sourceTree = "<group>"; };
 		3b1e218bb487735b3b3c780d9b5f1836 /* UILight.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UILight.h; path = ../../../addons/ofxUIProject/src/gl/UILight.h; sourceTree = SOURCE_ROOT; };
 		3d09afbd7fae4c7994f70bc164775032 /* UI2DProject.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UI2DProject.h; path = ../../../addons/ofxUIProject/src/UI2DProject.h; sourceTree = SOURCE_ROOT; };
 		4117b8c24d49837d3df9c23bd2405bdc /* ofxUIToggle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIToggle.h; path = ../../../addons/ofxUI/src/ofxUIToggle.h; sourceTree = SOURCE_ROOT; };
@@ -480,6 +481,7 @@
 		d96eff7f4efbb1a4f12ac4ffeba1f5e1 /* helpers */ = {
 			isa = PBXGroup;
 			children = (
+				3D8D16D91819724900AD1628 /* ConsoleListener.h */,
 				e4ae7f43389ee1dfd248e3db2f1e1532 /* DraggableRectangle.cpp */,
 				fe7637213769127f2af4034d247b7a8e /* DraggableRectangle.h */,
 			);

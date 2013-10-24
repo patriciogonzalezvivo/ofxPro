@@ -26,8 +26,8 @@ public:
     //
     virtual string getSystemName(){ return "3D_ABSTRACT_PROJECT"; };
     
-    virtual void selfDrawBackground(){};
-    virtual void selfSceneTransformation(){};
+    virtual void selfDrawBackground(){};        //  2D Scene here
+    virtual void selfSceneTransformation(){};   //  3D Previus sceen transformations
     
 	//---------------------
     
