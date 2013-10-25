@@ -63,6 +63,7 @@ void UIBackground::setupUI(){
     briSlider = gui->addSlider("BRI2", 0.0, 1.0, &HSBTarget2.z );
     
     gui->autoSizeToFitWidgets();
+    bChange = true;
 }
 
 void UIBackground::setColor( ofFloatColor _color ){

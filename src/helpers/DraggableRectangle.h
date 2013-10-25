@@ -1,6 +1,5 @@
 //
 //  RectangleBooks.h
-//  cLibrary
 //
 //  This is a class that extends from ofRectangle to deal with
 //  the boxes and books (points).
@@ -11,7 +10,7 @@
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
 
-class DraggableRectangle: public ofRectangle{
+class DraggableRectangle: public ofRectangle {
 public:
     
     virtual bool loadSettings(string _fileConfig, string _tagName = "rect", int _num = 0 );

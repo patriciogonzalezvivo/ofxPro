@@ -28,7 +28,7 @@ public:
     
     virtual void selfDrawBackground(){};        //  2D Scene here
     virtual void selfSceneTransformation(){};   //  3D Previus sceen transformations
-    
+    //
 	//---------------------
     
 	// Interface functions
@@ -36,6 +36,8 @@ public:
 	virtual void setup();
     virtual void play();
 	virtual void stop();
+    
+    virtual ofCamera& getCameraRef();
     
 	//  These events are registered to be call automatically
     //
@@ -78,8 +80,6 @@ protected:
     
     virtual void materialAdd( string _name );
     
-    virtual ofCamera& getCameraRef();
-	   
     //  GUI
     UIReference     lgtGui, camGui;
 	

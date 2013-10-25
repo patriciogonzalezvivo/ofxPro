@@ -10,7 +10,6 @@
 
 SuperParticle::SuperParticle(){
     localOffset.set(ofRandom(1.0f),ofRandom(1.0f),ofRandom(1.0f));
-    tailLength = 0;
 }
 
 void SuperParticle::addNoise(float _angle, float _turbulence){

@@ -12,6 +12,7 @@
 class Particle : public ofPoint {
 public:
 	Particle();
+    virtual ~Particle(){};
     
     ofPoint getVel();
     
@@ -20,17 +21,24 @@ public:
     
     void    addRepulsionForce(ofPoint p, float radius, float scale);
     void    addRepulsionForce(Particle *p, float radius, float scale);
+    void    addRepulsionForce(Particle *p, float scale);
     
     void    addAttractionForce(ofPoint p, float radius, float scale);
     void    addAttractionForce(Particle *p, float radius, float scale);
+    void    addAttractionForce(Particle *p, float scale);
     
     void    addClockwiseForce(Particle *p, float radius, float scale);
+    void    addClockwiseForce(Particle *p, float scale);
+    
     void    addCounterClockwiseForce(Particle *p, float radius, float scale);
+    void    addCounterClockwiseForce(Particle *p, float scale);
 
     void    update(float _speed);
     void    draw();
     
     ofFloatColor    color;
+    
+    float           size;
     
     vector<ofPoint> tail;
     int             tailLength;

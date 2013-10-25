@@ -21,8 +21,6 @@ void UI2DProject::setup(){
 	cout << "SETTING UP SYSTEM " << getSystemName() << endl;
 	background = NULL;
     
-	ofAddListener(ofEvents().exit, this, &UI2DProject::exit);
-    
     ofDirectory dir;
     string directoryName = getDataPath()+"Presets/";
     if(!dir.doesDirectoryExist(directoryName)){
@@ -35,45 +33,58 @@ void UI2DProject::setup(){
     }
     
     ofSetSphereResolution(30);
-    bRenderSystem = true;
-    bUpdateSystem = true;
-    bDebug = false;
-    
-//#ifdef TARGET_RASPBERRY_PI
-    consoleListener.setup(this);
-//#endif    
-    
+
     selfSetup();
     setupCoreGuis();
     selfSetupGuis();
     
-	hideGUIS();
-    
-    ofRegisterMouseEvents(this);
-    ofRegisterKeyEvents(this);
-    ofAddListener(ofEvents().update, this, &UI2DProject::update);
-    ofAddListener(ofEvents().draw, this, &UI2DProject::draw);
-    
-    loadGUIS();
-    hideGUIS();
+    bPlaying = false;
 }
 
 void UI2DProject::play(){
-    selfBegin();
-    bDebug = false;
+    
+    if (!bPlaying){
+        selfBegin();
+        
+        bDebug = false;
+        bRenderSystem = true;
+        bUpdateSystem = true;
+        
+#ifdef TARGET_RASPBERRY_PI
+        consoleListener.setup(this);
+#endif
+        
+        ofRegisterMouseEvents(this);
+        ofRegisterKeyEvents(this);
+        ofAddListener(ofEvents().update, this, &UI2DProject::update);
+        ofAddListener(ofEvents().draw, this, &UI2DProject::draw);
+        ofAddListener(ofEvents().exit, this, &UI2DProject::exit);
+        
+        loadGUIS();
+        hideGUIS();
+        
+        bPlaying = true;
+    }
 }
 
 void UI2DProject::stop(){
     
-    hideGUIS();
-    saveGUIS();
-    
-    ofUnregisterMouseEvents(this);
-    ofUnregisterKeyEvents(this);
-    ofRemoveListener(ofEvents().update, this, &UI2DProject::update);
-    ofRemoveListener(ofEvents().draw, this, &UI2DProject::draw);
-    
-    selfEnd();
+    if (bPlaying){
+        hideGUIS();
+        saveGUIS();
+        
+        ofUnregisterMouseEvents(this);
+        ofUnregisterKeyEvents(this);
+        ofRemoveListener(ofEvents().update, this, &UI2DProject::update);
+        ofRemoveListener(ofEvents().draw, this, &UI2DProject::draw);
+        ofRemoveListener(ofEvents().exit, this, &UI2DProject::exit);
+        
+        selfEnd();
+        
+        bRenderSystem = false;
+        bUpdateSystem = false;
+        bPlaying = false;
+    }
 }
 
 void UI2DProject::update(ofEventArgs & args){
@@ -87,7 +98,8 @@ void UI2DProject::draw(ofEventArgs & args){
     if(bRenderSystem){
         
 #ifdef TARGET_RASPBERRY_PI
-        
+        //  a full screen FBO is to much for RPI
+        //
 #else
         UI2DProject::getRenderTarget().begin();
 #endif
@@ -98,22 +110,22 @@ void UI2DProject::draw(ofEventArgs & args){
                 background->draw();
             }
             
-            //  Draw Debug
-            //
-            if( bDebug ){
-                ofPushStyle();
-                ofPushMatrix();
-                selfDrawDebug();
-                ofPopMatrix();
-                ofPopStyle();
-            }
-            
             //  Draw Scene
             //
             {
                 ofPushStyle();
                 ofPushMatrix();
                 selfDraw();
+                ofPopMatrix();
+                ofPopStyle();
+            }
+            
+            //  Draw Debug
+            //
+            if( bDebug ){
+                ofPushStyle();
+                ofPushMatrix();
+                selfDrawDebug();
                 ofPopMatrix();
                 ofPopStyle();
             }
@@ -129,12 +141,10 @@ void UI2DProject::draw(ofEventArgs & args){
             }
         }
 #ifdef TARGET_RASPBERRY_PI
-        
+        //  a full screen FBO is to much for RPI
+        //
 #else
         UI2DProject::getRenderTarget().end();
-        
-        //  Post-Draw ( shader time )
-        //
         selfPostDraw();
 #endif
 	}
@@ -324,6 +334,9 @@ bool UI2DProject::cursorIsOverGUI(){
 }
 
 void UI2DProject::mouseDragged(ofMouseEventArgs& data){
+    if(cursorIsOverGUI())
+        return;
+    
     selfMouseDragged(data);
 }
 
@@ -332,10 +345,16 @@ void UI2DProject::mouseMoved(ofMouseEventArgs& data){
 }
 
 void UI2DProject::mousePressed(ofMouseEventArgs & args){
+    if(cursorIsOverGUI())
+        return;
+    
     selfMousePressed(args);
 }
 
 void UI2DProject::mouseReleased(ofMouseEventArgs & args){
+    if(cursorIsOverGUI())
+        return;
+    
     selfMouseReleased(args);
 }
 

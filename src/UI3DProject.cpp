@@ -12,8 +12,6 @@ void UI3DProject::setup(){
 	cout << "SETTING UP SYSTEM " << getSystemName() << endl;
 	background = NULL;
     
-	ofAddListener(ofEvents().exit, this, &UI3DProject::exit);
-    
     ofDirectory dir;
     string directoryName = getDataPath()+"Presets/";
     if(!dir.doesDirectoryExist(directoryName)){
@@ -26,13 +24,6 @@ void UI3DProject::setup(){
     }
     
     ofSetSphereResolution(30);
-    bRenderSystem = true;
-    bUpdateSystem = true;
-    bDebug = false;
-    
-//#ifdef TARGET_RASPBERRY_PI
-    consoleListener.setup(this);
-//#endif
     
     setupCameraParams();
 	setupLightingParams();
@@ -41,41 +32,27 @@ void UI3DProject::setup(){
     setupCoreGuis();
     selfSetupGuis();
     
-	hideGUIS();
-    
-    ofRegisterMouseEvents(this);
-    ofRegisterKeyEvents(this);
-    ofAddListener(ofEvents().update, this, &UI3DProject::update);
-    ofAddListener(ofEvents().draw, this, &UI3DProject::draw);
-    
-    loadGUIS();
-    hideGUIS();
+    bPlaying = false;
 }
 
 void UI3DProject::play(){
-    cam.enableMouseInput();
-    for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-        it->second->play();
+    if (!bPlaying){
+        cam.enableMouseInput();
+        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
+            it->second->play();
+        }
+        UI2DProject::play();
     }
-    
-    UI2DProject::play();
 }
 
 void UI3DProject::stop(){
-    hideGUIS();
-    saveGUIS();
-    
-    cam.disableMouseInput();
-    for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-        it->second->stop();
+    if(bPlaying){
+        cam.disableMouseInput();
+        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
+            it->second->stop();
+        }
+        UI2DProject::stop();
     }
-    
-    ofUnregisterMouseEvents(this);
-    ofUnregisterKeyEvents(this);
-    ofRemoveListener(ofEvents().update, this, &UI3DProject::update);
-    ofRemoveListener(ofEvents().draw, this, &UI3DProject::draw);
-    
-    selfEnd();
 }
 
 void UI3DProject::update(ofEventArgs & args){
@@ -156,6 +133,7 @@ void UI3DProject::draw(ofEventArgs & args){
                     ofPopStyle();
                     lightsEnd();
                 }
+                glDisable(GL_DEPTH_TEST);
                 
                 getCameraRef().end();
             }

@@ -13,6 +13,7 @@ class SuperParticle : public Particle {
 public:
     
     SuperParticle();
+    virtual ~SuperParticle(){};
     
     void    addNoise(float _angle, float _turbulence);
     void	applyGravityForceTo(ofPoint *_pos, float _pct);

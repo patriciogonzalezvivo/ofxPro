@@ -14,7 +14,7 @@ class UIBackground : public UIClass{
 public:
 
     UIBackground();
-    ~UIBackground();
+    virtual ~UIBackground();
     
     virtual void    setupUI();
     
