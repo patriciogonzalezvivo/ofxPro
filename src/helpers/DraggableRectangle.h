@@ -16,7 +16,7 @@ public:
     virtual bool loadSettings(string _fileConfig, string _tagName = "rect", int _num = 0 );
     virtual bool saveSettings(string _fileConfig, string _tagName = "rect", int _num = 0 );
     
-    void mouseDragged(ofPoint _mouse);
+    bool mouseDragged(ofPoint _mouse);
     
     void draw();
     

@@ -11,6 +11,8 @@
 #include "UIClass.h"
 #include "UIBackground.h"
 
+#include "Flickr.h"
+
 //  ADDONS
 //
 #include "ofxUI.h"
@@ -118,19 +120,22 @@ protected:
     virtual void guiEvent(ofxUIEventArgs &e);
     virtual void guiAllEvents(ofxUIEventArgs &e);
     
-    virtual void loadGUIS();
-	virtual void loadPresetGUISFromName(string presetName);
-    virtual void loadPresetGUISFromPath(string presetPath);
-    virtual void saveGUIS();
-    virtual void savePresetGUIS(string presetName);
+    virtual void guiLoad();
+	virtual void guiLoadPresetFromName(string presetName);
+    virtual void guiLoadPresetFromPath(string presetPath);
+    virtual void guiSave();
+    virtual void guiSavePreset(string presetName);
+
+    virtual void guiShow();
+    virtual void guiHide();
+    virtual void guiToggle();
+    virtual void guiArrange( int _order_type );
+    virtual void guiToggleAndPosition( UIReference &g);
     
-    virtual void showGUIS();
-    virtual void hideGUIS();
-    virtual void toggleGUIS();
-    virtual void toggleGuiAndPosition( UIReference &g);
+    virtual void screenShot(bool _upload_to_flickr);
     
 	virtual bool cursorIsOverGUI();
-
+    
     //  GUI
     ofxUISuperCanvas *guiTemplate;
     ofxUIRadio       *presetRadio;
@@ -148,4 +153,5 @@ protected:
     bool    bUpdateSystem;
     bool    bPlaying;
     bool    bDebug;
+    bool    bGui;
 };

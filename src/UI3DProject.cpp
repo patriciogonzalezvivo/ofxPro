@@ -164,7 +164,7 @@ void UI3DProject::draw(ofEventArgs & args){
 }
 
 void UI3DProject::exit(ofEventArgs & args){
-    saveGUIS();
+    guiSave();
     
     extruders.clear();
     lights.clear();
@@ -172,163 +172,6 @@ void UI3DProject::exit(ofEventArgs & args){
     
     guis.clear();
     selfExit();
-}
-
-void UI3DProject::keyPressed(ofKeyEventArgs & args){
-    
-    for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-        if((*it)->hasKeyboardFocus())
-        {
-            return;
-        }
-    }
-    
-    switch (args.key){
-        case '1':
-            toggleGuiAndPosition(gui);
-            break;
-        case '2':
-            toggleGuiAndPosition(sysGui);
-            break;
-        case '3':
-            toggleGuiAndPosition(rdrGui);
-            break;
-        case '4':
-            toggleGuiAndPosition(bgGui);
-            break;
-        case '5':
-            toggleGuiAndPosition(lgtGui);
-            break;
-        case '0':
-            toggleGuiAndPosition(camGui);
-            break;
-            
-        case 'u':{
-            bUpdateSystem = !bUpdateSystem;
-        }
-            break;
-            
-        case 's':{
-            ofImage img;
-            img.grabScreen(0,0,ofGetWidth(), ofGetHeight());
-			if( !ofDirectory(getDataPath()+"snapshots/").exists() ){
-				ofDirectory(getDataPath()+"snapshots/").create();
-			}
-            img.saveImage(getDataPath()+"snapshots/" + getSystemName() + " " + ofGetTimestampString() + ".png");
-        }
-            break;
-            
-        case 'h':{
-			toggleGUIS();
-        }
-            break;
-            
-        case 'f':{
-            cout << "FULLSCREEN" << endl;
-            ofToggleFullscreen();
-        }
-            break;
-            
-        case 'p':{
-            for(int i = 0; i < guis.size(); i++){
-                guis[i]->setDrawWidgetPadding(true);
-            }
-        }
-            break;
-            
-        case 'e':{
-			UIReference last;
-            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-                (*it)->setMinified(false);
-                if(last != NULL){
-                    (*it)->getRect()->setX(last->getRect()->getX());
-                    (*it)->getRect()->setY(last->getRect()->getY()+last->getRect()->getHeight()+1);
-                    
-                    if((*it)->getRect()->getY()+(*it)->getRect()->getHeight() > ofGetHeight() ){
-                        (*it)->getRect()->setX(last->getRect()->getX()+last->getRect()->getWidth()+1);
-                        (*it)->getRect()->setY(1);
-                    }
-                } else {
-                    (*it)->getRect()->setX(1);
-                    (*it)->getRect()->setY(1);
-                }
-                last = (*it);
-            }
-        }
-            break;
-            
-        case 'r':{
-            float maxY = 0;
-            UIReference last;
-            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-                if(last != NULL){
-                    (*it)->getRect()->setX( last->getRect()->getX()+last->getRect()->getWidth()+1 );
-                    (*it)->getRect()->setY( last->getRect()->getY() );
-                    
-                    if((*it)->getRect()->getX()+(*it)->getRect()->getWidth() > ofGetWidth() ){
-                        (*it)->getRect()->setX(1);
-                        (*it)->getRect()->setY(maxY+1);
-                    }
-                    
-                } else {
-                    (*it)->getRect()->setX(1);
-                    (*it)->getRect()->setY(1);
-                    
-                }
-                last = (*it);
-                last->setMinified(false);
-                
-                float totalY = last->getRect()->getY()+last->getRect()->getHeight();
-                if ( totalY > maxY ){
-                    maxY = totalY;
-                }
-                
-            }
-        }
-            break;
-            
-        case 't':{
-            UIReference last;
-            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-                (*it)->setMinified(true);
-                if(last != NULL){
-                    (*it)->getRect()->setX(1);
-                    (*it)->getRect()->setY(last->getRect()->getY()+last->getRect()->getHeight()+1);
-                } else {
-                    (*it)->getRect()->setX(1);
-                    (*it)->getRect()->setY(1);
-                }
-                last = (*it);
-            }
-        }
-            break;
-            
-        case 'y':{
-            float x = ofGetWidth()*.5;
-            float y = ofGetHeight()*.5;
-            float tempRadius = gui->getGlobalCanvasWidth()*2.0;
-            float stepSize = TWO_PI/(float)guis.size();
-            float theta = 0;
-            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it)
-            {
-                (*it)->getRect()->setX(x+sin(theta)*tempRadius - (*it)->getRect()->getHalfWidth());
-                (*it)->getRect()->setY(y+cos(theta)*tempRadius - (*it)->getRect()->getHalfHeight());
-                theta +=stepSize;
-            }
-        }
-            break;
-            
-        case '=':{
-            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-                (*it)->toggleMinified();
-            }
-        }
-            break;
-            
-        default:
-            selfKeyPressed(args);
-            break;
-    }
 }
 
 void UI3DProject::mousePressed(ofMouseEventArgs & args){
@@ -356,7 +199,7 @@ void UI3DProject::setupCoreGuis(){
     setupLightingGui();
     setupCameraGui();
     setupPresetGui();
-    //setupBackground();
+    
     materialAdd( "MATERIAL" );
     lightAdd("POINT LIGHT 1", OF_LIGHT_POINT);
 }
@@ -610,50 +453,183 @@ void UI3DProject::lightsDraw(){
     }
 }
 
-void UI3DProject::loadGUIS(){
-    for(int i = 0; i < guis.size(); i++){
-        guis[i]->loadSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
-    }
+//------------------------------------------------------ Save & Load + Camera
+
+void UI3DProject::guiLoad(){
+    UI2DProject::guiLoad();
+    
     cam.reset();
-    ofxLoadCamera(cam, getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
+    loadCamera(cam, getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
 }
 
-void UI3DProject::saveGUIS(){
-    for(int i = 0; i < guis.size(); i++){
-        guis[i]->saveSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
-    }
-    ofxSaveCamera(cam, getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
+void UI3DProject::guiSave(){
+    UI2DProject::guiSave();
+    saveCamera(cam, getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
 }
 
-void UI3DProject::loadPresetGUISFromPath(string presetPath){
-    
-    for(int i = 0; i < guis.size(); i++){
-        guis[i]->loadSettings(presetPath+"/"+guis[i]->getName()+".xml");
-    }
+void UI3DProject::guiLoadPresetFromPath(string presetPath){
     cam.reset();
-    ofxLoadCamera(cam, presetPath+"/ofEasyCamSettings");
-    
-	selfPresetLoaded(presetPath);
+    loadCamera(cam, presetPath+"/ofEasyCamSettings");
+
+    UI2DProject::guiLoadPresetFromPath(presetPath);
 }
 
-void UI3DProject::savePresetGUIS(string presetName){
-    ofDirectory dir;
-    string presetDirectory = getDataPath()+"Presets/"+presetName+"/";
-    if(!dir.doesDirectoryExist(presetDirectory)){
-        dir.createDirectory(presetDirectory);
-        presetRadio->addToggle(presetGui->addToggle(presetName, true));
-        presetGui->autoSizeToFitWidgets();
-    }
+void UI3DProject::guiSavePreset(string presetName){
+    UI2DProject::guiSavePreset(presetName);
     
-    for(int i = 0; i < guis.size(); i++){
-        guis[i]->saveSettings(presetDirectory+guis[i]->getName()+".xml");
-    }
-    
-    ofxSaveCamera(cam, getDataPath()+"Presets/"+presetName+"/ofEasyCamSettings");
-    
+    saveCamera(cam, getDataPath()+"Presets/"+presetName+"/ofEasyCamSettings");
     cam.enableMouseInput();
 }
 
+//----------------------------------------  CAMERA
 ofCamera& UI3DProject::getCameraRef(){
 	return cam;
+}
+
+static bool saveOfCam(ofCamera &cam, string savePath){
+    ofBuffer buffer;
+    buffer.append("--------------ofCamera parameters--------------\n");
+    buffer.append("transformMatrix\n" + ofToString(cam.getGlobalTransformMatrix()) + "\n" );
+    buffer.append("fov\n" + ofToString(cam.getFov())+"\n");
+    buffer.append("near\n" + ofToString(cam.getNearClip())+"\n");
+    buffer.append("far\n" + ofToString(cam.getFarClip())+"\n");
+    buffer.append("lensOffset\n" + ofToString(cam.getLensOffset())+"\n");
+#ifndef USE_DEVELOP_BRANCH
+    buffer.append("forceAspectRatio\n" + ofToString(cam.getForceAspectRatio())+"\n");
+    buffer.append("aspectRatio\n" + ofToString(cam.getAspectRatio()) + "\n");
+#endif
+    buffer.append("isOrtho\n" + ofToString(cam.getOrtho()) + "\n");
+    
+    if(ofBufferToFile(savePath, buffer)){
+        ofLogNotice("ofCamera saved successfully!");
+        return true;
+    }else{
+        ofLogWarning("failed to save ofCamera!");
+        return false;
+    }
+    
+}
+
+static bool loadOfCam(ofCamera &cam, string loadPath){
+    ofFile file(loadPath);
+	
+	if(!file.exists()){
+		ofLogError("The file " + loadPath + " is missing");
+        return false;
+	}
+	float aRatio;
+    bool bForceAspect =false;
+	ofBuffer buffer(file);
+	while (!buffer.isLastLine()) {
+		string line = buffer.getNextLine();
+        if (line == "transformMatrix") {
+            string str =buffer.getNextLine() + "\n";
+            str += buffer.getNextLine() + "\n";
+            str += buffer.getNextLine() + "\n";
+            str += buffer.getNextLine();
+            
+            ofMatrix4x4 m;
+            istringstream iss;
+            iss.str(str);
+            iss >> m;
+            cam.setTransformMatrix(m);
+        }else if(line == "fov"){
+            cam.setFov(ofToFloat(buffer.getNextLine()));
+        }else if(line == "near"){
+            cam.setNearClip(ofToFloat(buffer.getNextLine()));
+        }else if(line == "far"){
+            cam.setFarClip(ofToFloat(buffer.getNextLine()));
+        }else if(line == "lensOffset"){
+            vector<string> vals = ofSplitString(buffer.getNextLine(), ", ");
+            if (vals.size()==2) {
+                cam.setLensOffset(ofVec2f(ofToFloat(vals[0]), ofToFloat(vals[1])));
+            }
+#ifndef USE_DEVELOP_BRANCH
+        }else if(line == "forceAspectRatio"){
+            bForceAspect = ofToBool(buffer.getNextLine());
+            cam.setForceAspectRatio(bForceAspect);
+        }else if(line == "aspectRatio"){
+#endif
+            aRatio = ofToFloat(buffer.getNextLine());
+        }else if(line == "isOrtho"){
+            if(ofToBool(buffer.getNextLine())){
+                cam.enableOrtho();
+            }else{
+                cam.disableOrtho();
+            }
+        }
+	}
+    if (bForceAspect){
+        cam.setAspectRatio(aRatio);
+    }
+    
+    return true;
+    
+}
+
+bool UI3DProject::saveCamera(ofCamera &cam, string savePath){
+    return saveOfCam(cam, savePath);
+}
+
+bool UI3DProject::loadCamera(ofCamera & cam, string loadPath){
+    return loadOfCam(cam, loadPath);
+}
+
+bool UI3DProject::saveCamera(ofEasyCam & cam, string savePath){
+    
+    if(saveOfCam((ofCamera &)cam, savePath)){
+        ofBuffer buffer = ofBufferFromFile(savePath);
+        
+        buffer.append("--------------ofEasyCam parameters--------------\n");
+        buffer.append("target\n" + ofToString(cam.getTarget().getPosition()) + "\n" );
+        buffer.append("bEnableMouseMiddleButton\n" + ofToString(cam.getMouseMiddleButtonEnabled())+"\n");
+        buffer.append("bMouseInputEnabled\n" + ofToString(cam.getMouseInputEnabled())+"\n");
+        buffer.append("drag\n" + ofToString(cam.getDrag())+"\n");
+        buffer.append("doTranslationKey\n" + ofToString(cam.getTranslationKey())+"\n");
+        if(ofBufferToFile(savePath, buffer)){
+            ofLogNotice("ofEasyCam saved successfully!");
+            return true;
+        }else{
+            ofLogWarning("failed to save ofEasyCam!");
+            return false;
+        }
+    }else{
+        return false;
+    }
+}
+
+bool UI3DProject::loadCamera(ofEasyCam & cam, string loadPath){
+    if(loadOfCam((ofCamera &)cam, loadPath)){
+        ofBuffer buffer = ofBufferFromFile(loadPath);
+        while (!buffer.isLastLine()) {
+            string line = buffer.getNextLine();
+            
+            if (line == "target") {
+                vector<string> vals = ofSplitString(buffer.getNextLine(), ", ");
+                if (vals.size()==3) {
+                    cam.getTarget().setPosition(ofVec3f(ofToFloat(vals[0]), ofToFloat(vals[1]), ofToFloat(vals[2])));
+                }
+            }
+            else if(line == "drag"){
+                cam.setDrag(ofToFloat(buffer.getNextLine()));
+            }else if(line == "bEnableMouseMiddleButton"){
+                if(ofToBool(buffer.getNextLine())){
+                    cam.enableMouseMiddleButton();
+                }else{
+                    cam.disableMouseMiddleButton();
+                }
+            }else if(line == "bMouseInputEnabled"){
+                if(ofToBool(buffer.getNextLine())){
+                    cam.enableMouseInput();
+                }else{
+                    cam.disableMouseInput();
+                }
+            }else if(line == "doTranslationKey"){
+                cam.setTranslationKey(ofToChar(buffer.getNextLine()));
+            }
+        }
+        return true;
+    }else {
+        return false;
+    }
 }

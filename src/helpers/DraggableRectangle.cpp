@@ -105,7 +105,7 @@ void DraggableRectangle::drawBrakets(ofRectangle _rect, float size, float margin
     ofPopStyle();
 }
 
-void DraggableRectangle::mouseDragged(ofPoint _mouse){
+bool DraggableRectangle::mouseDragged(ofPoint _mouse){
     ofPoint A = ofPoint(x,y);
     ofPoint B = ofPoint(x+width,y+height);
     
@@ -113,11 +113,13 @@ void DraggableRectangle::mouseDragged(ofPoint _mouse){
         x += _mouse.x - x;
         y += _mouse.y - y;
         this->set(x,y, width, height);
-    }
-    
-    if ( B.distance( _mouse) < 20 ){
+        return true;
+    } else if ( B.distance( _mouse) < 20 ){
         width += _mouse.x - x - width;
         height += _mouse.y - y - height;
         this->set(x,y, width, height);
+        return true;
+    } else {
+        return false;
     }
 }

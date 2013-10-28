@@ -12,10 +12,6 @@
 #include "UIMaterial.h"
 #include "Extruder.h"
 
-//  ADDONS
-//
-#include "ofxCameraSaveLoad.h"
-
 class UI3DProject : public UI2DProject {
 public:
     
@@ -45,13 +41,13 @@ public:
 	virtual void draw(ofEventArgs & args);
 	virtual void exit(ofEventArgs & args);
     
-	virtual void keyPressed(ofKeyEventArgs & args);
-	virtual void mousePressed(ofMouseEventArgs & args);
-    virtual void mouseReleased(ofMouseEventArgs & args);
-    
+    virtual void keyPressed(ofKeyEventArgs & args){UI2DProject::keyPressed(args);};
 	virtual void keyReleased(ofKeyEventArgs & args){UI2DProject::keyReleased(args);};
+    
+    virtual void mouseMoved(ofMouseEventArgs & args){UI2DProject::mouseMoved(args);};
+    virtual void mousePressed(ofMouseEventArgs & args);
 	virtual void mouseDragged(ofMouseEventArgs & args){UI2DProject::mouseDragged(args);};
-	virtual void mouseMoved(ofMouseEventArgs & args){UI2DProject::mouseMoved(args);};
+	virtual void mouseReleased(ofMouseEventArgs & args);
 	
 protected:
     
@@ -59,10 +55,10 @@ protected:
     virtual void setupCoreGuis();
     virtual void setupBackground();
     
-    virtual void loadGUIS();
-    virtual void loadPresetGUISFromPath(string presetPath);
-    virtual void saveGUIS();
-    virtual void savePresetGUIS(string presetName);
+    virtual void guiLoad();
+    virtual void guiLoadPresetFromPath(string presetPath);
+    virtual void guiSave();
+    virtual void guiSavePreset(string presetName);
     
     // 3D SPECIFIC
     virtual void setupLightingGui();
@@ -81,10 +77,14 @@ protected:
     virtual void materialAdd( string _name );
     
     //  GUI
-    UIReference     lgtGui, camGui;
+    UIReference lgtGui, camGui;
 	
     //  CAMERA
     //
+    bool                saveCamera(ofCamera &cam, string savePath);
+    bool                loadCamera(ofCamera &cam, string loadPath);
+    bool                saveCamera(ofEasyCam &cam, string savePath);
+    bool                loadCamera(ofEasyCam &cam, string loadPath);
     float               camDistance,camFOV;
     ExtruderRef         xRot, yRot, zRot;
     vector<ExtruderRef> extruders;

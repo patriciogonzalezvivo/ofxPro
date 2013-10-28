@@ -60,8 +60,8 @@ void UI2DProject::play(){
         ofAddListener(ofEvents().draw, this, &UI2DProject::draw);
         ofAddListener(ofEvents().exit, this, &UI2DProject::exit);
         
-        loadGUIS();
-        hideGUIS();
+        guiLoad();
+        guiHide();
         
         bPlaying = true;
     }
@@ -70,8 +70,8 @@ void UI2DProject::play(){
 void UI2DProject::stop(){
     
     if (bPlaying){
-        hideGUIS();
-        saveGUIS();
+        guiHide();
+        guiSave();
         
         ofUnregisterMouseEvents(this);
         ofUnregisterKeyEvents(this);
@@ -152,155 +152,58 @@ void UI2DProject::draw(ofEventArgs & args){
 }
 
 void UI2DProject::exit(ofEventArgs & args){
-    saveGUIS();
+    guiSave();
     guis.clear();
     selfExit();
 }
 
 //------------------------------------------------------- KEYBOARD
 void UI2DProject::keyPressed(ofKeyEventArgs & args){
-
-    for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-        if((*it)->hasKeyboardFocus()){
-            return;
+    
+    if (bGui){
+        for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
+            if((*it)->hasKeyboardFocus()){
+                return;
+            }
+        }
+        
+        switch (args.key) {
+            case '\\':
+                guiArrange(0);
+                return;
+                break;
+            case '1':
+                guiArrange(1);
+                return;
+                break;
+            case '2':
+                guiArrange(2);
+                return;
+                break;
+            case '3':
+                guiArrange(3);
+                return;
+                break;
+            case '4':
+                guiArrange(4);
+                return;
+                break;
         }
     }
     
     switch (args.key){
-        case '1':
-            toggleGuiAndPosition(gui);
+        case 's':
+            screenShot(false);
             break;
-        case '2':
-            toggleGuiAndPosition(sysGui);
+        case 'S':
+            screenShot(true);
             break;
-        case '3':
-            toggleGuiAndPosition(rdrGui);
+        case 'h':
+			guiToggle();
             break;
-        case '4':
-            toggleGuiAndPosition(bgGui);
-            break;
-        case 'u':{
-            bUpdateSystem = !bUpdateSystem;
-        }
-            break;
-            
-        case 's':{
-            ofImage img;
-            img.grabScreen(0,0,ofGetWidth(), ofGetHeight());
-			if( !ofDirectory(getDataPath()+"snapshots/").exists() ){
-				ofDirectory(getDataPath()+"snapshots/").create();
-			}
-            img.saveImage(getDataPath()+"snapshots/" + getSystemName() + " " + ofGetTimestampString() + ".png");
-        }
-            break;
-            
-        case 'h':{
-			toggleGUIS();
-        }
-            break;
-            
-        case 'f':{
-            cout << "FULLSCREEN" << endl;
+        case 'f':
             ofToggleFullscreen();
-        }
             break;
-            
-        case 'p':{
-            for(int i = 0; i < guis.size(); i++){
-                guis[i]->setDrawWidgetPadding(true);
-            }
-        }
-            break;
-            
-        case 'e':{
-			UIReference last;
-            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-                (*it)->setMinified(false);
-                if(last != NULL){
-                    (*it)->getRect()->setX(last->getRect()->getX());
-                    (*it)->getRect()->setY(last->getRect()->getY()+last->getRect()->getHeight()+1);
-                    
-                    if((*it)->getRect()->getY()+(*it)->getRect()->getHeight() > ofGetHeight() ){
-                        (*it)->getRect()->setX(last->getRect()->getX()+last->getRect()->getWidth()+1);
-                        (*it)->getRect()->setY(1);
-                    }
-                } else {
-                    (*it)->getRect()->setX(1);
-                    (*it)->getRect()->setY(1);
-                }
-                last = (*it);
-            }
-        }
-            break;
-            
-        case 'r':{
-            float maxY = 0;
-            UIReference last;
-            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-                if(last != NULL){
-                    (*it)->getRect()->setX( last->getRect()->getX()+last->getRect()->getWidth()+1 );
-                    (*it)->getRect()->setY( last->getRect()->getY() );
-                    
-                    if((*it)->getRect()->getX()+(*it)->getRect()->getWidth() > ofGetWidth() ){
-                        (*it)->getRect()->setX(1);
-                        (*it)->getRect()->setY(maxY+1);
-                    }
-                    
-                } else {
-                    (*it)->getRect()->setX(1);
-                    (*it)->getRect()->setY(1);
-                    
-                }
-                last = (*it);
-                last->setMinified(false);
-                
-                float totalY = last->getRect()->getY()+last->getRect()->getHeight();
-                if ( totalY > maxY ){
-                    maxY = totalY;
-                }
-                
-            }
-        }
-            break;
-            
-        case 't':{
-            UIReference last;
-            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-                (*it)->setMinified(true);
-                if(last != NULL){
-                    (*it)->getRect()->setX(1);
-                    (*it)->getRect()->setY(last->getRect()->getY()+last->getRect()->getHeight()+1);
-                } else {
-                    (*it)->getRect()->setX(1);
-                    (*it)->getRect()->setY(1);
-                }
-                last = (*it);
-            }
-        }
-            break;
-            
-        case 'y':{
-            float x = ofGetWidth()*.5;
-            float y = ofGetHeight()*.5;
-            float tempRadius = gui->getGlobalCanvasWidth()*2.0;
-            float stepSize = TWO_PI/(float)guis.size();
-            float theta = 0;
-            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it)
-            {
-                (*it)->getRect()->setX(x+sin(theta)*tempRadius - (*it)->getRect()->getHalfWidth());
-                (*it)->getRect()->setY(y+cos(theta)*tempRadius - (*it)->getRect()->getHalfHeight());
-                theta +=stepSize;
-            }
-        }
-            break;
-            
-        case '=':{
-            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-                (*it)->toggleMinified();
-            }
-        }
-            break;
-            
         default:
             selfKeyPressed(args);
             break;
@@ -309,13 +212,6 @@ void UI2DProject::keyPressed(ofKeyEventArgs & args){
 
 void UI2DProject::keyReleased(ofKeyEventArgs & args){
     switch (args.key){
-        case 'p':{
-            for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-                (*it)->setDrawWidgetPadding(false);
-            }
-        }
-            break;
-            
         default:
             selfKeyReleased(args);
             break;
@@ -430,9 +326,9 @@ void UI2DProject::guiEvent(ofxUIEventArgs &e){
         if(b->getValue()){
             string presetName = ofSystemTextBoxDialog("Save Preset As");
             if(presetName.length()){
-                savePresetGUIS(presetName);
+                guiSavePreset(presetName);
             } else {
-                saveGUIS();
+                guiSave();
             }
         }
     } else if(name == "LOAD"){
@@ -440,9 +336,9 @@ void UI2DProject::guiEvent(ofxUIEventArgs &e){
         if(b->getValue()){
             ofFileDialogResult result = ofSystemLoadDialog("Load Visual System Preset Folder", true, getDataPath()+"Presets/");
             if(result.bSuccess && result.fileName.length()){
-                loadPresetGUISFromPath(result.filePath);
+                guiLoadPresetFromPath(result.filePath);
             } else {
-                loadGUIS();
+                guiLoad();
             }
         }
     }
@@ -519,7 +415,7 @@ void UI2DProject::setupPresetGui(){
 void UI2DProject::guiPresetEvent(ofxUIEventArgs &e){
     ofxUIToggle *t = (ofxUIToggle *) e.widget;
     if(t->getValue()){
-        loadPresetGUISFromName(e.widget->getName());
+        guiLoadPresetFromName(e.widget->getName());
     }
 }
 
@@ -538,32 +434,30 @@ void UI2DProject::guiAllEvents(ofxUIEventArgs &e){
     
 }
 
-void UI2DProject::loadGUIS(){
+void UI2DProject::guiLoad(){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
     }
 }
 
-void UI2DProject::saveGUIS(){
+void UI2DProject::guiSave(){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->saveSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
     }
 }
 
-void UI2DProject::loadPresetGUISFromName(string presetName){
-	loadPresetGUISFromPath(getDataPath()+"Presets/"+ presetName);
+void UI2DProject::guiLoadPresetFromName(string presetName){
+	guiLoadPresetFromPath(getDataPath()+"Presets/"+ presetName);
 }
 
-void UI2DProject::loadPresetGUISFromPath(string presetPath){
-    
+void UI2DProject::guiLoadPresetFromPath(string presetPath){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(presetPath+"/"+guis[i]->getName()+".xml");
     }
-    
 	selfPresetLoaded(presetPath);
 }
 
-void UI2DProject::savePresetGUIS(string presetName){
+void UI2DProject::guiSavePreset(string presetName){
     ofDirectory dir;
     string presetDirectory = getDataPath()+"Presets/"+presetName+"/";
     if(!dir.doesDirectoryExist(presetDirectory)){
@@ -577,25 +471,28 @@ void UI2DProject::savePresetGUIS(string presetName){
     }
 }
 
-void UI2DProject::showGUIS(){
+void UI2DProject::guiShow(){
     for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         (*it)->enable();
     }
+    bGui = true;
 }
 
-void UI2DProject::hideGUIS(){
+void UI2DProject::guiHide(){
     for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         (*it)->disable();
     }
+    bGui = false;
 }
 
-void UI2DProject::toggleGUIS(){
+void UI2DProject::guiToggle(){
     for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         (*it)->toggleVisible();
     }
+    bGui = !bgGui;
 }
 
-void UI2DProject::toggleGuiAndPosition(UIReference &g){
+void UI2DProject::guiToggleAndPosition(UIReference &g){
     if(g->isMinified()){
         g->setMinified(false);
         g->setPosition(ofGetMouseX(), ofGetMouseY());
@@ -604,10 +501,86 @@ void UI2DProject::toggleGuiAndPosition(UIReference &g){
     }
 }
 
+void UI2DProject::guiArrange( int _type ){
+    if (_type == 0){
+        for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
+            (*it)->toggleMinified();
+        }
+    } else if ( _type == 1){
+        UIReference last;
+        for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
+            (*it)->setMinified(true);
+            if(last != NULL){
+                (*it)->getRect()->setX(1);
+                (*it)->getRect()->setY(last->getRect()->getY()+last->getRect()->getHeight()+1);
+            } else {
+                (*it)->getRect()->setX(1);
+                (*it)->getRect()->setY(1);
+            }
+            last = (*it);
+        }
+    } else if (_type == 2){
+        float x = ofGetWidth()*.5;
+        float y = ofGetHeight()*.5;
+        float tempRadius = gui->getGlobalCanvasWidth()*2.0;
+        float stepSize = TWO_PI/(float)guis.size();
+        float theta = 0;
+        for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it)
+        {
+            (*it)->getRect()->setX(x+sin(theta)*tempRadius - (*it)->getRect()->getHalfWidth());
+            (*it)->getRect()->setY(y+cos(theta)*tempRadius - (*it)->getRect()->getHalfHeight());
+            theta +=stepSize;
+        }
+    } else if (_type == 3 ){
+        UIReference last;
+        for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
+            (*it)->setMinified(false);
+            if(last != NULL){
+                (*it)->getRect()->setX(last->getRect()->getX());
+                (*it)->getRect()->setY(last->getRect()->getY()+last->getRect()->getHeight()+1);
+                
+                if((*it)->getRect()->getY()+(*it)->getRect()->getHeight() > ofGetHeight() ){
+                    (*it)->getRect()->setX(last->getRect()->getX()+last->getRect()->getWidth()+1);
+                    (*it)->getRect()->setY(1);
+                }
+            } else {
+                (*it)->getRect()->setX(1);
+                (*it)->getRect()->setY(1);
+            }
+            last = (*it);
+        }
+    } else if ( _type == 4){
+        float maxY = 0;
+        UIReference last;
+        for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
+            if(last != NULL){
+                (*it)->getRect()->setX( last->getRect()->getX()+last->getRect()->getWidth()+1 );
+                (*it)->getRect()->setY( last->getRect()->getY() );
+                
+                if((*it)->getRect()->getX()+(*it)->getRect()->getWidth() > ofGetWidth() ){
+                    (*it)->getRect()->setX(1);
+                    (*it)->getRect()->setY(maxY+1);
+                }
+                
+            } else {
+                (*it)->getRect()->setX(1);
+                (*it)->getRect()->setY(1);
+                
+            }
+            last = (*it);
+            last->setMinified(false);
+            
+            float totalY = last->getRect()->getY()+last->getRect()->getHeight();
+            if ( totalY > maxY ){
+                maxY = totalY;
+            }
+            
+        }
+    }
+}
+
 ofFbo& UI2DProject::getRenderTarget(){
-    
     if(!renderTarget.isAllocated() || renderTarget.getWidth() != ofGetWidth() || renderTarget.getHeight() != ofGetHeight()){
-        
         ofFbo::Settings settings;
         settings.width = ofGetWidth();
         settings.height = ofGetHeight();
@@ -622,11 +595,9 @@ ofFbo& UI2DProject::getRenderTarget(){
         settings.textureTarget = ofGetUsingArbTex() ? GL_TEXTURE_RECTANGLE_ARB : GL_TEXTURE_2D;
         renderTarget.allocate(settings);
 #endif
-        
 		renderTarget.begin();
 		ofClear(0,0,0,0);
 		renderTarget.end();
-        
     }
     
     return renderTarget;
@@ -634,4 +605,29 @@ ofFbo& UI2DProject::getRenderTarget(){
 
 void UI2DProject::selfPostDraw(){
 	UI2DProject::getRenderTarget().draw(0, 0,UI2DProject::getRenderTarget().getWidth(), UI2DProject::getRenderTarget().getHeight());
+}
+
+
+string API_KEY = "e76352eef8a1025f9b3831f6d7800b67";
+string API_SECRET = "a6c2383bb1d0b86f";
+void UI2DProject::screenShot(bool _upload_to_flickr){
+    ofImage img;
+    img.grabScreen(0,0,ofGetWidth(), ofGetHeight());
+    if( !ofDirectory(getDataPath()+"snapshots/").exists() ){
+        ofDirectory(getDataPath()+"snapshots/").create();
+    }
+    string screenShotPath = getDataPath()+"snapshots/" + getSystemName() + " " + ofGetTimestampString() + ".png";
+    img.saveImage(screenShotPath);
+    
+    if(_upload_to_flickr){
+        Flickr::API flickrAPI;
+        bool bAuthenticated = flickrAPI.authenticate( API_KEY, API_SECRET, Flickr::FLICKR_WRITE );
+        if (bAuthenticated){
+            string photoID = flickrAPI.upload(screenShotPath);
+            
+            cout << photoID << endl;
+            //http://flic.kr/p/{base58-photo-id}
+            //http://www.flickr.com/groups/api/discuss/72157616713786392/
+        }
+    }
 }

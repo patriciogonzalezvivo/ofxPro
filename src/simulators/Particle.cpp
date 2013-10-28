@@ -55,7 +55,7 @@ void Particle::addRepulsionForce(ofPoint _posOfForce, float _radius, float _scal
 
 //------------------------------------------------------------
 void Particle::addRepulsionForce(Particle *p, float _scale){
-    addRepulsionForce(p, size*2.0 + p->size*2.0, _scale);
+    addRepulsionForce(p, (size+ p->size)*2.5, _scale);
 }
 
 void Particle::addRepulsionForce(Particle *p, float _radius, float _scale){
@@ -109,7 +109,7 @@ void Particle::addAttractionForce(ofPoint posOfForce, float radius, float scale)
 
 //------------------------------------------------------------
 void Particle::addAttractionForce(Particle *p, float _scale){
-    addAttractionForce(p, size*2.0 + p->size*2.0 ,_scale);
+    addAttractionForce(p, (size+p->size)*2.5 ,_scale);
 }
 
 void Particle::addAttractionForce(Particle *p, float _radius, float _scale){
