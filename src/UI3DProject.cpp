@@ -32,110 +32,120 @@ void UI3DProject::update(ofEventArgs & args){
         for(vector<ExtruderRef>::iterator it = extruders.begin(); it != extruders.end(); ++it){
             (*it)->update();
         }
-        selfUpdate();
+        
+        UI2DProject::update(args);
     }
 }
 
 void UI3DProject::draw(ofEventArgs & args){
-    ofPushStyle();
+    
     
     if(bRenderSystem){
-        
-        {
+        ofPushStyle();
 #ifdef TARGET_RASPBERRY_PI
             
 #else
-            getRenderTarget().begin();
+        getRenderTarget().begin();
 #endif
             
-            //  Background
-            //
-            if ( background != NULL ){
-                background->draw();
-            }
-            
-            
-            //  2D scene
-            //
-            {
-                ofPushStyle();
-                ofPushMatrix();
-                selfDrawBackground();
-                ofPopMatrix();
-                ofPopStyle();
-            }
-            
-            //  Start 3D scene
-            //
-            {
-                getCameraRef().begin();
-                
-                //  Rotate Camera
-                //
-                ofRotateX(xRot->getPos());
-                ofRotateY(yRot->getPos());
-                ofRotateZ(zRot->getPos());
-                
-                //  Scene Setup
-                //
-                selfSceneTransformation();
-                glEnable(GL_DEPTH_TEST);
-                
-                //  Draw Debug
-                //
-                if( bDebug ){
-                    ofPushStyle();
-                    ofPushMatrix();
-                    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-                    
-                    selfDrawDebug();
-                    
-                    ofPopMatrix();
-                    ofPopStyle();
-                }
-                
-                //  Draw Scene
-                //
-                {
-                    lightsBegin();
-                    ofPushStyle();
-                    
-                    selfDraw();
-                    
-                    ofPopStyle();
-                    lightsEnd();
-                }
-                glDisable(GL_DEPTH_TEST);
-                
-                getCameraRef().end();
-            }
-            
-            //  Draw Overlay
-            //
-            {
-                ofPushStyle();
-                ofPushMatrix();
-                selfDrawOverlay();
-                ofPopMatrix();
-                ofPopStyle();
-            }
-#ifdef TARGET_RASPBERRY_PI
-            
-#else
-            getRenderTarget().end();
-            
-            //  Post-Draw ( shader time )
-            //
-            selfPostDraw();
-#endif
+        //  Background
+        //
+        if ( background != NULL ){
+            background->draw();
         }
         
         
+        //  2D scene
+        //
+        {
+            ofPushStyle();
+            ofPushMatrix();
+            selfDrawBackground();
+            ofPopMatrix();
+            ofPopStyle();
+        }
+        
+        //  Start 3D scene
+        //
+        {
+            getCameraRef().begin();
+            
+            //  Rotate Camera
+            //
+            ofRotateX(xRot->getPos());
+            ofRotateY(yRot->getPos());
+            ofRotateZ(zRot->getPos());
+            
+            //  Scene Setup
+            //
+            selfSceneTransformation();
+            glEnable(GL_DEPTH_TEST);
+            
+            //  Draw Debug
+            //
+            if( bDebug ){
+                ofPushStyle();
+                ofPushMatrix();
+                ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+                
+                selfDrawDebug();
+                
+                ofPopMatrix();
+                ofPopStyle();
+            }
+            
+            //  Draw Scene
+            //
+            {
+                lightsBegin();
+                ofPushStyle();
+                
+                selfDraw();
+                
+                ofPopStyle();
+                lightsEnd();
+            }
+            glDisable(GL_DEPTH_TEST);
+            
+            getCameraRef().end();
+        }
+        
+        //  Draw Overlay
+        //
+        {
+            ofPushStyle();
+            ofPushMatrix();
+            selfDrawOverlay();
+            ofPopMatrix();
+            ofPopStyle();
+        }
+#ifdef TARGET_RASPBERRY_PI
+        
+#else
+        getRenderTarget().end();
+        
+        //  Post-Draw ( shader time )
+        //
+        ofDisableLighting();
+        selfPostDraw();
+#endif
+        if(bRecording){
+            ofPushStyle();
+            ofFill();
+            ofSetColor(255, 0, 0,abs(sin(ofGetElapsedTimef()))*255);
+            ofCircle(ofGetWidth()-20, 20, 5);
+            ofPopStyle();
+        }
+        ofPopStyle();
 	}
-    ofPopStyle();
+    
 }
 
 void UI3DProject::exit(ofEventArgs & args){
+    if(bRecording){
+        recordingEnd();
+    }
+    
     guiSave();
     
     extruders.clear();
@@ -263,8 +273,9 @@ void UI3DProject::materialAdd( string _name ){
 void UI3DProject::lightsBegin(){
     ofSetSmoothLighting(bSmoothLighting);
     if(bEnableLights){
+        ofEnableLighting();
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-            ofEnableLighting();
+//            ofEnableLighting();
             it->second->enable();
         }
     }
@@ -272,10 +283,11 @@ void UI3DProject::lightsBegin(){
 
 void UI3DProject::lightsEnd(){
     if(!bEnableLights){
-        ofDisableLighting();
+//        ofDisableLighting();
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->disable();
         }
+        ofDisableLighting();
     }
 }
 

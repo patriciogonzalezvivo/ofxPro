@@ -142,7 +142,10 @@ protected:
     virtual void guiArrange( int _order_type );
     virtual void guiToggleAndPosition( UIReference &g);
     
-    virtual void screenShot(bool _upload_to_flickr);
+    virtual void screenShot();
+    virtual void recordingStart();
+    virtual void recordingEnd();
+    virtual void uploadLastRecord();
     
 	virtual bool cursorIsOverGUI();
     
@@ -158,7 +161,8 @@ protected:
     
     //  Documenting
     Recorder        recorder;
-	
+	string          lastRercord;
+    
     //  APP Flags
     //
     bool    bRenderSystem;

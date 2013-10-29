@@ -34,17 +34,13 @@ void UI2DProject::setup(){
     
     ofSetSphereResolution(30);
     
-    recorder.setVideoCodec("mpeg4");
-    recorder.setVideoBitrate("800k");
-    recorder.setAudioCodec("mp3");
-    recorder.setAudioBitrate("192k");
-
     selfSetup();
     setupCoreGuis();
     selfSetupGuis();
     
     bPlaying = false;
     bRecording = false;
+    lastRercord = "";
 }
 
 void UI2DProject::play(){
@@ -74,8 +70,11 @@ void UI2DProject::play(){
 }
 
 void UI2DProject::stop(){
-    
     if (bPlaying){
+        if(bRecording){
+            recordingEnd();
+        }
+        
         guiHide();
         guiSave();
         
@@ -96,6 +95,11 @@ void UI2DProject::stop(){
 void UI2DProject::update(ofEventArgs & args){
     if(bUpdateSystem){
         selfUpdate();
+        if(bRecording){
+            ofPixels pixels;
+            getRenderTarget().readToPixels(pixels);
+            recorder.addFrame(pixels);
+        }
     }
 }
 
@@ -154,10 +158,21 @@ void UI2DProject::draw(ofEventArgs & args){
         selfPostDraw();
 #endif
 	}
+    
+    if(bRecording){
+        ofFill();
+        ofSetColor(abs(sin(ofGetElapsedTimef()))*255, 0, 0);
+        ofCircle(ofGetWidth()-20, -20, 5);
+    }
+    
     ofPopStyle();
 }
 
 void UI2DProject::exit(ofEventArgs & args){
+    if(bRecording){
+        recordingEnd();
+    }
+    
     guiSave();
     guis.clear();
     selfExit();
@@ -199,10 +214,18 @@ void UI2DProject::keyPressed(ofKeyEventArgs & args){
     
     switch (args.key){
         case 's':
-            screenShot(false);
+            screenShot();
             break;
-        case 'S':
-            screenShot(true);
+        case 'r':{
+            if(!bRecording){
+                recordingStart();
+            } else {
+                recordingEnd();
+            }
+        }
+            break;
+        case 'u':
+            uploadLastRecord();
             break;
         case 'h':
 			guiToggle();
@@ -612,26 +635,51 @@ void UI2DProject::selfPostDraw(){
 }
 
 
-string API_KEY = "e76352eef8a1025f9b3831f6d7800b67";
-string API_SECRET = "a6c2383bb1d0b86f";
-void UI2DProject::screenShot(bool _upload_to_flickr){
+//-------------------------------- DOCUMENTATION TOOLS
+//
+void UI2DProject::screenShot(){
     ofImage img;
     img.grabScreen(0,0,ofGetWidth(), ofGetHeight());
     if( !ofDirectory(getDataPath()+"snapshots/").exists() ){
         ofDirectory(getDataPath()+"snapshots/").create();
     }
-    string screenShotPath = getDataPath()+"snapshots/" + getSystemName() + " " + ofGetTimestampString() + ".png";
-    img.saveImage(screenShotPath);
+    string recordPath = getDataPath()+"snapshots/" + ofGetTimestampString() + ".png";
+    img.saveImage(recordPath);
+}
+
+void UI2DProject::recordingStart(){
+    if(!bRecording){
+        string recordPath = getDataPath()+"snapshots/" + ofGetTimestampString() + ".mov";
+//        recorder.setup(recordPath, getRenderTarget().getWidth(), getRenderTarget().getHeight(), 30, sampleRate, channels);
+        recorder.setup(recordPath, getRenderTarget().getWidth(), getRenderTarget().getHeight(), 30); // no audio
+        lastRercord = recordPath;
+        bRecording = true;
+    }
+}
+
+void UI2DProject::recordingEnd(){
+    if(bRecording){
+        recorder.close();
+        bRecording = false;
+    }
+}
+
+void UI2DProject::uploadLastRecord(){
+    if(lastRercord!=""){
     
-    if(_upload_to_flickr){
         Flickr::API flickrAPI;
+        string API_KEY = "e76352eef8a1025f9b3831f6d7800b67";
+        string API_SECRET = "a6c2383bb1d0b86f";
+        
         bool bAuthenticated = flickrAPI.authenticate( API_KEY, API_SECRET, Flickr::FLICKR_WRITE );
         if (bAuthenticated){
-            string photoID = flickrAPI.upload(screenShotPath);
+            string photoID = flickrAPI.upload(lastRercord);
             
             cout << photoID << endl;
             //http://flic.kr/p/{base58-photo-id}
             //http://www.flickr.com/groups/api/discuss/72157616713786392/
         }
+        
+        lastRercord = "";
     }
 }
