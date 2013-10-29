@@ -33,12 +33,18 @@ void UI2DProject::setup(){
     }
     
     ofSetSphereResolution(30);
+    
+    recorder.setVideoCodec("mpeg4");
+    recorder.setVideoBitrate("800k");
+    recorder.setAudioCodec("mp3");
+    recorder.setAudioBitrate("192k");
 
     selfSetup();
     setupCoreGuis();
     selfSetupGuis();
     
     bPlaying = false;
+    bRecording = false;
 }
 
 void UI2DProject::play(){
@@ -257,13 +263,11 @@ void UI2DProject::mouseReleased(ofMouseEventArgs & args){
 //------------------------------------------------------------ SETUP
 
 void UI2DProject::setupCoreGuis(){
-    
     setupGui();
     setupSystemGui();
     setupRenderGui();
     setupPresetGui();
     setupBackground();
-    
 }
 
 void UI2DProject::setupGui(){

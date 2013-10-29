@@ -7,37 +7,9 @@
 
 #include "UI3DProject.h"
 
-void UI3DProject::setup(){
-    
-	cout << "SETTING UP SYSTEM " << getSystemName() << endl;
-	background = NULL;
-    
-    ofDirectory dir;
-    string directoryName = getDataPath()+"Presets/";
-    if(!dir.doesDirectoryExist(directoryName)){
-        dir.createDirectory(directoryName);
-    }
-    
-    string workingDirectoryName = directoryName+"Working/";
-    if(!dir.doesDirectoryExist(workingDirectoryName)){
-        dir.createDirectory(workingDirectoryName);
-    }
-    
-    ofSetSphereResolution(30);
-    
-    setupCameraParams();
-	setupLightingParams();
-    
-    selfSetup();
-    setupCoreGuis();
-    selfSetupGuis();
-    
-    bPlaying = false;
-}
-
 void UI3DProject::play(){
     if (!bPlaying){
-        cam.enableMouseInput();
+        camera.enableMouseInput();
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->play();
         }
@@ -47,7 +19,7 @@ void UI3DProject::play(){
 
 void UI3DProject::stop(){
     if(bPlaying){
-        cam.disableMouseInput();
+        camera.disableMouseInput();
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->stop();
         }
@@ -174,34 +146,35 @@ void UI3DProject::exit(ofEventArgs & args){
     selfExit();
 }
 
+//-------------------- Mouse events + camera interaction
+//
 void UI3DProject::mousePressed(ofMouseEventArgs & args){
 	if(cursorIsOverGUI()){
-		cam.disableMouseInput();
+		camera.disableMouseInput();
 	}
     selfMousePressed(args);
 }
 
 void UI3DProject::mouseReleased(ofMouseEventArgs & args){
-    cam.enableMouseInput();
+    camera.enableMouseInput();
     selfMouseReleased(args);
 }
 
 //------------------------------------------------------------ CORE SETUP
 
 void UI3DProject::setupCoreGuis(){
-    setupGui();
-    setupSystemGui();
-    setupRenderGui();
-    setupBackground();
+    UI2DProject::setupCoreGuis();
     
     //  This is the specific of the 3D project
     //
-    setupLightingGui();
+    setupCameraParams();
     setupCameraGui();
-    setupPresetGui();
     
-    materialAdd( "MATERIAL" );
+    setupLightingParams();
+    setupLightingGui();
+    
     lightAdd("POINT LIGHT 1", OF_LIGHT_POINT);
+    materialAdd( "MATERIAL" );
 }
 
 void UI3DProject::setupBackground(){
@@ -210,7 +183,7 @@ void UI3DProject::setupBackground(){
     
     //  This is the specific of the 3D Project
     //
-    background->linkCamera( &cam );
+    background->linkCamera( &camera );
     
     guiAdd( *background );
 }
@@ -227,6 +200,7 @@ void UI3DProject::setupLightingParams(){
     globalAmbientColor[2] = 0.5;
     globalAmbientColor[3] = 1.0;
 }
+
 void UI3DProject::setupLightingGui(){
     UIReference tmp( new ofxUISuperCanvas("LIGHT", guiTemplate) );
     lgtGui = tmp;
@@ -269,12 +243,86 @@ void UI3DProject::guiLightingEvent(ofxUIEventArgs &e){
     }
 }
 
+void UI3DProject::lightAdd( string _name, ofLightType _type ){
+    UILightReference newLight(new UILight(_name, _type));
+    lights[_name] = newLight;
+	guis.push_back(newLight->getUIReference(guiTemplate));
+}
+
+void UI3DProject::materialAdd( string _name ){
+    UIMaterialReference newMaterial( new UIMaterial() );
+    
+    if ( newMaterial->getClassName()  == "MATERIAL" ){
+        newMaterial->setName("MATERIAL " + ofToString( materials.size() + 1));
+    }
+    
+    materials[ newMaterial->getClassName() ] = newMaterial;
+    guis.push_back( newMaterial->getUIReference(guiTemplate) );
+}
+
+void UI3DProject::lightsBegin(){
+    ofSetSmoothLighting(bSmoothLighting);
+    if(bEnableLights){
+        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
+            ofEnableLighting();
+            it->second->enable();
+        }
+    }
+}
+
+void UI3DProject::lightsEnd(){
+    if(!bEnableLights){
+        ofDisableLighting();
+        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
+            it->second->disable();
+        }
+    }
+}
+
+void UI3DProject::lightsDraw(){
+    if(bEnableLights){
+        ofDisableLighting();
+        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
+            it->second->draw();
+        }
+    }
+}
+
+//------------------------------------------------------ Save & Load + Camera
+
+void UI3DProject::guiLoad(){
+    UI2DProject::guiLoad();
+    
+    camera.reset();
+    cameraLoad(getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
+}
+
+void UI3DProject::guiSave(){
+    UI2DProject::guiSave();
+    cameraSave(getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
+}
+
+void UI3DProject::guiLoadPresetFromPath(string presetPath){
+    camera.reset();
+    cameraLoad(presetPath+"/ofEasyCamSettings");
+
+    UI2DProject::guiLoadPresetFromPath(presetPath);
+}
+
+void UI3DProject::guiSavePreset(string presetName){
+    UI2DProject::guiSavePreset(presetName);
+    
+    cameraSave(getDataPath()+"Presets/"+presetName+"/ofEasyCamSettings");
+    camera.enableMouseInput();
+}
+
+//----------------------------------------  CAMERA
 void UI3DProject::setupCameraParams(){
     //CAMERA
-    camFOV = 60;
-    camDistance = 200;
-    cam.setDistance(camDistance);
-    cam.setFov(camFOV);
+    cameraFOV = 60;
+    cameraDistance = 200;
+    camera.setDistance(cameraDistance);
+    camera.setFov(cameraFOV);
     
     ExtruderRef newXRot( new Extruder(0) );
     xRot = newXRot;
@@ -308,8 +356,8 @@ void UI3DProject::setupCameraGui(){
     camGui->addWidgetDown(button, OFX_UI_ALIGN_RIGHT, true);
     camGui->addWidgetToHeader(button);
     camGui->addSpacer();
-    camGui->addSlider("DIST", 0, 1000, &camDistance);
-    camGui->addSlider("FOV", 0, 180, &camFOV);
+    camGui->addSlider("DIST", 0, 1000, &cameraDistance);
+    camGui->addSlider("FOV", 0, 180, &cameraFOV);
     camGui->addSlider("ROT-X", 0, 360.0, xRot->getPosPtr())->setIncrement(1.0);
     camGui->addSlider("ROT-Y", 0, 360.0, yRot->getPosPtr())->setIncrement(1.0);
     camGui->addSlider("ROT-Z", 0, 360.0, zRot->getPosPtr())->setIncrement(1.0);
@@ -338,9 +386,9 @@ void UI3DProject::setupCameraGui(){
 void UI3DProject::guiCameraEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
     if(name == "DIST") {
-        cam.setDistance(camDistance);
+        camera.setDistance(cameraDistance);
     } else if(name == "FOV"){
-        cam.setFov(camFOV);
+        camera.setFov(cameraFOV);
     } else if(name == "ROT-X"){
         xRot->setPosAndHome(xRot->getPos());
     } else if(name == "ROT-Y") {
@@ -350,7 +398,7 @@ void UI3DProject::guiCameraEvent(ofxUIEventArgs &e){
     } else if(name == "RESET"){
         ofxUIButton *b = (ofxUIButton *) e.widget;
         if(b->getValue()){
-            cam.reset();
+            camera.reset();
         }
     }else if(name == "TOP"){
         ofxUIToggle *t = (ofxUIToggle *) e.widget;
@@ -408,82 +456,8 @@ void UI3DProject::guiCameraEvent(ofxUIEventArgs &e){
     }
 }
 
-void UI3DProject::lightAdd( string _name, ofLightType _type ){
-    UILightReference newLight(new UILight(_name, _type));
-    lights[_name] = newLight;
-	guis.push_back(newLight->getUIReference(guiTemplate));
-}
-
-void UI3DProject::materialAdd( string _name ){
-    UIMaterialReference newMaterial( new UIMaterial() );
-    
-    if ( newMaterial->getClassName()  == "MATERIAL" ){
-        newMaterial->setName("MATERIAL " + ofToString( materials.size() + 1));
-    }
-    
-    materials[ newMaterial->getClassName() ] = newMaterial;
-    guis.push_back( newMaterial->getUIReference(guiTemplate) );
-}
-
-void UI3DProject::lightsBegin(){
-    ofSetSmoothLighting(bSmoothLighting);
-    if(bEnableLights){
-        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-            ofEnableLighting();
-            it->second->enable();
-        }
-    }
-}
-
-void UI3DProject::lightsEnd(){
-    if(!bEnableLights){
-        ofDisableLighting();
-        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-            it->second->disable();
-        }
-    }
-}
-
-void UI3DProject::lightsDraw(){
-    if(bEnableLights){
-        ofDisableLighting();
-        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-            it->second->draw();
-        }
-    }
-}
-
-//------------------------------------------------------ Save & Load + Camera
-
-void UI3DProject::guiLoad(){
-    UI2DProject::guiLoad();
-    
-    cam.reset();
-    loadCamera(cam, getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
-}
-
-void UI3DProject::guiSave(){
-    UI2DProject::guiSave();
-    saveCamera(cam, getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
-}
-
-void UI3DProject::guiLoadPresetFromPath(string presetPath){
-    cam.reset();
-    loadCamera(cam, presetPath+"/ofEasyCamSettings");
-
-    UI2DProject::guiLoadPresetFromPath(presetPath);
-}
-
-void UI3DProject::guiSavePreset(string presetName){
-    UI2DProject::guiSavePreset(presetName);
-    
-    saveCamera(cam, getDataPath()+"Presets/"+presetName+"/ofEasyCamSettings");
-    cam.enableMouseInput();
-}
-
-//----------------------------------------  CAMERA
 ofCamera& UI3DProject::getCameraRef(){
-	return cam;
+	return camera;
 }
 
 static bool saveOfCam(ofCamera &cam, string savePath){
@@ -567,25 +541,17 @@ static bool loadOfCam(ofCamera &cam, string loadPath){
     
 }
 
-bool UI3DProject::saveCamera(ofCamera &cam, string savePath){
-    return saveOfCam(cam, savePath);
-}
-
-bool UI3DProject::loadCamera(ofCamera & cam, string loadPath){
-    return loadOfCam(cam, loadPath);
-}
-
-bool UI3DProject::saveCamera(ofEasyCam & cam, string savePath){
+bool UI3DProject::cameraSave(string savePath){
     
-    if(saveOfCam((ofCamera &)cam, savePath)){
+    if(saveOfCam((ofCamera &)camera, savePath)){
         ofBuffer buffer = ofBufferFromFile(savePath);
         
         buffer.append("--------------ofEasyCam parameters--------------\n");
-        buffer.append("target\n" + ofToString(cam.getTarget().getPosition()) + "\n" );
-        buffer.append("bEnableMouseMiddleButton\n" + ofToString(cam.getMouseMiddleButtonEnabled())+"\n");
-        buffer.append("bMouseInputEnabled\n" + ofToString(cam.getMouseInputEnabled())+"\n");
-        buffer.append("drag\n" + ofToString(cam.getDrag())+"\n");
-        buffer.append("doTranslationKey\n" + ofToString(cam.getTranslationKey())+"\n");
+        buffer.append("target\n" + ofToString(camera.getTarget().getPosition()) + "\n" );
+        buffer.append("bEnableMouseMiddleButton\n" + ofToString(camera.getMouseMiddleButtonEnabled())+"\n");
+        buffer.append("bMouseInputEnabled\n" + ofToString(camera.getMouseInputEnabled())+"\n");
+        buffer.append("drag\n" + ofToString(camera.getDrag())+"\n");
+        buffer.append("doTranslationKey\n" + ofToString(camera.getTranslationKey())+"\n");
         if(ofBufferToFile(savePath, buffer)){
             ofLogNotice("ofEasyCam saved successfully!");
             return true;
@@ -598,8 +564,8 @@ bool UI3DProject::saveCamera(ofEasyCam & cam, string savePath){
     }
 }
 
-bool UI3DProject::loadCamera(ofEasyCam & cam, string loadPath){
-    if(loadOfCam((ofCamera &)cam, loadPath)){
+bool UI3DProject::cameraLoad(string loadPath){
+    if(loadOfCam((ofCamera &)camera, loadPath)){
         ofBuffer buffer = ofBufferFromFile(loadPath);
         while (!buffer.isLastLine()) {
             string line = buffer.getNextLine();
@@ -607,25 +573,25 @@ bool UI3DProject::loadCamera(ofEasyCam & cam, string loadPath){
             if (line == "target") {
                 vector<string> vals = ofSplitString(buffer.getNextLine(), ", ");
                 if (vals.size()==3) {
-                    cam.getTarget().setPosition(ofVec3f(ofToFloat(vals[0]), ofToFloat(vals[1]), ofToFloat(vals[2])));
+                    camera.getTarget().setPosition(ofVec3f(ofToFloat(vals[0]), ofToFloat(vals[1]), ofToFloat(vals[2])));
                 }
             }
             else if(line == "drag"){
-                cam.setDrag(ofToFloat(buffer.getNextLine()));
+                camera.setDrag(ofToFloat(buffer.getNextLine()));
             }else if(line == "bEnableMouseMiddleButton"){
                 if(ofToBool(buffer.getNextLine())){
-                    cam.enableMouseMiddleButton();
+                    camera.enableMouseMiddleButton();
                 }else{
-                    cam.disableMouseMiddleButton();
+                    camera.disableMouseMiddleButton();
                 }
             }else if(line == "bMouseInputEnabled"){
                 if(ofToBool(buffer.getNextLine())){
-                    cam.enableMouseInput();
+                    camera.enableMouseInput();
                 }else{
-                    cam.disableMouseInput();
+                    camera.disableMouseInput();
                 }
             }else if(line == "doTranslationKey"){
-                cam.setTranslationKey(ofToChar(buffer.getNextLine()));
+                camera.setTranslationKey(ofToChar(buffer.getNextLine()));
             }
         }
         return true;

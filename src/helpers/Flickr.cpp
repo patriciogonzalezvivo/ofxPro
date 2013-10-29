@@ -1,9 +1,7 @@
 //
 //  Flickr.cpp
-//  ChromatcCapture
 //
 //  Created by Brett Renfer on 12/1/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "Flickr.h"

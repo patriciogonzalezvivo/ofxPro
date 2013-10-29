@@ -29,7 +29,6 @@ public:
     
 	// Interface functions
     //
-	virtual void setup();
     virtual void play();
 	virtual void stop();
     
@@ -81,14 +80,12 @@ protected:
 	
     //  CAMERA
     //
-    bool                saveCamera(ofCamera &cam, string savePath);
-    bool                loadCamera(ofCamera &cam, string loadPath);
-    bool                saveCamera(ofEasyCam &cam, string savePath);
-    bool                loadCamera(ofEasyCam &cam, string loadPath);
-    float               camDistance,camFOV;
+    virtual bool    cameraSave(string savePath);
+    virtual bool    cameraLoad(string loadPath);
+    float           cameraDistance,cameraFOV;
     ExtruderRef         xRot, yRot, zRot;
     vector<ExtruderRef> extruders;
-    ofEasyCam           cam;
+    ofEasyCam           camera;
 	
     //  LIGHTS & MATERIALs
     //

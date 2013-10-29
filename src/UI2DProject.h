@@ -7,16 +7,26 @@
 
 #pragma once
 
+//  OF
+//
 #include "ofMain.h"
-#include "UIClass.h"
-#include "UIBackground.h"
-
-#include "Flickr.h"
 
 //  ADDONS
 //
 #include "ofxUI.h"
 
+//  The basis
+//
+#include "UIClass.h"
+#include "UIBackground.h"
+
+//  Documenting Tools
+//
+#include "Flickr.h"
+#include "Recorder.h"
+
+//  RaspberryPi Extras
+//
 #ifdef TARGET_RASPBERRY_PI
 #include "ConsoleListener.h"
 #endif
@@ -28,7 +38,7 @@ class UI2DProject {
 #endif
 public:
     
-	UI2DProject(){};
+	UI2DProject():background(NULL){};
 	virtual ~UI2DProject(){};
 	
 	//--------------------- VIRTUAL CLASSES TO EDIT
@@ -142,15 +152,18 @@ protected:
     UIReference gui, sysGui, rdrGui, bgGui, presetGui, tlGui;
     vector<UIReference> guis;
 	
-    //  RENDER
+    //  Basic RENDER scene
+    UIBackground    *background;
     ofFbo           renderTarget;
     
-    //  BACKGROUND
-    UIBackground    *background;
+    //  Documenting
+    Recorder        recorder;
 	
     //  APP Flags
+    //
     bool    bRenderSystem;
     bool    bUpdateSystem;
+    bool    bRecording;
     bool    bPlaying;
     bool    bDebug;
     bool    bGui;
