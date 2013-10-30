@@ -511,68 +511,132 @@ namespace Flickr {
             return "";
         }
         
-        map<string,string> args;
-        args["api_key"] = api_key;
-        args["auth_token"] = auth_token;
+        fileToUpload = image;
+        startThread(true, false);
         
-        string result;
-        
-        FilePartSource * fps = new FilePartSource(image, "image/jpeg");
-        
-        try
-        {
-            
-            // prepare session
-            HTTPClientSession session( api_base );
-            HTTPRequest req(HTTPRequest::HTTP_POST, "/services/upload/", HTTPMessage::HTTP_1_0);
-            req.setContentType("multipart/form-data");
-            
-            // setup form
-            HTMLForm form;
-            form.set("api_key", api_key);
-            form.set("auth_token", auth_token);
-            form.set("api_sig", apiSig( args ));
-            form.setEncoding(HTMLForm::ENCODING_MULTIPART);
-            form.addPart("photo", fps);
-            form.prepareSubmit(req);
-            
-            std::ostringstream oszMessage;
-            form.write(oszMessage);
-            std::string szMessage = oszMessage.str();
-            
-            req.setContentLength((int) szMessage.length() );
-            
-            //session.setKeepAlive(true);
-            
-            // send form
-            ostream & out = session.sendRequest(req) << szMessage;
-            
-            // get response
-            HTTPResponse res;
-            cout << res.getStatus() << " " << res.getReason() << endl;
-            
-            // print response
-            istream &is = session.receiveResponse(res);
-            StreamCopier::copyToString(is, result);
-        }
-        catch (Exception &ex)
-        {
-            cerr << "error? " + ex.displayText() <<endl;
-        }
-        
-        string photoid;
-        
-        ofxXmlSettings xml;
-        xml.loadFromBuffer(result);
-        xml.pushTag("rsp");{
-            photoid = xml.getValue("photoid", "");
-        }; xml.popTag();
-        
-        return photoid;
+//        map<string,string> args;
+//        args["api_key"] = api_key;
+//        args["auth_token"] = auth_token;
+//        
+//        string result;
+//        
+//        FilePartSource * fps = new FilePartSource(image, "image/jpeg");
+//        
+//        try
+//        {
+//            
+//            // prepare session
+//            HTTPClientSession session( api_base );
+//            HTTPRequest req(HTTPRequest::HTTP_POST, "/services/upload/", HTTPMessage::HTTP_1_0);
+//            req.setContentType("multipart/form-data");
+//            
+//            // setup form
+//            HTMLForm form;
+//            form.set("api_key", api_key);
+//            form.set("auth_token", auth_token);
+//            form.set("api_sig", apiSig( args ));
+//            form.setEncoding(HTMLForm::ENCODING_MULTIPART);
+//            form.addPart("photo", fps);
+//            form.prepareSubmit(req);
+//            
+//            std::ostringstream oszMessage;
+//            form.write(oszMessage);
+//            std::string szMessage = oszMessage.str();
+//            
+//            req.setContentLength((int) szMessage.length() );
+//            
+//            //session.setKeepAlive(true);
+//            
+//            // send form
+//            ostream & out = session.sendRequest(req) << szMessage;
+//            
+//            // get response
+//            HTTPResponse res;
+//            cout << res.getStatus() << " " << res.getReason() << endl;
+//            
+//            // print response
+//            istream &is = session.receiveResponse(res);
+//            StreamCopier::copyToString(is, result);
+//        }
+//        catch (Exception &ex)
+//        {
+//            cerr << "error? " + ex.displayText() <<endl;
+//        }
+//        
+//        string photoid;
+//        
+//        ofxXmlSettings xml;
+//        xml.loadFromBuffer(result);
+//        xml.pushTag("rsp");{
+//            photoid = xml.getValue("photoid", "");
+//        }; xml.popTag();
+//        
+//        return photoid;
+        return "1";
     }
     
     void API::threadedFunction(){
         while( isThreadRunning() != 0 ){
+            
+            map<string,string> args;
+            if( lock() ){
+                args["api_key"] = api_key;
+                args["auth_token"] = auth_token;
+                unlock();
+            }
+            
+            string result;
+            FilePartSource * fps = new FilePartSource(fileToUpload, "image/jpeg");
+            
+//            try{
+                // prepare session
+                HTTPClientSession session( api_base );
+                HTTPRequest req(HTTPRequest::HTTP_POST, "/services/upload/", HTTPMessage::HTTP_1_0);
+                req.setContentType("multipart/form-data");
+                
+                // setup form
+                HTMLForm form;
+                form.set("api_key", args["api_key"]);//api_key);
+                form.set("auth_token", args["auth_token"]);//auth_token);
+                form.set("api_sig", apiSig( args ));
+                form.setEncoding(HTMLForm::ENCODING_MULTIPART);
+                form.addPart("photo", fps);
+                form.prepareSubmit(req);
+                
+                std::ostringstream oszMessage;
+                form.write(oszMessage);
+                std::string szMessage = oszMessage.str();
+                
+                req.setContentLength((int) szMessage.length() );
+                
+                //session.setKeepAlive(true);
+                
+                // send form
+                ostream & out = session.sendRequest(req) << szMessage;
+                
+                // get response
+                HTTPResponse res;
+                cout << res.getStatus() << " " << res.getReason() << endl;
+                
+                // print response
+                istream &is = session.receiveResponse(res);
+                StreamCopier::copyToString(is, result);
+//            }
+//            catch (Exception &ex)
+//            {
+//                cerr << "error? " + ex.displayText() <<endl;
+//            }
+            
+            string photoid;
+            
+            ofxXmlSettings xml;
+            xml.loadFromBuffer(result);
+            xml.pushTag("rsp");{
+                photoid = xml.getValue("photoid", "");
+            }; xml.popTag();
+            
+            ofNotifyEvent(uploadComplete,photoid,this);
+            stopThread();
         }
     }
     

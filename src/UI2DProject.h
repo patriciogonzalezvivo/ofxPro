@@ -146,7 +146,7 @@ protected:
     virtual void recordingStart();
     virtual void recordingEnd();
     virtual void uploadLastRecord();
-    virtual void uploadCompleted(string &_shorURL);
+    virtual void uploadCompleted(string &_recordID);
     
 	virtual bool cursorIsOverGUI();
     

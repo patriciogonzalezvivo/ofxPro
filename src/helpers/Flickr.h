@@ -237,8 +237,8 @@ namespace Flickr {
         vector<Media> search( Query query );
         
     private:
-        void threadedFunction();
-        string  filePath;
+        void    threadedFunction();
+        string  fileToUpload;
         
         bool                bAuthenticated;
         Permissions         currentPerms;

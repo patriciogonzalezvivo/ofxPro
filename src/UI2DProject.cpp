@@ -43,6 +43,9 @@ void UI2DProject::setup(){
     lastRercord = "";
 
     bAuthenticated = flickrAPI.authenticate("6394ea9fdcad0043386fbfd07f57a419","abf7c1706ee0fd7f",Flickr::FLICKR_WRITE);
+    if (bAuthenticated){
+        ofAddListener(flickrAPI.uploadComplete, this, &UI2DProject::uploadCompleted);
+    }
 }
 
 void UI2DProject::play(){
@@ -648,6 +651,7 @@ void UI2DProject::screenShot(){
     string recordPath = getDataPath()+"snapshots/" + ofGetTimestampString() + ".png";
     img.saveImage(recordPath);
     lastRercord = recordPath;
+    uploadLastRecord();
 }
 
 void UI2DProject::recordingStart(){
@@ -668,6 +672,10 @@ void UI2DProject::recordingEnd(){
 }
 
 void UI2DProject::uploadLastRecord(){
+    if(bRecording){
+        recordingEnd();
+    }
+    
     if(lastRercord!=""){
         if (bAuthenticated){
             string photoID = flickrAPI.upload(lastRercord);
@@ -676,6 +684,7 @@ void UI2DProject::uploadLastRecord(){
     }
 }
 
-void UI2DProject::uploadCompleted(string &_shorURL){
-    cout << "UPLOAD COMPLETE! Check it at " << _shorURL << cout;
+void UI2DProject::uploadCompleted(string &_recordID){
+    string shortURL = flickrAPI.getMediaById(_recordID).getShortURL();
+    cout << "UPLOAD COMPLETE! Check it at " << shortURL << endl;
 }
