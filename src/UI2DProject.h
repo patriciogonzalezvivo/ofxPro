@@ -146,6 +146,7 @@ protected:
     virtual void recordingStart();
     virtual void recordingEnd();
     virtual void uploadLastRecord();
+    virtual void uploadCompleted(string &_shorURL);
     
 	virtual bool cursorIsOverGUI();
     
@@ -160,8 +161,10 @@ protected:
     ofFbo           renderTarget;
     
     //  Documenting
+    Flickr::API     flickrAPI;
     Recorder        recorder;
 	string          lastRercord;
+    bool            bAuthenticated;
     
     //  APP Flags
     //

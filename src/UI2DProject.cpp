@@ -41,6 +41,8 @@ void UI2DProject::setup(){
     bPlaying = false;
     bRecording = false;
     lastRercord = "";
+
+    bAuthenticated = flickrAPI.authenticate("6394ea9fdcad0043386fbfd07f57a419","abf7c1706ee0fd7f",Flickr::FLICKR_WRITE);
 }
 
 void UI2DProject::play(){
@@ -645,6 +647,7 @@ void UI2DProject::screenShot(){
     }
     string recordPath = getDataPath()+"snapshots/" + ofGetTimestampString() + ".png";
     img.saveImage(recordPath);
+    lastRercord = recordPath;
 }
 
 void UI2DProject::recordingStart(){
@@ -666,20 +669,13 @@ void UI2DProject::recordingEnd(){
 
 void UI2DProject::uploadLastRecord(){
     if(lastRercord!=""){
-    
-        Flickr::API flickrAPI;
-        string API_KEY = "e76352eef8a1025f9b3831f6d7800b67";
-        string API_SECRET = "a6c2383bb1d0b86f";
-        
-        bool bAuthenticated = flickrAPI.authenticate( API_KEY, API_SECRET, Flickr::FLICKR_WRITE );
         if (bAuthenticated){
             string photoID = flickrAPI.upload(lastRercord);
-            
-            cout << photoID << endl;
-            //http://flic.kr/p/{base58-photo-id}
-            //http://www.flickr.com/groups/api/discuss/72157616713786392/
+            lastRercord = "";
         }
-        
-        lastRercord = "";
     }
+}
+
+void UI2DProject::uploadCompleted(string &_shorURL){
+    cout << "UPLOAD COMPLETE! Check it at " << _shorURL << cout;
 }

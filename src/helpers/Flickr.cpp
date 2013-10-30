@@ -59,6 +59,32 @@ namespace Flickr {
         }
     }
     
+    string Media::getShortURL(){
+        //http://www.flickr.com/groups/api/discuss/72157616713786392/
+        //
+        uint64 id_num = 0;
+        istringstream cur(id);
+        cur >> id_num;
+        
+        string alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+        uint64 base_count = 58;
+        string toBase58 = "";
+        
+        while (id_num > 0) {
+            uint64 num = id_num / base_count;
+            uint64 remainder = id_num % base_count;
+            toBase58 += alphabet[remainder];
+            id_num = num;
+        }
+        
+        string encoded = "";
+        for (int i = toBase58.length()-1; i >= 0 ; i--) {
+            encoded += toBase58[i];
+        }
+        
+        return "http://flic.kr/p/" + encoded;
+    }
+    
     
     //--------------------------------------------------------------
     MediaType Media::getType(){
@@ -247,7 +273,7 @@ namespace Flickr {
         
         if ( bLoaded ){
             xml.pushTag("settings");{
-                auth_token = xml.getValue("token", "");
+                auth_token = xml.getValue("token", "72157637127766253-d2060c92fa935409");
                 if (auth_token == "" ){
                     bLoaded = false;
                 }
@@ -278,6 +304,8 @@ namespace Flickr {
     //--------------------------------------------------------------
     bool API::checkAuthToken( string api_key, string auth_token, Permissions perms ){
         // build call
+        
+        cout << "CHECKING" << endl;
         map<string,string> args;
         args["api_key"]     = api_key;
         args["auth_token"]  = auth_token;
@@ -475,12 +503,11 @@ namespace Flickr {
     
     //-------------------------------------------------------------
     string API::upload( string image ){
-        
         if ( !bAuthenticated ){
             ofLogWarning( "Not authenticated! Please call authenticate() with proper api key and secret" );
             return "";
         } else if ( currentPerms != FLICKR_WRITE ){
-            ofLogWarning( "You do not have proper permissions to upload! Please call authenticate() with permissions of Flickr::FLICKR_WRITE" );
+            ofLogWarning( "You do not have proper permissions to upload! Please call authenticate() with permissions of ofxFlickr::FLICKR_WRITE" );
             return "";
         }
         
@@ -533,7 +560,6 @@ namespace Flickr {
             cerr << "error? " + ex.displayText() <<endl;
         }
         
-        
         string photoid;
         
         ofxXmlSettings xml;
@@ -543,6 +569,11 @@ namespace Flickr {
         }; xml.popTag();
         
         return photoid;
+    }
+    
+    void API::threadedFunction(){
+        while( isThreadRunning() != 0 ){
+        }
     }
     
     //-------------------------------------------------------------

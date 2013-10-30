@@ -99,6 +99,7 @@ namespace Flickr {
         
         void    loadFromXML( string XML );
         string  getURL( Size size = FLICKR_SIZE_DEFAULT );
+        string  getShortURL();
         
         MediaType getType();
         
@@ -188,7 +189,7 @@ namespace Flickr {
         vector<string> tags;
     };
     
-    class API {
+    class API : public ofThread {
     public:
         
         API();
@@ -200,7 +201,7 @@ namespace Flickr {
          * @param {std::string} api_secret
          * @param {Flickr::Permissions} perms
          */
-        bool authenticate( string api_key, string api_secret, Permissions perms = FLICKR_WRITE );
+        bool authenticate( string api_key, string auth_token, Permissions perms = FLICKR_WRITE );
         
         /**
          * Check API token
@@ -215,6 +216,7 @@ namespace Flickr {
          * @returns {std::string} id of uploaded image. Use getMediaById to get Flickr::Media, which includes the URL, etc.
          */
         string  upload( string image );
+        ofEvent<string> uploadComplete;
         
         /**
          * Get URL of photo by its ID (helpful after upload)
@@ -235,6 +237,9 @@ namespace Flickr {
         vector<Media> search( Query query );
         
     private:
+        void threadedFunction();
+        string  filePath;
+        
         bool                bAuthenticated;
         Permissions         currentPerms;
         ofURLFileLoader     dummyLoader; // this is needed because OF doesn't have a way to say "hey, we already made an HTTPStreamFactory!"

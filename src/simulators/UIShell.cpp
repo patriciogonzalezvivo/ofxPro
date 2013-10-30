@@ -53,7 +53,6 @@ void UIShell::update(){
             offSet = ofPoint(size,size*-translation);
             
             ofPolyline line = freqArc( averages[i], offSet, PI-0.65, 0.0f+0.65, size );
-            //line = line.getSmoothed(2);
             lineWidth = line.size();
             
             matrix.rotate( rotation , 1.0 , 0.0, 0.0);
