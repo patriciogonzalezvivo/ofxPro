@@ -259,7 +259,11 @@ namespace Flickr {
     bAuthenticated(false),
     currentPerms(FLICKR_NONE)
     {
-        
+//        api_key = "6394ea9fdcad0043386fbfd07f57a419";
+//        api_secret = "abf7c1706ee0fd7f";
+//        auth_token = "72157637127766253-d2060c92fa935409";
+//        currentPerms = Flickr::FLICKR_WRITE;
+//        bAuthenticated = true;
     };
     
     //--------------------------------------------------------------
@@ -270,10 +274,9 @@ namespace Flickr {
         // try to load from xml
         ofxXmlSettings xml;
         bool bLoaded = xml.loadFile("flickr.xml");
-        
         if ( bLoaded ){
             xml.pushTag("settings");{
-                auth_token = xml.getValue("token", "72157637127766253-d2060c92fa935409");
+                auth_token = xml.getValue("token", "");
                 if (auth_token == "" ){
                     bLoaded = false;
                 }
@@ -406,7 +409,7 @@ namespace Flickr {
             
             // get frob
             string auth_result = makeAPICall( "flickr.auth.getToken", auth_args, FLICKR_XML, true );
-            
+//            cout << auth_result << endl;
             xml.loadFromBuffer(auth_result);
             xml.pushTag("rsp"); {
                 xml.pushTag("auth"); {
@@ -414,8 +417,7 @@ namespace Flickr {
                 } xml.popTag();
             } xml.popTag();
             
-            bValidToken = !( auth_token == "" );
-            
+            bValidToken = !(auth_token == "" );
             if ( bValidToken ) break;
             numSeconds += secondsWait;
             sleep(1);
@@ -427,7 +429,6 @@ namespace Flickr {
         }
         
         // save auth token to XML for safe keeping
-        
         ofxXmlSettings toSave;
         toSave.addTag("settings");
         toSave.pushTag("settings");{
@@ -513,65 +514,6 @@ namespace Flickr {
         
         fileToUpload = image;
         startThread(true, false);
-        
-//        map<string,string> args;
-//        args["api_key"] = api_key;
-//        args["auth_token"] = auth_token;
-//        
-//        string result;
-//        
-//        FilePartSource * fps = new FilePartSource(image, "image/jpeg");
-//        
-//        try
-//        {
-//            
-//            // prepare session
-//            HTTPClientSession session( api_base );
-//            HTTPRequest req(HTTPRequest::HTTP_POST, "/services/upload/", HTTPMessage::HTTP_1_0);
-//            req.setContentType("multipart/form-data");
-//            
-//            // setup form
-//            HTMLForm form;
-//            form.set("api_key", api_key);
-//            form.set("auth_token", auth_token);
-//            form.set("api_sig", apiSig( args ));
-//            form.setEncoding(HTMLForm::ENCODING_MULTIPART);
-//            form.addPart("photo", fps);
-//            form.prepareSubmit(req);
-//            
-//            std::ostringstream oszMessage;
-//            form.write(oszMessage);
-//            std::string szMessage = oszMessage.str();
-//            
-//            req.setContentLength((int) szMessage.length() );
-//            
-//            //session.setKeepAlive(true);
-//            
-//            // send form
-//            ostream & out = session.sendRequest(req) << szMessage;
-//            
-//            // get response
-//            HTTPResponse res;
-//            cout << res.getStatus() << " " << res.getReason() << endl;
-//            
-//            // print response
-//            istream &is = session.receiveResponse(res);
-//            StreamCopier::copyToString(is, result);
-//        }
-//        catch (Exception &ex)
-//        {
-//            cerr << "error? " + ex.displayText() <<endl;
-//        }
-//        
-//        string photoid;
-//        
-//        ofxXmlSettings xml;
-//        xml.loadFromBuffer(result);
-//        xml.pushTag("rsp");{
-//            photoid = xml.getValue("photoid", "");
-//        }; xml.popTag();
-//        
-//        return photoid;
         return "1";
     }
     
@@ -579,16 +521,13 @@ namespace Flickr {
         while( isThreadRunning() != 0 ){
             
             map<string,string> args;
-            if( lock() ){
-                args["api_key"] = api_key;
-                args["auth_token"] = auth_token;
-                unlock();
-            }
+            args["api_key"] = api_key;
+            args["auth_token"] = auth_token;
             
             string result;
             FilePartSource * fps = new FilePartSource(fileToUpload, "image/jpeg");
             
-//            try{
+            try{
                 // prepare session
                 HTTPClientSession session( api_base );
                 HTTPRequest req(HTTPRequest::HTTP_POST, "/services/upload/", HTTPMessage::HTTP_1_0);
@@ -596,8 +535,8 @@ namespace Flickr {
                 
                 // setup form
                 HTMLForm form;
-                form.set("api_key", args["api_key"]);//api_key);
-                form.set("auth_token", args["auth_token"]);//auth_token);
+                form.set("api_key", api_key);
+                form.set("auth_token", auth_token);
                 form.set("api_sig", apiSig( args ));
                 form.setEncoding(HTMLForm::ENCODING_MULTIPART);
                 form.addPart("photo", fps);
@@ -609,7 +548,7 @@ namespace Flickr {
                 
                 req.setContentLength((int) szMessage.length() );
                 
-                //session.setKeepAlive(true);
+                session.setKeepAlive(true);
                 
                 // send form
                 ostream & out = session.sendRequest(req) << szMessage;
@@ -621,12 +560,12 @@ namespace Flickr {
                 // print response
                 istream &is = session.receiveResponse(res);
                 StreamCopier::copyToString(is, result);
-//            }
-//            catch (Exception &ex)
-//            {
-//                cerr << "error? " + ex.displayText() <<endl;
-//            }
-            
+            }
+            catch (Exception &ex)
+            {
+                cerr << "error? " + ex.displayText() <<endl;
+            }
+        
             string photoid;
             
             ofxXmlSettings xml;

@@ -41,11 +41,6 @@ void UI2DProject::setup(){
     bPlaying = false;
     bRecording = false;
     lastRercord = "";
-
-    bAuthenticated = flickrAPI.authenticate("6394ea9fdcad0043386fbfd07f57a419","abf7c1706ee0fd7f",Flickr::FLICKR_WRITE);
-    if (bAuthenticated){
-        ofAddListener(flickrAPI.uploadComplete, this, &UI2DProject::uploadCompleted);
-    }
 }
 
 void UI2DProject::play(){
@@ -677,7 +672,13 @@ void UI2DProject::uploadLastRecord(){
     }
     
     if(lastRercord!=""){
-        if (bAuthenticated){
+        if (!flickrAPI.bAuthenticated){
+            if ( flickrAPI.authenticate("6394ea9fdcad0043386fbfd07f57a419","abf7c1706ee0fd7f",Flickr::FLICKR_WRITE) ){
+                ofAddListener(flickrAPI.uploadComplete, this, &UI2DProject::uploadCompleted);
+            }
+        }
+        
+        if (flickrAPI.bAuthenticated){
             string photoID = flickrAPI.upload(lastRercord);
             lastRercord = "";
         }

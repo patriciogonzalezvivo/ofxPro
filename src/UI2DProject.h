@@ -164,7 +164,6 @@ protected:
     Flickr::API     flickrAPI;
     Recorder        recorder;
 	string          lastRercord;
-    bool            bAuthenticated;
     
     //  APP Flags
     //

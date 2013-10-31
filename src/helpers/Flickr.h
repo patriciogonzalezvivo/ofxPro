@@ -236,11 +236,12 @@ namespace Flickr {
          */
         vector<Media> search( Query query );
         
+        bool                bAuthenticated;
+        
     private:
         void    threadedFunction();
         string  fileToUpload;
         
-        bool                bAuthenticated;
         Permissions         currentPerms;
         ofURLFileLoader     dummyLoader; // this is needed because OF doesn't have a way to say "hey, we already made an HTTPStreamFactory!"
         map<string, Media>  loadedMedia;

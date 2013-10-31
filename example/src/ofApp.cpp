@@ -8,7 +8,7 @@ void ofApp::setup(){
     project->setup();
     project->play();
     
-    ofToggleFullscreen();
+//    ofToggleFullscreen();
 }
 
 //--------------------------------------------------------------
