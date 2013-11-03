@@ -45,6 +45,17 @@ bool DraggableRectangle::saveSettings(string _fileConfig, string _name, int _num
             XML.popTag();
             fileFound = XML.saveFile();
         }
+    } else {
+        name = _name;
+        XML.addTag(_name);
+        XML.pushTag(_name);
+        XML.addValue("x", x);
+        XML.addValue("y", y);
+        XML.addValue("width", width);
+        XML.addValue("height", height);
+        saveCustomValues(XML);
+        XML.popTag();
+        XML.saveFile(_fileConfig);
     }
     
     return fileFound;

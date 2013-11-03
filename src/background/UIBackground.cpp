@@ -137,7 +137,10 @@ ofFloatColor& UIBackground::getColor(){
 }
 
 ofFloatColor& UIBackground::getColor2(){
-    return color2;
+    if(gradientMode == OF_GRADIENT_CIRCULAR)
+        return color2;
+    else
+        return color;
 }
 
 void UIBackground::draw(){

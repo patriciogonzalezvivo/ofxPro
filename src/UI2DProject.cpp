@@ -369,9 +369,6 @@ void UI2DProject::guiEvent(ofxUIEventArgs &e){
             }
         }
     }
-    
-    
-    
     selfGuiEvent(e);
 }
 
@@ -516,7 +513,7 @@ void UI2DProject::guiToggle(){
     for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         (*it)->toggleVisible();
     }
-    bGui = !bgGui;
+    bGui = !bGui;
 }
 
 void UI2DProject::guiToggleAndPosition(UIReference &g){
