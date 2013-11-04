@@ -10,14 +10,16 @@
 
 #include "ofMain.h"
 
-class PingPong {
+class PingPong : public ofBaseHasTexture {
 public:
-    void allocate( int _width, int _height, int _internalformat = GL_RGBA){
+    virtual void    allocate( int _width, int _height, int _internalformat = GL_RGBA){
+        width = _width;
+        height = _height;
         
         // Allocate
         //
         for(int i = 0; i < 2; i++)
-            FBOs[i].allocate(_width,_height, _internalformat );
+            FBOs[i].allocate(width,height, _internalformat );
         
         // Clean
         //
@@ -30,12 +32,18 @@ public:
         flag = 0;
     }
     
-    void swap(){
+    virtual int     getWidth(){return width;};
+    virtual int     getHeight(){return height;};
+    
+    virtual void    setUseTexture(bool bUseTex){ };
+    virtual ofTexture& getTextureReference() { return dst->getTextureReference(); };
+    
+    virtual void    swap(){
         src = &(FBOs[(flag)%2]);
         dst = &(FBOs[++(flag)%2]);
     }
     
-    void clear(){
+    virtual void    clear(){
         for(int i = 0; i < 2; i++){
             FBOs[i].begin();
             ofClear(0,0);
@@ -43,7 +51,7 @@ public:
         }
     }
     
-    ofFbo& operator[]( int n ){ return FBOs[n];}
+    virtual ofFbo& operator[]( int n ){ return FBOs[n];}
     
     ofFbo   *src;       // Source       ->  Ping
     ofFbo   *dst;       // Destination  ->  Pong
@@ -51,6 +59,7 @@ public:
 private:
     ofFbo   FBOs[2];    // Real addresses of ping/pong FBO¬¥s
     int     flag;       // Integer for making a quick swap
+    int     width,height;
 };
 
 #endif

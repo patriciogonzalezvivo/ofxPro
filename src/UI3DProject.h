@@ -75,6 +75,9 @@ protected:
     
     virtual void materialAdd( string _name );
     
+    virtual string cursorIsOverLight();
+    string selectedLigth;
+    
     //  GUI
     UIReference lgtGui, camGui;
 	

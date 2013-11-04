@@ -159,15 +159,20 @@ void UI3DProject::exit(ofEventArgs & args){
 //-------------------- Mouse events + camera interaction
 //
 void UI3DProject::mousePressed(ofMouseEventArgs & args){
-	if(cursorIsOverGUI()){
+	if(bGui && cursorIsOverGUI()){
 		camera.disableMouseInput();
-	}
-    selfMousePressed(args);
+	} else if(bDebug && cursorIsOverLight() != "NULL"){
+        camera.disableMouseInput();
+        selectedLigth = cursorIsOverLight();
+    } else {
+        selfMousePressed(args);
+    }
 }
 
 void UI3DProject::mouseReleased(ofMouseEventArgs & args){
     camera.enableMouseInput();
     selfMouseReleased(args);
+    selectedLigth = "NULL";
 }
 
 //------------------------------------------------------------ CORE SETUP
@@ -259,15 +264,21 @@ void UI3DProject::lightAdd( string _name, ofLightType _type ){
 	guis.push_back(newLight->getUIReference(guiTemplate));
 }
 
-void UI3DProject::materialAdd( string _name ){
-    UIMaterialReference newMaterial( new UIMaterial() );
-    
-    if ( newMaterial->getClassName()  == "MATERIAL" ){
-        newMaterial->setName("MATERIAL " + ofToString( materials.size() + 1));
+string UI3DProject::cursorIsOverLight(){
+    if(bEnableLights){
+        ofPoint mouse(ofGetMouseX(),ofGetMouseY());
+        
+        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
+            ofPoint pos3D( it->second->x, it->second->y, it->second->z);
+            ofPoint pos2D = camera.worldToScreen(pos3D);
+            
+            if ( pos2D.distance(mouse) < 50 ){
+                return it->first;
+            }
+        }
     }
     
-    materials[ newMaterial->getClassName() ] = newMaterial;
-    guis.push_back( newMaterial->getUIReference(guiTemplate) );
+    return "NULL";
 }
 
 void UI3DProject::lightsBegin(){
@@ -298,6 +309,17 @@ void UI3DProject::lightsDraw(){
             it->second->draw();
         }
     }
+}
+
+void UI3DProject::materialAdd( string _name ){
+    UIMaterialReference newMaterial( new UIMaterial() );
+    
+    if ( newMaterial->getClassName()  == "MATERIAL" ){
+        newMaterial->setName("MATERIAL " + ofToString( materials.size() + 1));
+    }
+    
+    materials[ newMaterial->getClassName() ] = newMaterial;
+    guis.push_back( newMaterial->getUIReference(guiTemplate) );
 }
 
 //------------------------------------------------------ Save & Load + Camera
