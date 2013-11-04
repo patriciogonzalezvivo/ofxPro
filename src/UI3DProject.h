@@ -45,7 +45,7 @@ public:
     
     virtual void mouseMoved(ofMouseEventArgs & args){UI2DProject::mouseMoved(args);};
     virtual void mousePressed(ofMouseEventArgs & args);
-	virtual void mouseDragged(ofMouseEventArgs & args){UI2DProject::mouseDragged(args);};
+	virtual void mouseDragged(ofMouseEventArgs & args);
 	virtual void mouseReleased(ofMouseEventArgs & args);
 	
 protected:
@@ -72,6 +72,7 @@ protected:
     virtual void setupCameraGui();
     virtual void setupCameraParams();
     virtual void guiCameraEvent(ofxUIEventArgs &e);
+    virtual void cameraBillboard();
     
     virtual void materialAdd( string _name );
     

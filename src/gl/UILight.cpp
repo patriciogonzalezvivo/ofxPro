@@ -11,7 +11,6 @@
 UILight::UILight(){
     
     light.setup();
-//    position.set(0.0f,0.0f,0.0f);
     orientation.set(0.0f,0.0f,0.0f);
     ambient = ofFloatColor(.5f,.5f,.5f,1.f);
     diffuse = ofFloatColor(.5f,.5f,.5f,1.f);
@@ -178,13 +177,23 @@ void UILight::stop(){
 }
 
 void UILight::draw(){
-    
     if (bEnable){
         ofSetColor( diffuse );
         ofPushMatrix();
         light.draw();
         ofTranslate( *this );
-        ofDrawBitmapString(name, ofPoint(20,20,20));
+        
+        ofColor textColor = getColor();
+        textColor.setBrightness(gui->getColorBack().getBrightness());
+        ofSetColor( textColor );
+        ofDrawBitmapString(name, 20,20,20);
+        
+        if(light.getType() == OF_LIGHT_DIRECTIONAL){
+            ofSetColor( diffuse );
+            ofMultMatrix( light.getGlobalTransformMatrix() );
+            ofDrawArrow(ofPoint(0,0,0), ofPoint(0,0,70),20);
+            ofDrawSphere(0, 0, 10);
+        }
         ofPopMatrix();
     }
 }

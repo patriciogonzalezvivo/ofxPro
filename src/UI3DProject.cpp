@@ -13,6 +13,7 @@ void UI3DProject::play(){
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->play();
         }
+        selectedLigth = "NULL";
         UI2DProject::play();
     }
 }
@@ -169,6 +170,21 @@ void UI3DProject::mousePressed(ofMouseEventArgs & args){
     }
 }
 
+void UI3DProject::mouseDragged(ofMouseEventArgs & args){
+    if(bDebug && selectedLigth != "NULL"){
+        
+        ofPoint pmouse(ofGetPreviousMouseX(),-ofGetPreviousMouseY());
+        ofPoint mouse(ofGetMouseX(),-ofGetMouseY());
+        
+        ofPoint diff = camera.cameraToWorld(mouse)-camera.cameraToWorld(pmouse);
+    
+        *lights[selectedLigth]+=diff*0.1;
+        
+    } else {
+        UI2DProject::mouseDragged(args);
+    }
+};
+
 void UI3DProject::mouseReleased(ofMouseEventArgs & args){
     camera.enableMouseInput();
     selfMouseReleased(args);
@@ -305,8 +321,25 @@ void UI3DProject::lightsEnd(){
 void UI3DProject::lightsDraw(){
     if(bEnableLights){
         ofDisableLighting();
+        string overLight = cursorIsOverLight();
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->draw();
+            if( overLight == it->first){
+                
+                ofPushMatrix();
+                ofPopStyle();
+                ofNoFill();
+                float pulse = abs(sin(ofGetElapsedTimef()));
+                ofColor color = it->second->getColor();
+                color.setBrightness(255-background->getColor2().getBrightness());
+                ofSetColor( color, pulse*255);
+                ofTranslate( it->second->getPosition() );
+                float size = it->second->getPosition().distance(camera.getPosition())*0.1;
+                cameraBillboard();
+                ofEllipse(0,0, size, size);
+                ofPopStyle();
+                ofPopMatrix();
+            }
         }
     }
 }
@@ -632,4 +665,19 @@ bool UI3DProject::cameraLoad(string loadPath){
     }else {
         return false;
     }
+}
+
+void UI3DProject::cameraBillboard(){
+    ofVec3f objectLookAt = ofVec3f(0.0,0.0,1.0);
+    ofVec3f objToCam = camera.getGlobalPosition();
+    objToCam.normalize();
+    float theta = objectLookAt.angle(objToCam);
+    
+    ofVec3f axisOfRotation = objToCam.crossed(objectLookAt);
+    axisOfRotation.normalize();
+    
+    glRotatef(-zRot->getPos(), 0.0, 0.0, 1.0);
+    glRotatef(-yRot->getPos(), 0.0, 1.0, 0.0);
+    glRotatef(-xRot->getPos(), 1.0, 0.0, 0.0);
+    glRotatef(-theta, axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 }

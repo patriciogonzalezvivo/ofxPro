@@ -35,9 +35,11 @@ public:
     
     void    setName( string _name );
     void    setType( ofLightType _type );
-    
+
     void    setupUI();
     string  getClassName(){ return name; }
+    ofPoint getPosition(){return *this; };
+    ofColor getColor(){return (ambient+diffuse+specular)/3.0;}
     
     void    play();
     void    stop();
@@ -55,7 +57,7 @@ protected:
     ofFloatColor ambient;
     ofFloatColor diffuse;
     ofFloatColor specular;
-//    ofVec3f position;
+    
     ofVec3f orientation;
     float   spotCutOff;
     float   exponent;

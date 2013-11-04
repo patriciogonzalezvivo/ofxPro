@@ -1,9 +1,9 @@
 <Canvas>
     <Kind>42</Kind>
     <Name>DIR LIGHT </Name>
-    <IsMinified>1</IsMinified>
-    <XPosition>1.000000000</XPosition>
-    <YPosition>1.000000000</YPosition>
+    <IsMinified>0</IsMinified>
+    <XPosition>1213.000000000</XPosition>
+    <YPosition>371.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -18,12 +18,12 @@
 <Widget>
     <Kind>25</Kind>
     <Name>OY</Name>
-    <Value>-35.340202332</Value>
+    <Value>-43.821876526</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>OZ</Name>
-    <Value>-14.607444763</Value>
+    <Value>-28.743572235</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
