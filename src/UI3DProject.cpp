@@ -336,6 +336,7 @@ void UI3DProject::lightsDraw(){
                 ofTranslate( it->second->getPosition() );
                 float size = it->second->getPosition().distance(camera.getPosition())*0.1;
                 cameraBillboard();
+                ofSetLineWidth(2);
                 ofEllipse(0,0, size, size);
                 ofPopStyle();
                 ofPopMatrix();

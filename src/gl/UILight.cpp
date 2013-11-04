@@ -180,19 +180,20 @@ void UILight::draw(){
     if (bEnable){
         ofSetColor( diffuse );
         ofPushMatrix();
-        light.draw();
-        ofTranslate( *this );
         
+        if(light.getType() != OF_LIGHT_DIRECTIONAL){
+            light.draw();
+        }
+        ofTranslate( *this );
         ofColor textColor = getColor();
         textColor.setBrightness(gui->getColorBack().getBrightness());
         ofSetColor( textColor );
         ofDrawBitmapString(name, 20,20,20);
-        
         if(light.getType() == OF_LIGHT_DIRECTIONAL){
             ofSetColor( diffuse );
+            light.draw();
             ofMultMatrix( light.getGlobalTransformMatrix() );
             ofDrawArrow(ofPoint(0,0,0), ofPoint(0,0,70),20);
-            ofDrawSphere(0, 0, 10);
         }
         ofPopMatrix();
     }

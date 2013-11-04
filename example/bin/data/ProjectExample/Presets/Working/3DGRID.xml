@@ -1,0 +1,92 @@
+<Canvas>
+    <Kind>42</Kind>
+    <Name>3DGRID</Name>
+    <IsMinified>1</IsMinified>
+    <XPosition>1.000000000</XPosition>
+    <YPosition>51.000000000</YPosition>
+</Canvas>
+<Widget>
+    <Kind>2</Kind>
+    <Name>ENABLE</Name>
+    <Value>1</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>gridLineWidth</Name>
+    <Value>1.248768449</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>majorGridLineWidth</Name>
+    <Value>1.389162540</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>gridScale</Name>
+    <Value>16.118227005</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>gridMajorScale</Name>
+    <Value>10.103447914</Value>
+</Widget>
+<Widget>
+    <Kind>28</Kind>
+    <Name>gridColor</Name>
+    <XValue>0.889999986</XValue>
+    <YValue>0.937500000</YValue>
+    <RColor>10</RColor>
+    <GColor>2</GColor>
+    <BColor>24</BColor>
+    <AColor>255</AColor>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>gridAlpha</Name>
+    <Value>94.211822510</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>gridBrightness</Name>
+    <Value>0.536945820</Value>
+</Widget>
+<Widget>
+    <Kind>28</Kind>
+    <Name>gridMajorColor</Name>
+    <XValue>0.899999976</XValue>
+    <YValue>0.898437500</YValue>
+    <RColor>18</RColor>
+    <GColor>3</GColor>
+    <BColor>34</BColor>
+    <AColor>255</AColor>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>gridMajorAlpha</Name>
+    <Value>125.615768433</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>gridMajorBrightness</Name>
+    <Value>0.665024638</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>gridAlphaScale</Name>
+    <Value>2.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>fogFalloffDistance</Name>
+    <Value>872.413757324</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>fogFalloffExpo</Name>
+    <Value>3.609852314</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>fogFalloffScale</Name>
+    <Value>1.017241359</Value>
+</Widget>

@@ -1,5 +1,5 @@
 //
-//  UIGrid.h
+//  UI2DGrid.h
 //
 //  Created by Patricio Gonzalez Vivo on 8/30/13.
 //
@@ -10,10 +10,10 @@
 #include "GridBox.h"
 #include "UIClass.h"
 
-class UIGrid : public Grid, public UIClass {
+class UI2DGrid : public Grid, public UIClass {
 public:
     
-    UIGrid();
+    UI2DGrid();
     
     void    setResolutionToCm();
     void    setResolutionToInches();
@@ -24,7 +24,7 @@ public:
     void    makeGrid();
     
     void    print(int _layerNumber = -1 );
-    void    draw( );
+    void    draw();
     
 protected:
     

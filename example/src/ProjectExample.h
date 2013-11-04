@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "UI2DGrid.h"
+#include "UI3DGrid.h"
 #include "UIProject.h"
 
 class ProjectExample : public UI3DProject {
@@ -35,6 +37,7 @@ public:
 
     void selfDraw();
 	void selfDrawDebug();
+    void selfDrawOverlay();
 
 	void selfEnd();
     void selfExit();
@@ -48,6 +51,6 @@ public:
     void selfMouseReleased(ofMouseEventArgs& data);
 
 protected:
-    
-
+    UI3DGrid grid;
+    UI2DGrid ruler;
 };

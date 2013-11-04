@@ -1,12 +1,12 @@
 //
-//  UIGrid.cpp
+//  UI2DGrid.cpp
 //  Basic
 //
 //  Created by Patricio Gonzalez Vivo on 8/31/13.
 //
 //
 
-#include "UIGrid.h"
+#include "UI2DGrid.h"
 
 //  1cm     =   28.3 px.
 //  1inch   =   2.54 cm
@@ -17,8 +17,7 @@ float cmToInches = 2.54;
 float inchesToCm = 0.393701;
 float pixelToInches = pixelToCm*cmToInches;
 
-UIGrid::UIGrid(){
-
+UI2DGrid::UI2DGrid(){
     refRow = 0;
     refCol = 0;
     bJump = false;
@@ -34,21 +33,23 @@ UIGrid::UIGrid(){
     font.loadFont("GUI/NewMedia Fett.ttf",12,true, true, true,false);
     colorSampleImage.loadImage("GUI/defaultColorPalette.png");
     
+    setFromCenter(0, 0, ofGetScreenWidth(), ofGetScreenHeight());
+    setResolutionToInches();
 }
 
-void UIGrid::setResolutionToCm(){
+void UI2DGrid::setResolutionToCm(){
 
     subLineResolution = 10.0;
     setResolution(pixelToCm*subLineResolution);
 }
 
-void UIGrid::setResolutionToInches(){
+void UI2DGrid::setResolutionToInches(){
 
     setResolution(pixelToInches);
     subLineResolution = 8.0;
 }
 
-void UIGrid::setupUI(){
+void UI2DGrid::setupUI(){
 
     gui->addLabel("Lines");
     gui->addImageSampler("Lines_Color", &colorSampleImage, (float)colorSampleImage.getWidth()/2, (float)colorSampleImage.getHeight()/2 );
@@ -72,7 +73,7 @@ void UIGrid::setupUI(){
 
 }
 
-void UIGrid::guiEvent(ofxUIEventArgs &e){
+void UI2DGrid::guiEvent(ofxUIEventArgs &e){
 
     if (gui != NULL){
         string name = e.widget->getName();
@@ -105,7 +106,7 @@ void UIGrid::guiEvent(ofxUIEventArgs &e){
     }
 }
 
-void UIGrid::makeGrid(){
+void UI2DGrid::makeGrid(){
     margins = marginScale*resolution;
 
     skip.clear();
@@ -141,7 +142,7 @@ void UIGrid::makeGrid(){
     cross.makeGrid();
 };
 
-void UIGrid::print(int _layerNumber){
+void UI2DGrid::print(int _layerNumber){
 
     if (bEnable){
         if (_layerNumber == -1 || _layerNumber == 0){
@@ -180,12 +181,15 @@ void UIGrid::print(int _layerNumber){
     }
 }
 
-void UIGrid::draw(){
+void UI2DGrid::draw(){
 
     bool bFlip = true;
     
     if (bEnable){
+        ofPushMatrix();
+        ofTranslate(ofGetWidth()*0.5,ofGetHeight()*0.5);
         ofPushStyle();
+        ofDisableLighting();
         cross.draw();
 
         ofTranslate(0, 0, 0.1);
@@ -238,6 +242,8 @@ void UIGrid::draw(){
 
         ofTranslate(0, 0, 0.1);
         boxes.draw();
+        ofEnableLighting();
         ofPopStyle();
+        ofPopMatrix();
     }
 }

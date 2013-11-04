@@ -11,13 +11,15 @@
 void ProjectExample::selfSetup(){
     ofEnableAlphaBlending();
     ofEnableSmoothing();
-    
 }
 
 void ProjectExample::selfSetupGui(){
     
     lightAdd("DIR LIGHT ", OF_LIGHT_DIRECTIONAL );
     lightAdd("SPOT LIGHT", OF_LIGHT_SPOT);
+    
+    guiAdd(grid);
+    guiAdd(ruler);
 }
 
 void ProjectExample::selfGuiEvent(ofxUIEventArgs &e){
@@ -62,6 +64,8 @@ void ProjectExample::selfDraw(){
         ofPushStyle();
         materials["MATERIAL 1"]->begin();
         
+        grid.draw();
+        
         ofSetColor(255);
         ofDrawSphere(0, 0, 300);
         
@@ -74,6 +78,11 @@ void ProjectExample::selfDraw(){
 
 void ProjectExample::selfDrawDebug(){
 	lightsDraw();
+}
+
+void ProjectExample::selfDrawOverlay(){
+    ofSetColor(255);
+    ruler.draw();
 }
 
 void ProjectExample::selfEnd(){

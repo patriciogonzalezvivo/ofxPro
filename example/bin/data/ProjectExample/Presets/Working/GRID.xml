@@ -3,7 +3,7 @@
     <Name>GRID</Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>1.000000000</YPosition>
+    <YPosition>76.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -13,76 +13,76 @@
 <Widget>
     <Kind>28</Kind>
     <Name>Lines_Color</Name>
-    <XValue>0.500000000</XValue>
-    <YValue>0.500000000</YValue>
-    <RColor>7</RColor>
-    <GColor>243</GColor>
-    <BColor>139</BColor>
+    <XValue>0.504999995</XValue>
+    <YValue>0.007812500</YValue>
+    <RColor>233</RColor>
+    <GColor>255</GColor>
+    <BColor>243</BColor>
     <AColor>255</AColor>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Lines_Alpha</Name>
-    <Value>1.000000000</Value>
+    <Value>0.147783250</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>SubLine_Alpha</Name>
-    <Value>0.000000000</Value>
+    <Value>0.965517223</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Cross_Resolution</Name>
-    <Value>0.100000001</Value>
+    <Value>1.084236503</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Cross_Size</Name>
-    <Value>0.000000000</Value>
+    <Value>0.108374387</Value>
 </Widget>
 <Widget>
     <Kind>28</Kind>
     <Name>Cross_Color</Name>
-    <XValue>0.500000000</XValue>
-    <YValue>0.500000000</YValue>
-    <RColor>7</RColor>
-    <GColor>243</GColor>
-    <BColor>139</BColor>
+    <XValue>0.550000012</XValue>
+    <YValue>0.015625000</YValue>
+    <RColor>226</RColor>
+    <GColor>255</GColor>
+    <BColor>251</BColor>
     <AColor>255</AColor>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Cross_Alpha</Name>
-    <Value>1.000000000</Value>
+    <Value>0.453201979</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Reference_Margin</Name>
-    <Value>0.000000000</Value>
+    <Value>0.120689653</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Reference_Min</Name>
-    <Value>0.000000000</Value>
+    <Value>-0.002955616</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Col_Reference</Name>
-    <Value>0.000000000</Value>
+    <Value>0.502463043</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Row_Reference</Name>
-    <Value>0.000000000</Value>
+    <Value>0.044334974</Value>
 </Widget>
 <Widget>
     <Kind>28</Kind>
     <Name>Reference_Color</Name>
-    <XValue>0.500000000</XValue>
-    <YValue>0.500000000</YValue>
-    <RColor>7</RColor>
-    <GColor>243</GColor>
-    <BColor>139</BColor>
+    <XValue>0.675000012</XValue>
+    <YValue>0.000000000</YValue>
+    <RColor>235</RColor>
+    <GColor>244</GColor>
+    <BColor>250</BColor>
     <AColor>255</AColor>
 </Widget>
 <Widget>
