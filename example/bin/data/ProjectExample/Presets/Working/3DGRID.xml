@@ -1,9 +1,9 @@
 <Canvas>
     <Kind>42</Kind>
     <Name>3DGRID</Name>
-    <IsMinified>1</IsMinified>
-    <XPosition>1.000000000</XPosition>
-    <YPosition>270.000000000</YPosition>
+    <IsMinified>0</IsMinified>
+    <XPosition>1268.000000000</XPosition>
+    <YPosition>109.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -13,17 +13,17 @@
 <Widget>
     <Kind>4</Kind>
     <Name>gridLineWidth</Name>
-    <Value>0.921182275</Value>
+    <Value>0.593596041</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>majorGridLineWidth</Name>
-    <Value>1.389162540</Value>
+    <Value>1.295566559</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>gridScale</Name>
-    <Value>16.118227005</Value>
+    <Value>22.945812225</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -33,31 +33,31 @@
 <Widget>
     <Kind>28</Kind>
     <Name>gridColor</Name>
-    <XValue>0.834999979</XValue>
-    <YValue>0.164062500</YValue>
-    <RColor>163</RColor>
-    <GColor>161</GColor>
-    <BColor>245</BColor>
+    <XValue>0.814999998</XValue>
+    <YValue>0.765625000</YValue>
+    <RColor>6</RColor>
+    <GColor>11</GColor>
+    <BColor>111</BColor>
     <AColor>255</AColor>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>gridAlpha</Name>
-    <Value>237.413803101</Value>
+    <Value>251.231536865</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>gridBrightness</Name>
-    <Value>0.665024638</Value>
+    <Value>0.630541861</Value>
 </Widget>
 <Widget>
     <Kind>28</Kind>
     <Name>gridMajorColor</Name>
-    <XValue>0.779999971</XValue>
-    <YValue>0.289062500</YValue>
-    <RColor>95</RColor>
-    <GColor>124</GColor>
-    <BColor>251</BColor>
+    <XValue>0.754999995</XValue>
+    <YValue>0.640625000</YValue>
+    <RColor>0</RColor>
+    <GColor>51</GColor>
+    <BColor>169</BColor>
     <AColor>255</AColor>
 </Widget>
 <Widget>
@@ -68,7 +68,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>gridMajorBrightness</Name>
-    <Value>0.807881773</Value>
+    <Value>0.280788183</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -78,15 +78,15 @@
 <Widget>
     <Kind>4</Kind>
     <Name>fogFalloffDistance</Name>
-    <Value>341.379302979</Value>
+    <Value>872.413757324</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>fogFalloffExpo</Name>
-    <Value>2.637438297</Value>
+    <Value>2.776354790</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>fogFalloffScale</Name>
-    <Value>1.054187179</Value>
+    <Value>1.349753618</Value>
 </Widget>

@@ -20,9 +20,9 @@ void UIFog::setupUI(){
     if (color == NULL){
         color = new ofFloatColor(0.8);
         
-        gui->addSlider("Red", 0.0, 1.0, &color->r);
-        gui->addSlider("Green", 0.0, 1.0, &color->g);
-        gui->addSlider("Blue", 0.0, 1.0, &color->b);
+        red = gui->addSlider("Red", 0.0, 1.0, &color->r);
+        green = gui->addSlider("Green", 0.0, 1.0, &color->g);
+        blue = gui->addSlider("Blue", 0.0, 1.0, &color->b);
     }
 }
 
@@ -36,11 +36,8 @@ void UIFog::linkColor( UIBackground *_background ){
     if (color != NULL){
         //delete color;
         
-        ofxUISlider* red = (ofxUISlider *) gui->getWidget("Red");
         red->setVisible(false);
-        ofxUISlider* green = (ofxUISlider *) gui->getWidget("Green");
         green->setVisible(false);
-        ofxUISlider* blue = (ofxUISlider *) gui->getWidget("Blue");
         blue->setVisible(false);
         
         gui->autoSizeToFitWidgets();
@@ -69,10 +66,10 @@ void UIFog::begin(){
         GLuint fogMode[]= { GL_EXP, GL_EXP2, GL_LINEAR };
         
         glEnable(GL_FOG);
-        glFogi(GL_FOG_MODE, fogMode[fogfilter]);    // Fog Mode
-        glFogfv(GL_FOG_COLOR, FogCol);              // Set the fog color
-        glFogf(GL_FOG_DENSITY, powf(10.0, (int)density_exponent) * density);             // Thin the fog out a little
-        glHint(GL_FOG_HINT, GL_DONT_CARE);          // Fog Hint Value
+        glFogi(GL_FOG_MODE, fogMode[fogfilter]);                                // Fog Mode
+        glFogfv(GL_FOG_COLOR , FogCol);                                         // Set the fog color
+        glFogf(GL_FOG_DENSITY, powf(10.0, (int)density_exponent) * density);    // Thin the fog out a little
+        glHint(GL_FOG_HINT, GL_DONT_CARE);                                      // Fog Hint Value
 #endif
     }
 }

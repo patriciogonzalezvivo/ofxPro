@@ -4,11 +4,7 @@
 //  Created by Patricio Gonzalez Vivo on 10/15/13.
 //
 //
-
 #pragma once
-
-//  OF
-//
 #include "ofMain.h"
 
 //  ADDONS
@@ -19,6 +15,7 @@
 //
 #include "UIClass.h"
 #include "UIBackground.h"
+#include "UISuperBackground.h"
 
 //  Documenting Tools
 //
@@ -118,8 +115,10 @@ protected:
     virtual void setupCoreGuis();
 
     virtual void setupSystemGui();
-    virtual void setupBackground();
     virtual void setupRenderGui();
+    virtual void    backgroundSet(UIBackground *_bg);
+    UIBackground    *background;
+    ofFbo           renderTarget;
     
     virtual void setupPresetGui();
 	virtual void guiPresetEvent(ofxUIEventArgs &e);
@@ -141,25 +140,23 @@ protected:
     virtual void guiArrange( int _order_type );
     virtual void guiToggleAndPosition( UIReference &g);
     
-    virtual void screenShot();
-    virtual void recordingStart();
-    virtual void recordingEnd();
-    virtual void uploadLastRecord();
-    virtual void uploadCompleted(string &_recordID);
-    
 	virtual bool cursorIsOverGUI();
     
-    //  GUI
     ofxUISuperCanvas *guiTemplate;
     ofxUIRadio       *presetRadio;
-    UIReference gui, sysGui, rdrGui, bgGui, presetGui, tlGui;
+    UIReference      gui, sysGui, rdrGui, presetGui;
     vector<UIReference> guis;
 	
     //  Basic RENDER scene
-    UIBackground    *background;
-    ofFbo           renderTarget;
+    
     
     //  Documenting
+    //
+    virtual void    screenShot();
+    virtual void    recordingStart();
+    virtual void    recordingEnd();
+    virtual void    uploadLastRecord();
+    virtual void    uploadCompleted(string &_recordID);
     Flickr::API     flickrAPI;
     Recorder        recorder;
 	string          lastRercord;

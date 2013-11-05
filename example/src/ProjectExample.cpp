@@ -19,6 +19,10 @@ void ProjectExample::selfSetupGuis(){
     
     guiAdd(grid);
     guiAdd(ruler);
+    
+    backgroundSet(new UISuperBackground() );
+    
+    fog.linkColor(background);
 }
 
 void ProjectExample::selfGuiEvent(ofxUIEventArgs &e){

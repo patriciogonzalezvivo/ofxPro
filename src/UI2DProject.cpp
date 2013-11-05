@@ -285,7 +285,8 @@ void UI2DProject::setupCoreGuis(){
     setupSystemGui();
     setupRenderGui();
     setupPresetGui();
-    setupBackground();
+    
+    backgroundSet(new UIBackground());
 }
 
 void UI2DProject::setupGui(){
@@ -437,8 +438,22 @@ void UI2DProject::guiPresetEvent(ofxUIEventArgs &e){
     }
 }
 
-void UI2DProject::setupBackground(){
-    background = new UIBackground();
+void UI2DProject::backgroundSet(UIBackground *_bg){
+    
+    if(background != NULL){
+        
+        for(int i = 0; i<guis.size(); i++){
+            if (guis[i]->getName() == "BACKGROUND"){
+                guis.erase(guis.begin()+i);
+                break;
+            }
+        }
+        
+        delete background;
+        background = NULL;
+    }
+    
+    background = _bg;
     background->linkUIs( &guis );
     guiAdd( *background );
 }

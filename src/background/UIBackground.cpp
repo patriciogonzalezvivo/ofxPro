@@ -32,18 +32,6 @@ UIBackground::~UIBackground(){
         gui->disable();
         ofRemoveListener(gui->newGUIEvent, this, &UIBackground::guiEvent);
     }
-    
-    if ( hueSlider != NULL ){
-        delete hueSlider;
-    }
-    
-    if ( satSlider != NULL ){
-        delete hueSlider;
-    }
-    
-    if ( briSlider != NULL ){
-        delete hueSlider;
-    }
 }
 
 void UIBackground::setupUI(){

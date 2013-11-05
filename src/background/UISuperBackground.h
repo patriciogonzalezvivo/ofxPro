@@ -17,7 +17,7 @@ public:
     void        setupUI();
     void        draw();
     
-    float       grainPct;
+    float       value;
     
 protected:
 	virtual void update(ofEventArgs & args);

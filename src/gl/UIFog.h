@@ -30,6 +30,11 @@ public:
     
 protected:
     void    guiEvent(ofxUIEventArgs &e);
+    
+    ofxUISlider *red;
+    ofxUISlider *green;
+    ofxUISlider *blue;
+
     ofFloatColor *color;
 
 };

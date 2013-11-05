@@ -12,7 +12,7 @@
 #include "UILight.h"
 #include "UICamera.h"
 #include "UIMaterial.h"
-
+#include "UIFog.h"
 
 class UI3DProject : public UI2DProject {
 public:
@@ -64,6 +64,7 @@ protected:
     // CAMERA
     //
     UICamera        camera;
+    UIFog           fog;
     
     //  LIGHTS
     //

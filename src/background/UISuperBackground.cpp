@@ -15,10 +15,12 @@ UISuperBackground::UISuperBackground(){
     string fragShader = STRINGIFY(
                                   uniform sampler2DRect tex0;
                                   uniform vec2 resolution;
-                                  uniform float time;
                                   
-                                  uniform float freq;
-                                  uniform float pct;
+                                  uniform vec3 bgColor1;
+                                  uniform vec3 bgColor2;
+                                  
+                                  uniform float time;
+                                  uniform float value;
                                   
                                   float rand(vec2 co){
                                       return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -34,8 +36,10 @@ UISuperBackground::UISuperBackground(){
                                       
                                       vec3 color = texture2DRect(tex0, st*resolution).rgb;
                                       
-                                      float t = float(time * freq);
-                                      color *= (1.0+( rand(st+t*.00001) -0.2) * pct);
+                                      float t = float(time * 0.0001);
+                                      float pct = (1.0+( rand(st+t*.00001) -0.2) * value);
+                                      
+                                      color = mix(bgColor1*0.8,color,pct);
                                       
                                       gl_FragColor = vec4(color,1.0);
                                   }
@@ -51,7 +55,7 @@ UISuperBackground::UISuperBackground(){
 
 void UISuperBackground::setupUI(){
     
-    gui->addSlider("grain_pct", 0.0, 1.0, &grainPct);
+    gui->addSlider("value", 0.0, 1.0, &value);
 //    gui->addSlider("change_Speed", 0.0, 0.1, &speed);
     
     gui->addLabel("Colors");
@@ -77,25 +81,25 @@ void UISuperBackground::update(ofEventArgs & args){
         }
         
         if(bChange){
-        
-            if (HSBTarget.distance( HSB ) >= 0.00001  ){
+            
+            if (HSBTarget.distance( HSB ) != 0.0  ){
                 HSB.addForceTo( HSBTarget, true );
                 HSB.update(speed);
                 color.setHsb(HSB.x, HSB.y, HSB.z);
-                color.a = 1.0;
                 bChange = true;
             } else {
                 bChange = false;
             }
             
-            if (HSBTarget2.distance( HSB2 ) >= 0.00001 ){
-                HSB2.addForceTo( HSBTarget2, true );
-                HSB2.update(speed);
-                color2.setHsb(HSB2.x, HSB2.y, HSB2.z);
-                color2.a = 1.0;
-                bChange = true;
-            } else {
-                bChange = false;
+            if(gradientMode == OF_GRADIENT_CIRCULAR){
+                if (HSBTarget2.distance( HSB2 ) != 0.0 ){
+                    HSB2.addForceTo( HSBTarget2, true );
+                    HSB2.update(speed);
+                    color2.setHsb(HSB2.x, HSB2.y, HSB2.z);
+                    bChange = true;
+                } else {
+                    bChange = false;
+                }
             }
             
             if ( gradientMode == OF_GRADIENT_CIRCULAR ){
@@ -127,6 +131,7 @@ void UISuperBackground::update(ofEventArgs & args){
                 mesh.draw();
                 fbo.end();
             }
+            
         }
     }
 }
@@ -140,10 +145,11 @@ void UISuperBackground::draw(){
             ofBackground( color2 );
             
             shader.begin();
+            shader.setUniform3f("bgColor1", getColor().r, getColor().g, getColor().b);
+            shader.setUniform3f("bgColor2", getColor2().r, getColor2().g, getColor2().b);
             shader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
             shader.setUniform1f("time", ofGetElapsedTimef());
-            shader.setUniform1f("pct", grainPct);
-            shader.setUniform1f("freq", 0.001);
+            shader.setUniform1f("value", value);
             ofSetColor(255);
             fbo.draw(0, 0);
             shader.end();

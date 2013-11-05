@@ -54,6 +54,8 @@ void UI3DProject::draw(ofEventArgs & args){
         //
         {
             getCameraRef().begin();
+            fog.begin();
+            
             //  Scene Setup
             //
             selfSceneTransformation();
@@ -85,6 +87,7 @@ void UI3DProject::draw(ofEventArgs & args){
             }
             glDisable(GL_DEPTH_TEST);
             
+            fog.end();
             getCameraRef().end();
         }
         
@@ -173,6 +176,7 @@ void UI3DProject::setupCoreGuis(){
     UI2DProject::setupCoreGuis();
     
     guiAdd(camera);
+    guiAdd(fog);
     materialAdd( "MATERIAL" );
     
     setupLightingGui();

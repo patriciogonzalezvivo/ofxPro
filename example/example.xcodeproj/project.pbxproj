@@ -416,10 +416,10 @@
 			isa = PBXGroup;
 			children = (
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
-				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-				6902496c5005749b9e0692dd29dac44f /* ProjectExample.cpp */,
+				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				b4b78187175e98a85ecfbde7f498f65f /* ProjectExample.h */,
+				6902496c5005749b9e0692dd29dac44f /* ProjectExample.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
