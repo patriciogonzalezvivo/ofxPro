@@ -53,9 +53,9 @@ void UI2DProject::play(){
         
         ofRegisterMouseEvents(this);
         ofRegisterKeyEvents(this);
-        ofAddListener(ofEvents().update, this, &UI2DProject::update);
-        ofAddListener(ofEvents().draw, this, &UI2DProject::draw);
-        ofAddListener(ofEvents().exit, this, &UI2DProject::exit);
+        ofAddListener(ofEvents().update,this,&UI2DProject::update);
+        ofAddListener(ofEvents().draw,this,&UI2DProject::draw);
+        ofAddListener(ofEvents().exit,this,&UI2DProject::exit);
         
         guiLoad();
         guiHide();
@@ -307,14 +307,30 @@ void UI2DProject::setupGui(){
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     ofxUIButton *loadbtn = gui->addButton("LOAD", false);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    ofxUIButton *updatebtn = gui->addToggle("UPDATE", &bUpdateSystem);
+
+    ofxUIButton *debugbtn = gui->addToggle("DEBUG", &bDebug);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    ofxUIButton *renderbtn = gui->addToggle("RENDER", &bRenderSystem);
+    ofxUIButton *recordbtn = gui->addToggle("REC", false);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addWidgetNorthOf(loadbtn, "RENDER", true);
-    gui->setPlacer(updatebtn);
+    
+    gui->addWidgetNorthOf(loadbtn, "REC", true);
+    gui->setPlacer(debugbtn);
     gui->addSpacer();
+    
+    gui->setTriggerWidgetsUponLoad(false);
+    vector<string> empty;
+    empty.clear();
+	presetRadio = gui->addRadio("PRESETS", empty);
+    
+	gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
+    vector<string> presets = getPresets();
+    for(vector<string>::iterator it = presets.begin(); it != presets.end(); ++it){
+        ofxUIToggle *t = gui->addToggle((*it), false);
+        presetRadio->addToggle(t);
+    }
+    
     gui->autoSizeToFitWidgets();
+    
     ofAddListener(gui->newGUIEvent,this,&UI2DProject::guiEvent);
     
     guis.push_back(gui);
@@ -322,15 +338,18 @@ void UI2DProject::setupGui(){
 
 void UI2DProject::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
+
     if(name == "SAVE"){
         ofxUIButton *b = (ofxUIButton *) e.widget;
         if(b->getValue()){
+            bUpdateSystem = false;
             string presetName = ofSystemTextBoxDialog("Save Preset As");
             if(presetName.length()){
                 guiSavePreset(presetName);
             } else {
                 guiSave();
             }
+            bUpdateSystem = true;
         }
     } else if(name == "LOAD"){
         ofxUIButton *b = (ofxUIButton *) e.widget;
@@ -342,6 +361,15 @@ void UI2DProject::guiEvent(ofxUIEventArgs &e){
                 guiLoad();
             }
         }
+    } else if( name == "DEBUG" ){
+        
+    } else if( name == "REC" ){
+        
+    } else {
+        ofxUIToggle *t = (ofxUIToggle *) e.widget;
+        if(t->getValue()){
+            guiLoadPresetFromName(name);
+        }
     }
     selfGuiEvent(e);
 }
@@ -350,7 +378,6 @@ vector<string> UI2DProject::getPresets(){
 	vector<string> presets;
 	string presetPath = getDataPath()+"Presets/";
 	ofDirectory presetsFolder = ofDirectory(presetPath);
-	cout << "PRESET PATH AT " << presetPath << endl;
     
 	if(presetsFolder.exists()){
 		presetsFolder.listDir();
@@ -367,8 +394,6 @@ vector<string> UI2DProject::getPresets(){
 	return presets;
 }
 
-
-
 void UI2DProject::setupSystemGui(){
     UIReference tmp( new ofxUISuperCanvas("SYSTEM", guiTemplate) );
     
@@ -379,7 +404,7 @@ void UI2DProject::setupSystemGui(){
     sysGui->setName("SystemSettings");
     sysGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
     
-    ofxUIToggle *toggle = sysGui->addToggle("DEBUG", &bDebug);
+    ofxUIToggle *toggle = sysGui->addToggle("ENABLE", &bUpdateSystem);
     toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
     sysGui->resetPlacer();
     sysGui->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
@@ -401,43 +426,19 @@ void UI2DProject::setupRenderGui(){
     rdrGui->setName("RenderSettings");
     rdrGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
     
+    ofxUIToggle *toggle = rdrGui->addToggle("ENABLE", &bRenderSystem);
+    toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
+    rdrGui->resetPlacer();
+    rdrGui->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
+    rdrGui->addWidgetToHeader(toggle);
+    rdrGui->addSpacer();
+    
     rdrGui->addSpacer();
     selfSetupRenderGui();
     
     rdrGui->autoSizeToFitWidgets();
     ofAddListener(rdrGui->newGUIEvent,this,&UI2DProject::guiRenderEvent);
     guis.push_back(rdrGui);
-}
-
-void UI2DProject::setupPresetGui(){
-    UIReference tmp( new ofxUISuperCanvas("PRESENTS", guiTemplate) );
-	presetGui = tmp;
-    presetGui->setTriggerWidgetsUponLoad(false);
-	presetGui->setName("Presets");
-	presetGui->copyCanvasStyle(guiTemplate);
-    presetGui->copyCanvasProperties(guiTemplate);
-    presetGui->addSpacer();
-    
-    vector<string> empty; empty.clear();
-	presetRadio = presetGui->addRadio("PRESETS", empty);
-    
-	presetGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
-    vector<string> presets = getPresets();
-    for(vector<string>::iterator it = presets.begin(); it != presets.end(); ++it){
-        ofxUIToggle *t = presetGui->addToggle((*it), false);
-        presetRadio->addToggle(t);
-    }
-    
-	presetGui->autoSizeToFitWidgets();
-    ofAddListener(presetGui->newGUIEvent,this,&UI2DProject::guiPresetEvent);
-    guis.push_back(presetGui);
-}
-
-void UI2DProject::guiPresetEvent(ofxUIEventArgs &e){
-    ofxUIToggle *t = (ofxUIToggle *) e.widget;
-    if(t->getValue()){
-        guiLoadPresetFromName(e.widget->getName());
-    }
 }
 
 void UI2DProject::backgroundSet(UIBackground *_bg){
@@ -496,8 +497,8 @@ void UI2DProject::guiSavePreset(string presetName){
     string presetDirectory = getDataPath()+"Presets/"+presetName+"/";
     if(!dir.doesDirectoryExist(presetDirectory)){
         dir.createDirectory(presetDirectory);
-        presetRadio->addToggle(presetGui->addToggle(presetName, true));
-        presetGui->autoSizeToFitWidgets();
+        presetRadio->addToggle(gui->addToggle(presetName, true));
+        gui->autoSizeToFitWidgets();
     }
     
     for(int i = 0; i < guis.size(); i++){
@@ -542,16 +543,18 @@ void UI2DProject::guiArrange(int _type){
         }
     } else if ( _type == 1){
         UIReference last;
-        for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-            (*it)->setMinified(true);
-            if(last != NULL){
-                (*it)->getRect()->setX(1);
-                (*it)->getRect()->setY(last->getRect()->getY()+last->getRect()->getHeight()+1);
-            } else {
-                (*it)->getRect()->setX(1);
-                (*it)->getRect()->setY(1);
+        for(int i = 0; i < guis.size(); i++){
+            if( i > 0){
+                guis[i]->setMinified(true);
             }
-            last = (*it);
+            if(last != NULL){
+                guis[i]->getRect()->setX(1);
+                guis[i]->getRect()->setY(last->getRect()->getY()+last->getRect()->getHeight()+1);
+            } else {
+                guis[i]->getRect()->setX(1);
+                guis[i]->getRect()->setY(1);
+            }
+            last = guis[i];
         }
     } else if (_type == 2){
         float x = ofGetWidth()*.5;

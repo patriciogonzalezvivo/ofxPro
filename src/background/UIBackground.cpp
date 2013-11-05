@@ -24,13 +24,23 @@ void UIBackground::setupUI(){
     
     gui->addLabel("Colors");
     gui->addSlider("HUE", 0.0, 1.0, &color.hue);
-    gui->addSlider("SAT", 0.0, 1.0, &color.sat);
-    gui->addSlider("BRI", 0.0, 1.0, &color.bri);
+    
+    float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
+    float dim = gui->getGlobalSliderHeight();
+    gui->addSlider("SAT", 0.0, 1.0, &color.sat,length/2.0, dim);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addSlider("BRI", 0.0, 1.0, &color.bri, length/2.0, dim);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->addSpacer();
     
     gui->addToggle("GRADIENT", &bGradient);
     hueSlider = gui->addSlider("HUE2", 0.0, 1.0, &color2.hue);
-    satSlider = gui->addSlider("SAT2", 0.0, 1.0, &color2.sat);
-    briSlider = gui->addSlider("BRI2", 0.0, 1.0, &color2.bri);
+    
+    satSlider = gui->addSlider("SAT2", 0.0, 1.0, &color2.sat,length/2.0, dim);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    briSlider = gui->addSlider("BRI2", 0.0, 1.0, &color2.bri, length/2.0, dim);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     gui->autoSizeToFitWidgets();
 }

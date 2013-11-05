@@ -113,12 +113,6 @@ void UICamera::guiEvent(ofxUIEventArgs &e){
 //    }
 }
 
-void UICamera::reset(){
-    if(type == "easyCam"){
-        ((ofEasyCam*)camera)->reset();
-    }
-}
-
 void UICamera::enableMouseInput(){
     if(type == "easyCam"){
         ((ofEasyCam*)camera)->enableMouseInput();
@@ -241,9 +235,14 @@ bool UICamera::save(string savePath){
 
 bool UICamera::load(string loadPath){
     if (camera != NULL){
+        
+        if(type == "easyCam"){
+            ((ofEasyCam*)camera)->reset();
+        }
+        
         if(loadOfCam(*camera, loadPath)){
-            
             if(type == "easyCam"){
+                
                 ofBuffer buffer = ofBufferFromFile(loadPath);
                 while (!buffer.isLastLine()) {
                     string line = buffer.getNextLine();

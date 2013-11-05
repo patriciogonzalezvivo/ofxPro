@@ -21,7 +21,6 @@ public:
     
     void    setupUI();
     
-    void    reset();
     void    enableMouseInput();
     void    disableMouseInput();
     

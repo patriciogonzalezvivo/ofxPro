@@ -191,23 +191,8 @@ void UI3DProject::setupCoreGuis(){
 //------------------------------------------------------------ 3D SPECIFIC SETUP
 
 void UI3DProject::backgroundSet(UIBackground *_bg){
-    if(background != NULL){
-        
-        for(int i = 0; i<guis.size(); i++){
-            if (guis[i]->getName() == "BACKGROUND"){
-                guis.erase(guis.begin()+i);
-                break;
-            }
-        }
-        
-        delete background;
-        background = NULL;
-    }
-    
-    background = _bg;
-    background->linkUIs( &guis );
+    UI2DProject::backgroundSet(_bg);
     fog.linkColor(background);
-    guiAdd( *background );
 }
 
 void UI3DProject::setupLightingGui(){
@@ -348,8 +333,6 @@ void UI3DProject::materialAdd( string _name ){
 
 void UI3DProject::guiLoad(){
     UI2DProject::guiLoad();
-    
-    camera.reset();
     camera.load(getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
 }
 
@@ -359,10 +342,10 @@ void UI3DProject::guiSave(){
 }
 
 void UI3DProject::guiLoadPresetFromPath(string presetPath){
-    camera.reset();
-    camera.load(presetPath+"/ofEasyCamSettings");
-
+    cout << "PRESET PATH: " << presetPath << endl;
     UI2DProject::guiLoadPresetFromPath(presetPath);
+    camera.load(presetPath+"/ofEasyCamSettings");
+//    UI2DProject::guiLoadPresetFromPath(presetPath);
 }
 
 void UI3DProject::guiSavePreset(string presetName){

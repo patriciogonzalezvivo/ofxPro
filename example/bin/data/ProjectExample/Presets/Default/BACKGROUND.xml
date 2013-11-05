@@ -3,7 +3,7 @@
     <Name>BACKGROUND</Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>122.000000000</YPosition>
+    <YPosition>425.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -12,8 +12,8 @@
 </Widget>
 <Widget>
     <Kind>4</Kind>
-    <Name>change_Speed</Name>
-    <Value>0.100000001</Value>
+    <Name>value</Name>
+    <Value>0.492610842</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>

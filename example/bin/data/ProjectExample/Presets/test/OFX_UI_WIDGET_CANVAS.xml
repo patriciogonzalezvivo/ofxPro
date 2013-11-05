@@ -2,8 +2,8 @@
     <Kind>42</Kind>
     <Name>OFX_UI_WIDGET_CANVAS</Name>
     <IsMinified>0</IsMinified>
-    <XPosition>328.000000000</XPosition>
-    <YPosition>62.000000000</YPosition>
+    <XPosition>312.000000000</XPosition>
+    <YPosition>43.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -23,10 +23,10 @@
 <Widget>
     <Kind>2</Kind>
     <Name>test</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>test2</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>

@@ -24,6 +24,7 @@
 
 #pragma once
 #include "UIClass.h"
+#include "aColor.h"
 
 class UILight : public UIClass, public ofPoint {
 public:
@@ -54,9 +55,10 @@ protected:
     
     ofLight light;
     string  name;
-    ofFloatColor ambient;
-    ofFloatColor diffuse;
-    ofFloatColor specular;
+    
+    aColor  ambient;
+    aColor  diffuse;
+    aColor  specular;
     
     ofVec3f orientation;
     float   spotCutOff;

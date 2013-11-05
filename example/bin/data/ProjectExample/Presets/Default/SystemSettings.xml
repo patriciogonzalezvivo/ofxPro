@@ -3,10 +3,10 @@
     <Name>SystemSettings</Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>74.000000000</YPosition>
+    <YPosition>150.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
-    <Name>DEBUG</Name>
+    <Name>ENABLE</Name>
     <Value>0</Value>
 </Widget>

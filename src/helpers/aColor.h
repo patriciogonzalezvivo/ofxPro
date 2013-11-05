@@ -12,7 +12,15 @@
 class aColor : public ofFloatColor{
 public:
     
-    aColor():speed(0.1){};
+    aColor(){
+        speed =0.1;
+        r = 0.0;
+        g = 0.0;
+        b = 0.0;
+        hue=0.0;
+        sat=0.0;
+        bri=0.0;
+    };
     virtual ~aColor(){};
     
     virtual void set( ofFloatColor const & _color ){

@@ -31,12 +31,12 @@ public:
 protected:
     void    guiEvent(ofxUIEventArgs &e);
     
-    ofxUISlider *red;
-    ofxUISlider *green;
-    ofxUISlider *blue;
+    ofxUISlider *hue;
+    ofxUISlider *sat;
+    ofxUISlider *bri;
 
-    ofFloatColor color;
-    ofFloatColor *bgColor;
+    aColor color;
+    aColor *bgColor;
 
     bool        bMachBackground;
 };

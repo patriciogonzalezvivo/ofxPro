@@ -20,16 +20,21 @@ void UIFog::setupUI(){
     gui->addSpacer();
     gui->addToggle("Mach_Background", &bMachBackground);
     
-    red = gui->addSlider("Red", 0.0, 1.0, &color.r);
-    green = gui->addSlider("Green", 0.0, 1.0, &color.g);
-    blue = gui->addSlider("Blue", 0.0, 1.0, &color.b);
+    hue = gui->addSlider("HUE", 0.0, 1.0, &color.hue);
+    
+    float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
+    float dim = gui->getGlobalSliderHeight();
+    sat = gui->addSlider("SAT", 0.0, 1.0, &color.sat,length/2.0, dim);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    bri = gui->addSlider("BRI", 0.0, 1.0, &color.bri, length/2.0, dim);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
 }
 
 void UIFog::setColor( ofColor _color ){
     if(bMachBackground){
         bMachBackground = false;
     } else {
-        color = _color;
+        color.set(ofFloatColor(_color));
     }
 }
 
@@ -42,24 +47,26 @@ void UIFog::guiEvent(ofxUIEventArgs &e){
     
     if(name == "Mach_Background"){
         if(bMachBackground){
-            red->setVisible(false);
-            green->setVisible(false);
-            blue->setVisible(false);
-            gui->autoSizeToFitWidgets();
+            hue->setVisible(false);
+            sat->setVisible(false);
+            bri->setVisible(false);
         } else {
-            red->setVisible(true);
-            green->setVisible(true);
-            blue->setVisible(true);
-            gui->autoSizeToFitWidgets();
-            if(gui->isMinified()){
-                gui->setMinified(true);
-            }
+            hue->setVisible(true);
+            sat->setVisible(true);
+            bri->setVisible(true);
+        }
+        
+        gui->autoSizeToFitWidgets();
+        if(gui->isMinified()){
+            gui->setMinified(true);
         }
     }
 }
 
 void UIFog::begin(){
     if (bEnable){
+        color.update();
+        
         float FogCol[3];
         if (bMachBackground && bgColor != NULL){
             FogCol[0] = bgColor->r;

@@ -1,9 +1,9 @@
 <Canvas>
     <Kind>42</Kind>
-    <Name>DIR LIGHT </Name>
+    <Name>POINT LIGHT 1</Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>325.000000000</YPosition>
+    <YPosition>172.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -12,18 +12,18 @@
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>OX</Name>
-    <Value>-90.000000000</Value>
+    <Name>X</Name>
+    <Value>-2.766174316</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>OY</Name>
-    <Value>-35.340209961</Value>
+    <Name>Y</Name>
+    <Value>14.678588867</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>OZ</Name>
-    <Value>-14.607452393</Value>
+    <Name>Z</Name>
+    <Value>634.357055664</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -43,17 +43,17 @@
 <Widget>
     <Kind>25</Kind>
     <Name>dHUE</Name>
-    <Value>0.549738228</Value>
+    <Value>0.151832461</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>dSAT</Name>
-    <Value>0.649214685</Value>
+    <Value>0.408376962</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>dBRI</Name>
-    <Value>0.382198960</Value>
+    <Value>0.476439804</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
