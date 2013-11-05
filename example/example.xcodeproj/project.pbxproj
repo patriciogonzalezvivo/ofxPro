@@ -16,6 +16,7 @@
 		39102de8d4931869415f07553218bd57 /* VectorField2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 970cad2ca05e81c06e525a98081f73de /* VectorField2D.cpp */; };
 		3D508E86182732F500601BD5 /* UI3DGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D508E84182732F500601BD5 /* UI3DGrid.cpp */; };
 		3D508E891827394400601BD5 /* UI2DGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D508E871827394400601BD5 /* UI2DGrid.cpp */; };
+		3D92373F18286C38002F6060 /* UICamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D92373D18286C38002F6060 /* UICamera.cpp */; };
 		5a1b05b9062459786cd414ba0d575bfa /* Recorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4717081de3a58a8b448ccce0b2603fe2 /* Recorder.cpp */; };
 		5a4349e9754d6fa14c0f2a3a1abc30b6 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = fc5da1c87211d4f6377da7199d8c5a1e /* tinyxmlparser.cpp */; };
 		5d7edf80840f68b1bbbbf193239de93a /* UI3DProject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24403beeba436aa176bd5653b36bcdf9 /* UI3DProject.cpp */; };
@@ -118,6 +119,8 @@
 		3D508E85182732F500601BD5 /* UI3DGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UI3DGrid.h; path = ../src/grids/UI3DGrid.h; sourceTree = "<group>"; };
 		3D508E871827394400601BD5 /* UI2DGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UI2DGrid.cpp; path = ../src/grids/UI2DGrid.cpp; sourceTree = "<group>"; };
 		3D508E881827394400601BD5 /* UI2DGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UI2DGrid.h; path = ../src/grids/UI2DGrid.h; sourceTree = "<group>"; };
+		3D92373D18286C38002F6060 /* UICamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UICamera.cpp; path = ../src/gl/UICamera.cpp; sourceTree = "<group>"; };
+		3D92373E18286C38002F6060 /* UICamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UICamera.h; path = ../src/gl/UICamera.h; sourceTree = "<group>"; };
 		3b1e218bb487735b3b3c780d9b5f1836 /* UILight.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UILight.h; path = ../../../addons/ofxUIProject/src/gl/UILight.h; sourceTree = SOURCE_ROOT; };
 		3d09afbd7fae4c7994f70bc164775032 /* UI2DProject.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UI2DProject.h; path = ../../../addons/ofxUIProject/src/UI2DProject.h; sourceTree = SOURCE_ROOT; };
 		3e8e40167d6c3c4dc3b9546a83b2add1 /* md5.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = md5.cpp; path = ../../../addons/ofxUIProject/src/helpers/md5.cpp; sourceTree = SOURCE_ROOT; };
@@ -289,6 +292,8 @@
 				f84c0d38b417b1653a5bb5da0f322507 /* UIShader.cpp */,
 				c3f9167fbce336cb4885c7b60204143d /* UIShader.h */,
 				b99a1d0272f7e187e45c4aa4a4f7e5fb /* Uniform.h */,
+				3D92373E18286C38002F6060 /* UICamera.h */,
+				3D92373D18286C38002F6060 /* UICamera.cpp */,
 			);
 			name = gl;
 			sourceTree = "<group>";
@@ -526,10 +531,10 @@
 		e003ae6fc774be38dc2b299156dc9db2 /* background */ = {
 			isa = PBXGroup;
 			children = (
-				6b7022e8f8aafe6a26a1f79ca3cc2273 /* UIBackground.cpp */,
 				adce93f0ebe23c8921c843219908ed52 /* UIBackground.h */,
-				5b18d4bac8d493b40f9f18eae12aaf8a /* UISuperBackground.cpp */,
+				6b7022e8f8aafe6a26a1f79ca3cc2273 /* UIBackground.cpp */,
 				f94ac1e83a5b2b67d23594e39dde1d2d /* UISuperBackground.h */,
+				5b18d4bac8d493b40f9f18eae12aaf8a /* UISuperBackground.cpp */,
 			);
 			name = background;
 			sourceTree = "<group>";
@@ -543,10 +548,10 @@
 				d96eff7f4efbb1a4f12ac4ffeba1f5e1 /* helpers */,
 				e99abe18f22cbd19fbc95ac95a18bc4c /* simulators */,
 				e99890497d9c1ede6800cf2c87add865 /* text */,
-				8a2479b6c5c0dfec22f06342e32884a2 /* UI2DProject.cpp */,
 				3d09afbd7fae4c7994f70bc164775032 /* UI2DProject.h */,
-				24403beeba436aa176bd5653b36bcdf9 /* UI3DProject.cpp */,
+				8a2479b6c5c0dfec22f06342e32884a2 /* UI2DProject.cpp */,
 				7feef1b943d6492abc456b93083b140a /* UI3DProject.h */,
+				24403beeba436aa176bd5653b36bcdf9 /* UI3DProject.cpp */,
 				d48670cbcd25026071c713971ea7ceb5 /* UIClass.cpp */,
 				baa69f62ba08b1e6cefa3511cba74061 /* UIClass.h */,
 				a7cd549baed5afba55f0a00aa2fc1909 /* UIProject.h */,
@@ -692,6 +697,7 @@
 				3D508E86182732F500601BD5 /* UI3DGrid.cpp in Sources */,
 				66232392d8bafadd73d6fb46e40d2dd4 /* UIShader.cpp in Sources */,
 				8a8d0b0c5641725bd3b59e6ea66fe192 /* Grid.cpp in Sources */,
+				3D92373F18286C38002F6060 /* UICamera.cpp in Sources */,
 				e96489fe3c0ca1b22d74549dcc4fc1a8 /* DraggableRectangle.cpp in Sources */,
 				9ee2f1ff53c01cb930b4f479efcdf6ba /* Flickr.cpp in Sources */,
 				af50c824294abe5cb6135df1ca079d8d /* md5.cpp in Sources */,

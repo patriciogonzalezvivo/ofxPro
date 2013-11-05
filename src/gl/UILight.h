@@ -31,7 +31,7 @@ public:
     UILight();
     UILight( string _name, ofLightType _type  );
     
-    ~UILight();
+    virtual ~UILight(){};
     
     void    setName( string _name );
     void    setType( ofLightType _type );
@@ -61,7 +61,6 @@ protected:
     ofVec3f orientation;
     float   spotCutOff;
     float   exponent;
-    
 };
 
 typedef shared_ptr<UILight> UILightReference;

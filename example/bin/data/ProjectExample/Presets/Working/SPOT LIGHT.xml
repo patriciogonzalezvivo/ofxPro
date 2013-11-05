@@ -3,7 +3,7 @@
     <Name>SPOT LIGHT</Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>26.000000000</YPosition>
+    <YPosition>245.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -23,17 +23,17 @@
 <Widget>
     <Kind>25</Kind>
     <Name>X</Name>
-    <Value>58.508544922</Value>
+    <Value>22.324340820</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>Y</Name>
-    <Value>603.719482422</Value>
+    <Value>601.269042969</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>Z</Name>
-    <Value>26.624755859</Value>
+    <Value>28.957641602</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>

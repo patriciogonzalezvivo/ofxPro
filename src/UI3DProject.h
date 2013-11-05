@@ -8,9 +8,11 @@
 #pragma once
 
 #include "UI2DProject.h"
+
 #include "UILight.h"
+#include "UICamera.h"
 #include "UIMaterial.h"
-#include "Extruder.h"
+
 
 class UI3DProject : public UI2DProject {
 public:
@@ -36,7 +38,6 @@ public:
     
 	//  These events are registered to be call automatically
     //
-	virtual void update(ofEventArgs & args);
 	virtual void draw(ofEventArgs & args);
 	virtual void exit(ofEventArgs & args);
     
@@ -52,50 +53,37 @@ protected:
     
     // CORE
     virtual void setupCoreGuis();
-    virtual void setupBackground();
     
     virtual void guiLoad();
     virtual void guiLoadPresetFromPath(string presetPath);
     virtual void guiSave();
     virtual void guiSavePreset(string presetName);
     
-    // 3D SPECIFIC
-    virtual void setupLightingGui();
-    virtual void setupLightingParams();
-    virtual void guiLightingEvent(ofxUIEventArgs &e);
+    virtual string  cursorIsOverLight();
     
-    virtual void lightAdd( string _name, ofLightType _type );
-    virtual void lightsBegin();
-    virtual void lightsDraw();
-    virtual void lightsEnd();
-    
-    virtual void setupCameraGui();
-    virtual void setupCameraParams();
-    virtual void guiCameraEvent(ofxUIEventArgs &e);
-    virtual void cameraBillboard();
-    
-    virtual void materialAdd( string _name );
-    
-    virtual string cursorIsOverLight();
-    string selectedLigth;
-    
-    //  GUI
-    UIReference lgtGui, camGui;
-	
-    //  CAMERA
+    // CAMERA
     //
-    virtual bool    cameraSave(string savePath);
-    virtual bool    cameraLoad(string loadPath);
-    float           cameraDistance,cameraFOV;
-    ExtruderRef         xRot, yRot, zRot;
-    vector<ExtruderRef> extruders;
-    ofEasyCam           camera;
-	
-    //  LIGHTS & MATERIALs
+    UICamera        camera;
+    
+    //  LIGHTS
     //
+    virtual void    setupLightingGui();
+    virtual void    guiLightingEvent(ofxUIEventArgs &e);
+    
+    virtual void    lightAdd( string _name, ofLightType _type );
+    virtual void    lightsBegin();
+    virtual void    lightsDraw();
+    virtual void    lightsEnd();
+    
     map<string,UILightReference>    lights;
+    UIReference     lightsGui;
+    string          selectedLigth;
+    float           *globalAmbientColor;
+    bool            bSmoothLighting;
+    bool            bEnableLights;
+    
+    //  MATERIALs
+    //
+    virtual void    materialAdd( string _name );
     map<string,UIMaterialReference> materials;
-    float   *globalAmbientColor;
-    bool    bSmoothLighting;
-    bool    bEnableLights;
 };

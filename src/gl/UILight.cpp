@@ -25,9 +25,6 @@ UILight::UILight( string _name, ofLightType _type ){
     setType(_type);
 }
 
-UILight::~UILight(){
-}
-
 void UILight::setName(string _name){
     if (gui == NULL){
         name = _name;

@@ -9,7 +9,6 @@
 
 UIBackground::UIBackground(){
     guis = NULL;
-    cam = NULL;
     
     hueSlider = NULL;
     satSlider = NULL;
@@ -49,7 +48,7 @@ UIBackground::~UIBackground(){
 
 void UIBackground::setupUI(){
     
-    gui->addSlider("change_Speed", 0.0, 0.5, &speed);
+//    gui->addSlider("change_Speed", 0.0, 0.5, &speed);
     
     gui->addLabel("Colors");
     gui->addSlider("HUE", 0.0, 1.0, &HSBTarget.x );
@@ -82,10 +81,6 @@ void UIBackground::setColor2( ofFloatColor _color ){
 
 void UIBackground::linkUIs( vector<UIReference> *_guis ){
     guis = _guis;
-}
-
-void UIBackground::linkCamera( ofEasyCam *_cam ){
-    cam = _cam;
 }
 
 void UIBackground::guiEvent(ofxUIEventArgs &e){
@@ -158,13 +153,15 @@ void UIBackground::draw(){
                 bChange = false;
             }
             
-            if (HSBTarget2.distance( HSB2 ) != 0.0 ){
-                HSB2.addForceTo( HSBTarget2, true );
-                HSB2.update(speed);
-                color2.setHsb(HSB2.x, HSB2.y, HSB2.z);
-                bChange = true;
-            } else {
-                bChange = false;
+            if(gradientMode == OF_GRADIENT_CIRCULAR){
+                if (HSBTarget2.distance( HSB2 ) != 0.0 ){
+                    HSB2.addForceTo( HSBTarget2, true );
+                    HSB2.update(speed);
+                    color2.setHsb(HSB2.x, HSB2.y, HSB2.z);
+                    bChange = true;
+                } else {
+                    bChange = false;
+                }
             }
         }
         

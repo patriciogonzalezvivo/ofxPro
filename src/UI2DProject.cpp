@@ -17,16 +17,15 @@ string UI2DProject::getDataPath(){
 }
 
 void UI2DProject::setup(){
-    
 	cout << "SETTING UP SYSTEM " << getSystemName() << endl;
-	background = NULL;
-    
+	
+    //  Create directories if they are not there
+    //
     ofDirectory dir;
     string directoryName = getDataPath()+"Presets/";
     if(!dir.doesDirectoryExist(directoryName)){
         dir.createDirectory(directoryName);
     }
-    
     string workingDirectoryName = directoryName+"Working/";
     if(!dir.doesDirectoryExist(workingDirectoryName)){
         dir.createDirectory(workingDirectoryName);
@@ -37,10 +36,6 @@ void UI2DProject::setup(){
     selfSetup();
     setupCoreGuis();
     selfSetupGuis();
-    
-    bPlaying = false;
-    bRecording = false;
-    lastRercord = "";
 }
 
 void UI2DProject::play(){
@@ -318,7 +313,6 @@ void UI2DProject::setupGui(){
     gui->addWidgetNorthOf(loadbtn, "RENDER", true);
     gui->setPlacer(updatebtn);
     gui->addSpacer();
-    selfSetupGui();
     gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent,this,&UI2DProject::guiEvent);
     
@@ -525,7 +519,7 @@ void UI2DProject::guiToggleAndPosition(UIReference &g){
     }
 }
 
-void UI2DProject::guiArrange( int _type ){
+void UI2DProject::guiArrange(int _type){
     if (_type == 0){
         for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
             (*it)->toggleMinified();

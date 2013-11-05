@@ -13,8 +13,7 @@ void ProjectExample::selfSetup(){
     ofEnableSmoothing();
 }
 
-void ProjectExample::selfSetupGui(){
-    
+void ProjectExample::selfSetupGuis(){
     lightAdd("DIR LIGHT ", OF_LIGHT_DIRECTIONAL );
     lightAdd("SPOT LIGHT", OF_LIGHT_SPOT);
     
@@ -54,7 +53,6 @@ void ProjectExample::selfSceneTransformation(){
 }
 
 void ProjectExample::selfUpdate(){
-    
 }
 
 void ProjectExample::selfDraw(){

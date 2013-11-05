@@ -38,7 +38,7 @@ class UI2DProject {
 #endif
 public:
     
-	UI2DProject():background(NULL){};
+	UI2DProject():background(NULL),bPlaying(false),bRecording(false),lastRercord(""){};
 	virtual ~UI2DProject(){};
 	
 	//--------------------- VIRTUAL CLASSES TO EDIT
@@ -76,7 +76,6 @@ public:
     virtual void selfMousePressed(ofMouseEventArgs &data){};
     virtual void selfMouseReleased(ofMouseEventArgs &data){};
     
-    virtual void selfSetupGui(){};
     virtual void selfGuiEvent(ofxUIEventArgs &e){};
 	
     virtual void selfSetupSystemGui(){};

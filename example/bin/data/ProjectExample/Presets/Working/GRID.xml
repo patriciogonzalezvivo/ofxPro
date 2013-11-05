@@ -3,7 +3,7 @@
     <Name>GRID</Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>76.000000000</YPosition>
+    <YPosition>295.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -78,11 +78,11 @@
 <Widget>
     <Kind>28</Kind>
     <Name>Reference_Color</Name>
-    <XValue>0.675000012</XValue>
-    <YValue>0.000000000</YValue>
-    <RColor>235</RColor>
-    <GColor>244</GColor>
-    <BColor>250</BColor>
+    <XValue>0.270000011</XValue>
+    <YValue>0.062500000</YValue>
+    <RColor>254</RColor>
+    <GColor>252</GColor>
+    <BColor>201</BColor>
     <AColor>255</AColor>
 </Widget>
 <Widget>

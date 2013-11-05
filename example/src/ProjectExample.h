@@ -18,7 +18,7 @@ public:
 		return "ProjectExample";
 	}
 
-    void selfSetupGui();
+    void selfSetupGuis();
     void selfGuiEvent(ofxUIEventArgs &e);
 
     void selfSetupSystemGui();

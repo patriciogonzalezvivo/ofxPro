@@ -25,6 +25,4 @@ protected:
     ofFbo       fbo;
     ofShader    shader;
     ofMesh      mesh;
-    
-    
 };

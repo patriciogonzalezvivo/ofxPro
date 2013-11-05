@@ -52,7 +52,7 @@ UISuperBackground::UISuperBackground(){
 void UISuperBackground::setupUI(){
     
     gui->addSlider("grain_pct", 0.0, 1.0, &grainPct);
-    gui->addSlider("change_Speed", 0.0, 0.1, &speed);
+//    gui->addSlider("change_Speed", 0.0, 0.1, &speed);
     
     gui->addLabel("Colors");
     gui->addSlider("HUE", 0.0, 1.0, &HSBTarget.x );
