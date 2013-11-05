@@ -2,8 +2,8 @@
     <Kind>42</Kind>
     <Name>SPOT LIGHT</Name>
     <IsMinified>0</IsMinified>
-    <XPosition>1098.000000000</XPosition>
-    <YPosition>40.000000000</YPosition>
+    <XPosition>1353.000000000</XPosition>
+    <YPosition>145.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -13,42 +13,42 @@
 <Widget>
     <Kind>4</Kind>
     <Name>CUT OFF</Name>
-    <Value>27.931034088</Value>
+    <Value>47.438423157</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>EXPONENT</Name>
-    <Value>23.330049515</Value>
+    <Value>63.054187775</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>X</Name>
-    <Value>118.840332031</Value>
+    <Value>530.959106445</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>Y</Name>
-    <Value>494.870117188</Value>
+    <Value>198.035522461</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>Z</Name>
-    <Value>-198.601501465</Value>
+    <Value>-282.213256836</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>OX</Name>
-    <Value>-140.418853760</Value>
+    <Value>-123.455497742</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>OY</Name>
-    <Value>-59.371498108</Value>
+    <Value>-2.826995850</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>OZ</Name>
-    <Value>-68.796043396</Value>
+    <Value>-91.413848877</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -68,7 +68,7 @@
 <Widget>
     <Kind>25</Kind>
     <Name>dHUE</Name>
-    <Value>0.099476442</Value>
+    <Value>0.397905767</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -78,20 +78,20 @@
 <Widget>
     <Kind>25</Kind>
     <Name>dBRI</Name>
-    <Value>1.000000000</Value>
+    <Value>0.696335077</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>sHUE</Name>
-    <Value>0.209424078</Value>
+    <Value>0.654450238</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>sSAT</Name>
-    <Value>0.554973841</Value>
+    <Value>0.628272235</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>sBRI</Name>
-    <Value>1.000000000</Value>
+    <Value>0.937172771</Value>
 </Widget>

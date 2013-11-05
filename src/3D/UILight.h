@@ -59,8 +59,10 @@ protected:
     aColor  ambient;
     aColor  diffuse;
     aColor  specular;
-    
-    ofVec3f orientation;
+    aPoint  position;
+    aPoint  orientation;
+    ofPoint oriTarget;
+
     float   spotCutOff;
     float   exponent;
 };

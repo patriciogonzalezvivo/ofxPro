@@ -23,14 +23,6 @@ ofPoint Particle::getVel(){
     return vel;
 }
 
-void Particle::addForce(ofPoint _force){
-    acc += _force;
-};
-
-void Particle::addForceTo(ofPoint _target, bool _slowdown){
-    acc += steer(_target, _slowdown);
-}
-
 void Particle::addRepulsionForce(ofPoint _posOfForce, float _radius, float _scale){
     
 	// ----------- (2) calculate the difference & length
@@ -140,33 +132,6 @@ void Particle::addAttractionForce(Particle *p, float _radius, float _scale){
 	
 }
 
-ofPoint Particle::steer(ofPoint _target, bool _arrival) {
-    ofPoint steer;
-	
-	if (_arrival){
-		ofPoint desired = _target - *this;
-		float d = desired.length();
-        
-		if (d > 0) {
-			desired.normalize();
-			if (d < 1) 
-				desired *= (d); // This damping is somewhat arbitrary
-			//else 
-			//desired *= 2;
-			// Steering = Desired minus Velocity
-			steer = desired - vel; //PVector.sub(desired,vel);
-			//steer.limit(0.9);  // Limit to maximum steering force
-		} else
-			steer = ofPoint(0,0,0);
-
-	} else {
-		steer = _target - *this;
-		//steer.limit(maxforce);
-	}
-	
-    return steer;
-}
-
 //------------------------------------------------------------
 void Particle::addClockwiseForce(Particle *p, float _scale){
     addClockwiseForce(p, size*2.0 + p->size*2.0, _scale );
@@ -238,13 +203,7 @@ void Particle::addCounterClockwiseForce(Particle *p, float _radius, float _scale
 }
 
 void Particle::update(float _speed){
-	
-    //  Update Physics
-    //
-    vel += acc;
-    vel *= _speed;
-    *this += vel;
-    acc *= 0;
+    aPoint::update(_speed);
     
     //  Add Tail
     //

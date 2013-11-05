@@ -71,6 +71,7 @@ public:
     virtual void selfMouseDragged(ofMouseEventArgs &data){};
     virtual void selfMouseMoved(ofMouseEventArgs &data){};
     virtual void selfMousePressed(ofMouseEventArgs &data){};
+    virtual void selfMouseDoublePressed(ofMouseEventArgs &data){};
     virtual void selfMouseReleased(ofMouseEventArgs &data){};
     
     virtual void selfGuiEvent(ofxUIEventArgs &e){};
@@ -144,7 +145,7 @@ protected:
     
     ofxUISuperCanvas *guiTemplate;
     ofxUIRadio       *presetRadio;
-    UIReference      gui, sysGui, rdrGui;// presetGui;
+    UIReference      gui, sysGui, rdrGui;
     vector<UIReference> guis;
 	
     //  Basic RENDER scene
@@ -163,6 +164,9 @@ protected:
     
     //  APP Flags
     //
+    float   lastClick;
+    float   doublClickThreshold;
+    
     bool    bRenderSystem;
     bool    bUpdateSystem;
     bool    bRecording;

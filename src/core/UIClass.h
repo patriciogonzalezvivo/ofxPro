@@ -26,6 +26,5 @@ protected:
     virtual void        setupUI( ) = 0;
     virtual void        guiEvent(ofxUIEventArgs &e) = 0;
     UIReference         gui;
-    
 };
 

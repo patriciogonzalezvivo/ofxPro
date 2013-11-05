@@ -1,4 +1,3 @@
-ofxCameraSaveLoad
 ofxUI
 ofxUIProject
 ofxXmlSettings

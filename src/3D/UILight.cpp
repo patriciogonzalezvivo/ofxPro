@@ -9,8 +9,9 @@
 #include "UILight.h"
 
 UILight::UILight(){
-    
     light.setup();
+    position.set(0.0f,0.0f,0.0f);
+    oriTarget.set(0.0f,0.0f,0.0f);
     orientation.set(0.0f,0.0f,0.0f);
     ambient.set(ofFloatColor(.5f,.5f,.5f,1.f));
     diffuse.set(ofFloatColor(.5f,.5f,.5f,1.f));
@@ -80,10 +81,10 @@ void UILight::setupUI(){
             gui->addSpacer();
             
             gui->addLabel("ORIENTATION", OFX_UI_FONT_SMALL);
-            gui->addMinimalSlider("OX", -180.0, 180.0, &orientation.x, length/3., dim)->setShowValue(false);
+            gui->addMinimalSlider("OX", -180.0, 180.0, &oriTarget.x, length/3., dim)->setShowValue(false);
             gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-            gui->addMinimalSlider("OY", -180.0, 180.0, &orientation.y, length/3., dim)->setShowValue(false);
-            gui->addMinimalSlider("OZ", -180.0, 180.0, &orientation.z, length/3., dim)->setShowValue(false);
+            gui->addMinimalSlider("OY", -180.0, 180.0, &oriTarget.y, length/3., dim)->setShowValue(false);
+            gui->addMinimalSlider("OZ", -180.0, 180.0, &oriTarget.z, length/3., dim)->setShowValue(false);
             gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
             gui->addSpacer();
         }
@@ -91,10 +92,10 @@ void UILight::setupUI(){
             
         case OF_LIGHT_DIRECTIONAL:{
             gui->addLabel("ORIENTATION", OFX_UI_FONT_SMALL);
-            gui->addMinimalSlider("OX", -180.0, 180.0, &orientation.x, length/3., dim)->setShowValue(false);
+            gui->addMinimalSlider("OX", -180.0, 180.0, &oriTarget.x, length/3., dim)->setShowValue(false);
             gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-            gui->addMinimalSlider("OY", -180.0, 180.0, &orientation.y, length/3., dim)->setShowValue(false);
-            gui->addMinimalSlider("OZ", -180.0, 180.0, &orientation.z, length/3., dim)->setShowValue(false);
+            gui->addMinimalSlider("OY", -180.0, 180.0, &oriTarget.y, length/3., dim)->setShowValue(false);
+            gui->addMinimalSlider("OZ", -180.0, 180.0, &oriTarget.z, length/3., dim)->setShowValue(false);
             gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
             gui->addSpacer();
         }
@@ -133,17 +134,20 @@ void UILight::guiEvent(ofxUIEventArgs &e){
 void UILight::enable(){
     if(bEnable){
         
+        position.goTo(*this,0.1);
+        orientation.goTo(oriTarget,0.1);
+        
         ambient.update();
         diffuse.update();
         specular.update();
         
         switch(light.getType()){
             case OF_LIGHT_POINT:{
-                light.setPosition(*this);
+                light.setPosition(position);
             }
                 break;
             case OF_LIGHT_SPOT:{
-                light.setPosition(*this);
+                light.setPosition(position);
                 light.setOrientation(orientation);
                 light.setSpotlightCutOff(spotCutOff);
                 light.setSpotConcentration(exponent);
@@ -185,7 +189,7 @@ void UILight::draw(){
         if(light.getType() != OF_LIGHT_DIRECTIONAL){
             light.draw();
         }
-        ofTranslate( *this );
+        ofTranslate( position );
         ofColor textColor = getColor();
         textColor.setBrightness(gui->getColorBack().getBrightness());
         ofSetColor( textColor );

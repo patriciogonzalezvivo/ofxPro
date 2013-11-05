@@ -6,19 +6,17 @@
  *
  */
 #pragma once
+#include "aPoint.h"
 
-#include "ofMain.h"
-
-class Particle : public ofPoint {
+class Particle : public aPoint {
 public:
 	Particle();
     virtual ~Particle(){};
     
     ofPoint getVel();
     
-    void    addForce(ofPoint _force);
-    void    addForceTo( ofPoint _target, bool _slowdown = false);
-    
+    void    addForce(ofPoint _force){acc += _force;}
+    void    addForceTo(ofPoint _force, bool _arrive){acc += steer(_force, _arrive);};
     void    addRepulsionForce(ofPoint p, float radius, float scale);
     void    addRepulsionForce(Particle *p, float radius, float scale);
     void    addRepulsionForce(Particle *p, float scale);
@@ -45,7 +43,4 @@ public:
     bool            tailGradient;
     
 protected:
-    ofPoint	steer(ofPoint _target, bool _slowdown);
-    
-    ofPoint vel,acc;
 };

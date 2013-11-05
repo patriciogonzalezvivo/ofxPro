@@ -149,6 +149,24 @@ void UI3DProject::mousePressed(ofMouseEventArgs & args){
 	} else if(bDebug && cursorIsOverLight() != "NULL"){
         camera.disableMouseInput();
         selectedLigth = cursorIsOverLight();
+        
+        if(ofGetElapsedTimef()-lastClick<doublClickThreshold){
+            if(!bGui){
+                guiShow();
+            }
+            
+            for (int i = 0; i<guis.size(); i++) {
+                if(guis[i]->getName()==selectedLigth){
+                    
+                    guis[i]->setMinified(false);
+                    
+                    guis[i]->getRect()->setX(1);
+                    guis[i]->setPosition(args.x+25,
+                                         args.y-guis[i]->getRect()->getHalfHeight());
+                }
+            }
+        }
+        
     } else {
         selfMousePressed(args);
     }
@@ -173,6 +191,7 @@ void UI3DProject::mouseReleased(ofMouseEventArgs & args){
     camera.enableMouseInput();
     selfMouseReleased(args);
     selectedLigth = "NULL";
+    lastClick = ofGetElapsedTimef();
 }
 
 //------------------------------------------------------------ CORE SETUP

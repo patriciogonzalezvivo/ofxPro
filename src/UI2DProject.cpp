@@ -33,6 +33,8 @@ void UI2DProject::setup(){
     
     ofSetSphereResolution(30);
     
+    doublClickThreshold = 0.2;
+    
     selfSetup();
     setupCoreGuis();
     selfSetupGuis();
@@ -268,13 +270,17 @@ void UI2DProject::mousePressed(ofMouseEventArgs & args){
     if(cursorIsOverGUI())
         return;
     
-    selfMousePressed(args);
+    if(ofGetElapsedTimef()-lastClick<doublClickThreshold)
+        selfMouseDoublePressed(args);
+    else
+        selfMousePressed(args);
 }
 
 void UI2DProject::mouseReleased(ofMouseEventArgs & args){
     if(cursorIsOverGUI())
         return;
     
+    lastClick = ofGetElapsedTimef();
     selfMouseReleased(args);
 }
 
