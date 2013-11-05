@@ -1,9 +1,9 @@
 <Canvas>
     <Kind>42</Kind>
     <Name>3DGRID</Name>
-    <IsMinified>0</IsMinified>
-    <XPosition>1268.000000000</XPosition>
-    <YPosition>109.000000000</YPosition>
+    <IsMinified>1</IsMinified>
+    <XPosition>1.000000000</XPosition>
+    <YPosition>270.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -33,11 +33,11 @@
 <Widget>
     <Kind>28</Kind>
     <Name>gridColor</Name>
-    <XValue>0.814999998</XValue>
-    <YValue>0.765625000</YValue>
-    <RColor>6</RColor>
-    <GColor>11</GColor>
-    <BColor>111</BColor>
+    <XValue>0.574999988</XValue>
+    <YValue>0.382812500</YValue>
+    <RColor>47</RColor>
+    <GColor>240</GColor>
+    <BColor>233</BColor>
     <AColor>255</AColor>
 </Widget>
 <Widget>
@@ -53,17 +53,17 @@
 <Widget>
     <Kind>28</Kind>
     <Name>gridMajorColor</Name>
-    <XValue>0.754999995</XValue>
-    <YValue>0.640625000</YValue>
-    <RColor>0</RColor>
-    <GColor>51</GColor>
-    <BColor>169</BColor>
+    <XValue>0.444999993</XValue>
+    <YValue>0.609375000</YValue>
+    <RColor>1</RColor>
+    <GColor>193</GColor>
+    <BColor>50</BColor>
     <AColor>255</AColor>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>gridMajorAlpha</Name>
-    <Value>255.000000000</Value>
+    <Value>224.852218628</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -78,12 +78,12 @@
 <Widget>
     <Kind>4</Kind>
     <Name>fogFalloffDistance</Name>
-    <Value>872.413757324</Value>
+    <Value>582.758605957</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>fogFalloffExpo</Name>
-    <Value>2.776354790</Value>
+    <Value>4.906403542</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>

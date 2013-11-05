@@ -116,12 +116,12 @@ protected:
 
     virtual void setupSystemGui();
     virtual void setupRenderGui();
-    virtual void    backgroundSet(UIBackground *_bg);
-    UIBackground    *background;
-    ofFbo           renderTarget;
+    virtual void backgroundSet(UIBackground *_bg);
+    UIBackground *background;
+    ofFbo        renderTarget;
     
-    virtual void setupPresetGui();
-	virtual void guiPresetEvent(ofxUIEventArgs &e);
+//    virtual void setupPresetGui();
+//	virtual void guiPresetEvent(ofxUIEventArgs &e);
     vector<string> getPresets();
     
     virtual void guiAdd( UIClass &_uiClass );
@@ -144,7 +144,7 @@ protected:
     
     ofxUISuperCanvas *guiTemplate;
     ofxUIRadio       *presetRadio;
-    UIReference      gui, sysGui, rdrGui, presetGui;
+    UIReference      gui, sysGui, rdrGui;// presetGui;
     vector<UIReference> guis;
 	
     //  Basic RENDER scene

@@ -68,6 +68,7 @@ void UI3DProject::draw(ofEventArgs & args){
                 ofPushMatrix();
                 ofEnableBlendMode(OF_BLENDMODE_ALPHA);
                 
+                lightsDraw();
                 selfDrawDebug();
                 
                 ofPopMatrix();
@@ -78,11 +79,15 @@ void UI3DProject::draw(ofEventArgs & args){
             //
             {
                 lightsBegin();
+                
                 ofPushStyle();
+                ofPushMatrix();
                 
                 selfDraw();
                 
+                ofPopMatrix();
                 ofPopStyle();
+                
                 lightsEnd();
             }
             glDisable(GL_DEPTH_TEST);
@@ -185,6 +190,26 @@ void UI3DProject::setupCoreGuis(){
 
 //------------------------------------------------------------ 3D SPECIFIC SETUP
 
+void UI3DProject::backgroundSet(UIBackground *_bg){
+    if(background != NULL){
+        
+        for(int i = 0; i<guis.size(); i++){
+            if (guis[i]->getName() == "BACKGROUND"){
+                guis.erase(guis.begin()+i);
+                break;
+            }
+        }
+        
+        delete background;
+        background = NULL;
+    }
+    
+    background = _bg;
+    background->linkUIs( &guis );
+    fog.linkColor(background);
+    guiAdd( *background );
+}
+
 void UI3DProject::setupLightingGui(){
     bSmoothLighting = true;
     bEnableLights = true;
@@ -281,6 +306,7 @@ void UI3DProject::lightsEnd(){
 
 void UI3DProject::lightsDraw(){
     if(bEnableLights){
+        ofPushStyle();
         ofDisableLighting();
         string overLight = cursorIsOverLight();
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
@@ -292,7 +318,7 @@ void UI3DProject::lightsDraw(){
                 ofNoFill();
                 float pulse = abs(sin(ofGetElapsedTimef()));
                 ofColor color = it->second->getColor();
-                color.setBrightness(255-background->getColor2().getBrightness());
+                color.setBrightness(background->getUIBrightness()*255);
                 ofSetColor( color, pulse*255);
                 ofTranslate( it->second->getPosition() );
                 float size = it->second->getPosition().distance(getCameraRef().getPosition())*0.1;
@@ -303,6 +329,7 @@ void UI3DProject::lightsDraw(){
                 ofPopMatrix();
             }
         }
+        ofPopStyle();
     }
 }
 

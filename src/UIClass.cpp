@@ -7,6 +7,13 @@
 
 #include "UIClass.h"
 
+UIClass::~UIClass(){
+    if (gui != NULL){
+        gui->disable();
+        ofRemoveListener(gui->newGUIEvent, this, &UIClass::guiEvent);
+    }
+}
+
 UIReference UIClass::getUIReference( ofxUICanvas *_parent ){
 
     UIReference tmp( new ofxUISuperCanvas(getClassName() , _parent) );

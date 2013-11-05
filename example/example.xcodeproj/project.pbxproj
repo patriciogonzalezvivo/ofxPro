@@ -11,9 +11,9 @@
 		1201f7e2eb167c73e754f05d40133f5d /* Flock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56b12b126084d36d81163502e89d722b /* Flock.cpp */; };
 		20a64d7ed966ddcf0bc35ddeca574ecb /* Spring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 851b82fa1b05afb1c0cc0ad2f49abe74 /* Spring.cpp */; };
 		24cd636812540da6c27da9dbfd0f82ce /* Boid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = fa9dd5aefd2f18312e7d95e7891e0c22 /* Boid.cpp */; };
-		2c1ed88a3466d1d2ac3da004863f86e4 /* ofxCameraSaveLoad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = feb2058e7166d8cdcfad557b94dad5e4 /* ofxCameraSaveLoad.cpp */; };
 		3748428187310dddffb5a05b1aa96be9 /* TextShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = d7c0a83e58f2120818b1fe60a7fe203b /* TextShape.cpp */; };
 		39102de8d4931869415f07553218bd57 /* VectorField2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 970cad2ca05e81c06e525a98081f73de /* VectorField2D.cpp */; };
+		3D17357D182926580089C93E /* aColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D17357B182926580089C93E /* aColor.cpp */; };
 		3D508E86182732F500601BD5 /* UI3DGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D508E84182732F500601BD5 /* UI3DGrid.cpp */; };
 		3D508E891827394400601BD5 /* UI2DGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D508E871827394400601BD5 /* UI2DGrid.cpp */; };
 		3D92373F18286C38002F6060 /* UICamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D92373D18286C38002F6060 /* UICamera.cpp */; };
@@ -115,6 +115,8 @@
 		32fa0a7095256e3744900a394c912dab /* Grid.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Grid.cpp; path = ../../../addons/ofxUIProject/src/grids/Grid.cpp; sourceTree = SOURCE_ROOT; };
 		334840ca6b3402c8c30cac4e645376bb /* ofxUIOFWrapper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIOFWrapper.h; path = ../../../addons/ofxUI/src/ofxUIOFWrapper.h; sourceTree = SOURCE_ROOT; };
 		3563ffe2a3d47ac1c8d4769007ea5fe8 /* md5.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = md5.h; path = ../../../addons/ofxUIProject/src/helpers/md5.h; sourceTree = SOURCE_ROOT; };
+		3D17357B182926580089C93E /* aColor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = aColor.cpp; path = ../src/helpers/aColor.cpp; sourceTree = "<group>"; };
+		3D17357C182926580089C93E /* aColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aColor.h; path = ../src/helpers/aColor.h; sourceTree = "<group>"; };
 		3D508E84182732F500601BD5 /* UI3DGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UI3DGrid.cpp; path = ../src/grids/UI3DGrid.cpp; sourceTree = "<group>"; };
 		3D508E85182732F500601BD5 /* UI3DGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UI3DGrid.h; path = ../src/grids/UI3DGrid.h; sourceTree = "<group>"; };
 		3D508E871827394400601BD5 /* UI2DGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UI2DGrid.cpp; path = ../src/grids/UI2DGrid.cpp; sourceTree = "<group>"; };
@@ -151,7 +153,6 @@
 		6902496c5005749b9e0692dd29dac44f /* ProjectExample.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ProjectExample.cpp; path = src/ProjectExample.cpp; sourceTree = SOURCE_ROOT; };
 		6af5cc3c6fe992c4824ff29163fe849e /* TextArc.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = TextArc.cpp; path = ../../../addons/ofxUIProject/src/text/TextArc.cpp; sourceTree = SOURCE_ROOT; };
 		6b7022e8f8aafe6a26a1f79ca3cc2273 /* UIBackground.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = UIBackground.cpp; path = ../../../addons/ofxUIProject/src/background/UIBackground.cpp; sourceTree = SOURCE_ROOT; };
-		6d5588d3fae44b8d0798ba4446334433 /* ofxCameraSaveLoad.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxCameraSaveLoad.h; path = ../../../addons/ofxCameraSaveLoad/src/ofxCameraSaveLoad.h; sourceTree = SOURCE_ROOT; };
 		6e5dc86f121b9ca45bbc4252fd6b27ff /* UIText.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UIText.h; path = ../../../addons/ofxUIProject/src/text/UIText.h; sourceTree = SOURCE_ROOT; };
 		7feef1b943d6492abc456b93083b140a /* UI3DProject.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UI3DProject.h; path = ../../../addons/ofxUIProject/src/UI3DProject.h; sourceTree = SOURCE_ROOT; };
 		8178eb9aa3c0268331af3af347ca9d15 /* ofxUIToggleMatrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIToggleMatrix.h; path = ../../../addons/ofxUI/src/ofxUIToggleMatrix.h; sourceTree = SOURCE_ROOT; };
@@ -239,7 +240,6 @@
 		fccbdb55b98da36682809f0348522eab /* ofxUIWaveform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIWaveform.h; path = ../../../addons/ofxUI/src/ofxUIWaveform.h; sourceTree = SOURCE_ROOT; };
 		fda2832e78cfa22beec74160a7a68606 /* ofxUIFPS.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIFPS.h; path = ../../../addons/ofxUI/src/ofxUIFPS.h; sourceTree = SOURCE_ROOT; };
 		fe7637213769127f2af4034d247b7a8e /* DraggableRectangle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = DraggableRectangle.h; path = ../../../addons/ofxUIProject/src/helpers/DraggableRectangle.h; sourceTree = SOURCE_ROOT; };
-		feb2058e7166d8cdcfad557b94dad5e4 /* ofxCameraSaveLoad.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxCameraSaveLoad.cpp; path = ../../../addons/ofxCameraSaveLoad/src/ofxCameraSaveLoad.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -283,8 +283,8 @@
 			isa = PBXGroup;
 			children = (
 				f8538ab05571d76d232e9482dd8444d9 /* PingPong.h */,
-				a1e7a7f265682a1f56d0feb629a93e77 /* UIFog.cpp */,
 				954e1109e35a5924b898f4c2513a7026 /* UIFog.h */,
+				a1e7a7f265682a1f56d0feb629a93e77 /* UIFog.cpp */,
 				cb5e3546975a012c89a2d843165df649 /* UILight.cpp */,
 				3b1e218bb487735b3b3c780d9b5f1836 /* UILight.h */,
 				50f4e17d169c8bc50b1f3b0f3f2b1aff /* UIMaterial.cpp */,
@@ -344,7 +344,6 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
-				cd15e07442c69be602d98fd70431e827 /* ofxCameraSaveLoad */,
 				a492ce86424ab8905550bfd831201a16 /* ofxUI */,
 				534d7afab9219e3e87cb95eb92f126c2 /* ofxUIProject */,
 				1f4fb5c423662b96adfdcc0badec1cb0 /* ofxXmlSettings */,
@@ -441,14 +440,6 @@
 			name = ofxUI;
 			sourceTree = "<group>";
 		};
-		cd15e07442c69be602d98fd70431e827 /* ofxCameraSaveLoad */ = {
-			isa = PBXGroup;
-			children = (
-				dd4b7a6b02fe3a9e6ea4776d9dfedef7 /* src */,
-			);
-			name = ofxCameraSaveLoad;
-			sourceTree = "<group>";
-		};
 		d60f85fe32e11f4003b80627506496ad /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -515,17 +506,10 @@
 				3563ffe2a3d47ac1c8d4769007ea5fe8 /* md5.h */,
 				4717081de3a58a8b448ccce0b2603fe2 /* Recorder.cpp */,
 				cfc6f3e14e935f057903a7ea5ac5eda1 /* Recorder.h */,
+				3D17357B182926580089C93E /* aColor.cpp */,
+				3D17357C182926580089C93E /* aColor.h */,
 			);
 			name = helpers;
-			sourceTree = "<group>";
-		};
-		dd4b7a6b02fe3a9e6ea4776d9dfedef7 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				feb2058e7166d8cdcfad557b94dad5e4 /* ofxCameraSaveLoad.cpp */,
-				6d5588d3fae44b8d0798ba4446334433 /* ofxCameraSaveLoad.h */,
-			);
-			name = src;
 			sourceTree = "<group>";
 		};
 		e003ae6fc774be38dc2b299156dc9db2 /* background */ = {
@@ -688,13 +672,13 @@
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				636d2481de0f1a2481a31eafec49d8d1 /* ProjectExample.cpp in Sources */,
-				2c1ed88a3466d1d2ac3da004863f86e4 /* ofxCameraSaveLoad.cpp in Sources */,
 				846a4dfa13b504ba5a646805b1764db4 /* UIBackground.cpp in Sources */,
 				a2157834761feb0a13639b88b47e19f9 /* UISuperBackground.cpp in Sources */,
 				9316dd9c0e2c814e402b0d2b68c24927 /* UIFog.cpp in Sources */,
 				e34df0f08ae23dc9eca1cbe59b3e2bce /* UILight.cpp in Sources */,
 				7caf3ae440760530f4a24ddebaeb4f1c /* UIMaterial.cpp in Sources */,
 				3D508E86182732F500601BD5 /* UI3DGrid.cpp in Sources */,
+				3D17357D182926580089C93E /* aColor.cpp in Sources */,
 				66232392d8bafadd73d6fb46e40d2dd4 /* UIShader.cpp in Sources */,
 				8a8d0b0c5641725bd3b59e6ea66fe192 /* Grid.cpp in Sources */,
 				3D92373F18286C38002F6060 /* UICamera.cpp in Sources */,

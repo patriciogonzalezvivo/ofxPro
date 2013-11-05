@@ -9,7 +9,7 @@
 #include "UIFog.h"
 
 UIFog::UIFog(){
-    color = NULL;
+    bgColor = NULL;
 }
 
 void UIFog::setupUI(){
@@ -17,48 +17,60 @@ void UIFog::setupUI(){
     gui->addSlider("Density", 0.0, 1.0, &density);
     gui->addSlider("Density_EXP", -3.0, 3.0, &density_exponent);
     
-    if (color == NULL){
-        color = new ofFloatColor(0.8);
-        
-        red = gui->addSlider("Red", 0.0, 1.0, &color->r);
-        green = gui->addSlider("Green", 0.0, 1.0, &color->g);
-        blue = gui->addSlider("Blue", 0.0, 1.0, &color->b);
-    }
+    gui->addSpacer();
+    gui->addToggle("Mach_Background", &bMachBackground);
+    
+    red = gui->addSlider("Red", 0.0, 1.0, &color.r);
+    green = gui->addSlider("Green", 0.0, 1.0, &color.g);
+    blue = gui->addSlider("Blue", 0.0, 1.0, &color.b);
 }
 
-void UIFog::setColor( ofColor *_color ){
-    if (color == NULL){
-        color = new ofFloatColor( *_color );
+void UIFog::setColor( ofColor _color ){
+    if(bMachBackground){
+        bMachBackground = false;
+    } else {
+        color = _color;
     }
 }
 
 void UIFog::linkColor( UIBackground *_background ){
-    if (color != NULL){
-        //delete color;
-        
-        red->setVisible(false);
-        green->setVisible(false);
-        blue->setVisible(false);
-        
-        gui->autoSizeToFitWidgets();
-    }
-    
-    color = &_background->getColor();
+    bgColor = &_background->color;
 }
 
 void UIFog::guiEvent(ofxUIEventArgs &e){
-
+    string name = e.widget->getName();
+    
+    if(name == "Mach_Background"){
+        if(bMachBackground){
+            red->setVisible(false);
+            green->setVisible(false);
+            blue->setVisible(false);
+            gui->autoSizeToFitWidgets();
+        } else {
+            red->setVisible(true);
+            green->setVisible(true);
+            blue->setVisible(true);
+            gui->autoSizeToFitWidgets();
+            if(gui->isMinified()){
+                gui->setMinified(true);
+            }
+        }
+    }
 }
 
 void UIFog::begin(){
-    
     if (bEnable){
-        if (color == NULL){
-            color = new ofFloatColor(0.8);
+        float FogCol[3];
+        if (bMachBackground && bgColor != NULL){
+            FogCol[0] = bgColor->r;
+            FogCol[1] = bgColor->g;
+            FogCol[2] = bgColor->b;
+        } else {
+            FogCol[0] = color.r;
+            FogCol[1] = color.g;
+            FogCol[2] = color.b;
         }
-        
-        float FogCol[3]={ color->r, color->g, color->b};
-        
+
 #ifdef TARGET_RASPBERRY_PI
         
 #else

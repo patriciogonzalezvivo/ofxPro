@@ -284,7 +284,7 @@ void UI2DProject::setupCoreGuis(){
     setupGui();
     setupSystemGui();
     setupRenderGui();
-    setupPresetGui();
+//    setupPresetGui();
     
     backgroundSet(new UIBackground());
 }
@@ -320,27 +320,6 @@ void UI2DProject::setupGui(){
     guis.push_back(gui);
 }
 
-vector<string> UI2DProject::getPresets(){
-	vector<string> presets;
-	string presetPath = getDataPath()+"Presets/";
-	ofDirectory presetsFolder = ofDirectory(presetPath);
-	cout << "PRESET PATH AT " << presetPath << endl;
-    
-	if(presetsFolder.exists()){
-		presetsFolder.listDir();
-		cout << " found " << presetsFolder.size() << " files " << endl;
-		for(int i = 0; i < presetsFolder.size(); i++){
-			if(presetsFolder.getFile(i).isDirectory() &&
-               ofFilePath::removeTrailingSlash(presetsFolder.getName(i)) != "Working" &&
-			   presetsFolder.getName(i).at(0) != '_') //use leading _ to hide folders
-            {
-				presets.push_back(presetsFolder.getName(i));
-			}
-		}
-	}
-	return presets;
-}
-
 void UI2DProject::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
     if(name == "SAVE"){
@@ -366,6 +345,29 @@ void UI2DProject::guiEvent(ofxUIEventArgs &e){
     }
     selfGuiEvent(e);
 }
+
+vector<string> UI2DProject::getPresets(){
+	vector<string> presets;
+	string presetPath = getDataPath()+"Presets/";
+	ofDirectory presetsFolder = ofDirectory(presetPath);
+	cout << "PRESET PATH AT " << presetPath << endl;
+    
+	if(presetsFolder.exists()){
+		presetsFolder.listDir();
+		cout << " found " << presetsFolder.size() << " files " << endl;
+		for(int i = 0; i < presetsFolder.size(); i++){
+			if(presetsFolder.getFile(i).isDirectory() &&
+               ofFilePath::removeTrailingSlash(presetsFolder.getName(i)) != "Working" &&
+			   presetsFolder.getName(i).at(0) != '_') //use leading _ to hide folders
+            {
+				presets.push_back(presetsFolder.getName(i));
+			}
+		}
+	}
+	return presets;
+}
+
+
 
 void UI2DProject::setupSystemGui(){
     UIReference tmp( new ofxUISuperCanvas("SYSTEM", guiTemplate) );
@@ -439,7 +441,6 @@ void UI2DProject::guiPresetEvent(ofxUIEventArgs &e){
 }
 
 void UI2DProject::backgroundSet(UIBackground *_bg){
-    
     if(background != NULL){
         
         for(int i = 0; i<guis.size(); i++){

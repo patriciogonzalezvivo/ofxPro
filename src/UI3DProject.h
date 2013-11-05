@@ -59,6 +59,7 @@ protected:
     virtual void guiSave();
     virtual void guiSavePreset(string presetName);
     
+    virtual void    backgroundSet(UIBackground *_bg);
     virtual string  cursorIsOverLight();
     
     // CAMERA

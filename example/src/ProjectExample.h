@@ -36,7 +36,6 @@ public:
     void selfUpdate();
 
     void selfDraw();
-	void selfDrawDebug();
     void selfDrawOverlay();
 
 	void selfEnd();

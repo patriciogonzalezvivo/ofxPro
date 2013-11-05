@@ -17,7 +17,7 @@ public:
     UIFog();
     
     void    setupUI();
-    void    setColor( ofColor *_color );
+    void    setColor( ofColor _color );
     void    linkColor( UIBackground *_background );
     
     string  getClassName(){return "FOG"; }
@@ -35,6 +35,8 @@ protected:
     ofxUISlider *green;
     ofxUISlider *blue;
 
-    ofFloatColor *color;
+    ofFloatColor color;
+    ofFloatColor *bgColor;
 
+    bool        bMachBackground;
 };

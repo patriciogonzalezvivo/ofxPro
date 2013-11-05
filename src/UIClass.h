@@ -15,8 +15,8 @@ typedef shared_ptr<ofxUISuperCanvas> UIReference;
 class UIClass {
 public:
 
-    UIClass(){ }
-    virtual ~UIClass(){ }
+    UIClass(){};
+    virtual ~UIClass();
 
     virtual string      getClassName(){return "GUICLASS_DEFAULT";};
     UIReference         getUIReference(ofxUICanvas *_parent);

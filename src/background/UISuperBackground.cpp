@@ -54,22 +54,8 @@ UISuperBackground::UISuperBackground(){
 }
 
 void UISuperBackground::setupUI(){
-    
     gui->addSlider("value", 0.0, 1.0, &value);
-//    gui->addSlider("change_Speed", 0.0, 0.1, &speed);
-    
-    gui->addLabel("Colors");
-    gui->addSlider("HUE", 0.0, 1.0, &HSBTarget.x );
-    gui->addSlider("SAT", 0.0, 1.0, &HSBTarget.y );
-    gui->addSlider("BRI", 0.0, 1.0, &HSBTarget.z );
-    
-    ofxUIToggle *toggle = gui->addToggle("GRADIENT", false);
-    
-    hueSlider = gui->addSlider("HUE2", 0.0, 1.0, &HSBTarget2.x );
-    satSlider = gui->addSlider("SAT2", 0.0, 1.0, &HSBTarget2.y );
-    briSlider = gui->addSlider("BRI2", 0.0, 1.0, &HSBTarget2.z );
-    
-    gui->autoSizeToFitWidgets();
+    UIBackground::setupUI();
 }
 
 void UISuperBackground::update(ofEventArgs & args){
@@ -77,61 +63,44 @@ void UISuperBackground::update(ofEventArgs & args){
         
         if( fbo.getWidth() != ofGetWidth() || fbo.getHeight() != ofGetHeight() ){
             fbo.allocate(ofGetWidth(), ofGetHeight());
-            bChange = true;
         }
         
-        if(bChange){
+        color.update();
+        
+        if (bGradient){
+            color2.update();
             
-            if (HSBTarget.distance( HSB ) != 0.0  ){
-                HSB.addForceTo( HSBTarget, true );
-                HSB.update(speed);
-                color.setHsb(HSB.x, HSB.y, HSB.z);
-                bChange = true;
-            } else {
-                bChange = false;
+            float w = ofGetWidth();
+            float h = ofGetHeight();
+            mesh.clear();
+            mesh.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
+            // this could be optimized by building a single mesh once, then copying
+            // it and just adding the colors whenever the function is called.
+            ofVec2f center(ofGetWidth()*0.5,ofGetHeight()*0.5);
+            mesh.addTexCoord(center);
+            mesh.addVertex(center);
+            mesh.addColor( color );
+            int n = 32; // circular gradient resolution
+            float angleBisector = TWO_PI / (n * 2);
+            float smallRadius = ofDist(0, 0, w / 2, h / 2);
+            float bigRadius = smallRadius / cos(angleBisector);
+            for(int i = 0; i <= n; i++) {
+                float theta = i * TWO_PI / n;
+                mesh.addTexCoord( center + ofVec2f(sin(theta), cos(theta)) * bigRadius );
+                mesh.addVertex(center + ofVec2f(sin(theta), cos(theta)) * bigRadius);
+                mesh.addColor( color2 );
             }
             
-            if(gradientMode == OF_GRADIENT_CIRCULAR){
-                if (HSBTarget2.distance( HSB2 ) != 0.0 ){
-                    HSB2.addForceTo( HSBTarget2, true );
-                    HSB2.update(speed);
-                    color2.setHsb(HSB2.x, HSB2.y, HSB2.z);
-                    bChange = true;
-                } else {
-                    bChange = false;
-                }
-            }
-            
-            if ( gradientMode == OF_GRADIENT_CIRCULAR ){
-                float w = ofGetWidth();
-                float h = ofGetHeight();
-                
-                mesh.clear();
-                mesh.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
-                // this could be optimized by building a single mesh once, then copying
-                // it and just adding the colors whenever the function is called.
-                ofVec2f center(ofGetWidth()*0.5,ofGetHeight()*0.5);
-                mesh.addTexCoord(center);
-                mesh.addVertex(center);
-                mesh.addColor( color );
-                int n = 32; // circular gradient resolution
-                float angleBisector = TWO_PI / (n * 2);
-                float smallRadius = ofDist(0, 0, w / 2, h / 2);
-                float bigRadius = smallRadius / cos(angleBisector);
-                for(int i = 0; i <= n; i++) {
-                    float theta = i * TWO_PI / n;
-                    mesh.addTexCoord( center + ofVec2f(sin(theta), cos(theta)) * bigRadius );
-                    mesh.addVertex(center + ofVec2f(sin(theta), cos(theta)) * bigRadius);
-                    mesh.addColor( color2 );
-                }
-                
-                fbo.begin();
-                ofClear( color2 );
-                ofSetColor(255);
-                mesh.draw();
-                fbo.end();
-            }
-            
+            fbo.begin();
+            ofClear( color2 );
+            ofSetColor(255);
+            mesh.draw();
+            fbo.end();
+        } else {
+            fbo.begin();
+            ofClear( color );
+            ofSetColor(255);
+            fbo.end();
         }
     }
 }
@@ -140,25 +109,21 @@ void UISuperBackground::draw(){
     if(bEnable){
         ofPushStyle();
         
-        if ( gradientMode == OF_GRADIENT_CIRCULAR ){
-            
-            ofBackground( color2 );
-            
-            shader.begin();
-            shader.setUniform3f("bgColor1", getColor().r, getColor().g, getColor().b);
-            shader.setUniform3f("bgColor2", getColor2().r, getColor2().g, getColor2().b);
-            shader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
-            shader.setUniform1f("time", ofGetElapsedTimef());
-            shader.setUniform1f("value", value);
-            ofSetColor(255);
-            fbo.draw(0, 0);
-            shader.end();
-
-            
+        if (bGradient){
+            ofBackground(color2);
         } else {
-            ofSetSmoothLighting(false);
             ofBackground(color);
         }
+        
+        shader.begin();
+        shader.setUniform3f("bgColor1", color.r, color.g, color.b);
+        shader.setUniform3f("bgColor2", color2.r, color2.g, color2.b);
+        shader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
+        shader.setUniform1f("time", ofGetElapsedTimef());
+        shader.setUniform1f("value", value);
+        ofSetColor(255);
+        fbo.draw(0, 0);
+        shader.end();
         
         ofPopStyle();
     }

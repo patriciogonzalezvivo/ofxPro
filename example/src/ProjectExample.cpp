@@ -21,8 +21,6 @@ void ProjectExample::selfSetupGuis(){
     guiAdd(ruler);
     
     backgroundSet(new UISuperBackground() );
-    
-    fog.linkColor(background);
 }
 
 void ProjectExample::selfGuiEvent(ofxUIEventArgs &e){
@@ -76,10 +74,6 @@ void ProjectExample::selfDraw(){
         ofPopMatrix();
     }
     glDisable(GL_DEPTH_TEST);
-}
-
-void ProjectExample::selfDrawDebug(){
-	lightsDraw();
 }
 
 void ProjectExample::selfDrawOverlay(){
