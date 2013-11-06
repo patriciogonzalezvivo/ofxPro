@@ -23,6 +23,28 @@ ofPoint Particle::getVel(){
     return vel;
 }
 
+ofPoint Particle::steer(const ofPoint &_target, const bool &_slowdown){
+    ofPoint _steer;
+    
+    if (_slowdown){
+        ofPoint desired = _target - *this;
+        float d = desired.length();
+//        desired.normalize();
+        if (d > 0.0) {
+            if (d < 1.0)
+                desired *= (d);
+            
+            _steer = desired - vel;
+        } else
+            _steer = ofPoint(0,0,0);
+        
+    } else {
+        _steer = _target - *this;
+    }
+    
+    return _steer;
+}
+
 void Particle::addRepulsionForce(ofPoint _posOfForce, float _radius, float _scale){
     
 	// ----------- (2) calculate the difference & length

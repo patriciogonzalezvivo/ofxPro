@@ -61,6 +61,10 @@ void UI3DProject::draw(ofEventArgs & args){
             selfSceneTransformation();
             glEnable(GL_DEPTH_TEST);
             
+            if (bEdit){
+                lightsDraw();
+            }
+            
             //  Draw Debug
             //
             if( bDebug ){
@@ -68,7 +72,6 @@ void UI3DProject::draw(ofEventArgs & args){
                 ofPushMatrix();
                 ofEnableBlendMode(OF_BLENDMODE_ALPHA);
                 
-                lightsDraw();
                 selfDrawDebug();
                 
                 ofPopMatrix();
@@ -146,7 +149,7 @@ void UI3DProject::exit(ofEventArgs & args){
 void UI3DProject::mousePressed(ofMouseEventArgs & args){
 	if(bGui && cursorIsOverGUI()){
 		camera.disableMouseInput();
-	} else if(bDebug && cursorIsOverLight() != "NULL"){
+	} else if(bEdit && cursorIsOverLight() != "NULL"){
         camera.disableMouseInput();
         selectedLigth = cursorIsOverLight();
         
@@ -173,7 +176,7 @@ void UI3DProject::mousePressed(ofMouseEventArgs & args){
 }
 
 void UI3DProject::mouseDragged(ofMouseEventArgs & args){
-    if(bDebug && selectedLigth != "NULL"){
+    if(bEdit && selectedLigth != "NULL"){
         
         ofPoint pmouse(ofGetPreviousMouseX(),-ofGetPreviousMouseY());
         ofPoint mouse(ofGetMouseX(),-ofGetMouseY());
@@ -200,6 +203,8 @@ void UI3DProject::setupCoreGuis(){
     UI2DProject::setupCoreGuis();
     
     guiAdd(camera);
+    camera.loadLocations(getDataPath()+"cameras/");
+    
     guiAdd(fog);
     materialAdd( "MATERIAL" );
     
@@ -364,7 +369,7 @@ void UI3DProject::guiLoadPresetFromPath(string presetPath){
     cout << "PRESET PATH: " << presetPath << endl;
     UI2DProject::guiLoadPresetFromPath(presetPath);
     camera.load(presetPath+"/ofEasyCamSettings");
-//    UI2DProject::guiLoadPresetFromPath(presetPath);
+    UI2DProject::guiLoadPresetFromPath(presetPath);
 }
 
 void UI3DProject::guiSavePreset(string presetName){
@@ -375,5 +380,5 @@ void UI3DProject::guiSavePreset(string presetName){
 }
 
 ofCamera& UI3DProject::getCameraRef(){
-	return camera.getCameraRef();
+	return (*camera.getCameraPtn());
 }

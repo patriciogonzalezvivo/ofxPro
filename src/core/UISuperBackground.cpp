@@ -55,6 +55,7 @@ UISuperBackground::UISuperBackground(){
 
 void UISuperBackground::setupUI(){
     gui->addSlider("value", 0.0, 1.0, &value);
+    gui->addSpacer();
     UIBackground::setupUI();
 }
 

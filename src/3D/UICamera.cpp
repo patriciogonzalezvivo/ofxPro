@@ -15,29 +15,42 @@ UICamera::UICamera(){
     camera->setFov(FOV);
     ((ofEasyCam*)camera)->setDistance(200);
     type = "easyCam";
+    
+    locations = NULL;
+    bSaveLocation = false;
+    
+    ofAddListener(ofEvents().update, this, &UICamera::update);
 }
 
+void UICamera::loadLocations(string _path){
+    pathToLocations = _path;
+    
+    if(locations!=NULL){
+        locations->clearEmbeddedWidgets();
+        
+        ofDirectory dir(pathToLocations);
+        if(dir.exists()){
+            dir.listDir();
+            int total = dir.getFiles().size();
+            for (int i = 0; i < total; i++) {
+                ofxUIToggle *t = gui->addToggle(dir.getFiles()[i].getBaseName(),false);
+                locations->addToggle(t);
+            }
+        } else {
+            dir.createDirectory(pathToLocations);
+        }
+    }
+}
+
+
 void UICamera::setupUI(){
-    
     gui->addSlider("FOV", 0, 180, &FOV);
-    
+    gui->addSlider("Speed", 0.0, 1.0, &speed);
+    gui->addButton("SAVE", &bSaveLocation);
     gui->addSpacer();
-    vector<string> views;
-    views.push_back("TOP");
-    views.push_back("BOTTOM");
-    views.push_back("FRONT");
-    views.push_back("BACK");
-    views.push_back("RIGHT");
-    views.push_back("LEFT");
-    views.push_back("3D");
-    views.push_back("DISABLE");
-    
-    ofxUIDropDownList *ddl = gui->addDropDownList("VIEW", views);
-    ddl->setAutoClose(false);
-    ddl->setShowCurrentSelected(true);
-    ddl->activateToggle("DISABLE");
-    
-    gui->autoSizeToFitWidgets();
+
+    vector<string> clear;
+    locations = gui->addRadio("LOCATIONS", clear);
 }
 
 void UICamera::guiEvent(ofxUIEventArgs &e){
@@ -45,72 +58,49 @@ void UICamera::guiEvent(ofxUIEventArgs &e){
     
     if(name == "FOV"){
         camera->setFov(FOV);
+    } else if(name == "SAVE"){
+        if(bSaveLocation){
+            string locationName = ofSystemTextBoxDialog("Save Location as");
+            if(locationName.length()){
+                addLocation(locationName);
+            }
+        }
+    } else if (name == "LOCATIONS"){
+        
+    } else {
+        if(targetLocation.load(pathToLocations+name+".xml")){
+            pct = 1.0;
+        }
     }
-//    else if(name == "ROT-X"){
-//        xRot->setPosAndHome(xRot->getPos());
-//    } else if(name == "ROT-Y") {
-//        yRot->setPosAndHome(yRot->getPos());
-//    } else if(name == "ROT-Z"){
-//        zRot->setPosAndHome(zRot->getPos());
-//    } else if(name == "RESET"){
-//        ofxUIButton *b = (ofxUIButton *) e.widget;
-//        if(b->getValue()){
-//            camera.reset();
-//        }
-//    }else if(name == "TOP"){
-//        ofxUIToggle *t = (ofxUIToggle *) e.widget;
-//        if(t->getValue()){
-//            xRot->setHome(0);
-//            yRot->setHome(0);
-//            zRot->setHome(0);
-//        }
-//    } else if(name == "BOTTOM"){
-//        ofxUIToggle *t = (ofxUIToggle *) e.widget;
-//        if(t->getValue()){
-//            xRot->setHome(-180);
-//            yRot->setHome(0);
-//            zRot->setHome(0);
-//        }
-//    } else if(name == "BACK"){
-//        ofxUIToggle *t = (ofxUIToggle *) e.widget;
-//        if(t->getValue())
-//        {
-//            xRot->setHome(-90);
-//            yRot->setHome(0);
-//            zRot->setHome(180);
-//        }
-//    } else if(name == "FRONT"){
-//        ofxUIToggle *t = (ofxUIToggle *) e.widget;
-//        if(t->getValue()){
-//            xRot->setHome(-90);
-//            yRot->setHome(0);
-//            zRot->setHome(0);
-//        }
-//    } else if(name == "RIGHT"){
-//        ofxUIToggle *t = (ofxUIToggle *) e.widget;
-//        if(t->getValue())
-//        {
-//            xRot->setHome(-90);
-//            yRot->setHome(0);
-//            zRot->setHome(90);
-//        }
-//    } else if(name == "LEFT") {
-//        ofxUIToggle *t = (ofxUIToggle *) e.widget;
-//        if(t->getValue()){
-//            xRot->setHome(-90);
-//            yRot->setHome(0);
-//            zRot->setHome(-90);
-//            
-//        }
-//    } else if(name == "3D") {
-//        ofxUIToggle *t = (ofxUIToggle *) e.widget;
-//        if(t->getValue())
-//        {
-//            xRot->setHome(-70);
-//            yRot->setHome(0);
-//            zRot->setHome(45);
-//        }
-//    }
+}
+
+void UICamera::addLocation(string _name){
+    CameraLocation now = getCameraLocation();
+    if( now.save(pathToLocations+_name+".xml") ){
+        ofxUIToggle *t = gui->addToggle(_name,false);
+        locations->addToggle(t);
+        gui->autoSizeToFitWidgets();
+    }
+}
+
+void UICamera::setCameraLocation( const CameraLocation &_camPos ){
+    targetLocation = _camPos;
+    pct = 1.0;
+}
+
+CameraLocation UICamera::getCameraLocation(){
+    CameraLocation rta;
+    if(type == "easyCam"){
+        rta.distance = ((ofEasyCam*)camera)->getDistance();
+        rta.position = ((ofEasyCam*)camera)->getPosition();
+        rta.orientation = ((ofEasyCam*)camera)->getOrientationQuat();
+    } else {
+        rta.distance = 0;
+        rta.position = camera->getPosition();
+        rta.orientation = camera->getOrientationQuat();
+    }
+    
+    return rta;
 }
 
 void UICamera::enableMouseInput(){
@@ -122,6 +112,23 @@ void UICamera::enableMouseInput(){
 void UICamera::disableMouseInput(){
     if(type == "easyCam"){
         ((ofEasyCam*)camera)->disableMouseInput();
+    }
+}
+
+void UICamera::update(ofEventArgs& args){
+    if(bEnable){
+        if(pct>0.1){
+            if(type=="easyCam"){
+//                ((ofEasyCam*)camera)->setTarget(ofPoint(0,0,0));
+//                ((ofEasyCam*)camera)->setDistance(((ofEasyCam*)camera)->getDistance()*(1.0-pct) + targetLocation.distance*pct);
+            }
+            camera->setPosition(camera->getPosition().getInterpolated(targetLocation.position, 1.0-pct) );
+            ofQuaternion q;
+            q.slerp(1.0-pct,camera->getOrientationQuat(),targetLocation.orientation);
+            camera->setOrientation(q);
+            
+            pct *= (1.0- powf(10.0, (1.0-speed)*-3.0 ) );
+        }
     }
 }
 
@@ -206,19 +213,20 @@ static bool loadOfCam(ofCamera &cam, string loadPath){
     
 }
 
-bool UICamera::save(string savePath){
+bool UICamera::save(string _savePath){
+    
     if (camera != NULL){
-        if(saveOfCam((*camera), savePath)){
+        if(saveOfCam((*camera), _savePath)){
             
             if(type == "easyCam"){
-                ofBuffer buffer = ofBufferFromFile(savePath);
+                ofBuffer buffer = ofBufferFromFile(_savePath);
                 buffer.append("--------------ofEasyCam parameters--------------\n");
                 buffer.append("target\n" + ofToString(((ofEasyCam*)camera)->getTarget().getPosition()) + "\n" );
                 buffer.append("bEnableMouseMiddleButton\n" + ofToString(((ofEasyCam*)camera)->getMouseMiddleButtonEnabled())+"\n");
                 buffer.append("bMouseInputEnabled\n" + ofToString(((ofEasyCam*)camera)->getMouseInputEnabled())+"\n");
                 buffer.append("drag\n" + ofToString(((ofEasyCam*)camera)->getDrag())+"\n");
                 buffer.append("doTranslationKey\n" + ofToString(((ofEasyCam*)camera)->getTranslationKey())+"\n");
-                if(ofBufferToFile(savePath, buffer)){
+                if(ofBufferToFile(_savePath, buffer)){
                     ofLogNotice("ofEasyCam saved successfully!");
                     return true;
                 }else{
@@ -233,17 +241,17 @@ bool UICamera::save(string savePath){
     }
 }
 
-bool UICamera::load(string loadPath){
+bool UICamera::load(string _loadPath){
     if (camera != NULL){
         
         if(type == "easyCam"){
             ((ofEasyCam*)camera)->reset();
         }
         
-        if(loadOfCam(*camera, loadPath)){
+        if(loadOfCam(*camera, _loadPath)){
             if(type == "easyCam"){
                 
-                ofBuffer buffer = ofBufferFromFile(loadPath);
+                ofBuffer buffer = ofBufferFromFile(_loadPath);
                 while (!buffer.isLastLine()) {
                     string line = buffer.getNextLine();
                     

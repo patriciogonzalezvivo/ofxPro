@@ -22,13 +22,15 @@ void UI2DProject::setup(){
     //  Create directories if they are not there
     //
     ofDirectory dir;
-    string directoryName = getDataPath()+"Presets/";
-    if(!dir.doesDirectoryExist(directoryName)){
-        dir.createDirectory(directoryName);
-    }
-    string workingDirectoryName = directoryName+"Working/";
-    if(!dir.doesDirectoryExist(workingDirectoryName)){
-        dir.createDirectory(workingDirectoryName);
+    string directories[3] = {getDataPath(), "Presets/","Working/"};
+    for (int i = 0; i < 3; i++) {
+        string path = "";
+        for(int j = 0; j <= i; j++ ){
+            path += directories[j];
+        }
+        if(!dir.doesDirectoryExist(path)){
+            dir.createDirectory(path);
+        }
     }
     
     ofSetSphereResolution(30);
@@ -93,9 +95,16 @@ void UI2DProject::update(ofEventArgs & args){
     if(bUpdateSystem){
         selfUpdate();
         if(bRecording){
-            ofPixels pixels;
-            getRenderTarget().readToPixels(pixels);
-            recorder.addFrame(pixels);
+            if (bRecordAll){
+                ofImage img;
+                img.grabScreen(0,0,ofGetWidth(), ofGetHeight());
+                recorder.addFrame(img.getPixelsRef());
+            } else {
+                ofPixels pixels;
+                getRenderTarget().readToPixels(pixels);
+                recorder.addFrame(pixels);
+
+            }
         }
     }
 }
@@ -290,8 +299,6 @@ void UI2DProject::setupCoreGuis(){
     setupGui();
     setupSystemGui();
     setupRenderGui();
-//    setupPresetGui();
-    
     backgroundSet(new UIBackground());
 }
 
@@ -307,20 +314,21 @@ void UI2DProject::setupGui(){
     gui->resetPlacer();
     gui->addWidgetDown(fps, OFX_UI_ALIGN_RIGHT, true);
     gui->addWidgetToHeader(fps);
-    
     gui->addSpacer();
-    gui->addButton("SAVE", false);
+    gui->addToggle("EDIT",&bEdit);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    ofxUIButton *loadbtn = gui->addButton("LOAD", false);
+    gui->addToggle("DEBUG",&bDebug);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
 
-    ofxUIButton *debugbtn = gui->addToggle("DEBUG", &bDebug);
+    gui->addToggle("REC", false);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    ofxUIButton *recordbtn = gui->addToggle("REC", false);
+    gui->addToggle("ALL",&bRecordAll);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    
-    gui->addWidgetNorthOf(loadbtn, "REC", true);
-    gui->setPlacer(debugbtn);
+
+    gui->addButton("SAVE", false);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addButton("LOAD", false);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addSpacer();
     
     gui->setTriggerWidgetsUponLoad(false);
@@ -367,9 +375,17 @@ void UI2DProject::guiEvent(ofxUIEventArgs &e){
                 guiLoad();
             }
         }
+    } else if( name == "EDIT" ){
+        
     } else if( name == "DEBUG" ){
         
     } else if( name == "REC" ){
+        if(!bRecording){
+            recordingStart();
+        } else {
+            recordingEnd();
+        }
+    } else if( name == "ALL" ){
         
     } else {
         ofxUIToggle *t = (ofxUIToggle *) e.widget;
@@ -672,6 +688,8 @@ void UI2DProject::recordingStart(){
         recorder.setup(recordPath, getRenderTarget().getWidth(), getRenderTarget().getHeight(), 30); // no audio
         lastRercord = recordPath;
         bRecording = true;
+        ofxUIToggle *rec = (ofxUIToggle*)gui->getWidget("REC");
+        rec->setValue(true);
     }
 }
 
@@ -679,6 +697,8 @@ void UI2DProject::recordingEnd(){
     if(bRecording){
         recorder.close();
         bRecording = false;
+        ofxUIToggle *rec = (ofxUIToggle*)gui->getWidget("REC");
+        rec->setValue(false);
     }
 }
 

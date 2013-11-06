@@ -20,8 +20,6 @@ void UIBackground::linkUIs( vector<UIReference> *_guis ){
 }
 
 void UIBackground::setupUI(){
-//    gui->addSlider("change_Speed", 0.0, 0.5, &speed);
-    
     gui->addLabel("Colors");
     gui->addSlider("HUE", 0.0, 1.0, &color.hue);
     
@@ -33,10 +31,8 @@ void UIBackground::setupUI(){
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     gui->addSpacer();
-    
     gui->addToggle("GRADIENT", &bGradient);
     hueSlider = gui->addSlider("HUE2", 0.0, 1.0, &color2.hue);
-    
     satSlider = gui->addSlider("SAT2", 0.0, 1.0, &color2.sat,length/2.0, dim);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     briSlider = gui->addSlider("BRI2", 0.0, 1.0, &color2.bri, length/2.0, dim);

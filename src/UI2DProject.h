@@ -121,8 +121,6 @@ protected:
     UIBackground *background;
     ofFbo        renderTarget;
     
-//    virtual void setupPresetGui();
-//	virtual void guiPresetEvent(ofxUIEventArgs &e);
     vector<string> getPresets();
     
     virtual void guiAdd( UIClass &_uiClass );
@@ -148,9 +146,6 @@ protected:
     UIReference      gui, sysGui, rdrGui;
     vector<UIReference> guis;
 	
-    //  Basic RENDER scene
-    
-    
     //  Documenting
     //
     virtual void    screenShot();
@@ -161,6 +156,7 @@ protected:
     Flickr::API     flickrAPI;
     Recorder        recorder;
 	string          lastRercord;
+    bool            bRecording, bRecordAll;
     
     //  APP Flags
     //
@@ -169,8 +165,8 @@ protected:
     
     bool    bRenderSystem;
     bool    bUpdateSystem;
-    bool    bRecording;
     bool    bPlaying;
     bool    bDebug;
+    bool    bEdit;
     bool    bGui;
 };

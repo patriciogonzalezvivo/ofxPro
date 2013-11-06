@@ -43,4 +43,5 @@ public:
     bool            tailGradient;
     
 protected:
+    ofPoint steer(const ofPoint &_target, const bool &_slowdown);
 };

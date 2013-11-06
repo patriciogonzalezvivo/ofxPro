@@ -15,7 +15,19 @@ public:
     
     virtual void goTo(const ofPoint &_target, float _speed = 0.1){
         if( ((ofPoint)*this) != _target){
-            acc += steer(_target, true);
+            
+            ofPoint _steer;
+            ofPoint desired = _target - *this;
+            float d = desired.length();
+            if (d > 0.0) {
+                if (d < 1.0)
+                    desired *= (d);
+                
+                _steer = desired - vel;
+            } else
+                _steer = ofPoint(0,0,0);
+        
+            acc += _steer;
             update(_speed);
         }
     }
@@ -28,27 +40,6 @@ public:
     }
     
 protected:
-    ofPoint steer(const ofPoint &_target, const bool &_slowdown){
-        ofPoint _steer;
-        
-        if (_slowdown){
-            ofPoint desired = _target - *this;
-            float d = desired.length();
-            
-            if (d > 0.0) {
-                if (d < 1.0)
-                    desired *= (d);
-                
-                _steer = desired - vel;
-            } else
-                _steer = ofPoint(0,0,0);
-            
-        } else {
-            _steer = _target - *this;
-        }
-        
-        return _steer;
-    }
     
     ofPoint vel,acc;
 };
