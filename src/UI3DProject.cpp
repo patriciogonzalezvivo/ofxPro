@@ -323,7 +323,7 @@ void UI3DProject::lightsDraw(){
             if( overLight == it->first){
                 
                 ofPushMatrix();
-                ofPopStyle();
+                ofPushStyle();
                 ofNoFill();
                 float pulse = abs(sin(ofGetElapsedTimef()));
                 ofColor color = it->second->getColor();
