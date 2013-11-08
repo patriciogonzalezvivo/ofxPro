@@ -49,11 +49,13 @@ private:
     float   FOV;
     
     CameraLocation  targetLocation;
+    ofxUITextInput  *textField;
     ofxUIRadio      *locations;
     string          pathToLocations;
+    string          newLocationName;
     float           pct;
     float           speed;
-    bool            bSaveLocation;
+    
 };
 
 

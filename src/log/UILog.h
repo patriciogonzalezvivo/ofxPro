@@ -57,7 +57,9 @@ protected:
 	string          lastRercord;
     bool            bRecording, bRecordAll;
     
-    Note            actualNote;
-    vector<Note>    notes;
-    bool            bNoteTaking,bSaveNote;
+    vector<Note*>   notes;
+    Note            *actualNote;
+    ofxUITextInput  *textField;
+    bool            bNoteTaking;
+    bool            bLoaded,addNewNote;
 };

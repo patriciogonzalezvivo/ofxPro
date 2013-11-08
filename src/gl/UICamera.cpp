@@ -17,7 +17,7 @@ UICamera::UICamera(){
     type = "easyCam";
     
     locations = NULL;
-    bSaveLocation = false;
+    newLocationName = "";
     
     ofAddListener(ofEvents().update, this, &UICamera::update);
 }
@@ -25,9 +25,9 @@ UICamera::UICamera(){
 void UICamera::setupUI(){
     gui->addSlider("FOV", 0, 180, &FOV);
     gui->addSlider("Speed", 0.0, 1.0, &speed);
-    gui->addButton("SAVE", &bSaveLocation);
     gui->addSpacer();
-    
+    textField = gui->addTextInput("ADD", "", OFX_UI_FONT_SMALL);
+
     vector<string> clear;
     locations = gui->addRadio("LOCATIONS", clear);
 }
@@ -37,13 +37,9 @@ void UICamera::guiEvent(ofxUIEventArgs &e){
     
     if(name == "FOV"){
         camera->setFov(FOV);
-    } else if(name == "SAVE"){
-        if(bSaveLocation){
-            string locationName = ofSystemTextBoxDialog("Save Location as");
-            if(locationName.length()){
-                addLocation(locationName);
-            }
-        }
+    } else if(name == "ADD"){
+        string locationName = textField->getTextString();
+        newLocationName = locationName;
     } else if (name == "LOCATIONS"){
         
     } else if (name == "ENABLE"){
@@ -135,9 +131,13 @@ void UICamera::update(ofEventArgs& args){
             ofQuaternion q;
             q.slerp(1.0-pct,camera->getOrientationQuat(),targetLocation.orientation);
             camera->setOrientation(q);
-            
             pct *= (1.0- powf(10.0, (1.0-speed)*-3.0 ) );
-        }
+        } 
+    }
+    
+    if(newLocationName.length()){
+        addLocation(newLocationName);
+        newLocationName = "";
     }
 }
 
