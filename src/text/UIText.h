@@ -18,7 +18,6 @@ public:
     
     UIText();
     
-    void    setupUI();
     void    setText(string _text);
     void    setFontsDir( string _dir );
     
@@ -31,10 +30,12 @@ public:
     void    debugDraw();
     
 protected:
+    virtual void    setupUI();
+    virtual void    guiEvent(ofxUIEventArgs &e);
+    
     virtual void loadCustomValues(ofxXmlSettings &_XML);
     virtual void saveCustomValues(ofxXmlSettings &_XML);
     
-    void    guiEvent(ofxUIEventArgs &e);
     string  fontDir;
     vector<string> fonts;
     

@@ -18,7 +18,6 @@ public:
     void    setResolutionToCm();
     void    setResolutionToInches();
     
-    void    setupUI();
     string  getClassName(){ return "GRID"; }
     
     void    makeGrid();
@@ -28,9 +27,8 @@ public:
     
 protected:
     
-    //  Gui
-    //
-    void                guiEvent(ofxUIEventArgs &e);
+    virtual void    setupUI();
+    virtual void    guiEvent(ofxUIEventArgs &e);
     
     ofImage             colorSampleImage;
     

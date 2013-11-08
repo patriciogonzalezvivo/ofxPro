@@ -19,7 +19,6 @@ public:
     UIShader();
     
     string getClassName();
-    void setupUI();
     
     void loadFrag(string _fragShader );
     ofShader& getShader();
@@ -28,7 +27,9 @@ public:
     void end();
     
 protected:
+    void setupUI();
     void guiEvent(ofxUIEventArgs &e);
+    
     void checkShaderFile();
     bool reloadShader(string _filePath = "none");
     void addUniform(UniformType _type, string _name);

@@ -16,8 +16,6 @@ public:
     UIBackground();
     virtual ~UIBackground(){};
     
-    virtual void    setupUI();
-    
     void    linkUIs( vector<UIReference> *_guis );
     
     string  getClassName(){return "BACKGROUND"; }
@@ -30,6 +28,7 @@ public:
     bool    bGradient;
     
 protected:
+    virtual void    setupUI();
     virtual void    guiEvent(ofxUIEventArgs &e);
     
     vector<UIReference> *guis;

@@ -70,8 +70,8 @@ void UI2DProject::play(){
 
 void UI2DProject::stop(){
     if (bPlaying){
-        if(bRecording){
-            recordingEnd();
+        if(log.isRecording()){
+            log.record(false);
         }
         
         guiHide();
@@ -94,17 +94,8 @@ void UI2DProject::stop(){
 void UI2DProject::update(ofEventArgs & args){
     if(bUpdateSystem){
         selfUpdate();
-        if(bRecording){
-            if (bRecordAll){
-                ofImage img;
-                img.grabScreen(0,0,ofGetWidth(), ofGetHeight());
-                recorder.addFrame(img.getPixelsRef());
-            } else {
-                ofPixels pixels;
-                getRenderTarget().readToPixels(pixels);
-                recorder.addFrame(pixels);
-
-            }
+        if(log.isRecording()){
+            log.recordAddFrame(getRenderTarget());
         }
     }
 }
@@ -155,6 +146,15 @@ void UI2DProject::draw(ofEventArgs & args){
                 ofPopMatrix();
                 ofPopStyle();
             }
+            
+            //  Draw Log
+            //
+            {
+                ofPushStyle();
+                ofSetColor(background->getUIBrightness()*255);
+                log.draw();
+                ofPopStyle();
+            }
         }
 #ifdef TARGET_RASPBERRY_PI
         //  a full screen FBO is to much for RPI
@@ -165,7 +165,7 @@ void UI2DProject::draw(ofEventArgs & args){
 #endif
 	}
     
-    if(bRecording){
+    if(log.isRecording()){
         ofFill();
         ofSetColor(abs(sin(ofGetElapsedTimef()))*255, 0, 0);
         ofCircle(ofGetWidth()-20, -20, 5);
@@ -175,8 +175,8 @@ void UI2DProject::draw(ofEventArgs & args){
 }
 
 void UI2DProject::exit(ofEventArgs & args){
-    if(bRecording){
-        recordingEnd();
+    if(log.isRecording()){
+        log.record(false);
     }
     
     guiSave();
@@ -220,18 +220,14 @@ void UI2DProject::keyPressed(ofKeyEventArgs & args){
     
     switch (args.key){
         case 's':
-            screenShot();
+            log.screenShot();
             break;
         case 'r':{
-            if(!bRecording){
-                recordingStart();
-            } else {
-                recordingEnd();
-            }
+            log.record(!log.isRecording());
         }
             break;
         case 'u':
-            uploadLastRecord();
+            log.upload();
             break;
         case 'h':
 			guiToggle();
@@ -256,19 +252,14 @@ void UI2DProject::keyReleased(ofKeyEventArgs & args){
 //-------------------------------------------------------- MOUSE
 
 bool UI2DProject::cursorIsOverGUI(){
-    for(int i = 0; i < guis.size(); i++){
-		if(guis[i]->isHit(ofGetMouseX(), ofGetMouseY())){
-			return true;
-		}
-	}
+    if (bGui){
+        for(int i = 0; i < guis.size(); i++){
+            if(guis[i]->isHit(ofGetMouseX(), ofGetMouseY())){
+                return true;
+            }
+        }
+    }
 	return false;
-}
-
-void UI2DProject::mouseDragged(ofMouseEventArgs& data){
-    if(cursorIsOverGUI())
-        return;
-    
-    selfMouseDragged(data);
 }
 
 void UI2DProject::mouseMoved(ofMouseEventArgs& data){
@@ -276,18 +267,41 @@ void UI2DProject::mouseMoved(ofMouseEventArgs& data){
 }
 
 void UI2DProject::mousePressed(ofMouseEventArgs & args){
-    if(cursorIsOverGUI())
+    if(cursorIsOverGUI()){
         return;
+    }
     
+    if (log.isTakingNotes()){
+        log.penDown(ofPoint(args.x,args.y));
+        return;
+    }
+   
     if(ofGetElapsedTimef()-lastClick<doublClickThreshold)
         selfMouseDoublePressed(args);
     else
         selfMousePressed(args);
 }
 
+void UI2DProject::mouseDragged(ofMouseEventArgs& args){
+    if(cursorIsOverGUI())
+        return;
+    
+    if (log.isTakingNotes()){
+        log.penDown(ofPoint(args.x,args.y));
+        return;
+    }
+    
+    selfMouseDragged(args);
+}
+
 void UI2DProject::mouseReleased(ofMouseEventArgs & args){
     if(cursorIsOverGUI())
         return;
+    
+    if (log.isTakingNotes()){
+        log.penUp();
+        return;
+    }
     
     lastClick = ofGetElapsedTimef();
     selfMouseReleased(args);
@@ -297,8 +311,13 @@ void UI2DProject::mouseReleased(ofMouseEventArgs & args){
 
 void UI2DProject::setupCoreGuis(){
     setupGui();
+    
+    log.linkDataPath(getDataPath());
+    guiAdd(log);
+    
     setupSystemGui();
     setupRenderGui();
+    
     backgroundSet(new UIBackground());
 }
 
@@ -318,11 +337,6 @@ void UI2DProject::setupGui(){
     gui->addToggle("EDIT",&bEdit);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     gui->addToggle("DEBUG",&bDebug);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-
-    gui->addToggle("REC", false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addToggle("ALL",&bRecordAll);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
 
     gui->addButton("SAVE", false);
@@ -356,14 +370,12 @@ void UI2DProject::guiEvent(ofxUIEventArgs &e){
     if(name == "SAVE"){
         ofxUIButton *b = (ofxUIButton *) e.widget;
         if(b->getValue()){
-            bUpdateSystem = false;
             string presetName = ofSystemTextBoxDialog("Save Preset As");
             if(presetName.length()){
                 guiSavePreset(presetName);
             } else {
                 guiSave();
             }
-            bUpdateSystem = true;
         }
     } else if(name == "LOAD"){
         ofxUIButton *b = (ofxUIButton *) e.widget;
@@ -378,14 +390,6 @@ void UI2DProject::guiEvent(ofxUIEventArgs &e){
     } else if( name == "EDIT" ){
         
     } else if( name == "DEBUG" ){
-        
-    } else if( name == "REC" ){
-        if(!bRecording){
-            recordingStart();
-        } else {
-            recordingEnd();
-        }
-    } else if( name == "ALL" ){
         
     } else {
         ofxUIToggle *t = (ofxUIToggle *) e.widget;
@@ -403,7 +407,6 @@ vector<string> UI2DProject::getPresets(){
     
 	if(presetsFolder.exists()){
 		presetsFolder.listDir();
-		cout << " found " << presetsFolder.size() << " files " << endl;
 		for(int i = 0; i < presetsFolder.size(); i++){
 			if(presetsFolder.getFile(i).isDirectory() &&
                ofFilePath::removeTrailingSlash(presetsFolder.getName(i)) != "Working" &&
@@ -549,15 +552,6 @@ void UI2DProject::guiToggle(){
     bGui = !bGui;
 }
 
-void UI2DProject::guiToggleAndPosition(UIReference &g){
-    if(g->isMinified()){
-        g->setMinified(false);
-        g->setPosition(ofGetMouseX(), ofGetMouseY());
-    } else {
-        g->setMinified(true);
-    }
-}
-
 void UI2DProject::guiArrange(int _type){
     if (_type == 0){
         for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
@@ -664,64 +658,4 @@ ofFbo& UI2DProject::getRenderTarget(){
 
 void UI2DProject::selfPostDraw(){
 	UI2DProject::getRenderTarget().draw(0, 0,UI2DProject::getRenderTarget().getWidth(), UI2DProject::getRenderTarget().getHeight());
-}
-
-
-//-------------------------------- DOCUMENTATION TOOLS
-//
-void UI2DProject::screenShot(){
-    ofImage img;
-    img.grabScreen(0,0,ofGetWidth(), ofGetHeight());
-    if( !ofDirectory(getDataPath()+"snapshots/").exists() ){
-        ofDirectory(getDataPath()+"snapshots/").create();
-    }
-    string recordPath = getDataPath()+"snapshots/" + ofGetTimestampString() + ".png";
-    img.saveImage(recordPath);
-    lastRercord = recordPath;
-    uploadLastRecord();
-}
-
-void UI2DProject::recordingStart(){
-    if(!bRecording){
-        string recordPath = getDataPath()+"snapshots/" + ofGetTimestampString() + ".mov";
-//        recorder.setup(recordPath, getRenderTarget().getWidth(), getRenderTarget().getHeight(), 30, sampleRate, channels);
-        recorder.setup(recordPath, getRenderTarget().getWidth(), getRenderTarget().getHeight(), 30); // no audio
-        lastRercord = recordPath;
-        bRecording = true;
-        ofxUIToggle *rec = (ofxUIToggle*)gui->getWidget("REC");
-        rec->setValue(true);
-    }
-}
-
-void UI2DProject::recordingEnd(){
-    if(bRecording){
-        recorder.close();
-        bRecording = false;
-        ofxUIToggle *rec = (ofxUIToggle*)gui->getWidget("REC");
-        rec->setValue(false);
-    }
-}
-
-void UI2DProject::uploadLastRecord(){
-    if(bRecording){
-        recordingEnd();
-    }
-    
-    if(lastRercord!=""){
-        if (!flickrAPI.bAuthenticated){
-            if ( flickrAPI.authenticate("6394ea9fdcad0043386fbfd07f57a419","abf7c1706ee0fd7f",Flickr::FLICKR_WRITE) ){
-                ofAddListener(flickrAPI.uploadComplete, this, &UI2DProject::uploadCompleted);
-            }
-        }
-        
-        if (flickrAPI.bAuthenticated){
-            string photoID = flickrAPI.upload(lastRercord);
-            lastRercord = "";
-        }
-    }
-}
-
-void UI2DProject::uploadCompleted(string &_recordID){
-    string shortURL = flickrAPI.getMediaById(_recordID).getShortURL();
-    cout << "UPLOAD COMPLETE! Check it at " << shortURL << endl;
 }

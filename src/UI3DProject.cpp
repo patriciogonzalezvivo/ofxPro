@@ -93,8 +93,17 @@ void UI3DProject::draw(ofEventArgs & args){
                 
                 lightsEnd();
             }
-            glDisable(GL_DEPTH_TEST);
             
+            //  Draw Log
+            //
+            {
+                ofPushStyle();
+                ofSetColor(background->getUIBrightness()*255);
+                log.draw();
+                ofPopStyle();
+            }
+            
+            glDisable(GL_DEPTH_TEST);
             fog.end();
             getCameraRef().end();
         }
@@ -108,6 +117,7 @@ void UI3DProject::draw(ofEventArgs & args){
             ofPopMatrix();
             ofPopStyle();
         }
+        
 #ifdef TARGET_RASPBERRY_PI
         
 #else
@@ -118,7 +128,7 @@ void UI3DProject::draw(ofEventArgs & args){
         ofDisableLighting();
         selfPostDraw();
 #endif
-        if(bRecording){
+        if(log.isRecording()){
             ofPushStyle();
             ofFill();
             ofSetColor(255, 0, 0,abs(sin(ofGetElapsedTimef()))*255);
@@ -131,8 +141,8 @@ void UI3DProject::draw(ofEventArgs & args){
 }
 
 void UI3DProject::exit(ofEventArgs & args){
-    if(bRecording){
-        recordingEnd();
+    if(log.isRecording()){
+        log.record(false);
     }
     
     guiSave();
@@ -147,9 +157,14 @@ void UI3DProject::exit(ofEventArgs & args){
 //-------------------- Mouse events + camera interaction
 //
 void UI3DProject::mousePressed(ofMouseEventArgs & args){
-	if(bGui && cursorIsOverGUI()){
+	if( cursorIsOverGUI() ){
 		camera.disableMouseInput();
-	} else if(bEdit && cursorIsOverLight() != "NULL"){
+	}
+    else if (log.isTakingNotes()){
+        camera.disableMouseInput();
+        log.penDown(ofPoint(args.x,args.y));
+    }
+    else if(bEdit && cursorIsOverLight() != "NULL"){
         camera.disableMouseInput();
         selectedLigth = cursorIsOverLight();
         
@@ -169,29 +184,40 @@ void UI3DProject::mousePressed(ofMouseEventArgs & args){
                 }
             }
         }
-        
-    } else {
-        selfMousePressed(args);
+    }
+    else {
+        if(ofGetElapsedTimef()-lastClick<doublClickThreshold)
+            selfMouseDoublePressed(args);
+        else
+            selfMousePressed(args);
     }
 }
 
 void UI3DProject::mouseDragged(ofMouseEventArgs & args){
-    if(bEdit && selectedLigth != "NULL"){
+    if (cursorIsOverGUI()){
         
+    }
+    else if (log.isTakingNotes()){
+        log.penDown(ofPoint(args.x,args.y));
+    }
+    else if(bEdit && selectedLigth != "NULL"){
         ofPoint pmouse(ofGetPreviousMouseX(),-ofGetPreviousMouseY());
         ofPoint mouse(ofGetMouseX(),-ofGetMouseY());
-        
         ofPoint diff = getCameraRef().cameraToWorld(mouse)-getCameraRef().cameraToWorld(pmouse);
-    
         *lights[selectedLigth]+=diff*0.1;
-        
-    } else {
+    }
+    else {
         UI2DProject::mouseDragged(args);
     }
 };
 
 void UI3DProject::mouseReleased(ofMouseEventArgs & args){
     camera.enableMouseInput();
+    
+    if(log.isTakingNotes()){
+        log.penUp();
+    }
+    
     selfMouseReleased(args);
     selectedLigth = "NULL";
     lastClick = ofGetElapsedTimef();
@@ -200,10 +226,21 @@ void UI3DProject::mouseReleased(ofMouseEventArgs & args){
 //------------------------------------------------------------ CORE SETUP
 
 void UI3DProject::setupCoreGuis(){
-    UI2DProject::setupCoreGuis();
+    
+    setupGui();
+    
+    log.linkDataPath(getDataPath());
+    log.linkCamera(camera);
+    guiAdd(log);
+    
+    setupSystemGui();
+    setupRenderGui();
+    
+    backgroundSet(new UIBackground());
     
     guiAdd(camera);
     camera.loadLocations(getDataPath()+"cameras/");
+
     
     guiAdd(fog);
     materialAdd( "MATERIAL" );
@@ -293,11 +330,10 @@ string UI3DProject::cursorIsOverLight(){
 }
 
 void UI3DProject::lightsBegin(){
-    ofSetSmoothLighting(bSmoothLighting);
     if(bEnableLights){
+        ofSetSmoothLighting(bSmoothLighting);
         ofEnableLighting();
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-//            ofEnableLighting();
             it->second->enable();
         }
     }
@@ -305,7 +341,6 @@ void UI3DProject::lightsBegin(){
 
 void UI3DProject::lightsEnd(){
     if(!bEnableLights){
-//        ofDisableLighting();
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->disable();
         }
@@ -353,29 +388,31 @@ void UI3DProject::materialAdd( string _name ){
     guis.push_back( newMaterial->getUIReference(guiTemplate) );
 }
 
-//------------------------------------------------------ Save & Load + Camera
+//------------------------------------------------------ Save & Load + CAMERA
 
 void UI3DProject::guiLoad(){
     UI2DProject::guiLoad();
-    camera.load(getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
+    camera.load(getDataPath()+"Presets/Working/"+"current.cam");
 }
 
 void UI3DProject::guiSave(){
     UI2DProject::guiSave();
-    camera.save(getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
+    camera.save(getDataPath()+"Presets/Working/"+"current.cam");
+//    camera.save(getDataPath()+"cameras/default.cam");
 }
 
 void UI3DProject::guiLoadPresetFromPath(string presetPath){
     cout << "PRESET PATH: " << presetPath << endl;
     UI2DProject::guiLoadPresetFromPath(presetPath);
-    camera.load(presetPath+"/ofEasyCamSettings");
+    camera.load(presetPath+"/current.cam");
     UI2DProject::guiLoadPresetFromPath(presetPath);
 }
 
 void UI3DProject::guiSavePreset(string presetName){
     UI2DProject::guiSavePreset(presetName);
 
-    camera.save(getDataPath()+"Presets/"+presetName+"/ofEasyCamSettings");
+    camera.save(getDataPath()+"Presets/"+presetName+"/current.cam");
+//    camera.save(getDataPath()+"cameras/default.cam");
     camera.enableMouseInput();
 }
 

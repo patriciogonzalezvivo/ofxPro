@@ -3,7 +3,7 @@
     <Name>SPOT LIGHT</Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>350.000000000</YPosition>
+    <YPosition>375.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -13,42 +13,42 @@
 <Widget>
     <Kind>4</Kind>
     <Name>CUT OFF</Name>
-    <Value>47.438423157</Value>
+    <Value>46.995075226</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>EXPONENT</Name>
-    <Value>63.054187775</Value>
+    <Value>34.679801941</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>X</Name>
-    <Value>559.010986328</Value>
+    <Value>-70.687500000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>Y</Name>
-    <Value>107.136596680</Value>
+    <Value>593.712890625</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>Z</Name>
-    <Value>-282.676391602</Value>
+    <Value>220.392822266</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>OX</Name>
-    <Value>-123.455497742</Value>
+    <Value>-117.801048279</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>OY</Name>
-    <Value>-2.826995850</Value>
+    <Value>-104.607101440</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>OZ</Name>
-    <Value>-91.413848877</Value>
+    <Value>-90.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -68,7 +68,7 @@
 <Widget>
     <Kind>25</Kind>
     <Name>dHUE</Name>
-    <Value>0.397905767</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -78,20 +78,20 @@
 <Widget>
     <Kind>25</Kind>
     <Name>dBRI</Name>
-    <Value>0.696335077</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>sHUE</Name>
-    <Value>0.654450238</Value>
+    <Value>0.209424078</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>sSAT</Name>
-    <Value>0.628272235</Value>
+    <Value>0.554973841</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>sBRI</Name>
-    <Value>0.937172771</Value>
+    <Value>1.000000000</Value>
 </Widget>

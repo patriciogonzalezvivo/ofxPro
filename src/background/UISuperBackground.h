@@ -14,12 +14,12 @@ public:
 
     UISuperBackground();
     
-    void        setupUI();
     void        draw();
     
     float       value;
     
 protected:
+    virtual void setupUI();
 	virtual void update(ofEventArgs & args);
     
     ofFbo       fbo;

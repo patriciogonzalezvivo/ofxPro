@@ -16,11 +16,7 @@
 #include "UIClass.h"
 #include "UIBackground.h"
 #include "UISuperBackground.h"
-
-//  Documenting Tools
-//
-#include "Flickr.h"
-#include "Recorder.h"
+#include "UILog.h"
 
 //  RaspberryPi Extras
 //
@@ -35,7 +31,7 @@ class UI2DProject {
 #endif
 public:
     
-	UI2DProject():background(NULL),bPlaying(false),bRecording(false),lastRercord(""){};
+	UI2DProject():background(NULL),bPlaying(false){};
 	virtual ~UI2DProject(){};
 	
 	//--------------------- VIRTUAL CLASSES TO EDIT
@@ -110,63 +106,58 @@ public:
     
 protected:
     
-    //  Core GUI
+    //  GENERAL UI stuff
     //
-    virtual void setupGui();
-    virtual void setupCoreGuis();
-
-    virtual void setupSystemGui();
-    virtual void setupRenderGui();
-    virtual void backgroundSet(UIBackground *_bg);
-    UIBackground *background;
-    ofFbo        renderTarget;
+    virtual void    guiLoad();
+    virtual void    guiLoadPresetFromName(string presetName);
+    virtual void    guiLoadPresetFromPath(string presetPath);
+    virtual void    guiSave();
+    virtual void    guiSavePreset(string presetName);
+    virtual void    guiShow();
+    virtual void    guiHide();
+    virtual void    guiToggle();
+    virtual void    guiArrange( int _order_type );
+    virtual void    guiAdd(UIClass &_uiClass);
+    virtual void    guiEvent(ofxUIEventArgs &e);
+    virtual void    guiAllEvents(ofxUIEventArgs &e);
     
-    vector<string> getPresets();
-    
-    virtual void guiAdd( UIClass &_uiClass );
-    virtual void guiEvent(ofxUIEventArgs &e);
-    virtual void guiAllEvents(ofxUIEventArgs &e);
-    
-    virtual void guiLoad();
-	virtual void guiLoadPresetFromName(string presetName);
-    virtual void guiLoadPresetFromPath(string presetPath);
-    virtual void guiSave();
-    virtual void guiSavePreset(string presetName);
-
-    virtual void guiShow();
-    virtual void guiHide();
-    virtual void guiToggle();
-    virtual void guiArrange( int _order_type );
-    virtual void guiToggleAndPosition( UIReference &g);
-    
-	virtual bool cursorIsOverGUI();
-    
-    ofxUISuperCanvas *guiTemplate;
-    ofxUIRadio       *presetRadio;
-    UIReference      gui, sysGui, rdrGui;
+	virtual bool    cursorIsOverGUI();
+    ofxUISuperCanvas    *guiTemplate;
     vector<UIReference> guis;
-	
-    //  Documenting
-    //
-    virtual void    screenShot();
-    virtual void    recordingStart();
-    virtual void    recordingEnd();
-    virtual void    uploadLastRecord();
-    virtual void    uploadCompleted(string &_recordID);
-    Flickr::API     flickrAPI;
-    Recorder        recorder;
-	string          lastRercord;
-    bool            bRecording, bRecordAll;
+    float           lastClick;
+    float           doublClickThreshold;
+    bool            bPlaying;
+    bool            bGui;
     
-    //  APP Flags
+    //  SCENE GUI
     //
-    float   lastClick;
-    float   doublClickThreshold;
+    virtual void    setupGui();
+    virtual void    setupCoreGuis();
+    vector<string>  getPresets();
+    ofxUIRadio      *presetRadio;
+    UIReference     gui;
+    bool            bDebug;
+    bool            bEdit;
+
+    //  UPDATE GUI
+    //
+    virtual void    setupSystemGui();
+    UIReference     sysGui;
+    bool            bUpdateSystem;
     
-    bool    bRenderSystem;
-    bool    bUpdateSystem;
-    bool    bPlaying;
-    bool    bDebug;
-    bool    bEdit;
-    bool    bGui;
+    //  RENDER GUI
+    //
+    virtual void    setupRenderGui();
+    UIReference     rdrGui;
+    bool            bRenderSystem;
+    ofFbo           renderTarget;
+    
+    //  BACKGROUND GUI
+    //
+    virtual void    backgroundSet(UIBackground *_bg);
+    UIBackground    *background;
+    
+    //  LOG GUI
+    //
+    UILog           log;
 };

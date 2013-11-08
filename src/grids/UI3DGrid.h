@@ -14,14 +14,14 @@ class UI3DGrid : public UIClass {
 public:
     
     UI3DGrid();
-    
-    void    setupUI();
+
     string  getClassName(){ return "3DGRID"; }
     
     void    draw();
     
 protected:
-    void    guiEvent(ofxUIEventArgs &e);
+    virtual void    setupUI();
+    virtual void    guiEvent(ofxUIEventArgs &e);
 
     ofImage colorSampleImage;
     

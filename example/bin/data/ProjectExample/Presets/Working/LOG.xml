@@ -1,13 +1,13 @@
 <Canvas>
     <Kind>42</Kind>
-    <Name>OFX_UI_WIDGET_CANVAS</Name>
+    <Name>LOG</Name>
     <IsMinified>0</IsMinified>
-    <XPosition>1.000000000</XPosition>
-    <YPosition>1.000000000</YPosition>
+    <XPosition>843.000000000</XPosition>
+    <YPosition>217.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
-    <Name>DEBUG</Name>
+    <Name>ENABLE</Name>
     <Value>1</Value>
 </Widget>
 <Widget>
@@ -17,16 +17,16 @@
 </Widget>
 <Widget>
     <Kind>2</Kind>
-    <Name>Default</Name>
+    <Name>ALL</Name>
     <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
-    <Name>test</Name>
+    <Name>ANOTATE</Name>
     <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
-    <Name>test2</Name>
+    <Name>logTest</Name>
     <Value>1</Value>
 </Widget>

@@ -21,7 +21,6 @@ public:
     UIMaterial( string _name );
 	virtual ~UIMaterial();
 	
-    void    setupUI();
     void    setName( string _name );
 	void    setColors(ofFloatColor oDiffuse, ofFloatColor oAmbient, ofFloatColor oSpecular, ofFloatColor oEmissive);
     
@@ -32,6 +31,7 @@ public:
 	virtual void end();
 	
 protected:
+    void    setupUI();
     void    guiEvent(ofxUIEventArgs &e);
     string  name;
     
