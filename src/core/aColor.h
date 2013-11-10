@@ -7,7 +7,7 @@
 
 #pragma once
 #include "ofMain.h"
-#include "Particle.h"
+#include "aPoint.h"
 
 class aColor : public ofFloatColor{
 public:
@@ -40,5 +40,5 @@ public:
     float       hue,sat,bri;
     
 protected:
-    Particle    HSB;
+    aPoint    HSB;
 };
