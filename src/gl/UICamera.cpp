@@ -27,7 +27,7 @@ void UICamera::setupUI(){
     gui->addSlider("Speed", 0.0, 1.0, &speed);
     gui->addSpacer();
     textField = gui->addTextInput("ADD", "", OFX_UI_FONT_SMALL);
-
+    gui->setTriggerWidgetsUponLoad(false);
     vector<string> clear;
     locations = gui->addRadio("LOCATIONS", clear);
 }

@@ -61,5 +61,5 @@ protected:
     Note            *actualNote;
     ofxUITextInput  *textField;
     bool            bNoteTaking;
-    bool            bLoaded,addNewNote;
+    bool            addNewNote;
 };

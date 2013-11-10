@@ -40,6 +40,5 @@ public:
     }
     
 protected:
-    
     ofPoint vel,acc;
 };

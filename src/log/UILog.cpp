@@ -20,7 +20,6 @@ UILog::UILog(){
     bRecording = false;
     bRecordAll = false;
     addNewNote = false;
-    bLoaded = false;
     
     actualNote = new Note();
 }
@@ -34,7 +33,6 @@ UILog::~UILog(){
 }
 
 void UILog::setupUI(){
-    bLoaded = false;
     gui->addToggle("REC", false);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     gui->addToggle("ALL",&bRecordAll);
@@ -45,7 +43,7 @@ void UILog::setupUI(){
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addSpacer();
     textField = gui->addTextInput("ADD", "", OFX_UI_FONT_SMALL);
-    
+    gui->setTriggerWidgetsUponLoad(false);
     string pathToNotes = dataPath+"notes/";
     ofDirectory dir(pathToNotes);
     if(dir.exists()){
@@ -69,57 +67,54 @@ void UILog::setupUI(){
 
 void UILog::guiEvent(ofxUIEventArgs &e){
 
-    if(bLoaded){
-        string name = e.widget->getName();
-        cout << ofGetElapsedTimef() << " " << name << endl;
-        if( name == "REC" ){
-            record(!bRecording);
-        } else if( name == "ALL" ){
+    string name = e.widget->getName();
+    if( name == "REC" ){
+        record(!bRecording);
+    } else if( name == "ALL" ){
+        
+    } else if( name == "ANOTATE"){
+        if(!bNoteTaking){
+            actualNote->penUp();
+        }
+    } else if( name == "ADD" ){
+        string noteName = textField->getTextString();
+        
+        if(noteName.length()>1){
+            bNoteTaking = false;
+            string noteFile = dataPath+"notes/"+noteName;
             
-        } else if( name == "ANOTATE"){
-            if(!bNoteTaking){
-                actualNote->penUp();
-            }
-        } else if( name == "ADD" ){
-            string noteName = textField->getTextString();
+            actualNote->name = noteName;
+            actualNote->save(noteFile+".note");
             
-            if(noteName.length()>1){
-                bNoteTaking = false;
-                string noteFile = dataPath+"notes/"+noteName;
-                
-                actualNote->name = noteName;
-                actualNote->save(noteFile+".note");
-                
-                bool isNew = true;
-                for (int i = 0; i < notes.size(); i++) {
-                    if(notes[i]->name == noteFile){
-                        isNew = false;
-                        break;
-                    }
+            bool isNew = true;
+            for (int i = 0; i < notes.size(); i++) {
+                if(notes[i]->name == noteFile){
+                    isNew = false;
+                    break;
                 }
-                if(camera != NULL){
-                    camera->save(noteFile+".cam");
-                }
-                
-                notes.push_back(actualNote);
-                actualNote = new Note();
-                addNewNote = isNew;
+            }
+            if(camera != NULL){
+                camera->save(noteFile+".cam");
             }
             
-        } else if ( name == "ENABLE" ) {
-            if(!bEnable){
-                bNoteTaking = false;
-                actualNote->penUp();
-            }
-        } else if ( name == "NOTES" ) {
-            
-        } else {
-            ofxUIToggle *t = ((ofxUIToggle *)gui->getWidget(name));
-            if(t != NULL ){
-                if (t->getValue()){
-                    if (camera != NULL){
-                        camera->load(dataPath+"notes/"+name+".cam");
-                    }
+            notes.push_back(actualNote);
+            actualNote = new Note();
+            addNewNote = isNew;
+        }
+        
+    } else if ( name == "ENABLE" ) {
+        if(!bEnable){
+            bNoteTaking = false;
+            actualNote->penUp();
+        }
+    } else if ( name == "NOTES" ) {
+        
+    } else {
+        ofxUIToggle *t = ((ofxUIToggle *)gui->getWidget(name));
+        if(t != NULL ){
+            if (t->getValue()){
+                if (camera != NULL){
+                    camera->load(dataPath+"notes/"+name+".cam");
                 }
             }
         }
@@ -210,10 +205,6 @@ void UILog::uploadCompleted(string &_recordID){
 }
 
 void UILog::draw(){
-    if(!bLoaded){
-        bLoaded = true;
-    }
-    
     if(addNewNote){
         gui->addToggle(notes[notes.size()-1]->name, &notes[notes.size()-1]->bEnable);
         gui->autoSizeToFitWidgets();

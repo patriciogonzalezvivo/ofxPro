@@ -97,9 +97,10 @@ void UI3DProject::draw(ofEventArgs & args){
             //  Draw Log
             //
             {
+                ofDisableLighting();
                 ofPushStyle();
-                ofSetColor(background->getUIBrightness()*255);
-                log.draw();
+                ofSetColor(background->getUIBrightness()*255.0);
+                logGui.draw();
                 ofPopStyle();
             }
             
@@ -128,7 +129,7 @@ void UI3DProject::draw(ofEventArgs & args){
         ofDisableLighting();
         selfPostDraw();
 #endif
-        if(log.isRecording()){
+        if(logGui.isRecording()){
             ofPushStyle();
             ofFill();
             ofSetColor(255, 0, 0,abs(sin(ofGetElapsedTimef()))*255);
@@ -141,8 +142,8 @@ void UI3DProject::draw(ofEventArgs & args){
 }
 
 void UI3DProject::exit(ofEventArgs & args){
-    if(log.isRecording()){
-        log.record(false);
+    if(logGui.isRecording()){
+        logGui.record(false);
     }
     
     guiSave();
@@ -160,9 +161,9 @@ void UI3DProject::mousePressed(ofMouseEventArgs & args){
 	if( cursorIsOverGUI() ){
 		camera.disableMouseInput();
 	}
-    else if (log.isTakingNotes()){
+    else if (logGui.isTakingNotes()){
         camera.disableMouseInput();
-        log.penDown(ofPoint(args.x,args.y));
+        logGui.penDown(ofPoint(args.x,args.y));
     }
     else if(bEdit && cursorIsOverLight() != "NULL"){
         camera.disableMouseInput();
@@ -197,8 +198,8 @@ void UI3DProject::mouseDragged(ofMouseEventArgs & args){
     if (cursorIsOverGUI()){
         
     }
-    else if (log.isTakingNotes()){
-        log.penDown(ofPoint(args.x,args.y));
+    else if (logGui.isTakingNotes()){
+        logGui.penDown(ofPoint(args.x,args.y));
     }
     else if(bEdit && selectedLigth != "NULL"){
         ofPoint pmouse(ofGetPreviousMouseX(),-ofGetPreviousMouseY());
@@ -214,8 +215,8 @@ void UI3DProject::mouseDragged(ofMouseEventArgs & args){
 void UI3DProject::mouseReleased(ofMouseEventArgs & args){
     camera.enableMouseInput();
     
-    if(log.isTakingNotes()){
-        log.penUp();
+    if(logGui.isTakingNotes()){
+        logGui.penUp();
     }
     
     selfMouseReleased(args);
@@ -229,9 +230,9 @@ void UI3DProject::setupCoreGuis(){
     
     setupGui();
     
-    log.linkDataPath(getDataPath());
-    log.linkCamera(camera);
-    guiAdd(log);
+    logGui.linkDataPath(getDataPath());
+    logGui.linkCamera(camera);
+    guiAdd(logGui);
     
     setupSystemGui();
     setupRenderGui();

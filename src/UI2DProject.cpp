@@ -70,8 +70,8 @@ void UI2DProject::play(){
 
 void UI2DProject::stop(){
     if (bPlaying){
-        if(log.isRecording()){
-            log.record(false);
+        if(logGui.isRecording()){
+            logGui.record(false);
         }
         
         guiHide();
@@ -94,8 +94,8 @@ void UI2DProject::stop(){
 void UI2DProject::update(ofEventArgs & args){
     if(bUpdateSystem){
         selfUpdate();
-        if(log.isRecording()){
-            log.recordAddFrame(getRenderTarget());
+        if(logGui.isRecording()){
+            logGui.recordAddFrame(getRenderTarget());
         }
     }
 }
@@ -152,7 +152,7 @@ void UI2DProject::draw(ofEventArgs & args){
             {
                 ofPushStyle();
                 ofSetColor(background->getUIBrightness()*255);
-                log.draw();
+                logGui.draw();
                 ofPopStyle();
             }
         }
@@ -165,7 +165,7 @@ void UI2DProject::draw(ofEventArgs & args){
 #endif
 	}
     
-    if(log.isRecording()){
+    if(logGui.isRecording()){
         ofFill();
         ofSetColor(abs(sin(ofGetElapsedTimef()))*255, 0, 0);
         ofCircle(ofGetWidth()-20, -20, 5);
@@ -175,8 +175,8 @@ void UI2DProject::draw(ofEventArgs & args){
 }
 
 void UI2DProject::exit(ofEventArgs & args){
-    if(log.isRecording()){
-        log.record(false);
+    if(logGui.isRecording()){
+        logGui.record(false);
     }
     
     guiSave();
@@ -220,14 +220,14 @@ void UI2DProject::keyPressed(ofKeyEventArgs & args){
     
     switch (args.key){
         case 's':
-            log.screenShot();
+            logGui.screenShot();
             break;
         case 'r':{
-            log.record(!log.isRecording());
+            logGui.record(!logGui.isRecording());
         }
             break;
         case 'u':
-            log.upload();
+            logGui.upload();
             break;
         case 'h':
 			guiToggle();
@@ -271,8 +271,8 @@ void UI2DProject::mousePressed(ofMouseEventArgs & args){
         return;
     }
     
-    if (log.isTakingNotes()){
-        log.penDown(ofPoint(args.x,args.y));
+    if (logGui.isTakingNotes()){
+        logGui.penDown(ofPoint(args.x,args.y));
         return;
     }
    
@@ -286,8 +286,8 @@ void UI2DProject::mouseDragged(ofMouseEventArgs& args){
     if(cursorIsOverGUI())
         return;
     
-    if (log.isTakingNotes()){
-        log.penDown(ofPoint(args.x,args.y));
+    if (logGui.isTakingNotes()){
+        logGui.penDown(ofPoint(args.x,args.y));
         return;
     }
     
@@ -298,8 +298,8 @@ void UI2DProject::mouseReleased(ofMouseEventArgs & args){
     if(cursorIsOverGUI())
         return;
     
-    if (log.isTakingNotes()){
-        log.penUp();
+    if (logGui.isTakingNotes()){
+        logGui.penUp();
         return;
     }
     
@@ -312,8 +312,8 @@ void UI2DProject::mouseReleased(ofMouseEventArgs & args){
 void UI2DProject::setupCoreGuis(){
     setupGui();
     
-    log.linkDataPath(getDataPath());
-    guiAdd(log);
+    logGui.linkDataPath(getDataPath());
+    guiAdd(logGui);
     
     setupSystemGui();
     setupRenderGui();
@@ -338,12 +338,9 @@ void UI2DProject::setupGui(){
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     gui->addToggle("DEBUG",&bDebug);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-
-    gui->addButton("SAVE", false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addButton("LOAD", false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
     gui->addSpacer();
+    textField = gui->addTextInput("ADD", "", OFX_UI_FONT_SMALL);
     
     gui->setTriggerWidgetsUponLoad(false);
     vector<string> empty;
@@ -367,25 +364,12 @@ void UI2DProject::setupGui(){
 void UI2DProject::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
 
-    if(name == "SAVE"){
-        ofxUIButton *b = (ofxUIButton *) e.widget;
-        if(b->getValue()){
-            string presetName = ofSystemTextBoxDialog("Save Preset As");
-            if(presetName.length()){
-                guiSavePreset(presetName);
-            } else {
-                guiSave();
-            }
-        }
-    } else if(name == "LOAD"){
-        ofxUIButton *b = (ofxUIButton *) e.widget;
-        if(b->getValue()){
-            ofFileDialogResult result = ofSystemLoadDialog("Load Visual System Preset Folder", true, getDataPath()+"Presets/");
-            if(result.bSuccess && result.fileName.length()){
-                guiLoadPresetFromPath(result.filePath);
-            } else {
-                guiLoad();
-            }
+    if( name == "ADD" ){
+        string presetName = textField->getTextString();
+        if(presetName.length()>0){
+            guiSavePreset(presetName);
+        } else {
+            guiSave();
         }
     } else if( name == "EDIT" ){
         
@@ -393,8 +377,10 @@ void UI2DProject::guiEvent(ofxUIEventArgs &e){
         
     } else {
         ofxUIToggle *t = (ofxUIToggle *) e.widget;
-        if(t->getValue()){
-            guiLoadPresetFromName(name);
+        if(t != NULL){
+            if(t->getValue()){
+                guiLoadPresetFromName(name);
+            }
         }
     }
     selfGuiEvent(e);

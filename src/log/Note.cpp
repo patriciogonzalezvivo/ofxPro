@@ -98,6 +98,7 @@ void Note::clearLast(){
 
 void Note::draw(){
     if(bEnable){
+        ofNoFill();
         for(int i = 0; i < lines.size(); i++){
             lines[i].draw();
         }
