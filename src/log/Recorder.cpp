@@ -149,7 +149,7 @@ Recorder::Recorder()
     ffmpegLocation = "ffmpeg";
     videoCodec = "mpeg4";
     audioCodec = "pcm_s16le";
-    videoBitrate = "2000k";
+    videoBitrate = "20000k";
     audioBitrate = "128k";
     pixelFormat = "rgb24";
 }

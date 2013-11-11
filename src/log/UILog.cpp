@@ -187,7 +187,7 @@ void UILog::record(bool _state){
         }
         string recordPath = dataPath+"videos/" + ofGetTimestampString() + ".mov";
         //        recorder.setup(recordPath, ofGetWidth(), ofGetHeight(), 30, sampleRate, channels);
-        recorder.setup(recordPath, ofGetWidth(), ofGetHeight(), 30); // no audio
+        recorder.setup(recordPath, ofGetWidth(), ofGetHeight(), 24); // no audio
         lastRercord = recordPath;
         bRecording = true;
         ofxUIToggle *rec = (ofxUIToggle*)gui->getWidget("REC");
