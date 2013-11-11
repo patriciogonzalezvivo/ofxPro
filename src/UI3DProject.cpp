@@ -59,7 +59,8 @@ void UI3DProject::draw(ofEventArgs & args){
             //  Scene Setup
             //
             selfSceneTransformation();
-            glEnable(GL_DEPTH_TEST);
+            ofEnableDepthTest();
+            glDepthMask(false);
             
             if (bEdit){
                 lightsDraw();
@@ -70,7 +71,6 @@ void UI3DProject::draw(ofEventArgs & args){
             if( bDebug ){
                 ofPushStyle();
                 ofPushMatrix();
-                ofEnableBlendMode(OF_BLENDMODE_ALPHA);
                 
                 selfDrawDebug();
                 
@@ -82,7 +82,6 @@ void UI3DProject::draw(ofEventArgs & args){
             //
             {
                 lightsBegin();
-                
                 ofPushStyle();
                 ofPushMatrix();
                 
@@ -90,21 +89,21 @@ void UI3DProject::draw(ofEventArgs & args){
                 
                 ofPopMatrix();
                 ofPopStyle();
-                
                 lightsEnd();
             }
             
             //  Draw Log
             //
             {
-                ofDisableLighting();
                 ofPushStyle();
+                ofDisableLighting();
                 ofSetColor(background->getUIBrightness()*255.0);
                 logGui.draw();
                 ofPopStyle();
             }
             
-            glDisable(GL_DEPTH_TEST);
+            glDepthMask(true);
+            ofDisableDepthTest();
             fog.end();
             getCameraRef().end();
         }

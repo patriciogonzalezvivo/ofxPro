@@ -48,6 +48,7 @@ protected:
     
     void    uploadCompleted(string &_recordID);
     
+    ofShader        shader;
     ofFbo           *renderTarget;
     UICamera        *camera;
     string          dataPath;

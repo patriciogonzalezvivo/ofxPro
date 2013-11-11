@@ -7,6 +7,8 @@
 
 #include "UILog.h"
 
+#define STRINGIFY(A) #A
+
 UILog::UILog(){
 #ifdef TARGET_OSX
     dataPath = "../../../data/";
@@ -22,6 +24,32 @@ UILog::UILog(){
     addNewNote = false;
     
     actualNote = new Note();
+    
+    string vertexShader = STRINGIFY(uniform float minDistance;
+                                    uniform float maxDistance;
+                                    
+                                    float map(float value, float inputMin, float inputMax, float outputMin, float outputMax) {;
+                                        return ((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin);
+                                    }
+                                    
+                                    const float epsilon = 1e-6;
+                                    void main(void){
+                                        vec4 eyeCoord = gl_ModelViewMatrix * gl_Vertex;
+                                        gl_Position = gl_ProjectionMatrix * eyeCoord;
+                                        gl_FrontColor = gl_Color * clamp(map(gl_Position.z, minDistance, maxDistance, 1.0, 0.0), 0.0, 1.0);
+                                    }
+                                    );
+    
+    string fragShader = STRINGIFY(
+                                  void main (void) {
+                                      vec2 st = gl_TexCoord[0].xy;
+                                      gl_FragColor = gl_Color;
+                                  }
+                                  );
+
+    shader.setupShaderFromSource(GL_VERTEX_SHADER, vertexShader);
+    shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShader);
+    shader.linkProgram();
 }
 
 UILog::~UILog(){
@@ -212,9 +240,16 @@ void UILog::draw(){
     }
     
     if(bEnable){
+        ofPushStyle();
+        ofSetLineWidth(2);
+        shader.begin();
+        shader.setUniform1f("minDistance", 0);
+        shader.setUniform1f("maxDistance", 100);
         actualNote->draw();
         for(int i = 0; i < notes.size();i++){
             notes[i]->draw();
         }
+        shader.end();
+        ofPopStyle();
     }
 }
