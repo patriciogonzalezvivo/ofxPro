@@ -59,8 +59,9 @@ void UI3DProject::draw(ofEventArgs & args){
             //  Scene Setup
             //
             selfSceneTransformation();
+//            glEnable(GL_DEPTH_TEST);
             ofEnableDepthTest();
-            glDepthMask(false);
+//            glDepthMask(false);
             
             if (bEdit){
                 lightsDraw();
@@ -102,8 +103,9 @@ void UI3DProject::draw(ofEventArgs & args){
                 ofPopStyle();
             }
             
-            glDepthMask(true);
+//            glDepthMask(true);
             ofDisableDepthTest();
+//            glDisable(GL_DEPTH_TEST);
             fog.end();
             getCameraRef().end();
         }

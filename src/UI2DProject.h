@@ -134,7 +134,6 @@ protected:
     virtual void    setupGui();
     virtual void    setupCoreGuis();
     vector<string>  getPresets();
-    ofxUITextInput  *textField;
     ofxUIRadio      *presetRadio;
     UIReference     gui;
     bool            bDebug;

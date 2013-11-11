@@ -339,8 +339,12 @@ void UI2DProject::setupGui(){
     gui->addToggle("DEBUG",&bDebug);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
+    gui->addButton("SAVE", false);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addButton("LOAD", false);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
     gui->addSpacer();
-    textField = gui->addTextInput("ADD", "", OFX_UI_FONT_SMALL);
     
     gui->setTriggerWidgetsUponLoad(false);
     vector<string> empty;
@@ -364,12 +368,25 @@ void UI2DProject::setupGui(){
 void UI2DProject::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
 
-    if( name == "ADD" ){
-        string presetName = textField->getTextString();
-        if(presetName.length()>0){
-            guiSavePreset(presetName);
-        } else {
-            guiSave();
+    if(name == "SAVE"){
+        ofxUIButton *b = (ofxUIButton *) e.widget;
+        if(b->getValue()){
+            string presetName = ofSystemTextBoxDialog("Save Preset As");
+            if(presetName.length()){
+                guiSavePreset(presetName);
+            } else {
+                guiSave();
+            }
+        }
+    } else if(name == "LOAD"){
+        ofxUIButton *b = (ofxUIButton *) e.widget;
+        if(b->getValue()){
+            ofFileDialogResult result = ofSystemLoadDialog("Load Visual System Preset Folder", true, getDataPath()+"Presets/");
+            if(result.bSuccess && result.fileName.length()){
+                guiLoadPresetFromPath(result.filePath);
+            } else {
+                guiLoad();
+            }
         }
     } else if( name == "EDIT" ){
         
