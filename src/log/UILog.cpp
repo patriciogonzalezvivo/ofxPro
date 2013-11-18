@@ -23,6 +23,8 @@ UILog::UILog(){
     bRecordAll = false;
     addNewNote = false;
     
+    lastPicture = "";
+    lastRercord = "";
     actualNote = new Note();
     
     string vertexShader = STRINGIFY(uniform float minDistance;
@@ -169,19 +171,19 @@ void UILog::screenShot(){
     if( !ofDirectory(dataPath+"snapshots/").exists() ){
         ofDirectory(dataPath+"snapshots/").create();
     }
-    string recordPath = dataPath+"snapshots/" + ofGetTimestampString() + ".png";
-    img.saveImage(recordPath);
-    lastRercord = recordPath;
+    string picturePath = dataPath+"snapshots/" + ofGetTimestampString() + ".png";
+    img.saveImage(picturePath);
+    lastPicture = picturePath;
     upload();
 }
 
 void UILog::record(bool _state){
-    if(bRecording){
+    if(bRecording && !_state){
         recorder.close();
         bRecording = false;
         ofxUIToggle *rec = (ofxUIToggle*)gui->getWidget("REC");
         rec->setValue(false);
-    } else {
+    } else if (!bRecording && _state) {
         if( !ofDirectory(dataPath+"videos/").exists() ){
             ofDirectory(dataPath+"videos/").create();
         }
@@ -209,25 +211,47 @@ void UILog::recordAddFrame(ofBaseHasTexture &_texBase){
 }
 
 void UILog::upload(){
-    if(bRecording){
-        record(false);
+    
+    if (!flickrAPI.bAuthenticated){
+        flickrAPI.authenticate("6394ea9fdcad0043386fbfd07f57a419","abf7c1706ee0fd7f",Flickr::FLICKR_WRITE);
     }
     
-    if(lastRercord!=""){
-        if (!flickrAPI.bAuthenticated){
-            if ( flickrAPI.authenticate("6394ea9fdcad0043386fbfd07f57a419","abf7c1706ee0fd7f",Flickr::FLICKR_WRITE) ){
-                ofAddListener(flickrAPI.uploadComplete, this, &UILog::uploadCompleted);
+    if (flickrAPI.bAuthenticated){
+        
+        string fileToUpload;
+        
+        if(lastPicture!=""){
+            fileToUpload = lastPicture;
+            lastPicture = "";
+        } else {
+            if(bRecording){
+                record(false);
             }
+            fileToUpload = lastRercord;
+            lastRercord = "";
         }
         
-        if (flickrAPI.bAuthenticated){
-            string photoID = flickrAPI.upload(lastRercord);
-            lastRercord = "";
+        if(fileToUpload!=""){
+            FileUploader *file = flickrAPI.upload(fileToUpload);
+            
+            if (file != NULL){
+                ofAddListener(file->isDone, this, &UILog::uploadCompleted);
+                uploadingFiles.push_back(file);
+                lastRercord = "";
+            }
         }
     }
 }
 
-void UILog::uploadCompleted(string &_recordID){
+void UILog::uploadCompleted(string &_result){
+    string _recordID;
+
+    ofxXmlSettings xml;
+    xml.loadFromBuffer(_result);
+    xml.pushTag("rsp");{
+        _recordID = xml.getValue("photoid", "");
+    }; xml.popTag();
+    
     string shortURL = flickrAPI.getMediaById(_recordID).getShortURL();
     cout << "UPLOAD COMPLETE! Check it at " << shortURL << endl;
 }
@@ -251,5 +275,39 @@ void UILog::draw(){
         }
         shader.end();
         ofPopStyle();
+    }
+}
+
+void UILog::drawStatus(){
+    if(isRecording()){
+        ofPushStyle();
+        ofFill();
+        ofSetColor(255, 0, 0,abs(sin(ofGetElapsedTimef()))*255);
+        ofCircle(ofGetWidth()-20, 20, 5);
+        ofPopStyle();
+    }
+    
+    ofPushStyle();
+    ofFill();
+    for(int i = 0; i < uploadingFiles.size(); i++ ){
+        ofSetColor(0, 255, 0,abs(sin(ofGetElapsedTimef()+((float)i*0.5)))*255);
+        
+        ofPushMatrix();
+        ofTranslate(ofGetWidth()-20-10*i, 20+15);
+        ofBeginShape();
+        ofVertex(0, -5);
+        ofVertex(-5, 2);
+        ofVertex(5, 2);
+        ofEndShape(true);
+        ofPopMatrix();
+    }
+    ofPopStyle();
+    
+    for(int i = uploadingFiles.size()-1; i>=0;i--){
+        if ( uploadingFiles[i]->bFinish ){
+            ofRemoveListener(uploadingFiles[i]->isDone, this, &UILog::uploadCompleted);
+            delete uploadingFiles[i];
+            uploadingFiles.erase(uploadingFiles.begin()+i);
+        }
     }
 }

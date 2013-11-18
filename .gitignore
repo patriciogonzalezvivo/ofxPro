@@ -63,3 +63,5 @@ Desktop.ini
 # Miscellaneous
 .mailmap
 
+
+/example/bin/data/oauth.xml

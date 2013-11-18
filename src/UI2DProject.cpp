@@ -163,15 +163,9 @@ void UI2DProject::draw(ofEventArgs & args){
         UI2DProject::getRenderTarget().end();
         selfPostDraw();
 #endif
+        
+        logGui.drawStatus();
 	}
-    
-    if(logGui.isRecording()){
-        ofPushStyle();
-        ofFill();
-        ofSetColor(255, 0, 0,abs(sin(ofGetElapsedTimef()))*255);
-        ofCircle(ofGetWidth()-20, 20, 5);
-        ofPopStyle();
-    }
     
     ofPopStyle();
 }

@@ -23,6 +23,8 @@
 #include "Poco/URI.h"
 #include "Poco/Exception.h"
 
+#include "FileUploader.h"
+
 using namespace Poco::Net;
 using namespace Poco;
 
@@ -189,7 +191,7 @@ namespace Flickr {
         vector<string> tags;
     };
     
-    class API : public ofThread {
+    class API {
     public:
         
         API();
@@ -215,8 +217,7 @@ namespace Flickr {
          * Upload an image from disk
          * @returns {std::string} id of uploaded image. Use getMediaById to get Flickr::Media, which includes the URL, etc.
          */
-        string  upload( string image );
-        ofEvent<string> uploadComplete;
+        FileUploader* upload( string image );
         
         /**
          * Get URL of photo by its ID (helpful after upload)
@@ -239,8 +240,6 @@ namespace Flickr {
         bool                bAuthenticated;
         
     private:
-        void    threadedFunction();
-        string  fileToUpload;
         
         Permissions         currentPerms;
         ofURLFileLoader     dummyLoader; // this is needed because OF doesn't have a way to say "hey, we already made an HTTPStreamFactory!"

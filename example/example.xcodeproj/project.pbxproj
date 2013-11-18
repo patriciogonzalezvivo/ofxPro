@@ -110,6 +110,7 @@
 		334840ca6b3402c8c30cac4e645376bb /* ofxUIOFWrapper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxUIOFWrapper.h; path = ../../../addons/ofxUI/src/ofxUIOFWrapper.h; sourceTree = SOURCE_ROOT; };
 		3687eebddd09f92c8ea74c3019caeb0f /* Recorder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Recorder.h; path = ../../../addons/ofxUIProject/src/log/Recorder.h; sourceTree = SOURCE_ROOT; };
 		37420e1e4019bbc4b25492ee29ca6960 /* UILog.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = UILog.cpp; path = ../../../addons/ofxUIProject/src/log/UILog.cpp; sourceTree = SOURCE_ROOT; };
+		3D4CA51F1839A86400E897CF /* FileUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileUploader.h; path = ../src/log/FileUploader.h; sourceTree = "<group>"; };
 		3b1e218bb487735b3b3c780d9b5f1836 /* UILight.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UILight.h; path = ../../../addons/ofxUIProject/src/gl/UILight.h; sourceTree = SOURCE_ROOT; };
 		3d09afbd7fae4c7994f70bc164775032 /* UI2DProject.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = UI2DProject.h; path = ../../../addons/ofxUIProject/src/UI2DProject.h; sourceTree = SOURCE_ROOT; };
 		40cd6dc1b51fc876188bc0421f3bfb0d /* aPoint.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = aPoint.h; path = ../../../addons/ofxUIProject/src/core/aPoint.h; sourceTree = SOURCE_ROOT; };
@@ -353,6 +354,7 @@
 				3687eebddd09f92c8ea74c3019caeb0f /* Recorder.h */,
 				37420e1e4019bbc4b25492ee29ca6960 /* UILog.cpp */,
 				74fbac8644c02b7d2368cb6625edd19f /* UILog.h */,
+				3D4CA51F1839A86400E897CF /* FileUploader.h */,
 			);
 			name = log;
 			sourceTree = "<group>";

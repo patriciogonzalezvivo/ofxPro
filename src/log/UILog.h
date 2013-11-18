@@ -13,6 +13,8 @@
 #include "Flickr.h"
 #include "Recorder.h"
 
+#include "FileUploader.h"
+
 class UILog : public UIClass {
 public:
     
@@ -40,14 +42,17 @@ public:
     void    logLoad(string _name);
     
     void    draw();
+    void    drawStatus();
+    
     
     
 protected:
     void    setupUI();
     void    guiEvent(ofxUIEventArgs &e);
     
-    void    uploadCompleted(string &_recordID);
-    
+    void    uploadCompleted(string &_result);
+    vector<FileUploader*> uploadingFiles;
+
     ofShader        shader;
     ofFbo           *renderTarget;
     UICamera        *camera;
@@ -55,6 +60,7 @@ protected:
     
     Flickr::API     flickrAPI;
     Recorder        recorder;
+    string          lastPicture;
 	string          lastRercord;
     bool            bRecording, bRecordAll;
     

@@ -273,9 +273,9 @@ namespace Flickr {
         
         // try to load from xml
         ofxXmlSettings xml;
-        bool bLoaded = xml.loadFile("flickr.xml");
+        bool bLoaded = xml.loadFile("oauth.xml");
         if ( bLoaded ){
-            xml.pushTag("settings");{
+            xml.pushTag("flickr");{
                 auth_token = xml.getValue("token", "");
                 if (auth_token == "" ){
                     bLoaded = false;
@@ -409,7 +409,7 @@ namespace Flickr {
             
             // get frob
             string auth_result = makeAPICall( "flickr.auth.getToken", auth_args, FLICKR_XML, true );
-//            cout << auth_result << endl;
+
             xml.loadFromBuffer(auth_result);
             xml.pushTag("rsp"); {
                 xml.pushTag("auth"); {
@@ -417,11 +417,13 @@ namespace Flickr {
                 } xml.popTag();
             } xml.popTag();
             
-            bValidToken = !(auth_token == "" );
+            bValidToken = !( auth_token == "" );
+            
             if ( bValidToken ) break;
             numSeconds += secondsWait;
             sleep(1);
         }
+        
         
         if ( !bValidToken ){
             ofLogError( "OAuth didn't succeed. Maybe you took too long?");
@@ -430,11 +432,11 @@ namespace Flickr {
         
         // save auth token to XML for safe keeping
         ofxXmlSettings toSave;
-        toSave.addTag("settings");
-        toSave.pushTag("settings");{
+        toSave.addTag("flickr");
+        toSave.pushTag("flickr");{
             toSave.addValue("token", auth_token);
         }; toSave.popTag();
-        toSave.saveFile("flickr.xml");
+        toSave.saveFile("oauth.xml");
         
         return true;
     }
@@ -498,85 +500,39 @@ namespace Flickr {
             args["method"] = method;
             call += "&api_sig=" + apiSig( args );
         }
-        
+     
         return call;
     }
     
     //-------------------------------------------------------------
-    string API::upload( string image ){
+    FileUploader* API::upload( string _filePath ){
         if ( !bAuthenticated ){
             ofLogWarning( "Not authenticated! Please call authenticate() with proper api key and secret" );
-            return "";
+            return NULL;
         } else if ( currentPerms != FLICKR_WRITE ){
             ofLogWarning( "You do not have proper permissions to upload! Please call authenticate() with permissions of ofxFlickr::FLICKR_WRITE" );
-            return "";
+            return NULL;
         }
+
+        FileUploader *file = new FileUploader();
         
-        fileToUpload = image;
-        startThread(true, false);
-        return "1";
-    }
-    
-    void API::threadedFunction(){
-        while( isThreadRunning() != 0 ){
-            
-            map<string,string> args;
-            args["api_key"] = api_key;
-            args["auth_token"] = auth_token;
-            
-            string result;
-            FilePartSource * fps = new FilePartSource(fileToUpload, "image/jpeg");
-            
-            try{
-                // prepare session
-                HTTPClientSession session( api_base );
-                HTTPRequest req(HTTPRequest::HTTP_POST, "/services/upload/", HTTPMessage::HTTP_1_0);
-                req.setContentType("multipart/form-data");
-                
-                // setup form
-                HTMLForm form;
-                form.set("api_key", api_key);
-                form.set("auth_token", auth_token);
-                form.set("api_sig", apiSig( args ));
-                form.setEncoding(HTMLForm::ENCODING_MULTIPART);
-                form.addPart("photo", fps);
-                form.prepareSubmit(req);
-                
-                std::ostringstream oszMessage;
-                form.write(oszMessage);
-                std::string szMessage = oszMessage.str();
-                
-                req.setContentLength((int) szMessage.length() );
-                
-                session.setKeepAlive(true);
-                
-                // send form
-                ostream & out = session.sendRequest(req) << szMessage;
-                
-                // get response
-                HTTPResponse res;
-                cout << res.getStatus() << " " << res.getReason() << endl;
-                
-                // print response
-                istream &is = session.receiveResponse(res);
-                StreamCopier::copyToString(is, result);
-            }
-            catch (Exception &ex)
-            {
-                cerr << "error? " + ex.displayText() <<endl;
-            }
+        map<string,string> args;
+        args["api_key"] = api_key;
+        args["auth_token"] = auth_token;
         
-            string photoid;
-            
-            ofxXmlSettings xml;
-            xml.loadFromBuffer(result);
-            xml.pushTag("rsp");{
-                photoid = xml.getValue("photoid", "");
-            }; xml.popTag();
-            
-            ofNotifyEvent(uploadComplete,photoid,this);
-            stopThread();
-        }
+        string result;
+        file->fps = new FilePartSource(_filePath, "image/jpeg");
+        file->session.setHost(api_base);
+        
+        file->form.set("api_key", api_key);
+        file->form.set("auth_token", auth_token);
+        file->form.set("api_sig", apiSig( args ));
+        file->form.setEncoding(HTMLForm::ENCODING_MULTIPART);
+        file->form.addPart("photo", file->fps);
+        
+        file->start();
+        
+        return file;
     }
     
     //-------------------------------------------------------------

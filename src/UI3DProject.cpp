@@ -130,13 +130,8 @@ void UI3DProject::draw(ofEventArgs & args){
         ofDisableLighting();
         selfPostDraw();
 #endif
-        if(logGui.isRecording()){
-            ofPushStyle();
-            ofFill();
-            ofSetColor(255, 0, 0,abs(sin(ofGetElapsedTimef()))*255);
-            ofCircle(ofGetWidth()-20, 20, 5);
-            ofPopStyle();
-        }
+        logGui.drawStatus();
+        
         ofPopStyle();
 	}
     
