@@ -30,8 +30,8 @@ public:
     void    debugDraw();
     
 protected:
-    virtual void    setupUI();
-    virtual void    guiEvent(ofxUIEventArgs &e);
+    virtual void setupUI();
+    virtual void guiEvent(ofxUIEventArgs &e);
     
     virtual void loadCustomValues(ofxXmlSettings &_XML);
     virtual void saveCustomValues(ofxXmlSettings &_XML);

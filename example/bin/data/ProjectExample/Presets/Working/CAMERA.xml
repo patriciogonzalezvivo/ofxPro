@@ -21,6 +21,11 @@
     <Value>0.448275864</Value>
 </Widget>
 <Widget>
+    <Kind>12</Kind>
+    <Name>ADD</Name>
+    <Value></Value>
+</Widget>
+<Widget>
     <Kind>2</Kind>
     <Name>3D</Name>
     <Value>1</Value>

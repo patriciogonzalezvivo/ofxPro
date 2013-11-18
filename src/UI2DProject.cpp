@@ -166,9 +166,11 @@ void UI2DProject::draw(ofEventArgs & args){
 	}
     
     if(logGui.isRecording()){
+        ofPushStyle();
         ofFill();
-        ofSetColor(abs(sin(ofGetElapsedTimef()))*255, 0, 0);
-        ofCircle(ofGetWidth()-20, -20, 5);
+        ofSetColor(255, 0, 0,abs(sin(ofGetElapsedTimef()))*255);
+        ofCircle(ofGetWidth()-20, 20, 5);
+        ofPopStyle();
     }
     
     ofPopStyle();
