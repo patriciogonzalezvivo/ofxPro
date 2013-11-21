@@ -60,6 +60,21 @@ void UICamera::guiEvent(ofxUIEventArgs &e){
     }
 }
 
+ofMatrix4x4 UICamera::getGlobalTransformMatrix(string _camLocName){
+    CameraLocation loc;
+    ofMatrix4x4 mat;
+    mat.makeIdentityMatrix();
+    
+    if(loc.load(pathToLocations+_camLocName+".cam")){
+        ofNode node;
+        node.setPosition(loc.position);
+        node.setOrientation(loc.orientation);
+        return node.getLocalTransformMatrix();
+    }
+    
+    return mat;
+}
+
 void UICamera::loadLocations(string _path){
     pathToLocations = _path;
     

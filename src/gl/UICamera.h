@@ -34,6 +34,7 @@ public:
     string          getClassName(){return "CAMERA";};
     
     ofCamera*       getCameraPtn(){return camera;};
+    ofMatrix4x4     getGlobalTransformMatrix(string _camLocName);
     
     void    enableMouseInput();
     void    disableMouseInput();

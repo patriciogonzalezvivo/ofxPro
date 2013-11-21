@@ -2,4 +2,4 @@
 
 #include "UI3DProject.h"
 
-typedef UI3DProject UIProject;
+typedef UI2DProject UIProject;

@@ -19,7 +19,8 @@ UIText::UIText(){
 void UIText::setupUI(){
     
 //    gui->addTextInput("content", "_content_", OFX_UI_FONT_SMALL);
-    
+    gui->addSlider("width",10,ofGetWindowWidth(),&width);
+    gui->addSlider("height", 10, ofGetWindowHeight(), &height);
     gui->addSlider("font_size",4.0,80.0,&fontSize);
     gui->addSlider("font_scale",0.0,2.0,&fontScale);
     
@@ -73,7 +74,27 @@ void UIText::guiEvent(ofxUIEventArgs &e){
     if (gui != NULL || shape != NULL){
         string name = e.widget->getName();
         
-        if( name == "BLOCK" ){
+        if( name == "width" || name == "height" ){
+            ofPoint center = getCenter();
+            setFromCenter(center, width, height);
+            
+            if ( shape != NULL ){
+                delete shape;
+            }
+            
+            shape = new TextBlock();
+            ((TextBlock*)(shape))->setWrapping(false);
+            shape->set(*this);
+            shape->loadFont( fontDir+"/"+fontName, fontSize );
+            shape->setScale( fontScale );
+            shape->setAlignment( textAlignH , textAlignV );
+            shape->setText(text);
+            
+            ofxUIWidget *angWidget =  gui->getWidget("arc_angle");
+            angWidget->setVisible(false);
+            gui->autoSizeToFitWidgets();
+        
+        } else if( name == "BLOCK" ){
             shapeType = TEXT_SHAPE_BLOCK;
             
             if ( shape != NULL ){

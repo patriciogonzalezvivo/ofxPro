@@ -88,7 +88,7 @@ void TextBlock::draw(){
                     currentWordID = lines[l].wordsID[w];
                     
                     drawX = x + currX;
-                    drawY = yAlig + (font.getLineHeight() * (l + 1));
+                    drawY = yAlig - (font.getLineHeight() * (l + 1));
                     
                     ofPushMatrix();
                     ofScale(scale, scale, scale);
@@ -206,7 +206,7 @@ void TextBlock::draw(){
                     currentWordID = lines[l].wordsID[w];
                     
                     drawX = -(lineWidth / 2) + currX;
-                    drawY = font.getLineHeight() * (l + 1);
+                    drawY = font.getLineHeight() * ((lines.size()-1)-l);//(l + 1);
                     
                     ofPushMatrix();
                     //Move to central point using pre-scaled co-ordinates

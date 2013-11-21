@@ -55,6 +55,13 @@ void ProjectExample::selfSceneTransformation(){
 }
 
 void ProjectExample::selfUpdate(){
+    ofTexture tex = getRenderTarget().getTextureReference();
+    
+    ofPixels pixels;
+    
+    tex.readToPixels(pixels);
+    
+    
 }
 
 void ProjectExample::selfDraw(){
