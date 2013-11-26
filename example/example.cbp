@@ -365,5 +365,98 @@
 		<Unit filename="../../../addons/ofxXmlSettings/libs/tinyxmlparser.cpp">
 			<Option virtualFolder="addons/ofxXmlSettings/libs" />
 		</Unit>
+		<Unit filename="src/ProjectExample.cpp">
+			<Option virtualFolder="src" />
+		</Unit>
+		<Unit filename="src/ProjectExample.h">
+			<Option virtualFolder="src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/core/aColor.h">
+			<Option virtualFolder="addons/ofxUIProject/src/core" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/core/aPoint.h">
+			<Option virtualFolder="addons/ofxUIProject/src/core" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/core/ConsoleListener.h">
+			<Option virtualFolder="addons/ofxUIProject/src/core" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/core/DraggableRectangle.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/core" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/core/DraggableRectangle.h">
+			<Option virtualFolder="addons/ofxUIProject/src/core" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/core/UIClass.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/core" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/core/UIClass.h">
+			<Option virtualFolder="addons/ofxUIProject/src/core" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/gl/CameraLocation.h">
+			<Option virtualFolder="addons/ofxUIProject/src/gl" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/gl/UICamera.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/gl" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/gl/UICamera.h">
+			<Option virtualFolder="addons/ofxUIProject/src/gl" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/grids/UI2DGrid.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/grids" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/grids/UI2DGrid.h">
+			<Option virtualFolder="addons/ofxUIProject/src/grids" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/grids/UI3DGrid.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/grids" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/grids/UI3DGrid.h">
+			<Option virtualFolder="addons/ofxUIProject/src/grids" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/io/UIBufferIn.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/io" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/io/UIBufferIn.h">
+			<Option virtualFolder="addons/ofxUIProject/src/io" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/io/UIRpiCam.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/io" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/io/UIRpiCam.h">
+			<Option virtualFolder="addons/ofxUIProject/src/io" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/log/FileUploader.h">
+			<Option virtualFolder="addons/ofxUIProject/src/log" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/log/Flickr.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/log" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/log/Flickr.h">
+			<Option virtualFolder="addons/ofxUIProject/src/log" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/log/md5.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/log" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/log/md5.h">
+			<Option virtualFolder="addons/ofxUIProject/src/log" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/log/Note.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/log" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/log/Note.h">
+			<Option virtualFolder="addons/ofxUIProject/src/log" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/log/Recorder.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/log" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/log/Recorder.h">
+			<Option virtualFolder="addons/ofxUIProject/src/log" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/log/UILog.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/log" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/log/UILog.h">
+			<Option virtualFolder="addons/ofxUIProject/src/log" />
+		</Unit>
 	</Project>
 </CodeBlocks_project_file>
