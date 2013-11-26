@@ -1,5 +1,5 @@
 //
-//  UIAudioIn.h
+//  UIBufferIn.h
 //
 //  Created by Patricio Gonzalez Vivo on 11/19/13.
 //
@@ -7,11 +7,11 @@
 #pragma once
 #include "UIClass.h"
 
-class UIAudioIn : public UIClass, public ofBaseSoundInput {
+class UIBufferIn : public UIClass, public ofBaseSoundInput {
 public:
     
-    UIAudioIn();
-    virtual ~UIAudioIn();
+    UIBufferIn();
+    virtual ~UIBufferIn();
     
     void    setup(int _sampleRate, int _bufferSize);
     
@@ -22,7 +22,7 @@ public:
     float   *left;
     float   *right;
     
-    string  getClassName(){return "AUDIO-IN";};
+    string  getClassName(){return "BUFFER-IN";};
     
 protected:
     void    setupUI();

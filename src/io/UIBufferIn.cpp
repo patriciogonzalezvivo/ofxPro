@@ -1,14 +1,14 @@
 //
-//  UIAudioIn.cpp
+//  UIBufferIn.cpp
 //  Thesis
 //
 //  Created by Patricio Gonzalez Vivo on 11/19/13.
 //
 //
 
-#include "UIAudioIn.h"
+#include "UIBufferIn.h"
 
-UIAudioIn::UIAudioIn(){
+UIBufferIn::UIBufferIn(){
     bufferSize = 512;
     sampleRate = 44100;
     left    = new float[bufferSize];
@@ -20,39 +20,39 @@ UIAudioIn::UIAudioIn(){
     }
 }
 
-void UIAudioIn::setup(int _sampleRate, int _bufferSize){
+void UIBufferIn::setup(int _sampleRate, int _bufferSize){
     sampleRate = _sampleRate;
     bufferSize = _bufferSize;
 }
 
-UIAudioIn::~UIAudioIn(){
+UIBufferIn::~UIBufferIn(){
     delete []left;
     delete []right;
 }
 
-void UIAudioIn::start(){
+void UIBufferIn::start(){
     stream.setup(0, 2, sampleRate, bufferSize, 4);
     stream.setInput(this);
 }
 
-void UIAudioIn::audioReceived(float * input, int bufferSize, int nChannels ){
+void UIBufferIn::audioReceived(float * input, int bufferSize, int nChannels ){
     for (int i = 0; i < bufferSize; i++){
 		left[i] = input[i*2];
 		right[i] = input[i*2+1];
 	}
 }
 
-void UIAudioIn::stop(){
+void UIBufferIn::stop(){
     stream.stop();
     
 }
 
-void UIAudioIn::setupUI(){
+void UIBufferIn::setupUI(){
     gui->addWaveform("LEFT", left, bufferSize);
     gui->addWaveform("RIGHT", right, bufferSize);
 }
 
-void UIAudioIn::guiEvent(ofxUIEventArgs &e){
+void UIBufferIn::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
     
     if(name == "ENABLE"){
