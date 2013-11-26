@@ -7,7 +7,10 @@
 #pragma once
 
 #include "ofMain.h"
+
+#include <stdint.h>
 #include "md5.h"
+
 #include "ofxXmlSettings.h"
 
 // Poco stuff

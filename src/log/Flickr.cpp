@@ -62,17 +62,17 @@ namespace Flickr {
     string Media::getShortURL(){
         //http://www.flickr.com/groups/api/discuss/72157616713786392/
         //
-        uint64 id_num = 0;
+        uint64_t id_num = 0;
         istringstream cur(id);
         cur >> id_num;
         
         string alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
-        uint64 base_count = 58;
+        uint64_t base_count = 58;
         string toBase58 = "";
         
         while (id_num > 0) {
-            uint64 num = id_num / base_count;
-            uint64 remainder = id_num % base_count;
+            uint64_t num = id_num / base_count;
+            uint64_t remainder = id_num % base_count;
             toBase58 += alphabet[remainder];
             id_num = num;
         }
