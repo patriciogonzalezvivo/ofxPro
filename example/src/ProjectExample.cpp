@@ -20,7 +20,7 @@ void ProjectExample::selfSetupGuis(){
     guiAdd(grid);
     guiAdd(ruler);
     
-    backgroundSet(new UISuperBackground() );
+    backgroundSet(new UIMapBackground() );
 }
 
 void ProjectExample::selfGuiEvent(ofxUIEventArgs &e){

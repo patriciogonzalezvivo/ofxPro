@@ -1,9 +1,9 @@
 <Canvas>
-    <Kind>42</Kind>
+    <Kind>40</Kind>
     <Name>POINT LIGHT 1</Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>325.000000000</YPosition>
+    <YPosition>281.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -12,18 +12,18 @@
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>X</Name>
-    <Value>-2.766174316</Value>
+    <Name>pX</Name>
+    <Value>-258.512084961</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>Y</Name>
-    <Value>14.678588867</Value>
+    <Name>pY</Name>
+    <Value>2.188659668</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>Z</Name>
-    <Value>634.357055664</Value>
+    <Name>pZ</Name>
+    <Value>-472.787719727</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>

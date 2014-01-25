@@ -10,9 +10,9 @@
 UIBackground::UIBackground(){
     guis = NULL;
     
-    hueSlider = NULL;
-    satSlider = NULL;
-    briSlider = NULL;
+//    hueSlider = NULL;
+//    satSlider = NULL;
+//    briSlider = NULL;
 }
 
 void UIBackground::linkUIs( vector<UIReference> *_guis ){
@@ -20,47 +20,14 @@ void UIBackground::linkUIs( vector<UIReference> *_guis ){
 }
 
 void UIBackground::setupUI(){
-    gui->addLabel("Colors");
-    gui->addSlider("HUE", 0.0, 1.0, &color.hue);
-    
-    float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
-    float dim = gui->getGlobalSliderHeight();
-    gui->addSlider("SAT", 0.0, 1.0, &color.sat,length/2.0, dim);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addSlider("BRI", 0.0, 1.0, &color.bri, length/2.0, dim);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    
-    gui->addSpacer();
+    addUIColor("A COLOR", color);
+    addUIColor("B COLOR", color2);
     gui->addToggle("GRADIENT", &bGradient);
-    hueSlider = gui->addSlider("HUE2", 0.0, 1.0, &color2.hue);
-    satSlider = gui->addSlider("SAT2", 0.0, 1.0, &color2.sat,length/2.0, dim);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    briSlider = gui->addSlider("BRI2", 0.0, 1.0, &color2.bri, length/2.0, dim);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    
-    gui->autoSizeToFitWidgets();
 }
 
 void UIBackground::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
-    
-    if(name == "GRADIENT"){
-        if(bGradient){
-            hueSlider->setVisible(true);
-            satSlider->setVisible(true);
-            briSlider->setVisible(true);
-            gui->autoSizeToFitWidgets();
-            if(gui->isMinified()){
-                gui->setMinified(true);
-            }
-        } else {
-            hueSlider->setVisible(false);
-            satSlider->setVisible(false);
-            briSlider->setVisible(false);
-            gui->autoSizeToFitWidgets();
-        }
-    }
-    
+
     if(name == "BRI" || name == "BRI2" || name == "GRADIENT"){
         if (guis != NULL){
             for(int i = 0; i < guis->size(); i++){

@@ -57,13 +57,14 @@ void UILight::setupUI(){
     
     switch( light.getType() ){
         case OF_LIGHT_POINT:{
-            gui->addLabel("POSITION", OFX_UI_FONT_SMALL);
-            gui->addMinimalSlider("X", -1000.0, 1000.0, &x, length/3., dim)->setShowValue(false);
-            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-            gui->addMinimalSlider("Y", -1000.0, 1000.0, &y, length/3., dim)->setShowValue(false);
-            gui->addMinimalSlider("Z", -1000.0, 1000.0, &z, length/3., dim)->setShowValue(false);
-            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-            gui->addSpacer();
+            addUIPos("POSITION", *this);
+//            gui->addLabel("POSITION", OFX_UI_FONT_SMALL);
+//            gui->addMinimalSlider("X", -1000.0, 1000.0, &x, length/3., dim)->setShowValue(false);
+//            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+//            gui->addMinimalSlider("Y", -1000.0, 1000.0, &y, length/3., dim)->setShowValue(false);
+//            gui->addMinimalSlider("Z", -1000.0, 1000.0, &z, length/3., dim)->setShowValue(false);
+//            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+//            gui->addSpacer();
         }
             break;
             
@@ -72,59 +73,65 @@ void UILight::setupUI(){
             gui->addSlider("EXPONENT", 0.0, 128.0, &exponent);
             gui->addSpacer();
             
-            gui->addLabel("POSITION", OFX_UI_FONT_SMALL);
-            gui->addMinimalSlider("X", -1000.0, 1000.0, &x, length/3., dim)->setShowValue(false);
-            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-            gui->addMinimalSlider("Y", -1000.0, 1000.0, &y, length/3., dim)->setShowValue(false);
-            gui->addMinimalSlider("Z", -1000.0, 1000.0, &z, length/3., dim)->setShowValue(false);
-            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-            gui->addSpacer();
+            addUIPos("POSITION", *this);
+//            gui->addLabel("POSITION", OFX_UI_FONT_SMALL);
+//            gui->addMinimalSlider("X", -1000.0, 1000.0, &x, length/3., dim)->setShowValue(false);
+//            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+//            gui->addMinimalSlider("Y", -1000.0, 1000.0, &y, length/3., dim)->setShowValue(false);
+//            gui->addMinimalSlider("Z", -1000.0, 1000.0, &z, length/3., dim)->setShowValue(false);
+//            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+//            gui->addSpacer();
             
-            gui->addLabel("ORIENTATION", OFX_UI_FONT_SMALL);
-            gui->addMinimalSlider("OX", -180.0, 180.0, &oriTarget.x, length/3., dim)->setShowValue(false);
-            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-            gui->addMinimalSlider("OY", -180.0, 180.0, &oriTarget.y, length/3., dim)->setShowValue(false);
-            gui->addMinimalSlider("OZ", -180.0, 180.0, &oriTarget.z, length/3., dim)->setShowValue(false);
-            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-            gui->addSpacer();
+            addUIPos("ORIENTATION", oriTarget);
+//            gui->addLabel("ORIENTATION", OFX_UI_FONT_SMALL);
+//            gui->addMinimalSlider("OX", -180.0, 180.0, &oriTarget.x, length/3., dim)->setShowValue(false);
+//            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+//            gui->addMinimalSlider("OY", -180.0, 180.0, &oriTarget.y, length/3., dim)->setShowValue(false);
+//            gui->addMinimalSlider("OZ", -180.0, 180.0, &oriTarget.z, length/3., dim)->setShowValue(false);
+//            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+//            gui->addSpacer();
         }
             break;
             
         case OF_LIGHT_DIRECTIONAL:{
-            gui->addLabel("ORIENTATION", OFX_UI_FONT_SMALL);
-            gui->addMinimalSlider("OX", -180.0, 180.0, &oriTarget.x, length/3., dim)->setShowValue(false);
-            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-            gui->addMinimalSlider("OY", -180.0, 180.0, &oriTarget.y, length/3., dim)->setShowValue(false);
-            gui->addMinimalSlider("OZ", -180.0, 180.0, &oriTarget.z, length/3., dim)->setShowValue(false);
-            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-            gui->addSpacer();
+            addUIPos("ORIENTATION", oriTarget);
+//            gui->addLabel("ORIENTATION", OFX_UI_FONT_SMALL);
+//            gui->addMinimalSlider("OX", -180.0, 180.0, &oriTarget.x, length/3., dim)->setShowValue(false);
+//            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+//            gui->addMinimalSlider("OY", -180.0, 180.0, &oriTarget.y, length/3., dim)->setShowValue(false);
+//            gui->addMinimalSlider("OZ", -180.0, 180.0, &oriTarget.z, length/3., dim)->setShowValue(false);
+//            gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+//            gui->addSpacer();
         }
             break;
     }
     
-    gui->addLabel("AMBIENT", OFX_UI_FONT_SMALL);
-    gui->addMinimalSlider("aHUE", 0.0, 1.0, &ambient.hue, length, dim)->setShowValue(false);
-    gui->addMinimalSlider("aSAT", 0.0, 1.0, &ambient.sat,length/2.0, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMinimalSlider("aBRI", 0.0, 1.0, &ambient.bri, length/2.0, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    addUIColor("AMBIENT", ambient);
+//    gui->addLabel("AMBIENT", OFX_UI_FONT_SMALL);
+//    gui->addMinimalSlider("aHUE", 0.0, 1.0, &ambient.hue, length, dim)->setShowValue(false);
+//    gui->addMinimalSlider("aSAT", 0.0, 1.0, &ambient.sat,length/2.0, dim)->setShowValue(false);
+//    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+//    gui->addMinimalSlider("aBRI", 0.0, 1.0, &ambient.bri, length/2.0, dim)->setShowValue(false);
+//    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+//    gui->addSpacer();
     
-    gui->addSpacer();
-    gui->addLabel("DIFFUSE", OFX_UI_FONT_SMALL);
-    gui->addMinimalSlider("dHUE", 0.0, 1.0, &diffuse.hue, length, dim)->setShowValue(false);
-    gui->addMinimalSlider("dSAT", 0.0, 1.0, &diffuse.sat,length/2.0, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMinimalSlider("dBRI", 0.0, 1.0, &diffuse.bri, length/2.0, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    addUIColor("DIFFUSE", diffuse);
+//    gui->addLabel("DIFFUSE", OFX_UI_FONT_SMALL);
+//    gui->addMinimalSlider("dHUE", 0.0, 1.0, &diffuse.hue, length, dim)->setShowValue(false);
+//    gui->addMinimalSlider("dSAT", 0.0, 1.0, &diffuse.sat,length/2.0, dim)->setShowValue(false);
+//    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+//    gui->addMinimalSlider("dBRI", 0.0, 1.0, &diffuse.bri, length/2.0, dim)->setShowValue(false);
+//    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+//    gui->addSpacer();
     
-    gui->addSpacer();
-    gui->addLabel("SPECULAR", OFX_UI_FONT_SMALL);
-    gui->addMinimalSlider("sHUE", 0.0, 1.0, &specular.hue, length, dim)->setShowValue(false);
-    gui->addMinimalSlider("sSAT", 0.0, 1.0, &specular.sat,length/2.0, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMinimalSlider("sBRI", 0.0, 1.0, &specular.bri, length/2.0, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addSpacer();
+    addUIColor("SPECULAR", specular);
+//    gui->addLabel("SPECULAR", OFX_UI_FONT_SMALL);
+//    gui->addMinimalSlider("sHUE", 0.0, 1.0, &specular.hue, length, dim)->setShowValue(false);
+//    gui->addMinimalSlider("sSAT", 0.0, 1.0, &specular.sat,length/2.0, dim)->setShowValue(false);
+//    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+//    gui->addMinimalSlider("sBRI", 0.0, 1.0, &specular.bri, length/2.0, dim)->setShowValue(false);
+//    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+//    gui->addSpacer();
 }
 
 void UILight::guiEvent(ofxUIEventArgs &e){

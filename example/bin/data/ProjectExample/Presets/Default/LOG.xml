@@ -1,9 +1,9 @@
 <Canvas>
-    <Kind>42</Kind>
+    <Kind>40</Kind>
     <Name>LOG</Name>
-    <IsMinified>1</IsMinified>
-    <XPosition>1.000000000</XPosition>
-    <YPosition>150.000000000</YPosition>
+    <IsMinified>0</IsMinified>
+    <XPosition>1271.000000000</XPosition>
+    <YPosition>86.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -24,4 +24,14 @@
     <Kind>2</Kind>
     <Name>ANOTATE</Name>
     <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>12</Kind>
+    <Name>ADD</Name>
+    <Value></Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>logTest</Name>
+    <Value>1</Value>
 </Widget>

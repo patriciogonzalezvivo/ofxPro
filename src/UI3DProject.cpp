@@ -200,6 +200,7 @@ void UI3DProject::mouseDragged(ofMouseEventArgs & args){
     else if(bEdit && selectedLigth != "NULL"){
         ofPoint pmouse(ofGetPreviousMouseX(),-ofGetPreviousMouseY());
         ofPoint mouse(ofGetMouseX(),-ofGetMouseY());
+        
         ofPoint diff = getCameraRef().cameraToWorld(mouse)-getCameraRef().cameraToWorld(pmouse);
         *lights[selectedLigth]+=diff*0.1;
     }
@@ -395,7 +396,6 @@ void UI3DProject::guiLoad(){
 void UI3DProject::guiSave(){
     UI2DProject::guiSave();
     camera.save(getDataPath()+"Presets/Working/"+"current.cam");
-//    camera.save(getDataPath()+"cameras/default.cam");
 }
 
 void UI3DProject::guiLoadPresetFromPath(string presetPath){
@@ -409,7 +409,6 @@ void UI3DProject::guiSavePreset(string presetName){
     UI2DProject::guiSavePreset(presetName);
 
     camera.save(getDataPath()+"Presets/"+presetName+"/current.cam");
-//    camera.save(getDataPath()+"cameras/default.cam");
     camera.enableMouseInput();
 }
 

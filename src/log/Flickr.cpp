@@ -342,6 +342,8 @@ namespace Flickr {
                 case FLICKR_DELETE:
                     if ( perm == "delete") bNeedNewToken = false;
                     break;
+                case FLICKR_NONE:
+                    break;
             }
         } else {
             cout << result << endl;
@@ -380,6 +382,8 @@ namespace Flickr {
                 break;
             case FLICKR_DELETE:
                 perm = "delete";
+                break;
+            case FLICKR_NONE:
                 break;
         }
         map<string,string> toEncode;

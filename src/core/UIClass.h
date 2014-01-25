@@ -10,6 +10,9 @@
 
 #include "ofxUI.h"
 
+#include "aColor.h"
+#include "aPoint.h"
+
 typedef shared_ptr<ofxUISuperCanvas> UIReference;
 
 class UIClass {
@@ -25,6 +28,11 @@ public:
 protected:
     virtual void        setupUI( ) = 0;
     virtual void        guiEvent(ofxUIEventArgs &e) = 0;
+    
+    virtual void        addUIPos(string _NAME, aPoint &_pos);
+    virtual void        addUIPos(string _NAME, ofPoint &_pos);
+    virtual void        addUIColor(string _NAME, aColor &_color);
+    
     UIReference         gui;
 };
 

@@ -4,6 +4,8 @@
 //  Created by Patricio Gonzalez Vivo on 10/15/13.
 //
 //
+//#define PACKED_APP
+
 #pragma once
 #include "ofMain.h"
 
@@ -15,6 +17,7 @@
 //
 #include "UIClass.h"
 #include "UIBackground.h"
+#include "UIMapBackground.h"
 #include "UISuperBackground.h"
 #include "UILog.h"
 

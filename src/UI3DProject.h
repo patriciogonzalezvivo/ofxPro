@@ -41,10 +41,10 @@ public:
 	virtual void draw(ofEventArgs & args);
 	virtual void exit(ofEventArgs & args);
     
-//    virtual void keyPressed(ofKeyEventArgs & args){UI2DProject::keyPressed(args);};
+//  virtual void keyPressed(ofKeyEventArgs & args){UI2DProject::keyPressed(args);};
 //	virtual void keyReleased(ofKeyEventArgs & args){UI2DProject::keyReleased(args);};
 //    
-//    virtual void mouseMoved(ofMouseEventArgs & args){UI2DProject::mouseMoved(args);};
+//  virtual void mouseMoved(ofMouseEventArgs & args){UI2DProject::mouseMoved(args);};
     virtual void mousePressed(ofMouseEventArgs & args);
 	virtual void mouseDragged(ofMouseEventArgs & args);
 	virtual void mouseReleased(ofMouseEventArgs & args);

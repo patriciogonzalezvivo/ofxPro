@@ -9,7 +9,13 @@
 
 string UI2DProject::getDataPath(){
 #ifdef TARGET_OSX
+    
+#ifdef PACKED_APP
+    string path = "data/"+getSystemName()+"/";
+#else
     string path = "../../../data/"+getSystemName()+"/";
+#endif
+    
 #else
     string path = getSystemName()+"/";
 #endif
@@ -18,7 +24,10 @@ string UI2DProject::getDataPath(){
 
 void UI2DProject::setup(){
 	cout << "SETTING UP SYSTEM " << getSystemName() << endl;
-	
+#ifdef PACKED_APP
+    ofSetDataPathRoot("data/");
+#endif
+    
     //  Create directories if they are not there
     //
     ofDirectory dir;
@@ -226,7 +235,9 @@ void UI2DProject::keyPressed(ofKeyEventArgs & args){
             logGui.upload();
             break;
         case 'h':
+#ifndef PACKED_APP
 			guiToggle();
+#endif
             break;
         case 'f':
             ofToggleFullscreen();

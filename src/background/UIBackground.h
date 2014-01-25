@@ -33,7 +33,7 @@ protected:
     
     vector<UIReference> *guis;
     
-    ofxUISlider     *hueSlider;
-    ofxUISlider     *satSlider;
-    ofxUISlider     *briSlider;
+//    ofxUISlider     *hueSlider;
+//    ofxUISlider     *satSlider;
+//    ofxUISlider     *briSlider;
 };
