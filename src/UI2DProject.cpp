@@ -160,8 +160,10 @@ void UI2DProject::draw(ofEventArgs & args){
             //
             {
                 ofPushStyle();
+                ofPushMatrix();
                 ofSetColor(background->getUIBrightness()*255);
                 logGui.draw();
+                ofPopMatrix();
                 ofPopStyle();
             }
         }

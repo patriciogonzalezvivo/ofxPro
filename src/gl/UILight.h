@@ -36,6 +36,7 @@ public:
     
     void    setName( string _name );
     void    setType( ofLightType _type );
+    void    move( ofPoint _pos );
 
     void    setupUI();
     string  getClassName(){ return name; }

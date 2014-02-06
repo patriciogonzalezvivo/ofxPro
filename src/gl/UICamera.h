@@ -15,7 +15,7 @@ class UICamera : public UIClass {
 public:
     
     UICamera();
-    virtual ~UICamera(){};
+    virtual ~UICamera();
     
     bool    save(string _savePath);
     bool    load(string _savePath);
@@ -56,7 +56,7 @@ private:
     string          newLocationName;
     float           pct;
     float           speed;
-    
+    bool            bNewLocation;
 };
 
 

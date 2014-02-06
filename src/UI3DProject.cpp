@@ -59,6 +59,15 @@ void UI3DProject::draw(ofEventArgs & args){
             //  Scene Setup
             //
             selfSceneTransformation();
+            
+            //  Cached Values
+            //
+            glGetFloatv(GL_MODELVIEW_MATRIX, viewMatrix.getPtr());
+            glGetFloatv(GL_PROJECTION_MATRIX, projectionMatrix.getPtr());
+            glGetDoublev(GL_PROJECTION_MATRIX, matP);
+            glGetDoublev(GL_MODELVIEW_MATRIX, matM);
+            glGetIntegerv(GL_VIEWPORT, viewport);
+            
 //            glEnable(GL_DEPTH_TEST);
             ofEnableDepthTest();
 //            glDepthMask(false);
@@ -107,6 +116,23 @@ void UI3DProject::draw(ofEventArgs & args){
             ofDisableDepthTest();
 //            glDisable(GL_DEPTH_TEST);
             fog.end();
+            
+            //  Update Mouse
+            //
+            if (bUpdateCursor){
+                unprojectCursor(cursor, ofGetMouseX(), ofGetMouseY());
+                bUpdateCursor = false;
+            }
+            
+//            if (bEdit){
+//                ofEnableDepthTest();
+//                ofPushStyle();
+//                ofSetColor(255);
+//                ofSphere(cursor.world, 10);
+//                ofPopStyle();
+//                ofDisableDepthTest();
+//            }
+            
             getCameraRef().end();
         }
         
@@ -153,6 +179,56 @@ void UI3DProject::exit(ofEventArgs & args){
 
 //-------------------- Mouse events + camera interaction
 //
+ofPoint UI3DProject::unproject(ofPoint _screen){
+    float depth;
+    //read z value from depth buffer at mouse coords
+    getRenderTarget().getDepthTexture().bind();
+    glReadPixels(_screen.x, _screen.y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+    getRenderTarget().getDepthTexture().unbind();
+    
+    if (depth == 1.0f) {
+        return ofPoint(0,0,0);
+    } else {
+        GLdouble c[3];
+        gluUnProject(_screen.x, _screen.y, depth, matM, matP, viewport, c, c+1, c+2);
+        return ofPoint(c[0], c[1],c[2]);
+    }
+}
+
+void UI3DProject::unprojectCursor(MovingCursor &_cursor, float _x, float _y){
+    _cursor.lastFrame = _cursor;
+    
+    //consider that these should be in viewport space
+    _cursor.screen.x = _x;
+    _cursor.screen.y = _y;
+    
+    cursor.world = unproject(_cursor.screen);
+    
+    if(cursor.world.z == 1.0f){
+        _cursor.worldValid = false;
+    } else {
+        _cursor.worldValid = true;
+    }
+    
+    ////
+    //worldViewFrameDifference
+    ofVec3f screenDiffNorm = _cursor.getScreenFrameDifference() / ofVec2f(viewport[2], -viewport[3]);
+    _cursor.worldViewFrameDifference = screenDiffNorm * viewMatrix.getInverse().getRotate();
+    float distance = (camera.getCameraPtn()->getPosition() - _cursor.world).length();
+    _cursor.worldViewFrameDifference *= distance * tan( camera.getCameraPtn()->getFov() * DEG_TO_RAD / 2.0f) * 2.0f * 2.0f;
+    _cursor.worldViewFrameDifference.x *= ofGetWidth() / ofGetHeight();
+    
+    _cursor.lastUpdate = ofGetFrameNum();
+}
+
+void UI3DProject::mouseMoved(ofMouseEventArgs & args){
+    if (bEdit){
+        bUpdateCursor = true;
+    }
+    
+    UI2DProject::mouseMoved(args);
+};
+
 void UI3DProject::mousePressed(ofMouseEventArgs & args){
 	if( cursorIsOverGUI() ){
 		camera.disableMouseInput();
@@ -191,6 +267,10 @@ void UI3DProject::mousePressed(ofMouseEventArgs & args){
 }
 
 void UI3DProject::mouseDragged(ofMouseEventArgs & args){
+    if (bEdit){
+        bUpdateCursor = true;
+    }
+    
     if (cursorIsOverGUI()){
         
     }
@@ -198,11 +278,12 @@ void UI3DProject::mouseDragged(ofMouseEventArgs & args){
         logGui.penDown(ofPoint(args.x,args.y));
     }
     else if(bEdit && selectedLigth != "NULL"){
-        ofPoint pmouse(ofGetPreviousMouseX(),-ofGetPreviousMouseY());
-        ofPoint mouse(ofGetMouseX(),-ofGetMouseY());
-        
-        ofPoint diff = getCameraRef().cameraToWorld(mouse)-getCameraRef().cameraToWorld(pmouse);
-        *lights[selectedLigth]+=diff*0.1;
+        if(cursor.worldValid){
+            ofPoint pmouse(ofGetPreviousMouseX(),-ofGetPreviousMouseY());
+            ofPoint mouse(ofGetMouseX(),-ofGetMouseY());
+            ofPoint diff = getCameraRef().cameraToWorld(mouse)-getCameraRef().cameraToWorld(pmouse);
+            *lights[selectedLigth]+=diff*0.1;//diff.normalize()*cursor.getWorldFrameDifference().length();
+        }
     }
     else {
         UI2DProject::mouseDragged(args);
@@ -312,13 +393,8 @@ void UI3DProject::lightAdd( string _name, ofLightType _type ){
 
 string UI3DProject::cursorIsOverLight(){
     if(bEnableLights){
-        ofPoint mouse(ofGetMouseX(),ofGetMouseY());
-        
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-            ofPoint pos3D( it->second->x, it->second->y, it->second->z);
-            ofPoint pos2D = getCameraRef().worldToScreen(pos3D);
-            
-            if ( pos2D.distance(mouse) < 50 ){
+            if ( it->second->distance(cursor.world) < 30 ){
                 return it->first;
             }
         }

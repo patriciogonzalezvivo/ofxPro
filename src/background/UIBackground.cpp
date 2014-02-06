@@ -9,10 +9,6 @@
 
 UIBackground::UIBackground(){
     guis = NULL;
-    
-//    hueSlider = NULL;
-//    satSlider = NULL;
-//    briSlider = NULL;
 }
 
 void UIBackground::linkUIs( vector<UIReference> *_guis ){
@@ -28,7 +24,7 @@ void UIBackground::setupUI(){
 void UIBackground::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
 
-    if(name == "BRI" || name == "BRI2" || name == "GRADIENT"){
+    if(name == "aBRI" || name == "bBRI" || name == "GRADIENT"){
         if (guis != NULL){
             for(int i = 0; i < guis->size(); i++){
                 (*guis)[i]->setWidgetColor(OFX_UI_WIDGET_COLOR_BACK, ofColor(getUIBrightness()*255,OFX_UI_COLOR_BACK_ALPHA*4.0));
@@ -40,7 +36,7 @@ void UIBackground::guiEvent(ofxUIEventArgs &e){
 
 float UIBackground::getUIBrightness(){
     if(bGradient){
-        return 1.0-color2.bri;
+        return 1.0-(color2.bri+color.bri)*0.5;
     } else {
         return 1.0-color.bri;
     }

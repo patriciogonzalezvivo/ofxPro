@@ -14,6 +14,8 @@
 #include "UIMaterial.h"
 #include "UIFog.h"
 
+#include "Cursor.h"
+
 class UI3DProject : public UI2DProject {
 public:
     
@@ -44,7 +46,7 @@ public:
 //  virtual void keyPressed(ofKeyEventArgs & args){UI2DProject::keyPressed(args);};
 //	virtual void keyReleased(ofKeyEventArgs & args){UI2DProject::keyReleased(args);};
 //    
-//  virtual void mouseMoved(ofMouseEventArgs & args){UI2DProject::mouseMoved(args);};
+    virtual void mouseMoved(ofMouseEventArgs & args);
     virtual void mousePressed(ofMouseEventArgs & args);
 	virtual void mouseDragged(ofMouseEventArgs & args);
 	virtual void mouseReleased(ofMouseEventArgs & args);
@@ -66,6 +68,15 @@ protected:
     //
     UICamera        camera;
     UIFog           fog;
+    
+    ofPoint         unproject(ofPoint _screen);
+    void            unprojectCursor(MovingCursor &_cursor, float _x, float _y);
+    MovingCursor    cursor;
+    bool            bUpdateCursor;
+    
+    GLint           viewport[4];
+	GLdouble        matM[16], matP[16];
+    ofMatrix4x4     viewMatrix,projectionMatrix;
     
     //  LIGHTS
     //

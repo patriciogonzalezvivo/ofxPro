@@ -71,6 +71,7 @@ void ProjectExample::selfDraw(){
         ofPushStyle();
         materials["MATERIAL 1"]->begin();
         
+        ofSetColor(255);
         grid.draw();
         
         ofSetColor(255);

@@ -154,7 +154,7 @@ void UILog::guiEvent(ofxUIEventArgs &e){
 bool UILog::penDown(ofPoint _mouse){
     if(bEnable){
         if(camera != NULL){
-            actualNote->addPoint( camera->getCameraPtn()->screenToWorld(_mouse) );
+            actualNote->addPoint(camera->getCameraPtn()->screenToWorld(_mouse) );
         } else {
             actualNote->addPoint(_mouse);
         }
@@ -264,17 +264,27 @@ void UILog::draw(){
     }
     
     if(bEnable){
-        ofPushStyle();
-        ofSetLineWidth(2);
-        shader.begin();
-        shader.setUniform1f("minDistance", 0);
-        shader.setUniform1f("maxDistance", 100);
-        actualNote->draw();
-        for(int i = 0; i < notes.size();i++){
-            notes[i]->draw();
+        if(camera != NULL){
+            ofPushStyle();
+            ofSetLineWidth(2);
+            shader.begin();
+            shader.setUniform1f("minDistance", 0);
+            shader.setUniform1f("maxDistance", 100);
+            actualNote->draw();
+            for(int i = 0; i < notes.size();i++){
+                notes[i]->draw();
+            }
+            shader.end();
+            ofPopStyle();
+        } else {
+            ofPushStyle();
+            ofSetLineWidth(2);
+            actualNote->draw();
+            for(int i = 0; i < notes.size();i++){
+                notes[i]->draw();
+            }
+            ofPopStyle();
         }
-        shader.end();
-        ofPopStyle();
     }
 }
 

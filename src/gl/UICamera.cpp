@@ -16,10 +16,22 @@ UICamera::UICamera(){
     ((ofEasyCam*)camera)->setDistance(200);
     type = "easyCam";
     
+    textField = NULL;
     locations = NULL;
     newLocationName = "";
+    bNewLocation = false;
     
     ofAddListener(ofEvents().update, this, &UICamera::update);
+}
+
+UICamera::~UICamera(){
+//    if (textField != NULL) {
+//        delete textField;
+//    }
+//    
+//    if (locations != NULL) {
+//        delete locations;
+//    }
 }
 
 void UICamera::setupUI(){
@@ -38,8 +50,8 @@ void UICamera::guiEvent(ofxUIEventArgs &e){
     if(name == "FOV"){
         camera->setFov(FOV);
     } else if(name == "ADD"){
-        string locationName = textField->getTextString();
-        newLocationName = locationName;
+        newLocationName = textField->getTextString();
+        bNewLocation = true;
     } else if (name == "LOCATIONS"){
         
     } else if (name == "ENABLE"){
@@ -150,9 +162,10 @@ void UICamera::update(ofEventArgs& args){
         } 
     }
     
-    if(newLocationName.length()){
+    if(bNewLocation){
         addLocation(newLocationName);
         newLocationName = "";
+        bNewLocation = false;
     }
 }
 

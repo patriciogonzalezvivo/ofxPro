@@ -79,6 +79,7 @@
 		3D425519189448B500A3D2EA /* UIText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D4254FB189448B500A3D2EA /* UIText.cpp */; };
 		3D42551A189448B500A3D2EA /* UI2DProject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D4254FD189448B500A3D2EA /* UI2DProject.cpp */; };
 		3D42551B189448B500A3D2EA /* UI3DProject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D4254FF189448B500A3D2EA /* UI3DProject.cpp */; };
+		3DBFB4CE18969DED0076DEE4 /* Cursor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB4CC18969DED0076DEE4 /* Cursor.cpp */; };
 		5a4349e9754d6fa14c0f2a3a1abc30b6 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = fc5da1c87211d4f6377da7199d8c5a1e /* tinyxmlparser.cpp */; };
 		636d2481de0f1a2481a31eafec49d8d1 /* ProjectExample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6902496c5005749b9e0692dd29dac44f /* ProjectExample.cpp */; };
 		63b57ac5bf4ef088491e0317dbb2ecaa /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50df87d612c5aae17aafa6c02c6bc570 /* ofxXmlSettings.cpp */; };
@@ -300,6 +301,8 @@
 		3D4254FF189448B500A3D2EA /* UI3DProject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UI3DProject.cpp; sourceTree = "<group>"; };
 		3D425500189448B500A3D2EA /* UI3DProject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UI3DProject.h; sourceTree = "<group>"; };
 		3D425501189448B500A3D2EA /* UIProject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIProject.h; sourceTree = "<group>"; };
+		3DBFB4CC18969DED0076DEE4 /* Cursor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cursor.cpp; sourceTree = "<group>"; };
+		3DBFB4CD18969DED0076DEE4 /* Cursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cursor.h; sourceTree = "<group>"; };
 		50df87d612c5aae17aafa6c02c6bc570 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxXmlSettings.cpp; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.cpp; sourceTree = SOURCE_ROOT; };
 		6902496c5005749b9e0692dd29dac44f /* ProjectExample.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ProjectExample.cpp; path = src/ProjectExample.cpp; sourceTree = SOURCE_ROOT; };
 		832bdc407620cdba568b713d2252c43c /* tinyxmlerror.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = tinyxmlerror.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxmlerror.cpp; sourceTree = SOURCE_ROOT; };
@@ -533,6 +536,8 @@
 				3D4254C7189448B500A3D2EA /* DraggableRectangle.h */,
 				3D4254C8189448B500A3D2EA /* UIClass.cpp */,
 				3D4254C9189448B500A3D2EA /* UIClass.h */,
+				3DBFB4CC18969DED0076DEE4 /* Cursor.cpp */,
+				3DBFB4CD18969DED0076DEE4 /* Cursor.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -825,6 +830,7 @@
 				3D425504189448B500A3D2EA /* UISuperBackground.cpp in Sources */,
 				3D4254B7189448B000A3D2EA /* ofxUIWidget.cpp in Sources */,
 				3D4254B1189448B000A3D2EA /* ofxUITextArea.cpp in Sources */,
+				3DBFB4CE18969DED0076DEE4 /* Cursor.cpp in Sources */,
 				3D4254B0189448B000A3D2EA /* ofxUITabBar.cpp in Sources */,
 				3D42548E189448B000A3D2EA /* ofxUIBiLabelSlider.cpp in Sources */,
 				3D425508189448B500A3D2EA /* UIFog.cpp in Sources */,

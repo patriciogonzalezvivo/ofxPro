@@ -32,8 +32,4 @@ protected:
     virtual void    guiEvent(ofxUIEventArgs &e);
     
     vector<UIReference> *guis;
-    
-//    ofxUISlider     *hueSlider;
-//    ofxUISlider     *satSlider;
-//    ofxUISlider     *briSlider;
 };

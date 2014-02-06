@@ -69,7 +69,14 @@ void UIMapBackground::setupUI(){
 void UIMapBackground::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
 
-    if (name.find('.') != string::npos){
+    if(name == "aBRI" || name == "bBRI" || name == "GRADIENT"){
+        if (guis != NULL){
+            for(int i = 0; i < guis->size(); i++){
+                (*guis)[i]->setWidgetColor(OFX_UI_WIDGET_COLOR_BACK, ofColor(getUIBrightness()*255,OFX_UI_COLOR_BACK_ALPHA*4.0));
+                (*guis)[i]->setColorBack( ofColor(getUIBrightness()*255, OFX_UI_COLOR_BACK_ALPHA*4.0));
+            }
+        }
+    } else if (name.find('.') != string::npos){
         ofxUIToggle *t = (ofxUIToggle*)e.widget;
         if (t != NULL){
             if (t->getValue()){
@@ -77,11 +84,12 @@ void UIMapBackground::guiEvent(ofxUIEventArgs &e){
             }
         }
     }
+    
+    
 }
 
 void UIMapBackground::update(ofEventArgs & args){
     if(bEnable){
-
         if(!bMeshReady){
             getBackgroundMesh(mesh, texture, ofGetWidth(), ofGetHeight());
             bMeshReady = true;
@@ -123,11 +131,10 @@ void UIMapBackground::getBackgroundMesh(ofMesh& _mesh, ofTexture& _image, float 
 
 void UIMapBackground::draw(){
     if(bEnable){
-        
-        
         ofBackground(color);
         
         if (bGradient && texture.isAllocated()){
+            
             ofPushStyle();
             ofSetColor(255);
             
