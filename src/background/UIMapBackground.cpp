@@ -10,7 +10,16 @@
 
 UIMapBackground::UIMapBackground(){
     UIBackground();
+
+    string vertShader = STRINGIFY(
+                                  varying vec2 oTexCoord;
+                                  void main(){
+                                      oTexCoord = gl_MultiTexCoord0.xy;
+                                      gl_Position = ftransform();
+                                  }
+                                  );
     
+    shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShader);
     string fragShader = STRINGIFY(
                                   uniform sampler2DRect image;
                                   uniform vec3 colorOne;
@@ -22,18 +31,7 @@ UIMapBackground::UIMapBackground(){
                                       gl_FragColor = vec4( mix(colorTwo,colorOne, pow(texture2DRect(image,oTexCoord).r, gradientExponent)), 1.0);
                                   }
                                   );
-    
     shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShader);
-    
-    string vertShader = STRINGIFY(
-                                  varying vec2 oTexCoord;
-                                  void main(){
-                                      oTexCoord = gl_MultiTexCoord0.xy;
-                                      gl_Position = ftransform();
-                                  }
-                                  );
-    
-    shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShader);
     shader.linkProgram();
     
     backgrounds = NULL;

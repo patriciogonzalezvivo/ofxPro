@@ -469,8 +469,6 @@ void UI2DProject::setupRenderGui(){
     rdrGui->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
     rdrGui->addWidgetToHeader(toggle);
     rdrGui->addSpacer();
-    
-    rdrGui->addSpacer();
     selfSetupRenderGui();
     
     rdrGui->autoSizeToFitWidgets();

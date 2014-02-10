@@ -15,7 +15,6 @@ class UICamera : public UIClass {
 public:
     
     UICamera();
-    virtual ~UICamera();
     
     bool    save(string _savePath);
     bool    load(string _savePath);

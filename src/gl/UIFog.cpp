@@ -1,6 +1,5 @@
 //
 //  UIFog.cpp
-//  Thesis
 //
 //  Created by Patricio Gonzalez Vivo on 9/15/13.
 //

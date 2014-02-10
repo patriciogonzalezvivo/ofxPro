@@ -24,16 +24,6 @@ UICamera::UICamera(){
     ofAddListener(ofEvents().update, this, &UICamera::update);
 }
 
-UICamera::~UICamera(){
-//    if (textField != NULL) {
-//        delete textField;
-//    }
-//    
-//    if (locations != NULL) {
-//        delete locations;
-//    }
-}
-
 void UICamera::setupUI(){
     gui->addSlider("FOV", 0, 180, &FOV);
     gui->addSlider("Speed", 0.0, 1.0, &speed);
