@@ -18,7 +18,6 @@
 #include "UIClass.h"
 #include "UIBackground.h"
 #include "UIMapBackground.h"
-#include "UISuperBackground.h"
 #include "UILog.h"
 
 //  RaspberryPi Extras

@@ -57,8 +57,8 @@ UILUT::UILUT(){
                                           vec2 st = gl_FragCoord.xy / resolution.xy;
                                           st.y = 1.0 - st.y;
                                           vec4 srcColor = texture2D(tex0, st);
-//                                          gl_FragColor = sampleAs3DTexture(tex1,srcColor.rgb);
-                                          gl_FragColor = cheapLUT(tex1,srcColor.rgb);
+                                          gl_FragColor = sampleAs3DTexture(tex1,srcColor.rgb);
+//                                          gl_FragColor = cheapLUT(tex1,srcColor.rgb);
                                           gl_FragColor.a = srcColor.a;
                                       }
                                       );

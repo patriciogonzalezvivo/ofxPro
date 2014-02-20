@@ -43,10 +43,10 @@ public:
         dst = &(FBOs[++(flag)%2]);
     }
     
-    virtual void    clear(){
+    virtual void clear(float _alpha = 0){
         for(int i = 0; i < 2; i++){
             FBOs[i].begin();
-            ofClear(0,0);
+            ofClear(ofFloatColor(0,_alpha));
             FBOs[i].end();
         }
     }
