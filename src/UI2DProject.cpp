@@ -4,7 +4,6 @@
 //  Created by Patricio Gonzalez Vivo on 10/15/13.
 //
 //
-
 #include "UI2DProject.h"
 
 string UI2DProject::getDataPath(){
@@ -13,6 +12,7 @@ string UI2DProject::getDataPath(){
 #ifdef PACKED_APP
     string path = "data/"+getSystemName()+"/";
 #else
+//    string path = "data/"+getSystemName()+"/";
     string path = "../../../data/"+getSystemName()+"/";
 #endif
     

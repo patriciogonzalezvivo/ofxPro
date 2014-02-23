@@ -5,19 +5,17 @@
 
 //  ADDONS
 //
-
 #include "ofxTimeline.h"
-#include "ofxTLCameraTrack.h"
 
-class UITimeProject : public UI3DProject {
+class UITime2DProject : public UI2DProject {
   public:
 	   
-	UITimeProject():timeline(NULL),cameraTrack(NULL),bUseCameraTrack(true),bEnableTimeline(true){};
-	virtual ~UITimeProject(){};
+	UITime2DProject():timeline(NULL),bEnableTimeline(true){};
+	virtual ~UITime2DProject(){};
 
     //--------------------- VIRTUAL CLASSES TO EDIT
     //
-    virtual string getSystemName(){ return "TIME_ABSTRACT_PROJECT"; };
+    virtual string getSystemName(){ return "TIME_ABSTRACT_2DPROJECT"; };
     
     virtual void selfSetupTimeline(){};
     virtual void selfSetupTimelineGui(){};
@@ -38,12 +36,7 @@ class UITimeProject : public UI3DProject {
 	virtual void exit(ofEventArgs & args);
 
 	virtual void keyPressed(ofKeyEventArgs & args);
-//    virtual void keyReleased(ofKeyEventArgs & args){UI3DProject::keyReleased(args);};
-//	virtual void mouseMoved(ofMouseEventArgs & args){UI3DProject::mouseMoved(args);};
-//	virtual void mousePressed(ofMouseEventArgs & args){UI3DProject::mousePressed(args);};
-//    virtual void mouseDragged(ofMouseEventArgs & args){UI3DProject::mouseDragged(args);};
-//	virtual void mouseReleased(ofMouseEventArgs & args){UI3DProject::mouseReleased(args);};
-
+    
 protected:
     
     //  CORE
@@ -82,7 +75,6 @@ protected:
     virtual void unBindWidgetFromTimeline(ofxUIWidget* widget);
     
     ofxTimeline*        timeline;
-    ofxTLCameraTrack*   cameraTrack;
 	ofxTLFlags*         introOutroTrack;
     UIReference         tlGui;
 	
@@ -94,7 +86,6 @@ protected:
     float   timelineDuration;
     float   secondsRemaining;
     
-	bool    bUseCameraTrack;
     bool    bShowTimeline;
     bool    bEnableTimeline;
     bool    bDeleteTimelineTrack;

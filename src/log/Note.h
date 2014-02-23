@@ -8,9 +8,11 @@
 #pragma once
 #include "ofMain.h"
 
+#include "BrushedLine.h"
+
 class Note {
 public:
-    Note():bPenDown(false),bEnable(true){}
+    Note():bPenDown(false),bEnable(true),BL(NULL){};
     virtual ~Note(){}
     
     void    load(string _file);
@@ -23,7 +25,10 @@ public:
     void    clearLast();
     
     void    draw();
+    void    smoothDraw();
     
+    
+    BrushedLine *BL;
     string  name;
     bool    bEnable;
     

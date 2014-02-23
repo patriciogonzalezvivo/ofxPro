@@ -121,7 +121,8 @@ void Book::draw(bool _bDebug){
     //  Actual Page
     //
     ofSetColor(255);
-    page.draw(_bDebug);
+    page.bDebug = _bDebug;
+    page.draw();
     
     //  Pevius & next Page
     //

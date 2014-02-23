@@ -26,8 +26,10 @@ LeapMotion::LeapMotion(){
     bEnable = false;
     bGestures = false;
     
+    circleResolution=20;
     palmSize = 60;
     idCounter = 0;
+    bXenon = true;
 }
 
 LeapMotion::~LeapMotion(){
@@ -40,7 +42,6 @@ LeapMotion::~LeapMotion(){
 }
 
 void LeapMotion::startGestures(){
-    
     open();
     
     if (!bGestures){
@@ -65,7 +66,6 @@ void LeapMotion::stopGestures(){
 }
 
 void LeapMotion::open(){
-    
     if (!bOpen){
         shared_ptr<Leap::Controller> newControler( new Leap::Controller() );
         ourController = newControler;
@@ -75,7 +75,6 @@ void LeapMotion::open(){
 }
 
 void LeapMotion::close(){
-    
     if (bOpen){
         bOpen = false;
         ourMutex.lock();
@@ -118,20 +117,19 @@ ofPoint LeapMotion::getMappedofPoint( Vector v ){
 
 //-------------------------------------------------------------- GUI
 void LeapMotion::setupUI(){
-    
     gui->addLabel("Calibration");
     gui->addSlider("Calibration_Elevation", 0, 200, &calibrationElevation);
     gui->addSlider("Calibration_X", 0, 500, &calibration.x);
     gui->addSlider("Calibration_Y", 0, 500, &calibration.y);
     gui->addSlider("Calibration_Z", 0, 500, &calibration.z);
     
-    gui->addLabel("Tracking");
-    gui->addSlider("Xenon",0.3,1.0,&trackXeno);
+    gui->addLabel("Interpolate");
+    gui->addToggle("Xenon/Lerp",&bXenon);
+    gui->addSlider("Pct",0.3,1.0,&trackXeno);
     
-    gui->addLabel("Render");
+//    gui->addLabel("Render");
 //    gui->addSlider("Scale", 10.0, 100.0, &palmSize);
-    gui->addSlider("Circle_Resolution", 3, 20, &circleResolution);
-
+//    gui->addSlider("Circle_Resolution", 3, 20, &circleResolution);
 }
 
 void LeapMotion::guiEvent(ofxUIEventArgs &e){
@@ -224,7 +222,11 @@ void LeapMotion::onFrame(const Controller& contr){
                 hands[i]->bSync = false;
                 for(int j = newHands.size()-1; j >= 0; j--){
                     if ( *hands[i] == newHands[j]){
-                        hands[i]->xeno(newHands[j],trackXeno);
+//                        if(bXenon){
+                            hands[i]->xeno(newHands[j],trackXeno);
+//                        } else {
+//                            hands[i]->lerp(newHands[j],trackXeno);
+//                        }
                         ofNotifyEvent(handMove, *hands[i], this);
                         
                         hands[i]->bSync = true;
@@ -321,12 +323,10 @@ void LeapMotion::onFingerDel( LeapFinger &_finger ){
 }
 
 void LeapMotion::draw(){
-
     if(bEnable){
         ourMutex.lock();
         ofPushStyle();
         ofSetCircleResolution(circleResolution);
-        
         for(int i = 0; i < hands.size(); i++){
             hands[i]->draw();
         }

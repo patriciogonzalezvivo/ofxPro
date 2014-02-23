@@ -14,6 +14,7 @@
 #include "Recorder.h"
 
 #include "FileUploader.h"
+#include "BrushedLine.h"
 
 class UILog : public UIClass {
 public:
@@ -44,18 +45,15 @@ public:
     void    draw();
     void    drawStatus();
     
-    
-    
 protected:
     void    setupUI();
     void    guiEvent(ofxUIEventArgs &e);
     
     void    uploadCompleted(string &_result);
     vector<FileUploader*> uploadingFiles;
-
-    ofShader        shader;
-    ofFbo           *renderTarget;
+    
     UICamera        *camera;
+    ofFbo           *renderTarget;
     string          dataPath;
     
     Flickr::API     flickrAPI;
@@ -64,6 +62,10 @@ protected:
 	string          lastRercord;
     bool            bRecording, bRecordAll;
     
+    //  Notes
+    BrushedLine     BL;
+    ofTexture       BLTexture;
+    ofShader        shader;
     vector<Note*>   notes;
     Note            *actualNote;
     ofxUITextInput  *textField;

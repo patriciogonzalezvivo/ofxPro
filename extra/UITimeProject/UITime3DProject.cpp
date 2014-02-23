@@ -1,6 +1,6 @@
-#include "UITimeProject.h"
+#include "UITime3DProject.h"
 
-void UITimeProject::play(){
+void UITime3DProject::play(){
 	if(!bPlaying){
         UI3DProject::play();
         
@@ -12,7 +12,7 @@ void UITimeProject::play(){
 	}
 }
 
-void UITimeProject::stop(){
+void UITime3DProject::stop(){
 	if(bPlaying){
 		timeline->stop();
 		cameraTrack->lockCameraToTrack = false;
@@ -22,7 +22,7 @@ void UITimeProject::stop(){
 
 #define REZANATOR_GUI_ALPHA_MULTIPLIER 4
 
-void UITimeProject::update(ofEventArgs & args){
+void UITime3DProject::update(ofEventArgs & args){
     if(bEnableTimeline){
         updateTimelineUIParams();
     }
@@ -36,7 +36,7 @@ void UITimeProject::update(ofEventArgs & args){
 	}
 }
 
-void UITimeProject::draw(ofEventArgs & args){
+void UITime3DProject::draw(ofEventArgs & args){
     
     UI3DProject::draw(args);
     
@@ -56,7 +56,7 @@ void UITimeProject::draw(ofEventArgs & args){
 	}
 }
 
-void UITimeProject::exit(ofEventArgs & args){
+void UITime3DProject::exit(ofEventArgs & args){
     if(logGui.isRecording()){
         logGui.record(false);
     }
@@ -83,7 +83,7 @@ void UITimeProject::exit(ofEventArgs & args){
     selfExit();
 }
 
-void UITimeProject::keyPressed(ofKeyEventArgs & args){
+void UITime3DProject::keyPressed(ofKeyEventArgs & args){
     
 	if(timeline->isModal()){
 		return;
@@ -109,7 +109,7 @@ void UITimeProject::keyPressed(ofKeyEventArgs & args){
 
 //-------------------------------------------------
 
-bool UITimeProject::cursorIsOverGUI(){
+bool UITime3DProject::cursorIsOverGUI(){
 	if(timeline->getDrawRect().inside(ofGetMouseX(),ofGetMouseY())){
 		return true;
 	}
@@ -117,7 +117,7 @@ bool UITimeProject::cursorIsOverGUI(){
     return UI2DProject::cursorIsOverGUI();
 }
 
-void UITimeProject::setupCoreGuis(){
+void UITime3DProject::setupCoreGuis(){
     UI3DProject::setupCoreGuis();
     
     //  This is the specific of TIMELINE
@@ -127,7 +127,7 @@ void UITimeProject::setupCoreGuis(){
     setupTimelineGui();
 }
 
-void UITimeProject::setupTimeLineParams(){
+void UITime3DProject::setupTimeLineParams(){
 	timeline = NULL;
     bShowTimeline = false;
 	bTimelineIsIndefinite = true;
@@ -137,7 +137,7 @@ void UITimeProject::setupTimeLineParams(){
     bEnableTimelineTrackCreation = false;
 }
 
-void UITimeProject::setupTimeline(){
+void UITime3DProject::setupTimeline(){
     if(timeline != NULL){
         delete timeline;
         timeline = NULL;
@@ -172,7 +172,7 @@ void UITimeProject::setupTimeline(){
     }
     
     timeline->setWorkingFolder(getDataPath()+"Presets/Working/Timeline/");
-    ofAddListener(timeline->events().bangFired, this, &UITimeProject::timelineBangEvent);
+    ofAddListener(timeline->events().bangFired, this, &UITime3DProject::timelineBangEvent);
     
     if(bShowTimeline){
         timeline->show();
@@ -183,10 +183,10 @@ void UITimeProject::setupTimeline(){
     selfSetupTimeline();
 }
 
-void UITimeProject::resetTimeline(){
+void UITime3DProject::resetTimeline(){
     
     if(timeline != NULL){
-        ofRemoveListener(timeline->events().bangFired, this, &UITimeProject::timelineBangEvent);
+        ofRemoveListener(timeline->events().bangFired, this, &UITime3DProject::timelineBangEvent);
         timeline->reset();
     }
     
@@ -200,7 +200,7 @@ void UITimeProject::resetTimeline(){
     setupTimeline();
 }
 
-void UITimeProject::timelineBangEvent(ofxTLBangEventArgs& args){
+void UITime3DProject::timelineBangEvent(ofxTLBangEventArgs& args){
 	
     if(bEnableTimeline){
         map<ofxTLBangs*, ofxUIButton*>::iterator it = tlButtonMap.find((ofxTLBangs *)args.track);
@@ -213,7 +213,7 @@ void UITimeProject::timelineBangEvent(ofxTLBangEventArgs& args){
     }
 }
 
-void UITimeProject::setupTimelineGui(){
+void UITime3DProject::setupTimelineGui(){
     
     UIReference tmp( new ofxUISuperCanvas("TIMELINE", guiTemplate) );
     tlGui = tmp;
@@ -240,11 +240,11 @@ void UITimeProject::setupTimelineGui(){
     
     selfSetupTimelineGui();
     tlGui->autoSizeToFitWidgets();
-    ofAddListener(tlGui->newGUIEvent,this,&UITimeProject::guiTimelineEvent);
+    ofAddListener(tlGui->newGUIEvent,this,&UITime3DProject::guiTimelineEvent);
     guis.push_back(tlGui);
 }
 
-void UITimeProject::guiTimelineEvent(ofxUIEventArgs &e){
+void UITime3DProject::guiTimelineEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
     if(name == "DURATION"){
 //		cout << "****** TL duration changed " << timelineDuration << endl;
@@ -282,43 +282,43 @@ void UITimeProject::guiTimelineEvent(ofxUIEventArgs &e){
     }
 }
 
-void UITimeProject::setTimelineTrackDeletion(bool state){
+void UITime3DProject::setTimelineTrackDeletion(bool state){
     bDeleteTimelineTrack = state;
     if(bDeleteTimelineTrack){
         bEnableTimeline = false;
         for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
             if((*it)->getName() != "TimelineSettings"){
-                ofAddListener((*it)->newGUIEvent,this,&UITimeProject::guiAllEvents);
+                ofAddListener((*it)->newGUIEvent,this,&UITime3DProject::guiAllEvents);
             }
         }
     } else {
         for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
             if((*it)->getName() != "TimelineSettings"){
-                ofRemoveListener((*it)->newGUIEvent,this,&UITimeProject::guiAllEvents);
+                ofRemoveListener((*it)->newGUIEvent,this,&UITime3DProject::guiAllEvents);
             }
         }
     }
 }
 
-void UITimeProject::setTimelineTrackCreation(bool state){
+void UITime3DProject::setTimelineTrackCreation(bool state){
     bEnableTimelineTrackCreation = state;
     if(bEnableTimelineTrackCreation){
         bEnableTimeline = false;
         for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
             if((*it)->getName() != "TimelineSettings"){
-                ofAddListener((*it)->newGUIEvent,this,&UITimeProject::guiAllEvents);
+                ofAddListener((*it)->newGUIEvent,this,&UITime3DProject::guiAllEvents);
             }
         }
     } else {
         for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
             if((*it)->getName() != "TimelineSettings"){
-                ofRemoveListener((*it)->newGUIEvent,this,&UITimeProject::guiAllEvents);
+                ofRemoveListener((*it)->newGUIEvent,this,&UITime3DProject::guiAllEvents);
             }
         }
     }
 }
 
-void UITimeProject::guiAllEvents(ofxUIEventArgs &e){
+void UITime3DProject::guiAllEvents(ofxUIEventArgs &e){
     //All GUIS except for the Timeline UI will send events to this function
     if(bEnableTimelineTrackCreation){
         bindWidgetToTimeline(e.widget);
@@ -331,7 +331,7 @@ void UITimeProject::guiAllEvents(ofxUIEventArgs &e){
     }
 }
 
-void UITimeProject::bindWidgetToTimeline(ofxUIWidget* widget){
+void UITime3DProject::bindWidgetToTimeline(ofxUIWidget* widget){
     string parentName = ((ofxUISuperCanvas *) widget->getCanvasParent())->getCanvasTitle()->getLabel();
     timeline->addPage(parentName, true);
     
@@ -402,7 +402,7 @@ void UITimeProject::bindWidgetToTimeline(ofxUIWidget* widget){
 
 }
 
-void UITimeProject::unBindWidgetFromTimeline(ofxUIWidget* widget){
+void UITime3DProject::unBindWidgetFromTimeline(ofxUIWidget* widget){
     string parentName = ((ofxUISuperCanvas *) widget->getCanvasParent())->getCanvasTitle()->getLabel();
     timeline->setCurrentPage(parentName);
     
@@ -478,7 +478,7 @@ void UITimeProject::unBindWidgetFromTimeline(ofxUIWidget* widget){
     }
 }
 
-void UITimeProject::updateTimelineUIParams()
+void UITime3DProject::updateTimelineUIParams()
 {
     for(map<ofxUIToggle*, ofxTLSwitches*>::iterator it = tlToggleMap.begin(); it != tlToggleMap.end(); ++it){
         ofxUIToggle *t = it->first;
@@ -504,7 +504,7 @@ void UITimeProject::updateTimelineUIParams()
     }
 }
 
-void UITimeProject::saveTimelineUIMappings(string path){
+void UITime3DProject::saveTimelineUIMappings(string path){
     if(ofFile::doesFileExist(path)){
 		//        cout << "DELETING OLD MAPPING FILE" << endl;
         ofFile::removeFile(path);
@@ -609,7 +609,7 @@ void UITimeProject::saveTimelineUIMappings(string path){
     delete XML;
 }
 
-void UITimeProject::loadTimelineUIMappings(string path){
+void UITime3DProject::loadTimelineUIMappings(string path){
     tlButtonMap.clear();
     tlToggleMap.clear();
     tlSliderMap.clear();
@@ -738,7 +738,7 @@ void UITimeProject::loadTimelineUIMappings(string path){
 }
 
 
-void UITimeProject::guiLoad(){
+void UITime3DProject::guiLoad(){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
     }
@@ -749,14 +749,14 @@ void UITimeProject::guiLoad(){
     timeline->loadTracksFromFolder(getDataPath()+"Presets/Working/Timeline/");
 }
 
-void UITimeProject::guiSave(){
+void UITime3DProject::guiSave(){
     UI3DProject::guiSave();
 
     saveTimelineUIMappings(getDataPath()+"Presets/Working/UITimelineMappings.xml");
     timeline->saveTracksToFolder(getDataPath()+"Presets/Working/Timeline/");
 }
 
-void UITimeProject::guiLoadPresetFromPath(string presetPath){
+void UITime3DProject::guiLoadPresetFromPath(string presetPath){
     resetTimeline();
     
     for(int i = 0; i < guis.size(); i++){
@@ -803,7 +803,7 @@ void UITimeProject::guiLoadPresetFromPath(string presetPath){
 	}
 }
 
-void UITimeProject::guiSavePreset(string presetName){
+void UITime3DProject::guiSavePreset(string presetName){
     UI3DProject::guiSavePreset(presetName);
 	
     //  TimeLine specifics
@@ -823,17 +823,17 @@ void UITimeProject::guiSavePreset(string presetName){
 	timeInfo.saveFile(getDataPath()+"Presets/"+presetName+"/"+"TimeInfo.xml");
 }
 
-void UITimeProject::guiShow(){
+void UITime3DProject::guiShow(){
     UI3DProject::guiShow();
 	timeline->show();
 }
 
-void UITimeProject::guiHide(){
+void UITime3DProject::guiHide(){
     UI3DProject::guiHide();
 	timeline->hide();
 }
 
-void UITimeProject::guiToggle(){
+void UITime3DProject::guiToggle(){
     UI3DProject::guiToggle();
     
     bShowTimeline = !timeline->getIsShowing();

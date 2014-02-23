@@ -105,3 +105,13 @@ void Note::draw(){
         actualLine.draw();
     }
 }
+
+void Note::smoothDraw(){
+    if(bEnable && BL != NULL){
+        ofEnableAlphaBlending();
+        for(int i = 0; i < lines.size(); i++){
+            BL->drawPolyline(&lines[i]);
+        }
+        BL->drawPolyline(&actualLine);
+    }
+}

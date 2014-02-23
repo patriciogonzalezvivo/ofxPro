@@ -79,8 +79,6 @@ protected:
     void onDisconnect(const Controller& contr);
     void onExit(const Controller& contr);
     
-    
-    
     void onFingerAdd(LeapFinger &_finger);
     void onFingerMove(LeapFinger &_finger);
     void onFingerDel(LeapFinger &_finger);
@@ -100,5 +98,5 @@ protected:
     float   palmSize;
     float   circleResolution;
     
-    bool    bGestures, bOpen;
+    bool    bGestures, bOpen, bXenon;
 };

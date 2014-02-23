@@ -55,15 +55,23 @@ bool LeapHand::operator==(const Leap::Hand &_otherHand) const {
 }
 
 void LeapHand::lerp( LeapHand &_otherHand, float _amount){
-    
-    palmPos     += (_otherHand.palmPos - palmPos)*_amount;
-    palmNormal  += (_otherHand.palmNormal - palmNormal)*_amount;
-    
-    direction   += (_otherHand.direction - direction)*_amount;
-    
-    sphereCenter += (_otherHand.sphereCenter - sphereCenter)*_amount;
-    sphereRadius += (_otherHand.sphereRadius - sphereRadius)*_amount;
-    
+    if(_amount==1.0){
+        palmPos     = _otherHand.palmPos;
+        palmNormal  = _otherHand.palmNormal;
+        
+        direction   = _otherHand.direction;
+        
+        sphereCenter = _otherHand.sphereCenter;
+        sphereRadius = _otherHand.sphereRadius;
+    } else {
+        palmPos     += (_otherHand.palmPos - palmPos)*_amount;
+        palmNormal  += (_otherHand.palmNormal - palmNormal)*_amount;
+        
+        direction   += (_otherHand.direction - direction)*_amount;
+        
+        sphereCenter += (_otherHand.sphereCenter - sphereCenter)*_amount;
+        sphereRadius += (_otherHand.sphereRadius - sphereRadius)*_amount;
+    }
     life         = _otherHand.life;
     
     //  Learp maching fingers
@@ -102,15 +110,25 @@ void LeapHand::lerp( LeapHand &_otherHand, float _amount){
 }
 
 void LeapHand::xeno( LeapHand &_otherHand, float _pct ){
-    palmPos     = _pct * _otherHand.palmPos + (1.0-_pct) * palmPos;
-    palmNormal  = _pct * _otherHand.palmNormal + (1.0-_pct) * palmNormal;
+    if(_pct==1.0){
+        palmPos     = _otherHand.palmPos;
+        palmNormal  = _otherHand.palmNormal;
+        
+        direction   = _otherHand.direction;
+        
+        sphereCenter = _otherHand.sphereCenter;
+        sphereRadius = _otherHand.sphereRadius;
+    } else {
+        palmPos     = _pct * _otherHand.palmPos + (1.0-_pct) * palmPos;
+        palmNormal  = _pct * _otherHand.palmNormal + (1.0-_pct) * palmNormal;
+        
+        direction   = _pct * _otherHand.direction + (1.0-_pct) * direction;
+        
+        sphereCenter = _pct * _otherHand.sphereCenter + (1.0-_pct) * sphereCenter;
+        sphereRadius = _pct * _otherHand.sphereRadius + (1.0-_pct) * sphereRadius;
+    }
     
-    direction   = _pct * _otherHand.direction + (1.0-_pct) * direction;
-    
-    sphereCenter = _pct * _otherHand.sphereCenter + (1.0-_pct) * sphereCenter;
-    sphereRadius = _pct * _otherHand.sphereRadius + (1.0-_pct) * sphereRadius;
-    
-    life         = _otherHand.life;
+    life = _otherHand.life;
     
     //  Learp maching fingers
     //
@@ -119,7 +137,7 @@ void LeapHand::xeno( LeapHand &_otherHand, float _pct ){
         
         for(int j = _otherHand.fingers.size()-1; j >= 0 ; j--){
             if ( fingers[i].id == _otherHand.fingers[j].id ){
-                fingers[i].xeno( _otherHand.fingers[j], _pct );
+                fingers[i].xeno(_otherHand.fingers[j], _pct);
                 ofNotifyEvent(fingerMove, fingers[i], this);
                 
                 fingers[i].bSync = true;

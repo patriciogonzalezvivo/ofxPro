@@ -55,20 +55,28 @@ public:
     
     Page();
 
+    void    setHandAt(ofPoint _hand, float _lerpPct = -1.0);
+    void    setNormHandAt(ofPoint _hand, float _lerpPct = -1.0);
+    
     float   getTransition();
-    void    setHandAt(ofPoint _hand, float lerpPct = 0.1);
-    void    setNormHandAt(ofPoint _hand, float lerpPct = 0.1);
+    ofMesh& getMesh();
     
     void    update();
-    void    draw(bool _bDebug = false);
+    void    draw();
     
     ofTexture *front;
     ofTexture *back;
     
-    int     meshDefinition;
+    float   handLerpPct;
+    float   meshDefinition;
     
-private:
+    bool    bFlipVertical;
+    bool    bLeftRight;
+    bool    bDebug;
+    
+protected:
     ofPoint getCurlPos(ofPoint pos, float _zOffset = 0 );
+    float   strightLine(float _x1, float _y1, float _x2, float _y2, float _x);
 
     ofMesh  mesh;
     ofPoint hand;

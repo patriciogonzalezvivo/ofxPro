@@ -130,12 +130,9 @@ void UIMapBackground::getBackgroundMesh(ofMesh& _mesh, ofTexture& _image, float 
 void UIMapBackground::draw(){
     if(bEnable){
         ofBackground(color);
-        
         if (bGradient && texture.isAllocated()){
-            
             ofPushStyle();
             ofSetColor(255);
-            
             shader.begin();
             shader.setUniformTexture("image", texture, 1);
             shader.setUniform3f("colorOne", color.r, color.g, color.b);
@@ -143,10 +140,7 @@ void UIMapBackground::draw(){
             shader.setUniform1f("gradientExponent", exp);
             mesh.draw();
             shader.end();
-            
             ofPopStyle();
         }
-        
-        
     }
 }

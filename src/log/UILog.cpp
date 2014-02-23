@@ -26,6 +26,7 @@ UILog::UILog(){
     lastPicture = "";
     lastRercord = "";
     actualNote = new Note();
+    actualNote->BL = &BL;
     
     string vertexShader = STRINGIFY(uniform float minDistance;
                                     uniform float maxDistance;
@@ -52,6 +53,12 @@ UILog::UILog(){
     shader.setupShaderFromSource(GL_VERTEX_SHADER, vertexShader);
     shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShader);
     shader.linkProgram();
+    
+    BL.size = 1.8;
+    ofDisableArbTex();
+    ofLoadImage(BLTexture, "GUI/dot.png");
+    ofEnableArbTex();
+    BL.tex = &BLTexture;
 }
 
 UILog::~UILog(){
@@ -82,6 +89,7 @@ void UILog::setupUI(){
         for (int i = 0; i < total; i++) {
             if (dir.getFiles()[i].getExtension() == "note" ){
                 Note *newNote = new Note();
+                newNote->BL = &BL;
                 newNote->load(pathToNotes+dir.getFiles()[i].getBaseName()+".note");
                 newNote->bEnable = false;
                 notes.push_back(newNote);
@@ -129,6 +137,7 @@ void UILog::guiEvent(ofxUIEventArgs &e){
             
             notes.push_back(actualNote);
             actualNote = new Note();
+            actualNote->BL = &BL;
             addNewNote = isNew;
         }
         
@@ -278,10 +287,9 @@ void UILog::draw(){
             ofPopStyle();
         } else {
             ofPushStyle();
-            ofSetLineWidth(2);
-            actualNote->draw();
+            actualNote->smoothDraw();
             for(int i = 0; i < notes.size();i++){
-                notes[i]->draw();
+                notes[i]->smoothDraw();
             }
             ofPopStyle();
         }

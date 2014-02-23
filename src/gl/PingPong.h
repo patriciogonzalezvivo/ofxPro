@@ -43,6 +43,18 @@ public:
         dst = &(FBOs[++(flag)%2]);
     }
     
+    virtual void beginBoth(){
+        FBOs[0].begin();
+    }
+    
+    virtual void endBoth(){
+        FBOs[0].end();
+        
+        FBOs[1].begin();
+        FBOs[0].draw(0,0);
+        FBOs[1].end();
+    }
+    
     virtual void clear(float _alpha = 0){
         for(int i = 0; i < 2; i++){
             FBOs[i].begin();
