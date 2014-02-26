@@ -140,7 +140,7 @@ void UICamera::disableMouseInput(){
 }
 
 void UICamera::update(ofEventArgs& args){
-    if(bEnable){
+    if(bEnable&&camera!= NULL){
         if(pct>0.1){
             FOV = camera->getFov()*(pct)+targetLocation.FOV*(1.0-pct);
             camera->setFov( FOV );

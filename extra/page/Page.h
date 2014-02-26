@@ -10,18 +10,7 @@
 
 #include "ofMain.h"
 
-// Helper macro for a straight line F(x) that passes through {x1, y1} and {x2, y2}.
-// We can't make this a template function (C++ doesn't let you have float literals
-// as template parameters).
-#define STRAIGHT_LINE(x1, y1, x2, y2, x) (((y2 - y1) / (x2 - x1)) * (x - x1) + y1)
-
-struct vectorFace{
-    ofPoint a,b,c,d;        //  TexCoord
-    ofPoint A, B, C, D;     //  Vectex
-};
-
-static void drawPage( ofTexture &_page, ofRectangle &_on ){
-    
+static void drawPage(ofTexture &_page,ofRectangle &_on){
     ofPoint normal = ofPoint(0,0,-1);
     
     ofMesh mesh;
@@ -49,7 +38,6 @@ static void drawPage( ofTexture &_page, ofRectangle &_on ){
 };
 
 //--------------------------------------------------------------
-//--------------------------------------------------------------
 class Page : public ofRectangle {
 public:
     
@@ -61,35 +49,39 @@ public:
     float   getTransition();
     ofMesh& getMesh();
     
+    void    reset();
     void    update();
+    void    forceUpdate(){bChange=true;};
     void    draw();
     
     ofTexture *front;
     ofTexture *back;
     
-    float   handLerpPct;
-    float   meshDefinition;
+    float   coneAxisDist;
     
+    float   handLerpPct;
+    int     meshDefinition;
+    
+    bool    bFlipHorizontal;
     bool    bFlipVertical;
     bool    bLeftRight;
     bool    bDebug;
     
 protected:
-    ofPoint getCurlPos(ofPoint pos, float _zOffset = 0 );
-    float   strightLine(float _x1, float _y1, float _x2, float _y2, float _x);
+    ofPoint getCurlPos(ofPoint pos, float _zOffset = 0);
+    void    computeConeValues();
+    void    updateMesh();
 
     ofMesh  mesh;
     ofPoint hand;
     
+    float   axis;               // location on y axis of cone axis
     float   theta;				// angle of right-cone
-    float   ay;					// location on y axis of cone axis
     float   angle;				// rotation about y axis
     float   conicContribution;	// how much of (south tip cone == -1, cylinder == 0, north tip cone == 1)
+    float   cylRadius;
     
     float   posNegOne;
-    
-    float   cylR;
-    float   cylRadius;
     
     bool    bChange;
 };

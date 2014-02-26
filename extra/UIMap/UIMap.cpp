@@ -18,8 +18,13 @@ UIMap::UIMap(){
     centerCoordinate.row = 0.5;
     centerCoordinate.column = 0.5;
     centerCoordinate.zoom = 0;
+    
     bLoaded = false;
 }
+
+UIMap::~UIMap(){
+    
+};
 
 void UIMap::setup(MapProviderRef _provider ) {
 	setMapProvider( _provider );
@@ -30,10 +35,8 @@ void UIMap::setup(MapProviderRef _provider ) {
 }
 
 void UIMap::setupUI(){
-    gui->addSlider("Zoom", 2.0, 19.0, &zoom);
-    gui->addSlider("lat", -90.0, 90.0, &lat);
-    gui->addSlider("lon", -180.0, 180.0, &lon);
     
+    gui->addLabel("Provider");
     vector<string> maps;
     maps.push_back("Bing");
     maps.push_back("Stamen-toner");
@@ -44,7 +47,13 @@ void UIMap::setupUI(){
     maps.push_back("GeoIp");
     maps.push_back("Modest-BlueMarble");
     maps.push_back("BayArea");
-    gui->addDropDownList("MAPS", maps);
+    providers = gui->addRadio("MAPS", maps);
+    
+    gui->addLabel("Parameters");
+    gui->addSlider("Zoom", 2.0, 19.0, &zoom);
+    gui->addSlider("Latitud", -90.0, 90.0, &lat);
+    gui->addSlider("Longitud", -180.0, 180.0, &lon);
+    
     bLoaded = true;
 }
 
@@ -524,6 +533,26 @@ void UIMap::grabTile(Coordinate coord) {
 	}
 }
 
+void UIMap::processQueue() {
+	if (queue.size() > MAX_PENDING-pending.size()) {
+		sort(queue.begin(), queue.end(), QueueSorter(getCenterCoordinate().zoomTo(getZoom())));
+	}
+    
+	while (pending.size() < MAX_PENDING && queue.size() > 0) {
+		Coordinate coord = *(queue.begin());
+		Coordinate key = Coordinate(coord);
+        
+		pending[key] = TileLoader();
+		pending[key].start(key, provider, this);
+        
+		queue.erase(queue.begin());
+	}  
+}
+
+//void UIMap::urlResponse(ofHttpResponse &_response){
+//    
+//}
+
 // TODO: there could be issues when this is called from within a thread
 // probably needs synchronizing on images / pending / queue
 void UIMap::tileDone(Coordinate coord, ofImage *img) {
@@ -532,26 +561,10 @@ void UIMap::tileDone(Coordinate coord, ofImage *img) {
 	if (pending.count(coord) > 0 && img != NULL) {
 		images[Coordinate(coord)] = img;
 		pending.erase(coord);
-	}
-	else {
+	} else {
 		pending.erase(coord);
 		// try again?
 	}
-}
-
-void UIMap::processQueue() {
-    
-	if (queue.size() > MAX_PENDING-pending.size()) {
-		sort(queue.begin(), queue.end(), QueueSorter(getCenterCoordinate().zoomTo(getZoom())));
-	}
-    
-	while (pending.size() < MAX_PENDING && queue.size() > 0) {
-		Coordinate coord = *(queue.begin());
-		Coordinate key = Coordinate(coord);
-		pending[key] = TileLoader();
-		pending[key].start(key, provider, this);
-		queue.erase(queue.begin());
-	}  
 }
 
 // ---------------------------------------------------------- EVENTS

@@ -30,12 +30,13 @@
 #define MAX_IMAGES_TO_KEEP 256
 
 // upping this can help appearances when zooming out, but also loads many more tiles
-#define GRID_PADDING 0
+#define GRID_PADDING 1
 
 class UIMap : public UIClass, public DraggableRectangle, public ofBaseHasTexture {
 public:
     
     UIMap();
+    virtual ~UIMap();
     
     void    setupUI();
     void    setup( MapProviderRef _provider);
@@ -112,6 +113,7 @@ public:
 	void    mouseReleased(int x, int y, int button);
 	
 protected:
+//    void    urlResponse(ofHttpResponse &_response);
     void    guiEvent(ofxUIEventArgs &e);
     
 	// loading tiles
@@ -133,6 +135,7 @@ protected:
     
     // what kinda maps?
 	MapProviderRef provider;
+    ofxUIRadio     *providers;
 
     // angle in radians
     //

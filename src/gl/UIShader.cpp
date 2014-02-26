@@ -24,6 +24,11 @@ void eraseSemiColon(string &_word){
 }
 
 UIShader::UIShader(){
+    fragFilename = "";
+    vertFilename = "";
+    geomFilename = "";
+    bVertex = false;
+    bGeometry = false;
 }
 
 void UIShader::setupUI(){
@@ -56,12 +61,26 @@ void UIShader::setupUI(){
     gui->addButton("OPEN",&bOpen);
 }
 
+void UIShader::load(string _name){
+    ofFile gShaderFile = ofFile( ofToDataPath(_name+".geom") );
+    if(gShaderFile.exists()){
+        load(_name+".frag",_name+".vert",_name+".geom");
+    } else {
+        load(_name+".frag",_name+".vert");
+    }
+}
+
+void UIShader::load(string _fragShader, string _vertShader, string _geomShader){
+    reloadShader(_fragShader,_vertShader, _geomShader);
+}
+
 void UIShader::loadFrag(string _fragShader){
     reloadShader( _fragShader );
+    bVertex = false;
 }
 
 string UIShader::getClassName(){
-    return shaderFile.getBaseName();
+    return fragFile.getBaseName();
 }
 
 ofShader& UIShader::getShader(){
@@ -73,33 +92,69 @@ void UIShader::guiEvent(ofxUIEventArgs &e){
         string name = e.widget->getName();
         
         if( name == "OPEN"){
-            string comand = "open " + shaderFilename ;
+            
+            string comand = "open " + fragFilename;
+
+            if (bVertex){
+                comand += " " + vertFilename;
+            }
+            
+            if(bGeometry){
+                comand += " " + geomFilename;
+            }
+            
             system(comand.c_str());
+            
         }
     }
 }
 
-bool UIShader::reloadShader(string _filePath){
+bool UIShader::reloadShader(string _fragPath, string _vertPath, string _geomPath){
     shader.unload();
 	
 	// hackety hack, clear errors or shader will fail to compile
 	GLuint err = glGetError();
 	
-    if (_filePath != "none"){
-        shaderFilename = ofToDataPath( _filePath );
-	}
+    fragFile.clear();
+    fragFilename = ofToDataPath( _fragPath );
+    fragFile = ofFile( fragFilename );
+    fragChangedTimes = getLastModified( fragFile );
+    ofBuffer fragBuffer = ofBufferFromFile( fragFilename );
+    if( fragBuffer.size() > 0 ){
+        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragBuffer.getText());
+    }
     
-	shaderFile.clear();
-	shaderFile = ofFile( shaderFilename );
-	shaderChangedTimes = getLastModified( shaderFile );
-    lastTimeCheckMillis = ofGetElapsedTimeMillis();
     
-	ofBuffer shaderBuffer = ofBufferFromFile( shaderFilename );
-	
-	if( shaderBuffer.size() > 0 ){
-        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, shaderBuffer.getText());
-	}
-	
+    if (_vertPath != ""){
+        vertFile.clear();
+        vertFilename = ofToDataPath(_vertPath);
+        vertFile = ofFile( vertFilename );
+        vertChangedTimes = getLastModified( vertFile );
+        ofBuffer vertBuffer = ofBufferFromFile( vertFilename );
+        
+        if( vertBuffer.size() > 0 ){
+            shader.setupShaderFromSource(GL_VERTEX_SHADER, vertBuffer.getText());
+        }
+        
+        bVertex = true;
+    }
+    
+    if (_geomPath != ""){
+        geomFile.clear();
+        geomFilename = ofToDataPath(_geomPath);
+        geomFile = ofFile( geomFilename );
+        geomChangedTimes = getLastModified( geomFile );
+        ofBuffer geomBuffer = ofBufferFromFile( geomFilename );
+        
+        if( geomBuffer.size() > 0 ){
+            shader.setupShaderFromSource(GL_GEOMETRY_SHADER, geomBuffer.getText());
+        }
+        
+        bGeometry = true;
+    }
+    
+	lastTimeCheckMillis = ofGetElapsedTimeMillis();
+    
     if (shader.linkProgram()){
         
         //  Prepear the uniform to be checked
@@ -110,8 +165,8 @@ bool UIShader::reloadShader(string _filePath){
         
         //  Read the shader and check what needs to be added;
         //
-        string fragmentShaderText = shaderBuffer.getText();
-        vector<string> lines = ofSplitString(shaderBuffer.getText(), "\n");
+        string fragmentShaderText = fragBuffer.getText();
+        vector<string> lines = ofSplitString(fragBuffer.getText(), "\n");
 
         for(int i = 0; i<lines.size(); i++){
             vector<string> words = ofSplitString( lines[i], " ");
@@ -139,6 +194,9 @@ bool UIShader::reloadShader(string _filePath){
                 }
             }
         }
+        
+        //  TODO:
+        //          - Read Vertex Shaders uniforms
         
         //  Get rid of extra uniforms
         //
@@ -193,11 +251,27 @@ void UIShader::addUniform(UniformType _type, string _name){
 void UIShader::checkShaderFile(){
 	int currTime = ofGetElapsedTimeMillis();
 	if( ((currTime - lastTimeCheckMillis) > millisBetweenFileCheck) ){
-        if( shaderFile.exists() ){
-            std::time_t fragmentShaderFileLastChangeTime = getLastModified( shaderFile );
-            if( fragmentShaderFileLastChangeTime != shaderChangedTimes ){
-                shaderChangedTimes = fragmentShaderFileLastChangeTime;
-                reloadShader();
+        if( fragFile.exists() ){
+            std::time_t fragmentShaderFileLastChangeTime = getLastModified( fragFile );
+            if( fragmentShaderFileLastChangeTime != fragChangedTimes ){
+                fragChangedTimes = fragmentShaderFileLastChangeTime;
+                reloadShader(fragFilename,vertFilename,geomFilename);
+            } else if (bVertex){
+                if( vertFile.exists() ){
+                    std::time_t vertexShaderFileLastChangeTime = getLastModified( vertFile );
+                    if( vertexShaderFileLastChangeTime != vertChangedTimes ){
+                        vertChangedTimes = vertexShaderFileLastChangeTime;
+                        reloadShader(fragFilename,vertFilename,geomFilename);
+                    }
+                }
+                
+                if( geomFile.exists() ){
+                    std::time_t geometryShaderFileLastChangeTime = getLastModified( geomFile );
+                    if( geometryShaderFileLastChangeTime != geomChangedTimes ){
+                        vertChangedTimes = geometryShaderFileLastChangeTime;
+                        reloadShader(fragFilename,vertFilename,geomFilename);
+                    }
+                }
             }
         }
         
