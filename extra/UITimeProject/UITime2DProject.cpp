@@ -77,8 +77,8 @@ void UITime2DProject::keyPressed(ofKeyEventArgs & args){
     switch (args.key){
         case ' ':{
 			timeline->togglePlay();
-            ((ofxUIToggle *) tlGui->getWidget("ENABLE"))->setValue(timeline->getIsPlaying());
-            ((ofxUIToggle *) tlGui->getWidget("ENABLE"))->triggerSelf();
+//            ((ofxUIToggle *) tlGui->getWidget("ENABLE"))->setValue(timeline->getIsPlaying());
+//            ((ofxUIToggle *) tlGui->getWidget("ENABLE"))->triggerSelf();
         }
     }
 }

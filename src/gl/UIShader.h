@@ -24,6 +24,7 @@ public:
     void    load(string _fragShader, string _vectShader, string _geomShader = "");
     void    loadFrag(string _fragShader);
     
+    void    setGeometryShaderValues(GLenum _in, GLenum _out, int _numOut);
     ofShader& getShader();
     
     void begin();
@@ -55,6 +56,9 @@ protected:
     ofFile              geomFile;
     string              geomFilename;
     std::time_t         geomChangedTimes;
+    GLenum              geomInType;
+    GLenum              geomOutType;
+    int                 geomOutCount;
     bool                bGeometry;
     
     ofShader            shader;

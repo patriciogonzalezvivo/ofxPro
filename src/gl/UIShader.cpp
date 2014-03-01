@@ -27,6 +27,11 @@ UIShader::UIShader(){
     fragFilename = "";
     vertFilename = "";
     geomFilename = "";
+    
+    geomInType = GL_POINTS;
+    geomOutType = GL_TRIANGLES;
+    geomOutCount = 6;
+    
     bVertex = false;
     bGeometry = false;
 }
@@ -77,6 +82,12 @@ void UIShader::load(string _fragShader, string _vertShader, string _geomShader){
 void UIShader::loadFrag(string _fragShader){
     reloadShader( _fragShader );
     bVertex = false;
+}
+
+void UIShader::setGeometryShaderValues(GLenum _in, GLenum _out, int _numOut){
+    geomInType = _in;
+    geomOutType = _out;
+    geomOutCount = _numOut;
 }
 
 string UIShader::getClassName(){
@@ -149,6 +160,10 @@ bool UIShader::reloadShader(string _fragPath, string _vertPath, string _geomPath
         if( geomBuffer.size() > 0 ){
             shader.setupShaderFromSource(GL_GEOMETRY_SHADER, geomBuffer.getText());
         }
+        
+        shader.setGeometryInputType(geomInType);
+        shader.setGeometryOutputType(geomOutType);
+        shader.setGeometryOutputCount(geomOutCount);
         
         bGeometry = true;
     }
