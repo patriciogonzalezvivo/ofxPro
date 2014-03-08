@@ -213,6 +213,7 @@ void UILog::recordAddFrame(ofBaseHasTexture &_texBase){
         recorder.addFrame(img.getPixelsRef());
     } else {
         ofPixels pixels;
+        pixels.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR_ALPHA);
         _texBase.getTextureReference().readToPixels(pixels);
         recorder.addFrame(pixels);
         

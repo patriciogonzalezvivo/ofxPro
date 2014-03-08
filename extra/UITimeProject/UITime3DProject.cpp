@@ -330,10 +330,10 @@ void UITime3DProject::guiAllEvents(ofxUIEventArgs &e){
         setTimelineTrackDeletion(false);
     }
 }
-
 void UITime3DProject::bindWidgetToTimeline(ofxUIWidget* widget){
     string parentName = ((ofxUISuperCanvas *) widget->getCanvasParent())->getCanvasTitle()->getLabel();
     timeline->addPage(parentName, true);
+    timeline->setCurrentPage(parentName);
     
     vector<ofxTLPage *> pages = timeline->getPages();
     
@@ -399,7 +399,7 @@ void UITime3DProject::bindWidgetToTimeline(ofxUIWidget* widget){
         default:
             break;
     }
-
+    
 }
 
 void UITime3DProject::unBindWidgetFromTimeline(ofxUIWidget* widget){

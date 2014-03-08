@@ -6,7 +6,7 @@
 //
 
 #pragma once
-#include "SpherePoint.h"
+#include "Location.h"
 
 class Sphere : public ofSpherePrimitive{
 public:
@@ -17,8 +17,5 @@ public:
     
     ofFloatColor    wireColor, solidColor;
     float           wireScale, solidScale;
-
-protected:
-    vector<SpherePoint> ripplePoints;
 };
 

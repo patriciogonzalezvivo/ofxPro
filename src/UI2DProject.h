@@ -20,6 +20,13 @@
 #include "UIMapBackground.h"
 #include "UILog.h"
 
+//  System
+//
+#ifdef TARGET_OSX
+#include "SystemTextbox.h"
+#endif
+#include "HotKeys.h"
+
 //  RaspberryPi Extras
 //
 #ifdef TARGET_RASPBERRY_PI
@@ -126,6 +133,7 @@ protected:
 	virtual bool    cursorIsOverGUI();
     ofxUISuperCanvas    *guiTemplate;
     vector<UIReference> guis;
+    string          currentPresetName;
     float           lastClick;
     float           doublClickThreshold;
     bool            bPlaying;

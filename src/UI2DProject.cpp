@@ -225,28 +225,55 @@ void UI2DProject::keyPressed(ofKeyEventArgs & args){
         }
     }
     
-    switch (args.key){
-        case 's':
-            logGui.screenShot();
-            break;
-        case 'r':{
-            logGui.record(!logGui.isRecording());
-        }
-            break;
-        case 'u':
-            logGui.upload();
-            break;
-        case 'h':
-#ifndef PACKED_APP
-			guiToggle();
+#ifdef TARGET_OSX
+    if( getModifierSpecialPressed()){
+#else
+    if( getModifierControlPressed() ){
 #endif
-            break;
-        case 'f':
-            ofToggleFullscreen();
-            break;
-        default:
+        switch (args.key){
+            case 's':
+                guiSavePreset(currentPresetName);
+                break;
+            case 'S':{
+#ifdef TARGET_OSX
+                string presetName = SystemTextBoxDialog("Save Preset As", currentPresetName);
+#else
+                string presetName = ofSystemTextBoxDialog("Save Preset As", currentPresetName);
+#endif
+                if(presetName != ""){
+                    guiSavePreset(presetName);
+                    currentPresetName = presetName;
+                }
+            }
+                break;
+            case 'p':
+                logGui.screenShot();
+                break;
+            case 'r':{
+                logGui.record(!logGui.isRecording());
+            }
+                break;
+            case 'u':
+                logGui.upload();
+                break;
+            case 'f':
+                ofToggleFullscreen();
+                break;
+            case 'e':
+                bEdit = !bEdit;
+                break;
+            case 'd':
+                bDebug = !bDebug;
+                break;
+        }
+    } else {
+        if(args.key == 'h'){
+#ifndef PACKED_APP
+            guiToggle();
+#endif
+        } else {
             selfKeyPressed(args);
-            break;
+        }
     }
 }
 
@@ -380,11 +407,14 @@ void UI2DProject::guiEvent(ofxUIEventArgs &e){
     if(name == "SAVE"){
         ofxUIButton *b = (ofxUIButton *) e.widget;
         if(b->getValue()){
-            string presetName = ofSystemTextBoxDialog("Save Preset As");
-            if(presetName.length()){
+#ifdef TARGET_OSX
+            string presetName = SystemTextBoxDialog("Save Preset As", currentPresetName);
+#else
+			string presetName = ofSystemTextBoxDialog("Save Preset As", currentPresetName);
+#endif
+            if(presetName != ""){
                 guiSavePreset(presetName);
-            } else {
-                guiSave();
+				currentPresetName = presetName;
             }
         }
     } else if(name == "LOAD"){
@@ -504,28 +534,34 @@ void UI2DProject::guiAllEvents(ofxUIEventArgs &e){
     
 }
 
+// LOAD
+//
 void UI2DProject::guiLoad(){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
     }
 }
 
+void UI2DProject::guiLoadPresetFromName(string presetName){
+    guiLoadPresetFromPath(getDataPath()+"Presets/"+ presetName);
+}
+    
+void UI2DProject::guiLoadPresetFromPath(string presetPath){
+    for(int i = 0; i < guis.size(); i++){
+        guis[i]->loadSettings(presetPath+"/"+guis[i]->getName()+".xml");
+    }
+    selfPresetLoaded(presetPath);
+    currentPresetName = ofFilePath::getBaseName(presetPath);
+}
+
+//  SAVE
+//
 void UI2DProject::guiSave(){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->saveSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
     }
 }
 
-void UI2DProject::guiLoadPresetFromName(string presetName){
-	guiLoadPresetFromPath(getDataPath()+"Presets/"+ presetName);
-}
-
-void UI2DProject::guiLoadPresetFromPath(string presetPath){
-    for(int i = 0; i < guis.size(); i++){
-        guis[i]->loadSettings(presetPath+"/"+guis[i]->getName()+".xml");
-    }
-	selfPresetLoaded(presetPath);
-}
 
 void UI2DProject::guiSavePreset(string presetName){
     ofDirectory dir;
@@ -541,6 +577,8 @@ void UI2DProject::guiSavePreset(string presetName){
     }
 }
 
+//  Others
+//
 void UI2DProject::guiShow(){
     for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         (*it)->enable();

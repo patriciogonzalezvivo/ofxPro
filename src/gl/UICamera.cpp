@@ -149,13 +149,13 @@ void UICamera::update(ofEventArgs& args){
             q.slerp(1.0-pct,camera->getOrientationQuat(),targetLocation.orientation);
             camera->setOrientation(q);
             pct *= (1.0- powf(10.0, (1.0-speed)*-3.0 ) );
-        } 
-    }
-    
-    if(bNewLocation){
-        addLocation(newLocationName);
-        newLocationName = "";
-        bNewLocation = false;
+        }
+        
+        if(bNewLocation){
+            addLocation(newLocationName);
+            newLocationName = "";
+            bNewLocation = false;
+        }
     }
 }
 
