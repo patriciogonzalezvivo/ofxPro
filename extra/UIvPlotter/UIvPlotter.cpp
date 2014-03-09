@@ -26,7 +26,6 @@ UIvPlotter::UIvPlotter(){
     
     penState    = PEN_UP;
     bPlotting   = false;
-
     
     checkHostValues();
     sender.setup(host, oscPort);
@@ -39,8 +38,10 @@ void UIvPlotter::setupUI(){
     
     gui->addLabel("Config");
     gui->addIntSlider("motorsDistance_(mm)", 0, 2000, &motorsDistance);
-    gui->addIntSlider("pulleyRadius_()", 0, 50, &pulleyRadius);
+    gui->addIntSlider("pulleyRadius_(mm)", 0, 50, &pulleyRadius);
     gui->addIntSlider("stepsPerRotation", 0, 1000, &stepsPerRotation);
+    gui->addIntSlider("penUp_(deg)", 0, 180, &penUp);
+    gui->addIntSlider("penDown_(deg)", 0, 180, &penDown);
     bool bFalse = false;
     gui->addButton("SYNC", bFalse);
     
@@ -59,6 +60,8 @@ void UIvPlotter::guiEvent(ofxUIEventArgs &e){
         ofxOscMessage m;
         m.setAddress("/stop");
         sender.sendMessage(m);
+    } else {
+        bUpdate = true;
     }
 }
 
@@ -71,38 +74,13 @@ bool UIvPlotter::checkHostValues(){
         cout  << "Failed to parse JSON\n" << endl;
     }
     
+    penUp = ofToInt(response["options"]["penUpAngle"].asString());
+    penDown = ofToInt(response["options"]["penDownAngle"].asString());
     motorsDistance = ofToInt(response["options"]["motorsDistance"].asString());
     pulleyRadius = ofToInt(response["options"]["pulleyRadius"].asString());
     stepsPerRotation = ofToInt(response["options"]["stepsPerRotation"].asString());
-    m2s = (2 * PI * pulleyRadius) / stepsPerRotation;
     
-    M1.set(0, 0);
-    M2.set(motorsDistance, 0);
-    
-    //  Set printing Area
-    printingArea.set(M1,motorsDistance,motorsDistance);
-    ofPoint testPos = printingArea.getCenter();
-    bool bSafe = true;
-    while (bSafe) {
-        testPos.y--;
-        bSafe = isHealthyAt(testPos);
-    }
-    float top = testPos.y;
-    testPos = printingArea.getCenter();
-    bSafe = true;
-    while (bSafe) {
-        testPos.x--;
-        testPos.y++;
-        bSafe = isHealthyAt(testPos);
-    }
-    float left = testPos.x;
-    float width = (printingArea.getCenter().x-left)*2;
-    float heigth = (testPos.y-top);
-    printingArea.x = left;
-    printingArea.y = top;
-    printingArea.width = width;
-    printingArea.height = heigth;
-
+    bUpdate = true;
 }
 
 bool UIvPlotter::isHealthyAt(ofPoint _pos){
@@ -167,7 +145,8 @@ ofVec2f UIvPlotter::getResolution(ofPoint _pos){
     }
 }
 
-void UIvPlotter::print( ofPolyline _polyline ){
+void UIvPlotter::print(ofPolyline _polyline){
+
     for(int j = 0; j < _polyline.getVertices().size(); j++) {
         addInstruction( ((j==0)?MOVE_ABS:LINE_ABS), _polyline.getVertices()[j] + printingArea.getTopLeft());
     }
@@ -196,17 +175,17 @@ bool UIvPlotter::addInstruction(Comand _command, ofPoint _pos){
     
     //  ABSolute or RELative positions??
     //
-    switch (_command) {
-        case MOVE_ABS:
-        case LINE_ABS:
-            t = _pos;
-            break;
-        case MOVE_REL:
-        case LINE_REL:
-            t = _pos + currentPos;
-            break;
-    }
-    
+//    switch (_command) {
+//        case MOVE_ABS:
+//        case LINE_ABS:
+//            t = _pos;
+//            break;
+//        case MOVE_REL:
+//        case LINE_REL:
+//            t = _pos + currentPos;
+//            break;
+//    }
+//    
     //  Inside Area
     //
 //    if (t.x < printingArea.getLeft())   t.x = printingArea.getLeft();
@@ -227,10 +206,53 @@ bool UIvPlotter::addInstruction(Comand _command, ofPoint _pos){
 }
 
 void UIvPlotter::update(){
+    if(bUpdate){
+        m2s = (2 * PI * pulleyRadius) / stepsPerRotation;
+        
+        M1.set(0, 0);
+        M2.set(motorsDistance, 0);
+        
+        //  Set printing Area
+        printingArea.set(M1,motorsDistance,motorsDistance);
+        ofPoint testPos = printingArea.getCenter();
+        bool bSafe = true;
+        while (bSafe) {
+            testPos.y--;
+            bSafe = isHealthyAt(testPos);
+        }
+        float top = testPos.y;
+        testPos = printingArea.getCenter();
+        bSafe = true;
+        while (bSafe) {
+            testPos.x--;
+            testPos.y++;
+            bSafe = isHealthyAt(testPos);
+        }
+        float left = testPos.x;
+        float width = (printingArea.getCenter().x-left)*2;
+        float heigth = (testPos.y-top);
+        printingArea.x = left;
+        printingArea.y = top;
+        printingArea.width = width;
+        printingArea.height = heigth;
+        
+        ofxOscMessage m;
+        m.setAddress("/setup");
+        m.addIntArg(penUp);
+        m.addIntArg(penDown);
+        m.addIntArg(motorsDistance);
+        m.addIntArg(pulleyRadius);
+        m.addIntArg(stepsPerRotation);
+        sender.sendMessage(m);
+        
+        bUpdate = false;
+    }
+    
+    
     if(bEnable){
         if (bPlotting){
             if(instructions.size()>0){
-                if (ofGetFrameNum()%10 == 0) {
+                if (ofGetFrameNum()%2 == 0) {
                     if (exeInstruction(instructions[0])){
                         
                         ofxOscMessage m;
@@ -357,10 +379,6 @@ void UIvPlotter::draw(){
             ofDrawBitmapString(ofToString(resolution.x,2)+"/"+ofToString(resolution.y,2), -70,50);
             ofNoFill();
             ofCircle(0,0,20);
-            if(penState==PEN_UP) ofNoFill();
-            else ofFill();
-            
-            ofCircle(0,0,8);
             ofLine(-30,0,30,0);
             ofLine(0,-30,0,30);
             ofPopStyle();

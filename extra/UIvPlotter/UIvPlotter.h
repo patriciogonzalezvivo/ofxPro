@@ -76,8 +76,9 @@ private:
     MotorVal    steps;
     MotorVal    target;
     float       m2s;
-    int         motorsDistance, pulleyRadius, stepsPerRotation;
+    int         motorsDistance, pulleyRadius, stepsPerRotation,penUp,penDown;
     
     bool        penState;
     bool        bPlotting;
+    bool        bUpdate;
 };

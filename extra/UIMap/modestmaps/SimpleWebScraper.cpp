@@ -62,7 +62,7 @@ void SimpleWebScraper::getStreamThreaded(string url_) {
 	requestType			= STREAM_REQUEST;
 	
 	if(!factoryLoaded){
-		HTTPStreamFactory::registerFactory();
+//		HTTPStreamFactory::registerFactory();
 		factoryLoaded = true;
 	}
 	

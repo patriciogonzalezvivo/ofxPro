@@ -88,6 +88,8 @@ void UIMap::loadMap(string _predef){
     } else if ( _predef == "Bing" ){
         setMapProvider( BingMapsProvider::create() );
         providerName = _predef;
+    } else {
+        setCenter( provider->locationCoordinate(Location(lat, lon)).zoomTo(zoom) );
     }
 }
 
