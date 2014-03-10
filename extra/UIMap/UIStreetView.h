@@ -19,7 +19,7 @@ struct Link {
     string pano_id;
 };
 
-class UIStreetView : public UIClass {
+class UIStreetView : public UIClass, public ofBaseHasTexture {
 public:
     
     UIStreetView();
@@ -29,11 +29,18 @@ public:
     
     void    setLocation(const Location &_loc);
     void    setLatLon(double _lat, double _lng);
+    void    setUseTexture(bool bUseTex){};
     
-    string  getClassName(){return "StreetView";};
+    string      getClassName(){return "StreetView";};
+    float       getWidth();
+	float       getHeight();
+    ofTexture&  getTextureReference();
     
-    void    urlResponse(ofHttpResponse & response);
+    void        urlResponse(ofHttpResponse & response);
     
+    void        update();
+    
+    void        draw(float _x=0, float _y=0,float _width = -1, float _height=-1);
 protected:
     void    setupUI();
     void    guiEvent(ofxUIEventArgs &e);
@@ -53,4 +60,6 @@ protected:
     vector<struct DepthMapPlane> depthmapPlanes;
     
     vector<struct Link> links;
+    
+    bool    bLoaded;
 };

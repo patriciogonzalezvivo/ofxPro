@@ -12,19 +12,19 @@
 
 UIStreetView::UIStreetView(){
     ofRegisterURLNotification(this);
-    
-    setLatLon(0,0);
+    fbo.allocate(13312, 6656);
+    lat = 0;
+    lng = 0;
+    bLoaded = false;
 }
 
 UIStreetView::UIStreetView(double _lat, double _lon){
-    ofRegisterURLNotification(this);
-    
+    UIStreetView();
     setLatLon(_lat,_lon);
 }
 
 UIStreetView::UIStreetView(const Location &location){
-    ofRegisterURLNotification(this);
-    
+    UIStreetView();
     setLocation(location);
 }
 
@@ -33,6 +33,7 @@ void UIStreetView::setLocation(const Location &_loc){
 }
 
 void UIStreetView::setLatLon(double _lat, double _lon){
+    bLoaded = false;
     string data_url = "http://cbk0.google.com/cbk?output=xml&ll="+ofToString(_lat)+","+ofToString(_lon)+"&dm=1&pm=1";
     ofLoadURLAsync(data_url);
 }
@@ -78,46 +79,44 @@ void UIStreetView::urlResponse(ofHttpResponse & response){
 //        </link>
 //        </annotation_properties>
         
-        
-        
         //Decode the depth map
         //The depth map is encoded as a series of pixels in a 512x256 image. Each pixels refers
         //to a depthMapPlane which are also encoded in the data. Each depthMapPlane has three elements:
         //The x,y,z normals and the closest distance the plane has to the origin. This uniquely
         //identifies the plane in 3d space.
         {
-            //Get the base64 encoded data
-            string depth_map_base64 = XML.getValue("panorama:model:depth_map", "NONE");
-            
-            //Decode base64
-            vector<unsigned char> depth_map_compressed(depth_map_base64.length());
-            int compressed_length = decode_base64(&depth_map_compressed[0], &depth_map_base64[0]);
-            
-            //Uncompress data with zlib
-            //TODO: decompress in a loop so we can accept any size
-            unsigned long length = 512 * 256 + 5000;
-            vector<unsigned char> depth_map(length);
-            int zlib_return = uncompress(&depth_map[0], &length, &depth_map_compressed[0], compressed_length);
-            if (zlib_return != Z_OK)
-                throw "zlib decompression of the depth map failed";
-            
-            //Load standard data
-            const int headersize = depth_map[0];
-            const int numPanos = depth_map[1] | (depth_map[2] << 8);
-            mapWidth = depth_map[3] | (depth_map[4] << 8);
-            mapHeight = depth_map[5] | (depth_map[6] << 8);
-            const int panoIndicesOffset = depth_map[7];
-            
-            if (headersize != 8 || panoIndicesOffset != 8)
-                throw "Unexpected depth map header";
-            
-            //Load depthMapIndices
-            depthmapIndices = vector<unsigned char>(mapHeight * mapWidth);
-            memcpy(&depthmapIndices[0], &depth_map[panoIndicesOffset], mapHeight * mapWidth);
-            
-            //Load depthMapPlanes
-            depthmapPlanes = vector<struct DepthMapPlane> (numPanos);
-            memcpy(&depthmapPlanes[0], &depth_map[panoIndicesOffset + mapHeight * mapWidth], numPanos * sizeof (struct DepthMapPlane));
+//            //Get the base64 encoded data
+//            string depth_map_base64 = XML.getValue("panorama:model:depth_map", "NONE");
+//            
+//            //Decode base64
+//            vector<unsigned char> depth_map_compressed(depth_map_base64.length());
+//            int compressed_length = decode_base64(&depth_map_compressed[0], &depth_map_base64[0]);
+//            
+//            //Uncompress data with zlib
+//            //TODO: decompress in a loop so we can accept any size
+//            unsigned long length = 512 * 256 + 5000;
+//            vector<unsigned char> depth_map(length);
+//            int zlib_return = uncompress(&depth_map[0], &length, &depth_map_compressed[0], compressed_length);
+//            if (zlib_return != Z_OK)
+//                throw "zlib decompression of the depth map failed";
+//            
+//            //Load standard data
+//            const int headersize = depth_map[0];
+//            const int numPanos = depth_map[1] | (depth_map[2] << 8);
+//            mapWidth = depth_map[3] | (depth_map[4] << 8);
+//            mapHeight = depth_map[5] | (depth_map[6] << 8);
+//            const int panoIndicesOffset = depth_map[7];
+//            
+//            if (headersize != 8 || panoIndicesOffset != 8)
+//                throw "Unexpected depth map header";
+//            
+//            //Load depthMapIndices
+//            depthmapIndices = vector<unsigned char>(mapHeight * mapWidth);
+//            memcpy(&depthmapIndices[0], &depth_map[panoIndicesOffset], mapHeight * mapWidth);
+//            
+//            //Load depthMapPlanes
+//            depthmapPlanes = vector<struct DepthMapPlane> (numPanos);
+//            memcpy(&depthmapPlanes[0], &depth_map[panoIndicesOffset + mapHeight * mapWidth], numPanos * sizeof (struct DepthMapPlane));
         }
         
         
@@ -133,25 +132,59 @@ void UIStreetView::urlResponse(ofHttpResponse & response){
         ofImage img;
         img.loadImage(response.data);
         images.push_back(img);
-        
-        if(images.size() >= 3*6){
-            fbo.allocate(images[0].width*6, images[0].height*3);
-            fbo.begin();
-            ofClear(0,0);
-            int x = 0;
-            int y = 0;
-            for(int i= 0; i < images.size(); i++){
-                images.at(i).draw(x*images.at(i).width, y*images.at(i).height);
-                if(x < 5){
-                    x++;
-                }else{
-                    x=0;
-                    y++;
-                }
-            }
-            fbo.end();
-            images.clear();
-        }
     }
 }
 
+float UIStreetView::getWidth(){
+    if(fbo.isAllocated()){
+        return fbo.getWidth();
+    }
+}
+
+float UIStreetView::getHeight(){
+    if(fbo.isAllocated()){
+        return fbo.getHeight();
+    }
+}
+
+ofTexture& UIStreetView::getTextureReference(){
+    if(fbo.isAllocated()){
+        return fbo.getTextureReference();
+    }
+}
+
+void UIStreetView::update(){
+    if(images.size() >= 3*6 && !bLoaded){
+        fbo.allocate(images[0].width*6, images[0].height*3);
+        
+        fbo.begin();
+        ofClear(0,0);
+        int x = 0;
+        int y = 0;
+        for(int i= 0; i < images.size(); i++){
+            images.at(i).draw(x*images.at(i).width, y*images.at(i).height);
+            if(x < 5){
+                x++;
+            }else{
+                x=0;
+                y++;
+            }
+        }
+        fbo.end();
+        bLoaded = true;
+    }
+}
+
+void UIStreetView::draw(float _x, float _y,float _width, float _height) {
+    if(bLoaded){
+        if(_width==-1||_height==-1){
+            _width = fbo.getWidth();
+            _height = fbo.getHeight();
+        }
+        
+        ofPushStyle();
+        ofSetColor(255);
+        fbo.draw(_x,_y,_width,_height);
+        ofPopStyle();
+    }
+}
