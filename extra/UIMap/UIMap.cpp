@@ -10,31 +10,22 @@
 #include "QueueSorter.h"
 
 UIMap::UIMap(){
-    name = "MAP";
-    
     width = 0;
     height = 0;
     
     centerCoordinate.row = 0.5;
     centerCoordinate.column = 0.5;
     centerCoordinate.zoom = 0;
-    
-    bLoaded = false;
 }
 
 UIMap::~UIMap(){
-    
+
 };
 
-void UIMap::setup(MapProviderRef _provider ) {
-	setMapProvider( _provider );
-    
-    centerCoordinate.row = 0.5;
-    centerCoordinate.column = 0.5;
-    centerCoordinate.zoom = 0;
-}
-
 void UIMap::setupUI(){
+    gui->addSlider("Latitud", -90.0, 90.0, &lat);
+    gui->addSlider("Longitud", -180.0, 180.0, &lon);
+    gui->addSlider("Zoom", 2.0, 19.0, &zoom);
     
     gui->addLabel("Provider");
     vector<string> maps;
@@ -48,76 +39,58 @@ void UIMap::setupUI(){
     maps.push_back("Modest-BlueMarble");
     maps.push_back("BayArea");
     providers = gui->addRadio("MAPS", maps);
-    
-    gui->addLabel("Parameters");
-    gui->addSlider("Zoom", 2.0, 19.0, &zoom);
-    gui->addSlider("Latitud", -90.0, 90.0, &lat);
-    gui->addSlider("Longitud", -180.0, 180.0, &lon);
-    
-    bLoaded = true;
-}
-
-void UIMap::loadMap(string _predef){
-    if ( _predef == "OpenStreet" ){
-        setMapProvider( OpenStreetMapProvider::create() );
-        providerName = _predef;
-    } else if ( _predef == "Stamen-toner" ){
-        setMapProvider( TemplatedMapProvider::create("http://spaceclaw.stamen.com/toner/{Z}/{X}/{Y}.png") );
-        providerName = _predef;
-    } else if ( _predef == "Stamen-toner-lite" ){
-        setMapProvider( TemplatedMapProvider::create("http://spaceclaw.stamen.com/toner-lite/{Z}/{X}/{Y}.png") );
-        providerName = _predef;
-    } else if ( _predef == "Stamen-toner-background" ){
-        setMapProvider( TemplatedMapProvider::create("http://spaceclaw.stamen.com/toner-background/{Z}/{X}/{Y}.png") );
-        providerName = _predef;
-    } else if ( _predef == "MapBox" ){
-        setMapProvider( TemplatedMapProvider::create("http://c.tiles.mapbox.com/v3/examples.map-szwdot65/{Z}/{X}/{Y}.png") );
-        providerName = _predef;
-    } else if ( _predef == "Mgcdn" ){
-        setMapProvider( TemplatedMapProvider::create("http://otile1.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png") );
-        providerName = _predef;
-    } else if ( _predef == "GeoIp" ){
-        setMapProvider( TemplatedMapProvider::create("http://acetate.geoiq.com/tiles/acetate/{Z}/{X}/{Y}.png") );
-        providerName = _predef;
-    } else if ( _predef == "Modest-BlueMarble" ){
-        setMapProvider( TemplatedMapProvider::create("http://s3.amazonaws.com/com.modestmaps.bluemarble/{Z}-r{Y}-c{X}.jpg") );
-        providerName = _predef;
-    } else if ( _predef == "BayArea" ){
-        setMapProvider( TemplatedMapProvider::create("http://osm-bayarea.s3.amazonaws.com/{Z}-r{Y}-c{X}.jpg") );
-        providerName = _predef;
-    } else if ( _predef == "Bing" ){
-        setMapProvider( BingMapsProvider::create() );
-        providerName = _predef;
-    } else {
-        setCenter( provider->locationCoordinate(Location(lat, lon)).zoomTo(zoom) );
-    }
-}
-
-void UIMap::loadCustomValues(ofxXmlSettings &_XML){
-    loadMap( _XML.getValue("provider", "Bing") );
-    setCenter(Location(_XML.getValue("lat", 0),
-                       _XML.getValue("lon", 0) ) );
-    setZoom( _XML.getValue("zoom", zoom) );
-}
-
-void UIMap::saveCustomValues(ofxXmlSettings &_XML){
-    _XML.setValue("zoom", centerCoordinate.zoom );
-    _XML.setValue("lat", getCenter().lat );
-    _XML.setValue("lon", getCenter().lon );
-    _XML.setValue("provider", providerName);
 }
 
 void UIMap::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
     
-    if (bLoaded){
-        if( name == "Zoom"){
-            setZoom( zoom );
-        } else if ( name == "lat" || name == "lon"){
-            setCenter( Location(lat, lon));
-        } else {
-            loadMap( name );
+    if(name == "Zoom"){
+        setZoom(zoom);
+    } else if (name == "Latitud" || name == "Longitud"){
+        setCenter(Location(lat, lon));
+    } else {
+        if(provider != NULL){
+            if(providers->getActive() != NULL){
+                string selected = providers->getActive()->getName();
+                if (name == selected){
+                    loadMap(name);
+                }
+            }
         }
+    }
+}
+
+void UIMap::allocate(float _width, float _height){
+    width = _width;
+    height = _height;
+    fbo.allocate(width,height);
+}
+
+void UIMap::loadMap(MapProviderRef _provider) {
+	setMapProvider( _provider );
+}
+
+void UIMap::loadMap(string _predef){
+    if ( _predef == "OpenStreet" ){
+        setMapProvider( OpenStreetMapProvider::create() );
+    } else if ( _predef == "Stamen-toner" ){
+        setMapProvider( TemplatedMapProvider::create("http://spaceclaw.stamen.com/toner/{Z}/{X}/{Y}.png") );
+    } else if ( _predef == "Stamen-toner-lite" ){
+        setMapProvider( TemplatedMapProvider::create("http://spaceclaw.stamen.com/toner-lite/{Z}/{X}/{Y}.png") );
+    } else if ( _predef == "Stamen-toner-background" ){
+        setMapProvider( TemplatedMapProvider::create("http://spaceclaw.stamen.com/toner-background/{Z}/{X}/{Y}.png") );
+    } else if ( _predef == "MapBox" ){
+        setMapProvider( TemplatedMapProvider::create("http://c.tiles.mapbox.com/v3/examples.map-szwdot65/{Z}/{X}/{Y}.png") );
+    } else if ( _predef == "Mgcdn" ){
+        setMapProvider( TemplatedMapProvider::create("http://otile1.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png") );
+    } else if ( _predef == "GeoIp" ){
+        setMapProvider( TemplatedMapProvider::create("http://acetate.geoiq.com/tiles/acetate/{Z}/{X}/{Y}.png") );
+    } else if ( _predef == "Modest-BlueMarble" ){
+        setMapProvider( TemplatedMapProvider::create("http://s3.amazonaws.com/com.modestmaps.bluemarble/{Z}-r{Y}-c{X}.jpg") );
+    } else if ( _predef == "BayArea" ){
+        setMapProvider( TemplatedMapProvider::create("http://osm-bayarea.s3.amazonaws.com/{Z}-r{Y}-c{X}.jpg") );
+    } else if ( _predef == "Bing" ){
+        setMapProvider( BingMapsProvider::create() );
     }
 }
 
@@ -130,6 +103,10 @@ ofTexture& UIMap::getTextureReference(){
 }
 
 void UIMap::update(){
+    if (fbo.getWidth() != width || fbo.getHeight() != height ){
+        fbo.allocate(width, height);
+    }
+    
     if (bEnable){
         
         // if we're in between zoom levels, we need to choose the nearest:
@@ -206,10 +183,6 @@ void UIMap::update(){
         // TODO: sort by zoom so we draw small zoom levels (big tiles) first:
         // can this be done with a different comparison function on the visibleKeys set?
         //Collections.sort(visibleKeys, zoomComparator);
-        
-        if (fbo.getWidth() != width || fbo.getHeight() != height ){
-            fbo.allocate(width, height);
-        }
         
         int numDrawnImages = 0;
         fbo.begin();
@@ -304,27 +277,17 @@ void UIMap::update(){
 }
 
 void UIMap::draw() {
+    if (fbo.getWidth() != width || fbo.getHeight() != height ){
+        fbo.allocate(width, height);
+    }
+    
     if (bEnable){
         ofPushStyle();
         ofSetColor(255);
-        fbo.draw(x,y);
+//        fbo.draw(x,y);
+        fbo.draw(0,0);
         ofPopStyle();
     }
-}
-
-void UIMap::drawDebug(){
-    DraggableRectangle::draw();
-}
-
-//---------------------------------------------------------- SET & GET
-//
-void UIMap::setSize(ofPoint _size) {
-    width = _size.x;
-    height = _size.y;
-}
-
-ofPoint UIMap::getSize() const {
-	return ofPoint(width,height);
 }
 
 void UIMap::setExtent( const MapExtent &extent, bool forceIntZoom ){
@@ -366,7 +329,7 @@ void UIMap::setExtent( const MapExtent &extent, bool forceIntZoom ){
 }
 
 MapExtent UIMap::getExtent() const{
-    return MapExtent( pointLocation( ofPoint(0,0) ), pointLocation( getSize() ) );
+    return MapExtent( pointLocation( ofPoint(0,0) ), pointLocation( ofPoint(width,height) ) );
 }
 
 void UIMap::setMapProvider( MapProviderRef _mapProvider ){
@@ -451,77 +414,34 @@ Location UIMap::pointLocation(const ofPoint &point) const {
 	return provider->coordinateLocation(pointCoordinate(point));
 }
 
-
-//----------------------------------------------------------------- MOVE ARROUND
-
-void UIMap::zoomBy(const double &dir) {
-	setZoom( getZoom()+dir );
-}
-
-void UIMap::panBy(const ofPoint &delta) { panBy(delta.x, delta.y); }
-
-void UIMap::panBy(const double &dx, const double &dy) {
+void UIMap::panBy(const ofPoint &_pos) {
     const double sinr = sin(rotation);
     const double cosr = cos(rotation);
-	const double dxr = dx*cosr + dy*sinr;
-	const double dyr = dy*cosr - dx*sinr;
+	const double dxr = _pos.x*cosr + _pos.y*sinr;
+	const double dyr = _pos.y*cosr - _pos.x*sinr;
     const ofPoint tileSize = provider->getTileSize();
 	centerCoordinate.column -= dxr / tileSize.x;
 	centerCoordinate.row -= dyr / tileSize.y;
+    Location centerLocation = getCenter();
+    lat = centerLocation.lat;
+    lon = centerLocation.lon;
 }
-void UIMap::scaleBy(const double &s) {
-	scaleBy(s, ofPoint(width,height) * 0.5);
-}
-void UIMap::scaleBy(const double &s, const ofPoint &c) {
-	scaleBy(s, c.x, c.y);
-}
-void UIMap::scaleBy(const double &s, const double &cx, const double &cy) {
+
+void UIMap::scaleBy(const double &_scale, const ofPoint &_pos) {
     const double prevRotation = rotation;
-	rotateBy(-prevRotation,cx,cy);
+	rotateBy(-prevRotation,_pos);
     ofPoint center = ofPoint(width,height) * 0.5;
-	panBy(-cx+center.x, -cy+center.y);
-	centerCoordinate = centerCoordinate.zoomBy(log2(s));
-	panBy(cx-center.x, cy-center.y);
-	rotateBy(prevRotation,cx,cy);
+	panBy(-_pos+center);
+	centerCoordinate = centerCoordinate.zoomBy(log2(_scale));
+	panBy(_pos-center);
+	rotateBy(prevRotation,_pos);
+    zoom = centerCoordinate.zoom;
 }
 
-void UIMap::rotateBy(const double &r, const ofPoint &c){
-    rotateBy(r,c.x,c.y);
-}
-
-void UIMap::rotateBy(const double &r, const double &cx, const double &cy) {
-	panBy(-cx, -cy);
-	rotation += r;
-	panBy(cx, cy);
-}
-
-void UIMap::zoomIn() {
-    zoomBy(+1);
-}
-
-void UIMap::zoomOut() {
-    zoomBy(-1);
-}
-
-void UIMap::panUp() {
-	setCenter(getCenterCoordinate().up());
-}
-void UIMap::panDown() {
-	setCenter(getCenterCoordinate().down());
-}
-void UIMap::panLeft() {
-	setCenter(getCenterCoordinate().left());
-}
-void UIMap::panRight() {
-	setCenter(getCenterCoordinate().right());
-}
-
-void UIMap::panAndZoomIn(const Location &location) {
-	setCenterZoom(location, getZoom() + 1);
-}
-
-void UIMap::panTo(const Location &location) {
-	setCenter(location);
+void UIMap::rotateBy(const double &_radians, const ofPoint &_pos) {
+	panBy(_pos*-1.0);
+	rotation += _radians;
+	panBy(_pos);
 }
 
 //------------------------------------------------------------------- MANAGING TILES
@@ -551,10 +471,6 @@ void UIMap::processQueue() {
 	}  
 }
 
-//void UIMap::urlResponse(ofHttpResponse &_response){
-//    
-//}
-
 // TODO: there could be issues when this is called from within a thread
 // probably needs synchronizing on images / pending / queue
 void UIMap::tileDone(Coordinate coord, ofImage *img) {
@@ -567,79 +483,4 @@ void UIMap::tileDone(Coordinate coord, ofImage *img) {
 		pending.erase(coord);
 		// try again?
 	}
-}
-
-// ---------------------------------------------------------- EVENTS
-//
-void UIMap::keyPressed(int key) {
-    if (bEnable){
-        if (key == '<' || key == ',' || key == '=' || key == '+' ) {
-            if (getZoom() < 19) {
-                zoomIn();
-            }
-        }
-        else if (key == '>' || key == '.'|| key == '-' || key == '_') {
-            if (getZoom() > 0) {
-                zoomOut();
-            }
-        }
-    }
-	// TODO: keyboard movement
-}
-
-void UIMap::keyReleased(int key) {
-	// TODO: keyboard movement
-}
-
-void UIMap::mouseDragged(int _x, int _y, int _button) {
-    if (bEnable){
-        ofPoint mouse = ofPoint(_x,_y);
-        ofPoint pMouse = ofPoint(ofGetPreviousMouseX(),ofGetPreviousMouseY());
-        
-        if (inside(mouse)){
-            
-            float scale = pow(2.0, centerCoordinate.zoom);
-            ofPoint dMouse = (mouse - pMouse);// / scale;
-
-            if (_button == 0) {
-                panBy(dMouse);
-            } else if (_button == 2) {
-                ofPoint mMouse = mouse - (ofPoint(x,y));//+ofPoint(width,height));
-                
-                if (ofGetKeyPressed( OF_KEY_SHIFT )) {
-                    rotateBy(dMouse.x < 0 ? M_PI/72.0 : -M_PI/72.0, mMouse);
-                } else {
-                    scaleBy(dMouse.y < 0 ? 1.05 : 1.0/1.05, mMouse);
-                }
-            }
-            
-            lat = getCenter().lat;
-            lon = getCenter().lon;
-        }
-    }
-}
-
-void UIMap::mouseDraggedDebug(ofPoint _mouse){
-    if (bEnable){
-        ofPoint A = ofPoint(x,y);
-        ofPoint B = ofPoint(x+width,y+height);
-        
-        if ( A.distance( _mouse) < 20 ){
-            x += _mouse.x - x;
-            y += _mouse.y - y;
-            this->set(x,y, width, height);
-            
-        } else if ( B.distance( _mouse) < 20 ){
-            width += _mouse.x - x - width;
-            height += _mouse.y - y - height;
-            this->set(x,y, width, height);
-        }
-    }
-}
-
-void UIMap::mousePressed(int _x, int _y, int _button) {
-
-}
-void UIMap::mouseReleased(int x, int y, int button) {
-
 }

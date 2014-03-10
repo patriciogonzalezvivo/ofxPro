@@ -35,7 +35,7 @@ public:
     std::string getQuadKey(const int column, const int row, const int zoom) {
 		std::stringstream key;
 		for (int i = 1; i <= zoom; i++) {
-			int digit = (((row >> zoom - i) & 1) << 1) | ((column >> zoom - i) & 1);
+			int digit = (((row >> (zoom - i)) & 1) << 1) | ((column >> (zoom - i)) & 1);
 			key << digit;
 		}
 		return key.str();

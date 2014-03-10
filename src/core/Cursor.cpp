@@ -18,7 +18,7 @@ Cursor::Cursor() {
 void Cursor::draw() const {
     ofPushMatrix();
     ofTranslate(world);
-    ofBox(0.1f);
+    ofDrawBox(0.1);
     ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL_BILLBOARD);
     ofScale(0.1f, 0.1f, 0.1f);
     ofPopMatrix();
