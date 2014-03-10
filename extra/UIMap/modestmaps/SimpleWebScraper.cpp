@@ -54,8 +54,6 @@ void SimpleWebScraper::getStreamUnthreaded(string url_) {
 }
 
 void SimpleWebScraper::getStreamThreaded(string url_) {
-    cout << "getStreamThreaded " << endl;
-
 	args.buff			= NULL;
 	args.bytesToRead	= NULL;
     url					= url_;

@@ -63,12 +63,13 @@ void UI2DProject::play(){
 #ifdef TARGET_RASPBERRY_PI
         consoleListener.setup(this);
 #endif
-        
         ofRegisterMouseEvents(this);
         ofRegisterKeyEvents(this);
         ofAddListener(ofEvents().update,this,&UI2DProject::update);
         ofAddListener(ofEvents().draw,this,&UI2DProject::draw);
         ofAddListener(ofEvents().exit,this,&UI2DProject::exit);
+        
+        ofAddListener(ofEvents().windowResized, this, &UI2DProject::windowResized);
         
         guiLoad();
         guiHide();
@@ -233,6 +234,7 @@ void UI2DProject::keyPressed(ofKeyEventArgs & args){
         switch (args.key){
             case 's':
                 guiSavePreset(currentPresetName);
+                logGui.screenShot(currentPresetName);
                 break;
             case 'S':{
 #ifdef TARGET_OSX
@@ -246,15 +248,9 @@ void UI2DProject::keyPressed(ofKeyEventArgs & args){
                 }
             }
                 break;
-            case 'p':
-                logGui.screenShot();
-                break;
             case 'r':{
                 logGui.record(!logGui.isRecording());
             }
-                break;
-            case 'u':
-                logGui.upload();
                 break;
             case 'f':
                 ofToggleFullscreen();
@@ -706,4 +702,8 @@ ofFbo& UI2DProject::getRenderTarget(){
 
 void UI2DProject::selfPostDraw(){
 	UI2DProject::getRenderTarget().draw(0, 0,UI2DProject::getRenderTarget().getWidth(), UI2DProject::getRenderTarget().getHeight());
+}
+
+void UI2DProject::windowResized(ofResizeEventArgs &args){
+    selfWindowResized(args);
 }

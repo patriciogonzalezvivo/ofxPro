@@ -15,7 +15,7 @@ public:
 	Location(double _lat, double _lon) : lat(_lat), lon(_lon) {}
 	Location(const Location &location) : lat(location.lat), lon(location.lon) {}
     
-    void setLatLon(double _lat, double _lon){ lat=_lat; lon=_lon; }
+    virtual void setLatLon(double _lat, double _lon){ lat=_lat; lon=_lon; }
     
 	friend ostream &operator<<(ostream &stream, Location l){
         stream << "(" << l.lat << ", " << l.lon << ")";

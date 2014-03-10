@@ -8,7 +8,6 @@
 #pragma once
 
 #include "UIClass.h"
-//#include "DraggableRectangle.h"
 
 #include "AbstractMapProvider.h"
 #include "OpenStreetMapProvider.h"
@@ -51,14 +50,13 @@ public:
     void    setZoom(const double &_zoom);
     void    setCenter(const Coordinate &center);
 	void    setCenter(const Location &location);
-	void    setCenterZoom(const Location &location, const double &_zoom);
     void    setUseTexture(bool bUseTex);
     
     double      getAngle(){return rotation;};
     double      getZoom() const;
 	MapExtent   getExtent() const;
     Location    getCenter() const;
-	Coordinate  getCenterCoordinate() const;
+    Coordinate  getCenterCoordinate(){return centerCoordinate;};
     
     string      getClassName(){ return "Map";}
     
@@ -66,7 +64,7 @@ public:
 	float       getHeight(){return height;};
     ofTexture&  getTextureReference();
     
-    //  Helpers
+    //  Conversions
     //
     ofPoint     coordinatePoint(const Coordinate &coord) const;
 	Coordinate  pointCoordinate(const ofPoint &point) const;
@@ -78,36 +76,28 @@ public:
     void    scaleBy(const double &_scale, const ofPoint &_pos);
     void    rotateBy(const double &_radians, const ofPoint &_pos);
     
-    void    update();
-	void    draw();
-    
     void    tileDone(Coordinate coord, ofImage *img);
+    
+    void    update();
+    
+	void    draw(float _x=0, float _y=0,float _width = -1, float _height=-1);
     
 protected:
     void    guiEvent(ofxUIEventArgs &e);
     void    grabTile(Coordinate coord);
-	
-	void    processQueue();
     
-	map<Coordinate, TileLoader> pending;    // loading tiles
-	map<Coordinate, ofImage*> images;       // loaded tiles
-	vector<Coordinate> queue;               // coords waiting to load
-	vector<ofImage*> recentImages;          // a list of the most recent MAX_IMAGES_TO_KEEP ofImages we've seen
-    std::set<Coordinate> visibleKeys;       // keep track of what we can see already:
+	map<Coordinate, TileLoader> pending;        // loading tiles
+	map<Coordinate, ofImage*>   images;         // loaded tiles
+	vector<Coordinate>          queue;          // coords waiting to load
+	vector<ofImage*>            recentImages;   // a list of the most recent MAX_IMAGES_TO_KEEP ofImages we've seen
+    std::set<Coordinate>        visibleKeys;    // keep track of what we can see already:
 	
-    // pan and zoom
+    MapProviderRef              provider;
+    ofxUIRadio                  *providers;
+    
     ofFbo       fbo;
-    
-    // pan and zoom
-	Coordinate  centerCoordinate;
-    
-    // what kinda maps?
-	MapProviderRef provider;
-    ofxUIRadio     *providers;
-
-    // angle in radians
+    Coordinate  centerCoordinate;
 	double      rotation;
-    
     float       width, height;
     float       zoom,lat,lon;
 };

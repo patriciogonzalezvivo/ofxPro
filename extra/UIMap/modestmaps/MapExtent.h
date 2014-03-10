@@ -29,7 +29,7 @@ public:
     
     explicit MapExtent(const Location &l1, const Location &l2): north(l1.lat), south(l2.lat), east(l1.lon), west(l2.lon) { canonicalize(); }
     
-    MapExtent( const MapExtent &extent ): north(extent.north), south(extent.south), east(extent.east), west(extent.west) { canonicalize(); }
+    MapExtent(const MapExtent &extent): north(extent.north), south(extent.south), east(extent.east), west(extent.west) { canonicalize(); }
     
     /** calculate the north/south/east/west extremes of the given array of locations */
     explicit MapExtent(const vector<Location> &locations){
@@ -149,6 +149,22 @@ public:
         return contains(extent.getNorthWest()) && contains(extent.getSouthEast());
     }
     
+    bool operator ==(const MapExtent& _other){
+        if(north == _other.north || south == _other.south || west == _other.west || east == _other.east){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    bool operator !=(const MapExtent& _other){
+        if(north != _other.north || south != _other.south || west != _other.west || east != _other.east){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     /** @return "north, south, east, west" */
     friend ostream &operator<<(ostream &stream, const MapExtent &e) {
         // TODO: number format
@@ -158,5 +174,4 @@ public:
         << e.west << ")";
         return stream;
     }
-    
 };

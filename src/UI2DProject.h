@@ -61,6 +61,8 @@ public:
     virtual void selfBegin(){};
 	virtual void selfEnd(){};
 	
+    virtual void selfWindowResized(ofResizeEventArgs & args){};
+    
     virtual void selfKeyPressed(ofKeyEventArgs &args){};
     virtual void selfKeyReleased(ofKeyEventArgs &args){};
     
@@ -105,6 +107,8 @@ public:
 	virtual void update(ofEventArgs & args);
 	virtual void draw(ofEventArgs & args);
 	virtual void exit(ofEventArgs & args);
+    virtual void windowResized(ofResizeEventArgs & args);
+    
 	virtual void keyPressed(ofKeyEventArgs & args);
 	virtual void keyReleased(ofKeyEventArgs & args);
 	

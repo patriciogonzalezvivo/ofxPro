@@ -27,7 +27,7 @@ public:
     
     string  getClassName(){return "LOG";};
 
-    void    screenShot();
+    void    screenShot(string _post = "");
 
     void    record(bool _state);
     void    recordAddFrame(ofBaseHasTexture &_texBase);

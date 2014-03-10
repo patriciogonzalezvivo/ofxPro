@@ -174,13 +174,13 @@ bool UILog::penUp(){
     actualNote->penUp();
 }
 
-void UILog::screenShot(){
+void UILog::screenShot(string _post){
     ofImage img;
     img.grabScreen(0,0,ofGetWidth(), ofGetHeight());
     if( !ofDirectory(dataPath+"snapshots/").exists() ){
         ofDirectory(dataPath+"snapshots/").create();
     }
-    string picturePath = dataPath+"snapshots/" + ofGetTimestampString() + ".png";
+    string picturePath = dataPath+"snapshots/" + ofGetTimestampString("%y-%m-%d-%H-%M-%S")+"_post" + ".png";
     img.saveImage(picturePath);
     lastPicture = picturePath;
     upload();
@@ -192,6 +192,7 @@ void UILog::record(bool _state){
         bRecording = false;
         ofxUIToggle *rec = (ofxUIToggle*)gui->getWidget("REC");
         rec->setValue(false);
+        upload();
     } else if (!bRecording && _state) {
         if( !ofDirectory(dataPath+"videos/").exists() ){
             ofDirectory(dataPath+"videos/").create();

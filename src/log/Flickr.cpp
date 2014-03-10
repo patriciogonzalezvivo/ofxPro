@@ -71,8 +71,8 @@ namespace Flickr {
         string toBase58 = "";
         
         while (id_num > 0) {
-            uint64_t num = id_num / base_count;
-            uint64_t remainder = id_num % base_count;
+            uint64_t num = id_num/base_count;
+            uint64_t remainder = id_num%base_count;
             toBase58 += alphabet[remainder];
             id_num = num;
         }

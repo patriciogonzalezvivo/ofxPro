@@ -19,7 +19,8 @@ UIMap::UIMap(){
 }
 
 UIMap::~UIMap(){
-
+    //  TODO:
+    //          - clean images and recent images
 };
 
 void UIMap::setupUI(){
@@ -33,6 +34,8 @@ void UIMap::setupUI(){
     maps.push_back("Stamen-toner");
     maps.push_back("Stamen-toner-lite");
     maps.push_back("Stamen-toner-background");
+    maps.push_back("Stamen-terrain");
+    maps.push_back("Stamen-watercolor");
     maps.push_back("MapBox");
     maps.push_back("Mgcdn");
     maps.push_back("GeoIp");
@@ -79,6 +82,10 @@ void UIMap::loadMap(string _predef){
         setMapProvider( TemplatedMapProvider::create("http://spaceclaw.stamen.com/toner-lite/{Z}/{X}/{Y}.png") );
     } else if ( _predef == "Stamen-toner-background" ){
         setMapProvider( TemplatedMapProvider::create("http://spaceclaw.stamen.com/toner-background/{Z}/{X}/{Y}.png") );
+    } else if ( _predef == "Stamen-terrain" ){
+        setMapProvider( TemplatedMapProvider::create("http://spaceclaw.stamen.com/terrain/{Z}/{X}/{Y}.png") );
+    } else if ( _predef == "Stamen-watercolor" ){
+        setMapProvider( TemplatedMapProvider::create("http://spaceclaw.stamen.com/watercolor/{Z}/{X}/{Y}.png") );
     } else if ( _predef == "MapBox" ){
         setMapProvider( TemplatedMapProvider::create("http://c.tiles.mapbox.com/v3/examples.map-szwdot65/{Z}/{X}/{Y}.png") );
     } else if ( _predef == "Mgcdn" ){
@@ -103,10 +110,6 @@ ofTexture& UIMap::getTextureReference(){
 }
 
 void UIMap::update(){
-    if (fbo.getWidth() != width || fbo.getHeight() != height ){
-        fbo.allocate(width, height);
-    }
-    
     if (bEnable){
         
         // if we're in between zoom levels, we need to choose the nearest:
@@ -137,8 +140,7 @@ void UIMap::update(){
         for (int col = minCol; col <= maxCol; col++) {
             for (int row = minRow; row <= maxRow; row++) {
                 
-                // source coordinate wraps around the world:
-                //Coordinate coord = provider->sourceCoordinate(Coordinate(row,col,baseZoom));
+                //  source coordinate wraps around the world:
                 Coordinate coord = Coordinate(row,col,baseZoom);
                 
                 // keep this for later:
@@ -180,55 +182,55 @@ void UIMap::update(){
             } // rows
         } // columns
         
-        // TODO: sort by zoom so we draw small zoom levels (big tiles) first:
-        // can this be done with a different comparison function on the visibleKeys set?
-        //Collections.sort(visibleKeys, zoomComparator);
-        
-        int numDrawnImages = 0;
+        //  Render
+        //
+        if (fbo.getWidth() != width || fbo.getHeight() != height ){
+            fbo.allocate(width, height);
+        }
         fbo.begin();
         ofPushMatrix();
+        ofRotate(ofRadToDeg(rotation));
+        
         ofClear(0,0);
-        {
-            ofRotate(ofRadToDeg(rotation));
-            int numDrawnImages = 0;
-            std::set<Coordinate>::iterator citer;
-            for (citer = visibleKeys.begin(); citer != visibleKeys.end(); citer++) {
-                Coordinate coord = *citer;
-                
-                float scale = pow(2.0, centerCoordinate.zoom - coord.zoom);
-                ofPoint tileSize = provider->getTileSize() * scale;
-                ofPoint center = ofPoint(width*0.5,height*0.5);
-                Coordinate theCoord = centerCoordinate.zoomTo(coord.zoom);
-                
-                double tx = center.x + (coord.column - theCoord.column) * tileSize.x;
-                double ty = center.y + (coord.row - theCoord.row) * tileSize.y;
-                
-                if (images.count(coord) > 0) {
-                    ofImage *tile = images[coord];
-                    // we want this image to be at the end of recentImages, if it's already there we'll remove it and then add it again
-                    //			recentImages.erase(remove(recentImages.begin(), recentImages.end(), tile), recentImages.end());
-                    std::vector<ofImage*>::iterator result = find(recentImages.begin(), recentImages.end(), tile);
-                    if (result != recentImages.end()) {
-                        recentImages.erase(result);
-                    } else {
-                        // if it's not in recent images it must be brand new?
-                        tile->setUseTexture(true);
-                        //					tile->initTex();
-                        tile->update();
-                    }
-
-                    tile->draw( tx, ty, tileSize.x, tileSize.y );
-                    numDrawnImages++;
-                    recentImages.push_back(tile);
+        
+        int numDrawnImages = 0;
+        std::set<Coordinate>::iterator citer;
+        for (citer = visibleKeys.begin(); citer != visibleKeys.end(); citer++) {
+            Coordinate coord = *citer;
+            
+            float scale = pow(2.0, centerCoordinate.zoom - coord.zoom);
+            ofPoint tileSize = provider->getTileSize() * scale;
+            ofPoint center = ofPoint(width*0.5,height*0.5);
+            Coordinate theCoord = centerCoordinate.zoomTo(coord.zoom);
+            
+            double tx = center.x + (coord.column - theCoord.column) * tileSize.x;
+            double ty = center.y + (coord.row - theCoord.row) * tileSize.y;
+            
+            if (images.count(coord) > 0) {
+                ofImage *tile = images[coord];
+                // we want this image to be at the end of recentImages, if it's already there we'll remove it and then add it again
+                //			recentImages.erase(remove(recentImages.begin(), recentImages.end(), tile), recentImages.end());
+                std::vector<ofImage*>::iterator result = find(recentImages.begin(), recentImages.end(), tile);
+                if (result != recentImages.end()) {
+                    recentImages.erase(result);
+                } else {
+                    // if it's not in recent images it must be brand new?
+                    tile->setUseTexture(true);
+                    //					tile->initTex();
+                    tile->update();
                 }
+                
+                tile->draw( tx, ty, tileSize.x, tileSize.y );
+                numDrawnImages++;
+                recentImages.push_back(tile);
             }
         }
+
         ofPopMatrix();
         fbo.end();
         
         // stop fetching things we can't see:
         // (visibleKeys also has the parents and children, if needed, but that shouldn't matter)
-        //queue.retainAll(visibleKeys);
         vector<Coordinate>::iterator iter = queue.begin();
         while (iter != queue.end()) {
             Coordinate key = *iter;
@@ -240,13 +242,21 @@ void UIMap::update(){
             }
         }
         
-        // TODO sort what's left by distance from center:
+        //  Process Queue ( load up to 4 more things )
         //
-        //queueSorter.setCenter(new Coordinate( (minRow + maxRow) / 2.0f, (minCol + maxCol) / 2.0f, zoom));
-        //Collections.sort(queue, queueSorter);
+        if (queue.size() > MAX_PENDING-pending.size()) {
+            sort(queue.begin(), queue.end(), QueueSorter(centerCoordinate));
+        }
         
-        // load up to 4 more things:
-        processQueue();
+        while (pending.size() < MAX_PENDING && queue.size() > 0) {
+            Coordinate coord = *(queue.begin());
+            Coordinate key = Coordinate(coord);
+            
+            pending[key] = TileLoader();
+            pending[key].start(key, provider, this);
+            
+            queue.erase(queue.begin());
+        }
         
         // clear some images away if we have too many...
         int numToKeep = max(numDrawnImages,MAX_IMAGES_TO_KEEP);
@@ -276,16 +286,15 @@ void UIMap::update(){
 	}
 }
 
-void UIMap::draw() {
-    if (fbo.getWidth() != width || fbo.getHeight() != height ){
-        fbo.allocate(width, height);
+void UIMap::draw(float _x, float _y,float _width, float _height) {
+    if(_width==-1||_height==-1){
+        _width = width;
+        _height = height;
     }
-    
     if (bEnable){
         ofPushStyle();
         ofSetColor(255);
-//        fbo.draw(x,y);
-        fbo.draw(0,0);
+        fbo.draw(_x,_y,_width,_height);
         ofPopStyle();
     }
 }
@@ -328,17 +337,29 @@ void UIMap::setExtent( const MapExtent &extent, bool forceIntZoom ){
     setCenter( Coordinate(centerRow, centerColumn, centerZoom).zoomTo(initZoom) );
 }
 
-MapExtent UIMap::getExtent() const{
-    return MapExtent( pointLocation( ofPoint(0,0) ), pointLocation( ofPoint(width,height) ) );
-}
-
 void UIMap::setMapProvider( MapProviderRef _mapProvider ){
-//    tileLoader->setMapProvider( _mapProvider );
     images.clear();
     queue.clear();
     recentImages.clear();
     visibleKeys.clear();
     provider = _mapProvider;
+}
+
+void UIMap::setCenter(const Coordinate &center) {
+    centerCoordinate = center;
+}
+
+void UIMap::setCenter(const Location &location) {
+	setCenter( provider->locationCoordinate(location).zoomTo(getZoom()) );
+}
+
+/** sets scale according to given zoom level, should leave you with pixel perfect tiles */
+void UIMap::setZoom(const double &_zoom) {
+    centerCoordinate = centerCoordinate.zoomTo(_zoom);
+}
+
+MapExtent UIMap::getExtent() const{
+    return MapExtent( pointLocation( ofPoint(0,0) ), pointLocation( ofPoint(width,height) ) );
 }
 
 /** @return zoom level of currently visible tile layer */
@@ -350,29 +371,7 @@ Location UIMap::getCenter() const {
 	return provider->coordinateLocation( centerCoordinate );
 }
 
-Coordinate UIMap::getCenterCoordinate() const {
-    return centerCoordinate;
-}
-
-void UIMap::setCenter(const Coordinate &center) {
-     centerCoordinate = center;
-}
-
-void UIMap::setCenter(const Location &location) {
-	setCenter( provider->locationCoordinate(location).zoomTo(getZoom()) );
-}
-
-void UIMap::setCenterZoom(const Location &location, const double &_zoom) {
-	setCenter( provider->locationCoordinate(location).zoomTo(_zoom) );
-}
-
-/** sets scale according to given zoom level, should leave you with pixel perfect tiles */
-void UIMap::setZoom(const double &_zoom) {
-    centerCoordinate = centerCoordinate.zoomTo(_zoom);
-}
-
 //----------------------------------------------------------------- CONVERSION
-
 ofPoint UIMap::coordinatePoint(const Coordinate &target) const {
     
 	/* Return an x, y point on the map image for a given coordinate. */
@@ -453,22 +452,6 @@ void UIMap::grabTile(Coordinate coord) {
 	if (!isPending && !isQueued && !isAlreadyLoaded) {
 		queue.push_back(Coordinate(coord));
 	}
-}
-
-void UIMap::processQueue() {
-	if (queue.size() > MAX_PENDING-pending.size()) {
-		sort(queue.begin(), queue.end(), QueueSorter(getCenterCoordinate().zoomTo(getZoom())));
-	}
-    
-	while (pending.size() < MAX_PENDING && queue.size() > 0) {
-		Coordinate coord = *(queue.begin());
-		Coordinate key = Coordinate(coord);
-        
-		pending[key] = TileLoader();
-		pending[key].start(key, provider, this);
-        
-		queue.erase(queue.begin());
-	}  
 }
 
 // TODO: there could be issues when this is called from within a thread
