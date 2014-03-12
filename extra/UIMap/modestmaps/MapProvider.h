@@ -28,7 +28,7 @@ public:
     virtual Location coordinateLocation(const Coordinate &coordinate) = 0;
     
 //    // called from a background thread:
-    virtual ofImage getImage( const Coordinate &coord ) = 0;
+//    virtual ofImage getImage( const Coordinate &coord ) = 0;
 };
 
 typedef std::shared_ptr<MapProvider> MapProviderRef;

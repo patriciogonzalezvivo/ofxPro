@@ -6,7 +6,7 @@
 #include "Coordinate.h"
 #include "SimpleWebScraper.h"
 
-class   ofMemoryImage : public ofImage {
+class ofMemoryImage : public ofImage {
 public:
     
 	void loadFromData(const unsigned char * datasource, int len){
@@ -27,19 +27,6 @@ class AbstractMapProvider;
 
 class TileLoader {
 public:
-    
-//    TileLoader(){
-//        ofRegisterURLNotification(this);
-//    }
-//    
-//    virtual ~TileLoader(){
-//        ofUnregisterURLNotification(this);
-//    }
-//    
-//    void start(Coordinate _coord, MapProviderRef _provider, UIMap *_map);
-//    void urlResponse(ofHttpResponse &response);
-	
-//private:
     Coordinate coord;
 	MapProviderRef provider;
 	UIMap *theMap;

@@ -62,7 +62,7 @@ void UILight::setupUI(){
     
     switch( light.getType() ){
         case OF_LIGHT_POINT:{
-            addUIPos("POSITION", *this);
+            addUIPos("POS", *this);
         }
             break;
             
@@ -71,13 +71,13 @@ void UILight::setupUI(){
             gui->addSlider("EXPONENT", 0.0, 128.0, &exponent);
             gui->addSpacer();
             
-            addUIPos("POSITION", *this);
-            addUIPos("ORIENTATION", oriTarget);
+            addUIPos("POS", *this);
+            addUIPos("ORI", oriTarget);
         }
             break;
             
         case OF_LIGHT_DIRECTIONAL:{
-            addUIPos("ORIENTATION", oriTarget);
+            addUIPos("ORI", oriTarget);
         }
             break;
     }

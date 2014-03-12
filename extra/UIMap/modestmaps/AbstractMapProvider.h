@@ -50,25 +50,25 @@ public:
 		return Coordinate(coordinate.row, wrappedColumn, coordinate.zoom);
 	}
     
-    ofImage getImage( const Coordinate &coord ) {
-        std::vector<std::string> urls = getTileUrls(coord);
-        
-        ofImage image;
-        
-        if (urls.size() > 0) {
-            try {
-//                image = Surface( loadImage( loadUrl( urls[0] ) ) );
-            }
-            catch( ... ) {
-                //std::cout << "Failed to load: " << url.str() << std::endl;
-                // create a dummy tile
-//                Vec2i size = getTileSize();
-//                image = Surface( size.x, size.y, true );
-//                ip::fill( &image, Color( 1.0f, 0.0f, 0.0f ) );
-            }
-        }
-        
-        return image;
-    }
+//    ofImage getImage( const Coordinate &coord ) {
+//        std::vector<std::string> urls = getTileUrls(coord);
+//        
+//        ofImage image;
+//        
+//        if (urls.size() > 0) {
+//            try {
+////                image = Surface( loadImage( loadUrl( urls[0] ) ) );
+//            }
+//            catch( ... ) {
+//                //std::cout << "Failed to load: " << url.str() << std::endl;
+//                // create a dummy tile
+////                Vec2i size = getTileSize();
+////                image = Surface( size.x, size.y, true );
+////                ip::fill( &image, Color( 1.0f, 0.0f, 0.0f ) );
+//            }
+//        }
+//        
+//        return image;
+//    }
 	
 };
