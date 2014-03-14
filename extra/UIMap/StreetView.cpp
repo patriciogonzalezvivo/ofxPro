@@ -20,13 +20,6 @@ StreetView::StreetView(){
     bDataLoaded = false;
     bPanoLoaded = false;
     bAutoDownload = false;
-    
-    compileList = -1;
-    horizontal_accuracy = 2;
-    vertical_accuracy = 5;
-    zoom_level = 2;
-    wireframe = false;
-    mipmapping = false;
 }
 
 StreetView::StreetView(string _pano_id){
@@ -57,14 +50,12 @@ void StreetView::setLocation(Location _loc){
 
 void StreetView::setLatLon(double _lat, double _lon){
     clear();
-    compileList = -1;
     string data_url = "http://cbk0.google.com/cbk?output=xml&ll="+ofToString(_lat)+","+ofToString(_lon)+"&dm=1&pm=1";
     ofLoadURLAsync(data_url);
 }
 
 void StreetView::setPanoId(string _pano_id){
     clear();
-    compileList = -1;
     string data_url = "http://cbk0.google.com/cbk?output=xml&panoid="+_pano_id+"&dm=1&pm=1";
     ofLoadURLAsync(data_url);
 }
@@ -79,7 +70,6 @@ void StreetView::clear(){
     loc.lon = 0;
     bDataLoaded = false;
     bPanoLoaded = false;
-    compileList = -1;
     pano_id.clear();
     depth_map_base64.clear();
     images.clear();
@@ -95,11 +85,14 @@ void StreetView::downloadPanorama(){
     if(!bPanoLoaded){
         if(pano_id != ""){
             for(int i = 0; i < 3; i++){
-                for(int j = 0; j < 6; j++){
+                for(int j = 0; j < 7; j++){
                     ofLoadURLAsync("http://cbk0.google.com/cbk?output=tile&panoid="+pano_id+"&zoom=3&x="+ofToString(j)+"&y="+ofToString(i));
                 }
             }
         }
+        
+        bool bDepth = false;
+        bool bPano = false;
         
         //Decode the depth map
         //The depth map is encoded as a series of pixels in a 512x256 image. Each pixels refers
@@ -137,6 +130,8 @@ void StreetView::downloadPanorama(){
             //Load depthMapPlanes
             depthmapPlanes = vector<DepthMapPlane> (numPanos);
             memcpy(&depthmapPlanes[0], &depth_map[panoIndicesOffset + mapHeight * mapWidth], numPanos * sizeof (struct DepthMapPlane));
+            
+            bDepth = true;
         }
         
         //Decode the pano map
@@ -183,6 +178,12 @@ void StreetView::downloadPanorama(){
                 if (memcmp(&panoids[i], &pano_id, PANOID_LENGTH + 1) == 0)
                     ownPanomapIndex = i + 1;
             }
+            
+            bPano = true;
+        }
+        
+        if(bDepth && bPano){
+            updateModel();
         }
     }
 }
@@ -194,13 +195,11 @@ void StreetView::urlResponse(ofHttpResponse & response){
         ofxXmlSettings  XML;
         XML.loadFromBuffer(response.data);
         
-//        <data_properties image_width="13312" image_height="6656" tile_width="512" tile_height="512" image_date="2011-07" pano_id="h8MTbKFUL84LsKzZjpbbSA" imagery_type="1" num_zoom_levels="3" lat="40.737268" lng="-73.992553" original_lat="40.737279" original_lng="-73.992562" elevation_wgs84_m="-17.887235" best_view_direction_deg="108.72954">
         pano_id = XML.getAttribute("panorama:data_properties", "pano_id", "");
         loc.lat = XML.getAttribute("panorama:data_properties", "original_lat", 0.0);
         loc.lon = XML.getAttribute("panorama:data_properties", "original_lng", 0.0);
         num_zoom_levels = XML.getAttribute("panorama:data_properties", "num_zoom_levels", 0);
         
-//        <projection_properties projection_type="spherical" pano_yaw_deg="122.63" tilt_yaw_deg="-46.44" tilt_pitch_deg="1.1899999"/>
         pano_yaw_deg = XML.getAttribute("panorama:projection_properties", "pano_yaw_deg", 0.0);
         tilt_yaw_deg = XML.getAttribute("panorama:projection_properties", "tilt_yaw_deg", 0.0);
         tilt_pitch_deg = XML.getAttribute("panorama:projection_properties", "tilt_pitch_deg", 0.0);
@@ -209,15 +208,6 @@ void StreetView::urlResponse(ofHttpResponse & response){
         depth_map_base64 = XML.getValue("panorama:model:depth_map", "");
         pano_map_base64 = XML.getValue("panorama:model:pano_map", "");
 
-//        <annotation_properties>
-//        <link yaw_deg="119.05" pano_id="8FegTnSng4M45fC-y-da4Q" road_argb="0x80ffffff" scene="0">
-//        <link_text>East 16th Street</link_text>
-//        </link>
-//        <link yaw_deg="299.05" pano_id="SnpKtJ8do5DNP7pXj14pkg" road_argb="0x80ffffff" scene="0">
-//        <link_text>5th Avenue / East 16th Street / West 16th Street</link_text>
-//        </link>
-//        </annotation_properties>
-        
         XML.pushTag("panorama");
         XML.pushTag("annotation_properties");
         int nLinks = XML.getNumTags("link");
@@ -231,7 +221,6 @@ void StreetView::urlResponse(ofHttpResponse & response){
         XML.popTag();
         XML.popTag();
         
-        utmLoc = loc.getUTM();
         bDataLoaded = true;
         
         if(bAutoDownload){
@@ -303,9 +292,43 @@ ofTexture& StreetView::getTextureReference(){
     }
 }
 
+ofTexture StreetView::getLookAt(float _deg, float _amp){
+    return getLookTo(pano_yaw_deg-360-_deg+90,_amp);
+}
+
+ofTexture StreetView::getLookTo(float _deg, float _amp){
+    ofTexture rta;
+    
+    if(fbo.isAllocated()){
+        float widthDeg = fbo.getWidth()/360.0;
+        
+        float offsetX = widthDeg*_deg;
+        float amplitud = widthDeg*_amp;
+        
+        ofFbo roi;
+        roi.allocate(widthDeg*_amp, fbo.getHeight());
+        rta.allocate(widthDeg*_amp, fbo.getHeight(),GL_RGB);
+        
+        roi.begin();
+        ofClear(0,0);
+        fbo.draw(-offsetX+amplitud*0.5-fbo.getWidth(),0);
+        fbo.draw(-offsetX+amplitud*0.5,0);
+        if(offsetX+amplitud>fbo.getWidth()){
+            fbo.draw(-offsetX+amplitud*0.5+fbo.getWidth(),0);
+        }
+        roi.end();
+        roi.draw(0, 0);
+        
+        rta = roi.getTextureReference();
+    }
+    return rta;
+}
+
 void StreetView::update(){
-    if(bDataLoaded && !bPanoLoaded && images.size() >= 3*6){
-        fbo.allocate(images[0].width*6, images[0].height*3);
+    if(bDataLoaded && !bPanoLoaded && images.size() >= 3*7){
+    
+        fbo.allocate(3335,1778);
+//        fbo.allocate(images[0].width*7, images[0].height*3);
         
         fbo.begin();
         ofClear(0,0);
@@ -313,7 +336,7 @@ void StreetView::update(){
         int y = 0;
         for(int i= 0; i < images.size(); i++){
             images.at(i).draw(x*images.at(i).width, y*images.at(i).height);
-            if(x < 5){
+            if(x < 6){
                 x++;
             }else{
                 x=0;
@@ -326,172 +349,34 @@ void StreetView::update(){
     }
 }
 
-void StreetView::draw(){
-    if(bPanoLoaded&&fbo.isAllocated()){
-        draw(utmLoc, true);
-    }
-}
-
-void StreetView::draw(UtmPosition referencePoint, bool drawAll) {
-    /**
-     * Transparant borders are the fuzzy edges of the panorama. Due to the use of display
-     * lists it is impossible to both have a continually increasing opacity AND transparant borders.
-     *
-     * We solve this in a two step process: during the fade-in sequence we set transparancy globally,
-     * no glColor calls are allowed in the display list that could corrupt the global transparancy.
-     * Once faded in we enable the transparant borders and allow glColor calls in the display list
-     */
-    bool settingsChanged = false;
-    bool firstTime = false;
+void StreetView::updateModel(){
+    mesh.clear();
+    mesh.setMode(OF_PRIMITIVE_TRIANGLES);
     
-    if (compileList == -1) {
-        compileList = glGenLists(1);
-        threeSixtyCompileList = glGenLists(1);
-        firstTime = true;
-    }
-    
-    //If any setting changed from the last time we compiled the list we need to recompile it with the new settings
-    if (compiledRenderSettings.horizontalDetail != horizontal_accuracy
-        || compiledRenderSettings.verticalAccuracy != vertical_accuracy) {
-        settingsChanged = true;
-    }
-    
-    //Recreate the display lists
-    if (firstTime || settingsChanged) {
-        RenderSettings renderSettings;
-        renderSettings.horizontalDetail = 2;
-        renderSettings.verticalAccuracy = 5;
-        
-        //Recreate display list for 'only own data' panorama
-        renderSettings.transparancy = true;
-        glNewList(compileList, GL_COMPILE);
-        drawActual(referencePoint, false, renderSettings);
-        glEndList();
-        
-        //Recreate display list for 'all data' panorama
-        renderSettings.transparancy = false;
-        glNewList(threeSixtyCompileList, GL_COMPILE);
-        drawActual(referencePoint, true, renderSettings);
-        glEndList();
-        
-        compiledRenderSettings = renderSettings;
-    }
-    
-    //Draw the cached version
-    if (drawAll) {
-        glCallList(threeSixtyCompileList);
-    } else {
-        glCallList(compileList);
-    }
-}
-
-void StreetView::drawActual(UtmPosition referencePoint, bool drawAll, RenderSettings settings) {
-    glPushMatrix();
-    glTranslated(utmLoc.easting - referencePoint.easting, utmLoc.northing - referencePoint.northing, 0);
-    glRotated(180 - pano_yaw_deg, 0, 0, 1);
-    
-//    glBindTexture(GL_TEXTURE_2D, texture_id);
-    fbo.bind();
-    
-    //The environment is basically just a sphere with each vertex at a different distance creating
-    //The illusion that everything is organized into planes
-    
-    /**
-     * Draw the panorama in long vertical strips
-     */
-    for (int x = 0; x < mapWidth - 1; x += settings.horizontalDetail) {
-        //printf("%d ", x);
-        bool drawing = false;
-        int currentDepthMap = 0;
-        int currentDepthMap2 = 0;
-        
-        const int next_x = x + settings.horizontalDetail;
+    for (int x = 0; x < mapWidth - 1; x += 1) {
+        const int next_x = x + 1;
         int map_next_x = next_x;
         if (map_next_x >= mapWidth)
             map_next_x -= mapWidth;
         
-        //Start drawing immediately at the zenith in the sky
-        if (drawAll) {
-            drawing = true;
-            
-            glBegin(GL_QUAD_STRIP);
-            drawVertexAtAzimuthElevation(next_x, 0, settings);
-            drawVertexAtAzimuthElevation(x, 0, settings);
-        }
         const unsigned int endHeight = mapHeight - 1;
         
         for (unsigned int y = 0; y < endHeight; y += 1) {
-            
             const int next_y = y + 1;
             
-            //Stop drawing
-            if (!drawAll && drawing && (!isVisible(x, y) || !isVisible(x + 1, y))) {
-                
-                drawing = false;
-                
-                drawVertexAtAzimuthElevation(next_x, y, settings);
-                drawVertexAtAzimuthElevation(x, y, settings);
-                glEnd();
-            }
+            addVertexAtAzimuthElevation(next_x, y);
+            addVertexAtAzimuthElevation(x, y);
+            addVertexAtAzimuthElevation(x, next_y);
             
-            /**
-             * If the depth map changes ensure that extra vertices are placed to create a nice sharp
-             * edge between planes.
-             */
-            const int depthMapIndex = depthmapIndices[(y + 1) * mapWidth + x];
-            const int depthMapIndex2 = depthmapIndices[(y + 1) * mapWidth + map_next_x];
+            addVertexAtAzimuthElevation(x, next_y);
+            addVertexAtAzimuthElevation(next_x, next_y);
+            addVertexAtAzimuthElevation(next_x, y);
             
-            if (drawing && (depthMapIndex != currentDepthMap || depthMapIndex2 != currentDepthMap2)) {
-                currentDepthMap = depthMapIndex;
-                currentDepthMap2 = depthMapIndex2;
-                
-                drawVertexAtAzimuthElevation(next_x, y, settings);
-                drawVertexAtAzimuthElevation(x, y, settings);
-                
-                drawVertexAtAzimuthElevation(next_x, next_y, settings);
-                drawVertexAtAzimuthElevation(x, next_y, settings);
-                
-                //Draw extra perspective corrective lines
-            } else if (drawing && (y % settings.verticalAccuracy) == 0) {
-                
-                drawVertexAtAzimuthElevation(next_x, y, settings);
-                drawVertexAtAzimuthElevation(x, y, settings);
-                
-                //Draw extra lines for transparancy to flow nicely
-            } else if (!drawAll && drawing && (isTransparant(x, y - 1, settings.horizontalDetail) || isTransparant(next_x, y - 1, settings.horizontalDetail))) {
-                drawVertexAtAzimuthElevation(next_x, y, settings);
-                drawVertexAtAzimuthElevation(x, y, settings);
-            }//Start drawing
-            else if (!drawing && isVisible(x, y) && isVisible(x + 1, y)) {
-                drawing = true;
-                
-                glBegin(GL_QUAD_STRIP);
-                
-                currentDepthMap = depthMapIndex;
-                currentDepthMap2 = depthMapIndex2;
-                
-                drawVertexAtAzimuthElevation(next_x, y, settings);
-                drawVertexAtAzimuthElevation(x, y, settings);
-            }
         }
-        //Draw last vertex at the nadir / very bottom of panorama
-        if (drawing) {
-            drawVertexAtAzimuthElevation(next_x, endHeight, settings);
-            drawVertexAtAzimuthElevation(x, endHeight, settings);
-            
-            glEnd();
-        }
-        
     }
-    fbo.unbind();
-    glPopMatrix();
 }
 
-void StreetView::drawVertexAtAzimuthElevation(int x, int y, RenderSettings settings) {
-
-    if (settings.transparancy)
-        glColor4d(1, 1, 1, isTransparant(x, y, settings.horizontalDetail) ? 0 : 1);
-    
+void StreetView::addVertexAtAzimuthElevation(int x, int y){
     float rad_azimuth = x / (float) (mapWidth - 1.0f) * TWO_PI;
     float rad_elevation = y / (float) (mapHeight - 1.0f) * PI;
     
@@ -502,6 +387,8 @@ void StreetView::drawVertexAtAzimuthElevation(int x, int y, RenderSettings setti
     xyz.z = cos(rad_elevation);
     float distance = 1;
     
+    ofPoint normal;
+    
     //Value that is safe to use to retrieve stuff from the index arrays
     const int map_x = x % mapWidth;
     
@@ -510,13 +397,32 @@ void StreetView::drawVertexAtAzimuthElevation(int x, int y, RenderSettings setti
     if (depthMapIndex == 0) {
         //Distance of sky
         distance = 100;
+        
+        normal = ofPoint(0,0,0)-xyz;
+        normal.normalize();
+        
     } else {
         DepthMapPlane plane = depthmapPlanes[depthMapIndex];
         distance = -plane.d / (plane.x * xyz.x + plane.y * xyz.y + -plane.z * xyz.z);
+        normal.set(plane.x,plane.y,plane.z);
     }
     
-    //Draw point!
-//    glTexCoord2d(x / (float) mapWidth, y / (float) mapHeight);
-    glTexCoord2d((x/(float)mapWidth)*fbo.getWidth(), (y/(float)mapHeight)*fbo.getHeight());
-    glVertex3f(xyz.x * distance, xyz.y*distance, xyz.z * distance);
+    ofVec2f texCoord = ofVec2f((x/(float)mapWidth)*3335.0,(y/(float)mapHeight)*1778.0);
+    xyz *= distance;
+    
+//    mesh.addColor(ofFloatColor(1,0.5));//x/(float)mapWidth,y/(float)mapHeight,0.0));
+
+    mesh.addNormal(normal);
+    mesh.addTexCoord(texCoord);
+    mesh.addVertex(xyz);
 }
+
+void StreetView::draw(){
+    if(bPanoLoaded&&fbo.isAllocated()){
+        ofSetColor(255);
+        fbo.getTextureReference().bind();
+        mesh.draw();
+        fbo.getTextureReference().unbind();
+    }
+}
+

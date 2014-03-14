@@ -50,11 +50,15 @@ public:
     string      getCloseLinkTo(float _deg);
     Location    getLocation();
     string      getPanoId(){return pano_id;};
+    float       getDirection(){return pano_yaw_deg;}
     float       getGroundHeight();
 
     float       getWidth();
 	float       getHeight();
     ofTexture&  getTextureReference();
+    
+    ofTexture   getLookAt(float _deg, float _amp); // 0 - North
+    ofTexture   getLookTo(float _deg, float _amp); // 0 is the direction of the Google Street Car
     
     bool        isTextureLoaded(){return bPanoLoaded;};
     void        downloadPanorama();
@@ -62,18 +66,18 @@ public:
     
     void        clear();
     void        update();
+    void        updateModel();
     
     vector<Link> links;
     
-    void    draw();
+    void        draw();
+    
     
 protected:
     bool    isVisible(int x, int y);
     bool    isTransparant(int x, int y, int horizontal_step);
     
-    void    draw(UtmPosition referencePoint, bool drawAll);
-    void    drawActual(UtmPosition referencePoint, bool drawAll, RenderSettings settings);
-    void    drawVertexAtAzimuthElevation(int x, int y, RenderSettings settings);
+    void    addVertexAtAzimuthElevation(int x, int y);
     
     ofFbo           fbo;
     vector<ofImage> images;
@@ -95,17 +99,8 @@ protected:
     vector<unsigned char> panomapIndices;
     char panoids[200][PANOID_LENGTH+1];
     int ownPanomapIndex;
-    
-    RenderSettings  compiledRenderSettings;
-    UtmPosition     utmLoc;
-    int compileList;
-    int threeSixtyCompileList;
-    int mipmapping;
-    int wireframe;
-    int horizontal_accuracy;
-    int vertical_accuracy;
-    int zoom_level;
-    
+
+    ofVboMesh   mesh;
     //  Flags
     //
     bool    bAutoDownload;
