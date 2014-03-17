@@ -13,6 +13,7 @@ class UIMapBackground : public UIBackground {
 public:
     
     UIMapBackground();
+    ~UIMapBackground();
     
     void    getBackgroundMesh(ofMesh& _mesh, ofTexture& _image, float _width, float _height);
     

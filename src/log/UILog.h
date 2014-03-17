@@ -23,7 +23,7 @@ public:
     virtual ~UILog();
 
     void    linkDataPath(string _path){dataPath=_path;}
-    void    linkCamera(UICamera &_camera){camera=&_camera;};
+    void    linkCamera(UICamera *_camera){camera=_camera;};
     
     string  getClassName(){return "LOG";};
 

@@ -11,10 +11,7 @@
 UICamera::UICamera(){
     FOV = 60;
     
-    camera = new ofEasyCam();
-    camera->setFov(FOV);
-    ((ofEasyCam*)camera)->setDistance(200);
-    type = "easyCam";
+    camera = new ofCamera();
     
     textField = NULL;
     locations = NULL;
@@ -24,9 +21,28 @@ UICamera::UICamera(){
     ofAddListener(ofEvents().update, this, &UICamera::update);
 }
 
+UICamera::~UICamera(){
+     ofRemoveListener(ofEvents().update, this, &UICamera::update);
+    
+    if(camera != NULL){
+        delete camera;
+        camera = NULL;
+    }
+
+//    if(textField != NULL){
+//        delete textField;
+//        textField = NULL;
+//    }
+//    
+//    if(locations != NULL){
+//        delete locations;
+//        locations = NULL;
+//    }
+}
+
 void UICamera::setupUI(){
     gui->addSlider("FOV", 0, 180, &FOV);
-    gui->addSlider("Speed", 0.0, 1.0, &speed);
+    gui->addSlider("Lerp", 0.0, 1.0, &lerpPct);
     gui->addSpacer();
     textField = gui->addTextInput("ADD", "", OFX_UI_FONT_SMALL);
     gui->setTriggerWidgetsUponLoad(false);
@@ -45,10 +61,14 @@ void UICamera::guiEvent(ofxUIEventArgs &e){
     } else if (name == "LOCATIONS"){
         
     } else if (name == "ENABLE"){
-        
+        if(bEnable){
+            enableMouseInput();
+        } else {
+            disableMouseInput();
+        }
     } else if (name == "FOV"){
-        
-    } else if (name == "Speed"){
+
+    } else if (name == "Lerp" || name == "Moving_Speed" || name == "Rolling_Speed" || name == "Use_Arrow_Keys" || name == "Reset"){
         
     } else {
         ofxUIToggle *t = (ofxUIToggle*)e.widget;
@@ -113,30 +133,11 @@ void UICamera::setCameraLocation( const CameraLocation &_camPos ){
 
 CameraLocation UICamera::getCameraLocation(){
     CameraLocation rta;
-    if(type == "easyCam"){
-        rta.FOV      = ((ofEasyCam*)camera)->getFov();
-        rta.distance = ((ofEasyCam*)camera)->getDistance();
-        rta.position = ((ofEasyCam*)camera)->getPosition();
-        rta.orientation = ((ofEasyCam*)camera)->getOrientationQuat();
-    } else {
-        rta.distance = 0;
-        rta.FOV      = camera->getFov();
-        rta.position = camera->getPosition();
-        rta.orientation = camera->getOrientationQuat();
-    }
+    rta.distance = 0;
+    rta.FOV      = camera->getFov();
+    rta.position = camera->getPosition();
+    rta.orientation = camera->getOrientationQuat();
     return rta;
-}
-
-void UICamera::enableMouseInput(){
-    if(type == "easyCam"){
-        ((ofEasyCam*)camera)->enableMouseInput();
-    }
-}
-
-void UICamera::disableMouseInput(){
-    if(type == "easyCam"){
-        ((ofEasyCam*)camera)->disableMouseInput();
-    }
 }
 
 void UICamera::update(ofEventArgs& args){
@@ -148,7 +149,7 @@ void UICamera::update(ofEventArgs& args){
             ofQuaternion q;
             q.slerp(1.0-pct,camera->getOrientationQuat(),targetLocation.orientation);
             camera->setOrientation(q);
-            pct *= (1.0- powf(10.0, (1.0-speed)*-3.0 ) );
+            pct *= (1.0- powf(10.0, (1.0-lerpPct)*-3.0 ) );
         }
         
         if(bNewLocation){

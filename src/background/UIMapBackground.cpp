@@ -41,6 +41,13 @@ UIMapBackground::UIMapBackground(){
     ofAddListener(ofEvents().windowResized , this, &UIMapBackground::windowResized);
 }
 
+UIMapBackground::~UIMapBackground(){
+    if(backgrounds!=NULL){
+        delete backgrounds;
+        backgrounds = NULL;
+    }
+}
+
 void UIMapBackground::setupUI(){
 
     vector<string> backgroundsList;

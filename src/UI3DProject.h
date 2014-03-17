@@ -9,10 +9,13 @@
 
 #include "UI2DProject.h"
 
-#include "UILight.h"
-#include "UICamera.h"
-#include "UIMaterial.h"
 #include "UIFog.h"
+#include "UILight.h"
+#include "UIMaterial.h"
+
+#include "UICamera.h"
+#include "UIEasyCam.h"
+#include "UIGameCam.h"
 
 #include "Cursor.h"
 
@@ -63,7 +66,11 @@ protected:
     
     // CAMERA
     //
-    UICamera        camera;
+    //  BACKGROUND GUI
+    //
+    virtual void    cameraSet(UICamera *_cam);
+    UICamera        *camera;
+    
     UIFog           fog;
     
     ofPoint         unproject(ofPoint _screen);

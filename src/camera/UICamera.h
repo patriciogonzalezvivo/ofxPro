@@ -15,6 +15,7 @@ class UICamera : public UIClass {
 public:
     
     UICamera();
+    virtual ~UICamera();
     
     bool    save(string _savePath);
     bool    load(string _savePath);
@@ -25,37 +26,39 @@ public:
     bool    saveLocation(string _savePath);
     bool    loadLocation(string _savePath);
     
-    void    setupUI();
+    virtual void    setupUI();
     
-    void            setCameraLocation( const CameraLocation &_camPos );
-    CameraLocation  getCameraLocation();
+    virtual void            setCameraLocation( const CameraLocation &_camPos );
+    virtual CameraLocation  getCameraLocation();
     
-    string          getClassName(){return "CAMERA";};
+    virtual string  getClassName(){return "CAMERA";};
     
     ofCamera*       getCameraPtn(){return camera;};
     ofMatrix4x4     getGlobalTransformMatrix(string _camLocName);
-    
-    void    enableMouseInput();
-    void    disableMouseInput();
 
-    void    billboard();
+    virtual void    enableMouseInput(){bMouse = true;};
+    virtual void    disableMouseInput(){bMouse = false;};
     
-private:
-    void    update(ofEventArgs& args);
-    void    guiEvent(ofxUIEventArgs &e);
+    virtual void    billboard();
     
-    ofCamera *camera;
-    string  type;
-    float   FOV;
+protected:
+    virtual void    update(ofEventArgs& args);
+    virtual void    guiEvent(ofxUIEventArgs &e);
+    
+    ofCamera        *camera;
+    float           FOV;
     
     CameraLocation  targetLocation;
+    
     ofxUITextInput  *textField;
     ofxUIRadio      *locations;
     string          pathToLocations;
     string          newLocationName;
     float           pct;
-    float           speed;
+    float           lerpPct;
     bool            bNewLocation;
+    
+    bool            bMouse;
 };
 
 

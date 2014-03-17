@@ -398,7 +398,7 @@ void StreetView::addVertexAtAzimuthElevation(int x, int y){
         //Distance of sky
         distance = 100;
         
-        normal = ofPoint(0,0,0)-xyz;
+        normal = xyz;
         normal.normalize();
         
     } else {

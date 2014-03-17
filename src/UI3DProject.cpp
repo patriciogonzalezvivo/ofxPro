@@ -9,7 +9,11 @@
 
 void UI3DProject::play(){
     if (!bPlaying){
-        camera.enableMouseInput();
+        
+        if(camera->bEnable){
+            camera->enableMouseInput();
+        }
+        
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->play();
         }
@@ -20,7 +24,7 @@ void UI3DProject::play(){
 
 void UI3DProject::stop(){
     if(bPlaying){
-        camera.disableMouseInput();
+        camera->disableMouseInput();
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->stop();
         }
@@ -214,8 +218,8 @@ void UI3DProject::unprojectCursor(MovingCursor &_cursor, float _x, float _y){
     //worldViewFrameDifference
     ofVec3f screenDiffNorm = _cursor.getScreenFrameDifference() / ofVec2f(viewport[2], -viewport[3]);
     _cursor.worldViewFrameDifference = screenDiffNorm * viewMatrix.getInverse().getRotate();
-    float distance = (camera.getCameraPtn()->getPosition() - _cursor.world).length();
-    _cursor.worldViewFrameDifference *= distance * tan( camera.getCameraPtn()->getFov() * DEG_TO_RAD / 2.0f) * 2.0f * 2.0f;
+    float distance = (camera->getCameraPtn()->getPosition() - _cursor.world).length();
+    _cursor.worldViewFrameDifference *= distance * tan( camera->getCameraPtn()->getFov() * DEG_TO_RAD / 2.0f) * 2.0f * 2.0f;
     _cursor.worldViewFrameDifference.x *= ofGetWidth() / ofGetHeight();
     
     _cursor.lastUpdate = ofGetFrameNum();
@@ -231,14 +235,14 @@ void UI3DProject::mouseMoved(ofMouseEventArgs & args){
 
 void UI3DProject::mousePressed(ofMouseEventArgs & args){
 	if( cursorIsOverGUI() ){
-		camera.disableMouseInput();
+		camera->disableMouseInput();
 	}
     else if (logGui.isTakingNotes()){
-        camera.disableMouseInput();
+        camera->disableMouseInput();
         logGui.penDown(ofPoint(args.x,args.y));
     }
     else if(bEdit && cursorIsOverLight() != "NULL"){
-        camera.disableMouseInput();
+        camera->disableMouseInput();
         selectedLigth = cursorIsOverLight();
         
         if(ofGetElapsedTimef()-lastClick<doublClickThreshold){
@@ -291,7 +295,10 @@ void UI3DProject::mouseDragged(ofMouseEventArgs & args){
 };
 
 void UI3DProject::mouseReleased(ofMouseEventArgs & args){
-    camera.enableMouseInput();
+    
+    if(camera->bEnable){
+        camera->enableMouseInput();
+    }
     
     if(logGui.isTakingNotes()){
         logGui.penUp();
@@ -305,11 +312,11 @@ void UI3DProject::mouseReleased(ofMouseEventArgs & args){
 //------------------------------------------------------------ CORE SETUP
 
 void UI3DProject::setupCoreGuis(){
-    
     setupGui();
     
+    cameraSet(new UIEasyCamera());
+    
     logGui.linkDataPath(getDataPath());
-    logGui.linkCamera(camera);
     guiAdd(logGui);
     
     setupSystemGui();
@@ -317,15 +324,31 @@ void UI3DProject::setupCoreGuis(){
     
     backgroundSet(new UIBackground());
     
-    guiAdd(camera);
-    camera.loadLocations(getDataPath()+"cameras/");
-
-    
     guiAdd(fog);
     materialAdd( "MATERIAL" );
     
     setupLightingGui();
     lightAdd("POINT LIGHT 1", OF_LIGHT_POINT);
+}
+
+void UI3DProject::cameraSet(UICamera *_cam){
+    if(camera != NULL){
+        
+        for(int i = 0; i<guis.size(); i++){
+            if (guis[i]->getName() == "CAMERA" || guis[i]->getName() == "EASYCAM" || guis[i]->getName() == "GAMECAM"){
+                guis.erase(guis.begin()+i);
+                break;
+            }
+        }
+        
+        delete camera;
+        camera = NULL;
+    }
+    
+    camera = _cam;
+    guiAdd(*_cam);
+    camera->loadLocations(getDataPath()+"cameras/");
+    logGui.linkCamera(camera);
 }
 
 //------------------------------------------------------------ 3D SPECIFIC SETUP
@@ -394,7 +417,7 @@ void UI3DProject::lightAdd( string _name, ofLightType _type ){
 string UI3DProject::cursorIsOverLight(){
     if(bEnableLights){
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-            if ( it->second->distance(cursor.world) < 30 ){
+            if ( it->second->distance(cursor.world) < 10 ){
                 return it->first;
             }
         }
@@ -440,7 +463,7 @@ void UI3DProject::lightsDraw(){
                 ofSetColor( color, pulse*255);
                 ofTranslate( it->second->getPosition() );
                 float size = it->second->getPosition().distance(getCameraRef().getPosition())*0.1;
-                camera.billboard();
+                camera->billboard();
                 ofSetLineWidth(2);
                 ofEllipse(0,0, size, size);
                 ofPopStyle();
@@ -466,28 +489,31 @@ void UI3DProject::materialAdd( string _name ){
 
 void UI3DProject::guiLoad(){
     UI2DProject::guiLoad();
-    camera.load(getDataPath()+"Presets/Working/"+"current.cam");
+    camera->load(getDataPath()+"Presets/Working/"+"current.cam");
 }
 
 void UI3DProject::guiSave(){
     UI2DProject::guiSave();
-    camera.save(getDataPath()+"Presets/Working/"+"current.cam");
+    camera->save(getDataPath()+"Presets/Working/"+"current.cam");
 }
 
 void UI3DProject::guiLoadPresetFromPath(string presetPath){
     cout << "PRESET PATH: " << presetPath << endl;
     UI2DProject::guiLoadPresetFromPath(presetPath);
-    camera.load(presetPath+"/current.cam");
+    camera->load(presetPath+"/current.cam");
     UI2DProject::guiLoadPresetFromPath(presetPath);
 }
 
 void UI3DProject::guiSavePreset(string presetName){
     UI2DProject::guiSavePreset(presetName);
 
-    camera.save(getDataPath()+"Presets/"+presetName+"/current.cam");
-    camera.enableMouseInput();
+    camera->save(getDataPath()+"Presets/"+presetName+"/current.cam");
+    
+    if(camera->bEnable){
+        camera->enableMouseInput();
+    }
 }
 
 ofCamera& UI3DProject::getCameraRef(){
-	return (*camera.getCameraPtn());
+	return (*camera->getCameraPtn());
 }
