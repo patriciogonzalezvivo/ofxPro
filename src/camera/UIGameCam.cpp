@@ -30,6 +30,8 @@ UIGameCam::UIGameCam(){
 	rollSpeed = 0.1;
 	justResetAngles = false;
     
+    bReset = false;
+    
     reset();
     
     ofAddListener(ofEvents().update, this, &UIGameCam::update);
@@ -47,9 +49,10 @@ UIGameCam::~UIGameCam(){
 void UIGameCam::setupUI(){
     gui->addSlider("FOV", 0, 180, &FOV);
     gui->addSlider("Lerp", 0.0, 1.0, &lerpPct);
-    gui->addSlider("Moving_Speed", 0.0, 10.0, &speed);
-    gui->addSlider("Rolling_Speed", 0.0, 10.0, &rollSpeed);
+    gui->addSlider("Moving_Speed", 0.0, 1.0, &speed);
+    gui->addSlider("Rolling_Speed", 0.0, 1.0, &rollSpeed);
     gui->addToggle("Use_Arrow_Keys", &bArrowKeys);
+    gui->addToggle("Reset", &bReset);
     
     gui->addSpacer();
     textField = gui->addTextInput("ADD", "", OFX_UI_FONT_SMALL);
@@ -61,6 +64,12 @@ void UIGameCam::setupUI(){
 
 void UIGameCam::update(ofEventArgs& args){
     if(bEnable&&camera!=NULL){
+        
+        if(bReset){
+            reset();
+            bReset = false;
+        }
+        
         bool rotationChanged = false;
         bool positionChanged = false;
         

@@ -184,9 +184,9 @@ float Location::getRadTo(Location _loc) {
 float Location::getDegTo(Location _loc) {
     float angle = getRadTo(_loc)-PI;
     angle *=RAD_TO_DEG;
-    angle = angle+90;
+    angle = angle+90.0;
     if(angle > 0){
-        return 360 - angle;
+        return 360.0 - angle;
     } else {
         return abs(angle);
     }

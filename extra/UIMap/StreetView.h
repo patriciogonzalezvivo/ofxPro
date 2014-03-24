@@ -4,6 +4,7 @@
 //  Created by Patricio Gonzalez Vivo on 3/10/14.
 //  Credits to:
 //              Paul Wagener https://github.com/PaulWagener/Streetview-Explorer
+//              http://maps.google.com/cbk?output=xml&cb_client=maps_sv&v=4&dm=1&pm=1&ph=1&hl=en&panoid=
 //
 
 #pragma once
@@ -44,66 +45,57 @@ public:
     void        setLocation(Location _loc);
     void        setLatLon(double _lat, double _lng);
     
-    void        setAutoDownload(bool _enable);
-    void        setUseTexture(bool bUseTex){};
-    
-    string      getCloseLinkTo(float _deg);
-    Location    getLocation();
-    string      getPanoId(){return pano_id;};
-    float       getDirection(){return pano_yaw_deg;}
-    float       getGroundHeight();
-
+    void        setUseTexture(bool _bUseTex);
+    bool        isTextureLoaded(){return bPanoLoaded;};
     float       getWidth();
 	float       getHeight();
+    
     ofTexture&  getTextureReference();
     
-    ofTexture   getLookAt(float _deg, float _amp); // 0 - North
-    ofTexture   getLookTo(float _deg, float _amp); // 0 is the direction of the Google Street Car
+    ofTexture   getTextureAt(float _deg, float _amp); // 0 - North
     
-    bool        isTextureLoaded(){return bPanoLoaded;};
-    void        downloadPanorama();
+    Location    getLocation();
+    string      getPanoId(){return pano_id;};
+    string      getCloseLinkTo(float _deg);
+    float       getDirection(){return pano_yaw_deg;}
+    float       getGroundHeight();
+    
+    int         getDepthMapWidth(){return mapWidth;}
+    int         getDepthMapHeight(){return mapHeight;}
+    ofVboMesh&  getDethMesh(){return meshDepth;};
+    vector<unsigned char> depthmapIndices;
+    vector<DepthMapPlane> depthmapPlanes;
+    
     void        urlResponse(ofHttpResponse & response);
-    
     void        clear();
-    void        update();
-    void        updateModel();
     
     vector<Link> links;
     
-    void        draw();
-    
-    
 protected:
-    bool    isVisible(int x, int y);
-    bool    isTransparant(int x, int y, int horizontal_step);
+    void        downloadPanorama();
+    vector<ofImage> panoImages;
+    ofFbo       panoFbo;
     
-    void    addVertexAtAzimuthElevation(int x, int y);
+    void        makeDepthMesh();
+    bool        isDepthVertexVisible(int x, int y);
+    bool        isDepthVertexTransparant(int x, int y, int horizontal_step);
+    void        addDepthVertexAtAzimuthElevation(int x, int y);
+    ofVboMesh   meshDepth;
     
-    ofFbo           fbo;
-    vector<ofImage> images;
-    
-    string      pano_id;
     Location    loc;
-    
+    string      data_url;
+    string      pano_id;
     float       pano_yaw_deg,tilt_yaw_deg,tilt_pitch_deg;
     int         num_zoom_levels;
 
     //Depth map information
-    int     mapWidth, mapHeight;
+    int     mapWidth, mapHeight, maxDistance;
     string  depth_map_base64;
-    vector<unsigned char> depthmapIndices;
-    vector<struct DepthMapPlane> depthmapPlanes;
     
-    //Panomap information
-    string  pano_map_base64;
-    vector<unsigned char> panomapIndices;
-    char panoids[200][PANOID_LENGTH+1];
-    int ownPanomapIndex;
-
-    ofVboMesh   mesh;
     //  Flags
     //
-    bool    bAutoDownload;
     bool    bDataLoaded;
     bool    bPanoLoaded;
+    bool    bRegister;
+    bool    bTexture;
 };

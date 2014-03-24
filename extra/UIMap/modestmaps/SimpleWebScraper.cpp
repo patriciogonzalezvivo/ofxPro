@@ -77,7 +77,9 @@ void SimpleWebScraper::start() {
 }
 
 void SimpleWebScraper::stop() {
-    stopThread();
+    if (isThreadRunning()){
+        stopThread();
+    }
 }
 
 void SimpleWebScraper::threadedFunction() {

@@ -13,7 +13,7 @@ UIvPlotter::UIvPlotter(){
     pulleyRadius        = 5;
     stepsPerRotation    = 800;
     
-    host                = "149.31.227.125";//"192.168.1.12";
+    host                = "192.168.1.12";
     oscPort             = 101010;
 
     currentPos.set(0,0);

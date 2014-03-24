@@ -37,7 +37,9 @@ public:
     }
     
     virtual ~FileUploader(){
-        waitForThread(true);
+        if(isThreadRunning()){
+            waitForThread(true);
+        }
     }
     
     void start(){

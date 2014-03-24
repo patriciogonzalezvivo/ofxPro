@@ -742,7 +742,7 @@ void UITime3DProject::guiLoad(){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
     }
-    camera.load(getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
+    camera->load(getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
     
     resetTimeline();
     loadTimelineUIMappings(getDataPath()+"Presets/Working/UITimelineMappings.xml");
@@ -762,7 +762,7 @@ void UITime3DProject::guiLoadPresetFromPath(string presetPath){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(presetPath+"/"+guis[i]->getName()+".xml");
     }
-    camera.load(presetPath+"/ofEasyCamSettings");
+    camera->load(presetPath+"/ofEasyCamSettings");
 	
     loadTimelineUIMappings(presetPath+"/UITimelineMappings.xml");
 	timeline->setName( ofFilePath::getBaseName( presetPath ) );

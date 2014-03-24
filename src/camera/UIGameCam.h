@@ -48,4 +48,5 @@ protected:
 	bool bArrowKeys;
 	bool applyRotation;
 	bool applyTranslation;
+    bool bReset;
 };
