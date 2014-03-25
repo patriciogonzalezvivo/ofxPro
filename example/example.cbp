@@ -458,5 +458,221 @@
 		<Unit filename="../../../addons/ofxUIProject/src/log/UILog.h">
 			<Option virtualFolder="addons/ofxUIProject/src/log" />
 		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUI2DGraph.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUI2DPad.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIBaseDraws.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIBiLabelSlider.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIButton.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUICanvas.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUICircleSlider.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUICustomImageButton.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIDefines.h">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIDragableLabelButton.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIDragableLabelButton.h">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIDropDownList.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIEventArgs.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIFPS.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIFPSSlider.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIImage.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIImageButton.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIImageSampler.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIImageSlider.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIImageToggle.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIIntSlider.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIIntSlider.h">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUILabel.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUILabelButton.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUILabelToggle.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIMinimalSlider.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIMovingGraph.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIMultiImageButton.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIMultiImageToggle.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUINumberDialer.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIRadio.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIRangeSlider.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIRectangle.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIRotarySlider.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIScrollableCanvas.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUISlider.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUISortableList.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUISortableList.h">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUISpacer.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUISpectrum.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUISuperCanvas.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUITabBar.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUITextArea.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUITextInput.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIToggle.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIToggleMatrix.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIValuePlotter.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIWaveform.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIWidget.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIWidgetWithLabel.cpp">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIWrapper.h">
+			<Option virtualFolder="addons/ofxUI/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/background/UIMapBackground.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/background" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/background/UIMapBackground.h">
+			<Option virtualFolder="addons/ofxUIProject/src/background" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/camera/CameraLocation.h">
+			<Option virtualFolder="addons/ofxUIProject/src/camera" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/camera/UICamera.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/camera" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/camera/UICamera.h">
+			<Option virtualFolder="addons/ofxUIProject/src/camera" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/camera/UIEasyCam.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/camera" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/camera/UIEasyCam.h">
+			<Option virtualFolder="addons/ofxUIProject/src/camera" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/camera/UIGameCam.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/camera" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/camera/UIGameCam.h">
+			<Option virtualFolder="addons/ofxUIProject/src/camera" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/core/BrushedLine.h">
+			<Option virtualFolder="addons/ofxUIProject/src/core" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/core/Cursor.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/core" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/core/Cursor.h">
+			<Option virtualFolder="addons/ofxUIProject/src/core" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/core/Location.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/core" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/core/Location.h">
+			<Option virtualFolder="addons/ofxUIProject/src/core" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/system/ConsoleListener.h">
+			<Option virtualFolder="addons/ofxUIProject/src/system" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/system/HotKeys.h">
+			<Option virtualFolder="addons/ofxUIProject/src/system" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/system/HotKeys_impl_linux.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/system" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/system/HotKeys_impl_mac.mm">
+			<Option virtualFolder="addons/ofxUIProject/src/system" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/system/HotKeys_impl_win.cpp">
+			<Option virtualFolder="addons/ofxUIProject/src/system" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/system/SystemTextbox.h">
+			<Option virtualFolder="addons/ofxUIProject/src/system" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUIProject/src/system/SystemTextbox.mm">
+			<Option virtualFolder="addons/ofxUIProject/src/system" />
+		</Unit>
 	</Project>
 </CodeBlocks_project_file>

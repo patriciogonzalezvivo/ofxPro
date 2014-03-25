@@ -58,6 +58,8 @@ public:
     string      getPanoId(){return pano_id;};
     string      getCloseLinkTo(float _deg);
     float       getDirection(){return pano_yaw_deg;}
+    float       getTiltPitch(){return tilt_pitch_deg;}
+    float       getTiltYaw(){return tilt_yaw_deg;}
     float       getGroundHeight();
     
     int         getDepthMapWidth(){return mapWidth;}

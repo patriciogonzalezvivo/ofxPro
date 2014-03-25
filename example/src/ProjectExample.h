@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "UI2DGrid.h"
 #include "UI3DGrid.h"
 #include "UIProject.h"
 
@@ -51,5 +50,4 @@ public:
 
 protected:
     UI3DGrid grid;
-    UI2DGrid ruler;
 };

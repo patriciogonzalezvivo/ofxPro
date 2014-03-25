@@ -18,7 +18,6 @@ void ProjectExample::selfSetupGuis(){
     lightAdd("SPOT LIGHT", OF_LIGHT_SPOT);
     
     guiAdd(grid);
-    guiAdd(ruler);
     
     backgroundSet(new UIMapBackground() );
 }
@@ -55,12 +54,6 @@ void ProjectExample::selfSceneTransformation(){
 }
 
 void ProjectExample::selfUpdate(){
-    ofTexture tex = getRenderTarget().getTextureReference();
-    
-    ofPixels pixels;
-    
-    tex.readToPixels(pixels);
-    
     
 }
 
@@ -85,8 +78,6 @@ void ProjectExample::selfDraw(){
 }
 
 void ProjectExample::selfDrawOverlay(){
-    ofSetColor(255);
-    ruler.draw();
 }
 
 void ProjectExample::selfEnd(){

@@ -1,9 +1,9 @@
 <Canvas>
     <Kind>40</Kind>
     <Name>SPOT LIGHT</Name>
-    <IsMinified>0</IsMinified>
-    <XPosition>1242.000000000</XPosition>
-    <YPosition>259.000000000</YPosition>
+    <IsMinified>1</IsMinified>
+    <XPosition>1.000000000</XPosition>
+    <YPosition>329.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -22,33 +22,33 @@
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>pX</Name>
-    <Value>-77.882934570</Value>
+    <Name>POSX</Name>
+    <Value>72.441772461</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>pY</Name>
-    <Value>276.140747070</Value>
+    <Name>POSY</Name>
+    <Value>-138.109619141</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>pZ</Name>
-    <Value>712.317138672</Value>
+    <Name>POSZ</Name>
+    <Value>28.002197266</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>oX</Name>
-    <Value>5.235534668</Value>
+    <Name>ORIX</Name>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>oY</Name>
-    <Value>15.708068848</Value>
+    <Name>ORIY</Name>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>oZ</Name>
-    <Value>-256.545776367</Value>
+    <Name>ORIZ</Name>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>

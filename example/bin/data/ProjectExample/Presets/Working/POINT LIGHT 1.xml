@@ -12,18 +12,18 @@
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>pX</Name>
-    <Value>-236.285766602</Value>
+    <Name>POSX</Name>
+    <Value>83.405761719</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>pY</Name>
-    <Value>19.820556641</Value>
+    <Name>POSY</Name>
+    <Value>-156.093627930</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
-    <Name>pZ</Name>
-    <Value>-452.466064453</Value>
+    <Name>POSZ</Name>
+    <Value>19.007080078</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
