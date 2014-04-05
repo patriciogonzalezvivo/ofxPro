@@ -103,7 +103,6 @@ class SimpleWebScraper : public ofThread  {
 		int				requestType;		
 		StreamEventArgs args;
 
-
 };
 
 #endif

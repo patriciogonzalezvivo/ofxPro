@@ -13,7 +13,7 @@ UIvPlotter::UIvPlotter(){
     pulleyRadius        = 5;
     stepsPerRotation    = 800;
     
-    host                = "192.168.1.12";
+    host                = "192.168.1.15";
     oscPort             = 101010;
 
     currentPos.set(0,0);
@@ -27,7 +27,7 @@ UIvPlotter::UIvPlotter(){
     penState    = PEN_UP;
     bPlotting   = false;
     
-    checkHostValues();
+//    checkHostValues();
     sender.setup(host, oscPort);
     
 //    textField = NULL;
@@ -146,9 +146,13 @@ ofVec2f UIvPlotter::getResolution(ofPoint _pos){
 }
 
 void UIvPlotter::print(ofPolyline _polyline){
-
+    if(_polyline.size()>1){
+        addInstruction(MOVE_ABS, _polyline.getVertices()[0]+ printingArea.getTopLeft());
+        addInstruction(MOVE_ABS, _polyline.getVertices()[1]+ printingArea.getTopLeft());
+    }
+    
     for(int j = 0; j < _polyline.getVertices().size(); j++) {
-        addInstruction( ((j==0)?MOVE_ABS:LINE_ABS), _polyline.getVertices()[j] + printingArea.getTopLeft());
+        addInstruction(((j==0)?MOVE_ABS:LINE_ABS), _polyline.getVertices()[j] + printingArea.getTopLeft());
     }
     
     if (instructions.size() > 0) {
@@ -158,7 +162,11 @@ void UIvPlotter::print(ofPolyline _polyline){
 }
 
 void UIvPlotter::print( vector<ofPolyline> _paths ){
+    
     for(int i = 0; i < _paths.size(); i++) {
+        if(_paths[i].size()>1){
+            addInstruction(MOVE_ABS, _paths[i].getVertices()[0]+ printingArea.getTopLeft());
+        }
         for(int j = 0; j < _paths[i].getVertices().size(); j++) {
             addInstruction( ((j==0)?MOVE_ABS:LINE_ABS), _paths[i].getVertices()[j] + printingArea.getTopLeft());
         }
@@ -171,28 +179,6 @@ void UIvPlotter::print( vector<ofPolyline> _paths ){
 }
 
 bool UIvPlotter::addInstruction(Comand _command, ofPoint _pos){
-    ofPoint t;
-    
-    //  ABSolute or RELative positions??
-    //
-//    switch (_command) {
-//        case MOVE_ABS:
-//        case LINE_ABS:
-//            t = _pos;
-//            break;
-//        case MOVE_REL:
-//        case LINE_REL:
-//            t = _pos + currentPos;
-//            break;
-//    }
-//    
-    //  Inside Area
-    //
-//    if (t.x < printingArea.getLeft())   t.x = printingArea.getLeft();
-//    if (t.x > printingArea.getRight())  t.x = printingArea.getRight();
-//    if (t.y < printingArea.getTop())    t.y = printingArea.getTop();
-//    if (t.y > printingArea.getBottom()) t.y = printingArea.getBottom();
-    
     //  Make instruction
     //
     Instruction inst;

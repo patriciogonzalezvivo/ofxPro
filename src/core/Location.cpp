@@ -164,27 +164,31 @@ UtmPosition Location::getUTM(){
 
 //  In meters
 //
-float Location::getDistanceTo(Location _loc) {
+double Location::getDistanceTo(Location _loc) {
     UtmPosition me = getUTM();
     UtmPosition other = _loc.getUTM();
-    float horizontalDist = (float) fabs(other.easting - me.easting);
-    float verticalDist = (float) fabs(other.northing - me.northing);
+    double horizontalDist = (double) fabs(other.easting - me.easting);
+    double verticalDist = (double) fabs(other.northing - me.northing);
     
     return sqrt(horizontalDist * horizontalDist + verticalDist * verticalDist);
 }
 
 //  In degrees
 //
-float Location::getRadTo(Location _loc) {
-    float x = _loc.lon - lon;
-    float y = _loc.lat - lat;
-    return atan2(y,x);
+double Location::getRadTo(Location _loc) {
+//    double x = _loc.lon - lon;
+//    double y = _loc.lat - lat;
+//    return atan2(y,x);    
+    double dLon = _loc.lon - lon;
+    double y = sin(dLon) * cos(_loc.lat);
+    double x = cos(lat) * sin(_loc.lat) - sin(lat) * cos(_loc.lat) * cos(dLon);
+    return atan2(y, x)+HALF_PI;
 }
 
-float Location::getDegTo(Location _loc) {
-    float angle = getRadTo(_loc)-PI;
+double Location::getDegTo(Location _loc) {
+    double angle = getRadTo(_loc)-PI;
     angle *=RAD_TO_DEG;
-    angle = angle+90.0;
+    angle =angle+90.0;
     if(angle > 0){
         return 360.0 - angle;
     } else {

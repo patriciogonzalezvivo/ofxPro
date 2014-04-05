@@ -45,10 +45,13 @@ public:
     void        setLocation(Location _loc);
     void        setLatLon(double _lat, double _lng);
     
+    void        setZoom(int _zoom);
+    
     void        setUseTexture(bool _bUseTex);
     bool        isTextureLoaded(){return bPanoLoaded;};
     float       getWidth();
 	float       getHeight();
+    int         getZoom(){return zoom;}
     
     ofTexture&  getTextureReference();
     
@@ -57,10 +60,11 @@ public:
     Location    getLocation();
     string      getPanoId(){return pano_id;};
     string      getCloseLinkTo(float _deg);
-    float       getDirection(){return pano_yaw_deg;}
-    float       getTiltPitch(){return tilt_pitch_deg;}
-    float       getTiltYaw(){return tilt_yaw_deg;}
-    float       getGroundHeight();
+    double      getElevation(){return elevation;}
+    double      getDirection(){return pano_yaw_deg;}
+    double      getTiltPitch(){return tilt_pitch_deg;}
+    double      getTiltYaw(){return tilt_yaw_deg;}
+    double      getGroundHeight();
     
     int         getDepthMapWidth(){return mapWidth;}
     int         getDepthMapHeight(){return mapHeight;}
@@ -70,6 +74,8 @@ public:
     
     void        urlResponse(ofHttpResponse & response);
     void        clear();
+    
+    void        update();
     
     vector<Link> links;
     
@@ -87,8 +93,9 @@ protected:
     Location    loc;
     string      data_url;
     string      pano_id;
-    float       pano_yaw_deg,tilt_yaw_deg,tilt_pitch_deg;
-    int         num_zoom_levels;
+    double      pano_yaw_deg,tilt_yaw_deg,tilt_pitch_deg;
+    double      elevation;
+    int         num_zoom_levels,zoom;
 
     //Depth map information
     int     mapWidth, mapHeight, maxDistance;

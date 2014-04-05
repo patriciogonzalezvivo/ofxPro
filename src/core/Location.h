@@ -35,9 +35,9 @@ public:
     
     UtmPosition getUTM();
 
-    float       getRadTo(Location _loc);
-    float       getDegTo(Location _loc);
-    float       getDistanceTo(Location _loc); // In Meters
+    double       getRadTo(Location _loc);
+    double       getDegTo(Location _loc);
+    double       getDistanceTo(Location _loc); // In Meters
     
     ofQuaternion getQuaternion();
     ofPoint     getSpherePosition(float _radius);

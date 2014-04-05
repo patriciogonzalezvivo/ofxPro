@@ -22,9 +22,9 @@ struct MotorVal{
 
 enum Comand{
     MOVE_ABS = 0,
-    MOVE_REL,
-    LINE_ABS,
-    LINE_REL
+    MOVE_REL = 1,
+    LINE_ABS = 2,
+    LINE_REL = 3
 };
 
 struct Instruction : public ofPoint {
