@@ -13,7 +13,7 @@ UIvPlotter::UIvPlotter(){
     pulleyRadius        = 5;
     stepsPerRotation    = 800;
     
-    host                = "192.168.1.15";
+    host                = "192.168.1.12";
     oscPort             = 101010;
 
     currentPos.set(0,0);
@@ -27,7 +27,7 @@ UIvPlotter::UIvPlotter(){
     penState    = PEN_UP;
     bPlotting   = false;
     
-//    checkHostValues();
+    checkHostValues();
     sender.setup(host, oscPort);
     
 //    textField = NULL;
@@ -68,7 +68,7 @@ void UIvPlotter::guiEvent(ofxUIEventArgs &e){
 bool UIvPlotter::checkHostValues(){
     ofxJSONElement  response;
     
-    std::string url = "http://"+host+"/vPlotterAPI/status.php";
+    std::string url = "http://"+host+":8080/status.json";
     
 	if (!response.open(url)){
         cout  << "Failed to parse JSON\n" << endl;

@@ -134,6 +134,7 @@ void UI3DGrid::guiEvent(ofxUIEventArgs &e){
 
 void UI3DGrid::draw(){
     if(bEnable){
+        ofPushStyle();
 		//	ofVec3f camPos;
 		//	camPos = cam->getPosition();
 		//	camPos += cam->getUpDir().cross(cam->getSideDir()).normalize() * gridDim * gridScale * .5;
@@ -170,5 +171,6 @@ void UI3DGrid::draw(){
 		ofPopMatrix();
 		
 		shader.end();
+        ofPopStyle();
 	}
 }

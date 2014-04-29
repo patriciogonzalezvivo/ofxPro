@@ -121,6 +121,11 @@ void StreetView::urlResponse(ofHttpResponse & response){
         XML.loadFromBuffer(response.data);
         
         pano_id = XML.getAttribute("panorama:data_properties", "pano_id", "");
+        text = XML.getValue("panorama:data_properties:text", "");
+        street_range = XML.getValue("panorama:data_properties:street_range",  "");
+        region = XML.getValue("panorama:data_properties:region", "");
+        country = XML.getValue("panorama:data_properties:country", "");
+        
 //        loc.lat = XML.getAttribute("panorama:data_properties", "original_lat", 0.0);
 //        loc.lon = XML.getAttribute("panorama:data_properties", "original_lng", 0.0);
         loc.lat = XML.getAttribute("panorama:data_properties", "lat", 0.0);

@@ -42,7 +42,7 @@ public:
     void    allocate(float _width, float _height);
     
     void    loadMap(MapProviderRef _provider);
-    void    loadMap(string _predef);
+    void    loadMap(string _predef = "Bing");
     
     void    setMapProvider( MapProviderRef _provider);
     void    setExtent( const MapExtent &extent, bool forceIntZoom );

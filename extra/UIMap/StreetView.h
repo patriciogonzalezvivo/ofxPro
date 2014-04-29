@@ -58,6 +58,9 @@ public:
     ofTexture   getTextureAt(float _deg, float _amp); // 0 - North
     
     Location    getLocation();
+    string      getAddress(){return street_range + " " + text;}
+    string      getRegion(){return region;}
+    string      getCountry(){return country;}
     string      getPanoId(){return pano_id;};
     string      getCloseLinkTo(float _deg);
     double      getElevation(){return elevation;}
@@ -91,6 +94,7 @@ protected:
     ofVboMesh   meshDepth;
     
     Location    loc;
+    string      text,street_range,region,country;
     string      data_url;
     string      pano_id;
     double      pano_yaw_deg,tilt_yaw_deg,tilt_pitch_deg;
