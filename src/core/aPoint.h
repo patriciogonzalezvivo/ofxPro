@@ -19,16 +19,19 @@ public:
             ofPoint _steer;
             ofPoint desired = _target - *this;
             float d = desired.length();
-            if (d > 0.0) {
+            if (d > 0.001) {
                 if (d < 1.0)
                     desired *= (d);
                 
                 _steer = desired - vel;
-            } else
+                acc += _steer;
+                update(_speed);
+            } else {
                 _steer = ofPoint(0,0,0);
-        
-            acc += _steer;
-            update(_speed);
+                acc *= 0;
+                vel *= 0;
+                set(_target);
+            }
         }
     }
     

@@ -8,20 +8,20 @@
 #include "UIMaterial.h"
 
 UIMaterial::UIMaterial(){
-    diffuse.set(0.8f, 0.8f, 0.8f, 1.0f);
-    specular.set(0.0f, 0.0f, 0.0f, 1.0f);
-    ambient.set(0.2f, 0.2f, 0.2f, 1.0f);
-    emissive.set(0.0f, 0.0f, 0.0f, 1.0f);
+    diffuse.set(ofFloatColor(0.8f, 0.8f, 0.8f, 1.0f));
+    specular.set(ofFloatColor(0.0f, 0.0f, 0.0f, 1.0f));
+    ambient.set(ofFloatColor(0.2f, 0.2f, 0.2f, 1.0f));
+    emissive.set(ofFloatColor(0.0f, 0.0f, 0.0f, 1.0f));
     shininess = 0.2;
 
     name = "MATERIAL";
 };
 
 UIMaterial::UIMaterial(string _name){
-    diffuse.set(0.8f, 0.8f, 0.8f, 1.0f);
-    specular.set(0.0f, 0.0f, 0.0f, 1.0f);
-    ambient.set(0.2f, 0.2f, 0.2f, 1.0f);
-    emissive.set(0.0f, 0.0f, 0.0f, 1.0f);
+    diffuse.set(ofFloatColor(0.8f, 0.8f, 0.8f, 1.0f));
+    specular.set(ofFloatColor(0.0f, 0.0f, 0.0f, 1.0f));
+    ambient.set(ofFloatColor(0.2f, 0.2f, 0.2f, 1.0f));
+    emissive.set(ofFloatColor(0.0f, 0.0f, 0.0f, 1.0f));
     shininess = 0.2;
 
     setName(_name);
@@ -30,12 +30,21 @@ UIMaterial::UIMaterial(string _name){
 UIMaterial::~UIMaterial(){
 };
 
+void UIMaterial::operator = (ofMaterial &_mat){
+    set(_mat);
+}
+
+void UIMaterial::set(ofMaterial &_mat){
+    setColors(_mat.getDiffuseColor(),_mat.getAmbientColor(),_mat.getSpecularColor(),_mat.getEmissiveColor());
+    shininess = _mat.getShininess();
+}
+
 // set colors
-void UIMaterial::setColors(ofFloatColor oDiffuse, ofFloatColor oAmbient, ofFloatColor oSpecular, ofFloatColor oEmissive){
-    diffuse = oDiffuse;
-    ambient = oAmbient;
-    specular = oSpecular;
-    emissive = oEmissive;
+void UIMaterial::setColors(ofFloatColor _Diffuse, ofFloatColor _Ambient, ofFloatColor _Specular, ofFloatColor _Emissive){
+    diffuse.set(_Diffuse);
+    ambient.set(_Ambient);
+    specular.set(_Specular);
+    emissive.set(_Emissive);
 };
 
 void UIMaterial::setName(string _name){
@@ -48,37 +57,10 @@ void UIMaterial::setupUI(){
     float length = ( gui->getGlobalCanvasWidth()- gui->getWidgetSpacing()*5)/3.;
     float dim = gui->getGlobalSliderHeight();
 
-    gui->addLabel("AMBIENT", OFX_UI_FONT_SMALL);
-    gui->addMinimalSlider("AR", 0.0, 1.0, &ambient.r, length, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMinimalSlider("AG", 0.0, 1.0, &ambient.g, length, dim)->setShowValue(false);
-    gui->addMinimalSlider("AB", 0.0, 1.0, &ambient.b, length, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addSpacer();
-
-    gui->addLabel("DIFFUSE", OFX_UI_FONT_SMALL);
-    gui->addMinimalSlider("AR", 0.0, 1.0, &diffuse.r, length, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMinimalSlider("AG", 0.0, 1.0, &diffuse.g, length, dim)->setShowValue(false);
-    gui->addMinimalSlider("AB", 0.0, 1.0, &diffuse.b, length, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addSpacer();
-
-    gui->addLabel("EMISSIVE", OFX_UI_FONT_SMALL);
-    gui->addMinimalSlider("ER", 0.0, 1.0, &emissive.r, length, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMinimalSlider("EG", 0.0, 1.0, &emissive.g, length, dim)->setShowValue(false);
-    gui->addMinimalSlider("EB", 0.0, 1.0, &emissive.b, length, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addSpacer();
-
-    gui->addLabel("SPECULAR", OFX_UI_FONT_SMALL);
-    gui->addMinimalSlider("SR", 0.0, 1.0, &specular.r, length, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMinimalSlider("SG", 0.0, 1.0, &specular.g, length, dim)->setShowValue(false);
-    gui->addMinimalSlider("SB", 0.0, 1.0, &specular.b, length, dim)->setShowValue(false);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addSpacer();
+    addUIColor("AMBIENT", ambient);
+    addUIColor("DIFFUSE", diffuse);
+    addUIColor("EMISSIVE", emissive);
+    addUIColor("SPECULAR", specular);
 
     gui->addMinimalSlider("SHINY", 0.0, 1.0, &shininess)->setShowValue(false);
 }
@@ -94,6 +76,12 @@ void UIMaterial::guiEvent(ofxUIEventArgs &e){
 // apply the Material
 void UIMaterial::begin(){
     if (bEnable){
+        
+        diffuse.update();
+        ambient.update();
+        specular.update();
+        emissive.update();
+        
 #ifndef TARGET_OPENGLES
         // save previous values, opengl es cannot use push/pop attrib
         glGetMaterialfv(GL_FRONT,GL_DIFFUSE,&prev_diffuse.r);

@@ -31,6 +31,8 @@ protected:
     
     virtual void        addUIPos(string _NAME, aPoint &_pos, bool _justXY = false);
     virtual void        addUIPos(string _NAME, ofPoint &_pos, bool _justXY = false);
+    virtual void        addUIOri(string _NAME, aPoint &_pos, bool _justXY = false);
+    virtual void        addUIOri(string _NAME, ofPoint &_pos, bool _justXY = false);
     virtual void        addUIColor(string _NAME, aColor &_color);
     
     UIReference         gui;

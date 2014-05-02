@@ -72,12 +72,12 @@ void UILight::setupUI(){
             gui->addSpacer();
             
             addUIPos("POS", *this);
-            addUIPos("ORI", oriTarget);
+            addUIOri("ORI", oriTarget);
         }
             break;
             
         case OF_LIGHT_DIRECTIONAL:{
-            addUIPos("ORI", oriTarget);
+            addUIOri("ORI", oriTarget);
         }
             break;
     }

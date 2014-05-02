@@ -37,3 +37,20 @@ void SuperParticle::applyFlockingForce(ofPoint * _offset, float _neighbordhood, 
                            z / _neighbordhood + _offset->z + localOffset.z * _independece)
                    - .5);
 }
+
+void SuperParticle::applyFlockingForce(ofPoint * _offset, float _neighbordhood, float _independece, float _scale){
+	acc += ofVec3f(ofNoise(x / _neighbordhood + _offset->x + localOffset.x * _independece,
+                           y / _neighbordhood,
+                           z / _neighbordhood)
+                   - .5,
+                   ofNoise(
+                           x / _neighbordhood,
+                           y / _neighbordhood + _offset->y  + localOffset.y * _independece,
+                           z / _neighbordhood)
+                   - .5,
+                   ofNoise(
+                           x / _neighbordhood,
+                           y / _neighbordhood,
+                           z / _neighbordhood + _offset->z + localOffset.z * _independece)
+                   - .5)*_scale;
+}

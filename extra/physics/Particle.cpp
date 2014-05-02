@@ -113,9 +113,9 @@ void Particle::addAttractionForce(ofPoint posOfForce, float radius, float scale)
     }
 	
 	// ----------- (4) if so, update force
-	if (bAmCloseEnough == true){
-		float pct = 1 - (length / radius);  // stronger on the inside
-		diff.normalize();
+	if (bAmCloseEnough){
+		float pct = 1.0 - (length / radius);  // stronger on the inside
+//		diff.normalize();
 		acc -= diff * scale * pct;
     }
 }

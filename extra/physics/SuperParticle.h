@@ -17,6 +17,7 @@ public:
     
     void    addNoise(float _angle, float _turbulence);
     void	applyFlockingForce(ofPoint *_offSet, float _neighbordhood, float _independece);
+    void	applyFlockingForce(ofPoint *_offSet, float _neighbordhood, float _independece, float _scale);
     void    applyAttractionToNodes(float _pct);
     
     ofPoint localOffset;

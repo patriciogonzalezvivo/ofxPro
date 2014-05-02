@@ -51,21 +51,23 @@ public:
     
     void    draw();
     
+    float   spotCutOff;
+    float   exponent;
+    
+    aColor  ambient;
+    aColor  diffuse;
+    aColor  specular;
+    
+    ofPoint oriTarget;
+    
 protected:
     void    guiEvent(ofxUIEventArgs &e);
     
     ofLight light;
     string  name;
     
-    aColor  ambient;
-    aColor  diffuse;
-    aColor  specular;
     aPoint  position;
     aPoint  orientation;
-    ofPoint oriTarget;
-
-    float   spotCutOff;
-    float   exponent;
 };
 
 typedef shared_ptr<UILight> UILightReference;

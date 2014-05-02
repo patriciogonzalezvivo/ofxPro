@@ -477,11 +477,12 @@ void UI3DProject::lightsDraw(){
 void UI3DProject::materialAdd( string _name ){
     UIMaterialReference newMaterial( new UIMaterial() );
     
-    if ( newMaterial->getClassName()  == "MATERIAL" ){
-        newMaterial->setName("MATERIAL " + ofToString( materials.size() + 1));
+    if ( _name == "MATERIAL" ){
+        _name = "MATERIAL " + ofToString( materials.size() + 1);
     }
     
-    materials[ newMaterial->getClassName() ] = newMaterial;
+    newMaterial->setName(_name);
+    materials[ _name ] = newMaterial;
     guis.push_back( newMaterial->getUIReference(guiTemplate) );
 }
 

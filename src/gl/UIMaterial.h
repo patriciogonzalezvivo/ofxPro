@@ -21,25 +21,33 @@ public:
     UIMaterial( string _name );
 	virtual ~UIMaterial();
 	
+    void    set(ofMaterial &_mat);
     void    setName( string _name );
 	void    setColors(ofFloatColor oDiffuse, ofFloatColor oAmbient, ofFloatColor oSpecular, ofFloatColor oEmissive);
+    
+    void operator = (ofMaterial &_mat);
     
     string  getClassName();
     
 	// apply the material
 	virtual void begin();
 	virtual void end();
+    
+    aColor diffuse;
+	aColor ambient;
+	aColor specular;
+	aColor emissive;
 	
 protected:
     void    setupUI();
     void    guiEvent(ofxUIEventArgs &e);
     string  name;
     
-	ofFloatColor diffuse;
-	ofFloatColor ambient;
-	ofFloatColor specular;
-	ofFloatColor emissive;
-	
+//	ofFloatColor diffuse;
+//	ofFloatColor ambient;
+//	ofFloatColor specular;
+//	ofFloatColor emissive;
+
 	ofFloatColor prev_diffuse, prev_diffuse_back;
 	ofFloatColor prev_ambient, prev_ambient_back;
 	ofFloatColor prev_specular, prev_specular_back;

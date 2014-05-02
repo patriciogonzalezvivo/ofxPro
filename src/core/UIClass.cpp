@@ -59,6 +59,48 @@ void UIClass::addUIPos(string _NAME, aPoint &_pos, bool _justXY){
     gui->addSpacer();
 }
 
+void UIClass::addUIOri(string _NAME, aPoint &_pos, bool _justXY){
+    float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
+    float dim = gui->getGlobalSliderHeight();
+    gui->addLabel(_NAME, OFX_UI_FONT_SMALL);
+    
+    if(_justXY){
+        
+        gui->addMinimalSlider(_NAME+"X", 0, 360, &_pos.x, length/2., dim)->setShowValue(false);
+        gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+        gui->addMinimalSlider(_NAME+"Y", 0, 360, &_pos.y, length/2., dim)->setShowValue(false);
+    } else {
+        gui->addMinimalSlider(_NAME+"X", -180, 180, &_pos.x, length/3., dim)->setShowValue(false);
+        gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+        gui->addMinimalSlider(_NAME+"Y", -180, 180, &_pos.y, length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Z", -180, 180, &_pos.z, length/3., dim)->setShowValue(false);
+    }
+    
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    gui->addSpacer();
+}
+
+void UIClass::addUIOri(string _NAME, ofPoint &_pos, bool _justXY){
+    float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
+    float dim = gui->getGlobalSliderHeight();
+    gui->addLabel(_NAME, OFX_UI_FONT_SMALL);
+    
+    if(_justXY){
+        
+        gui->addMinimalSlider(_NAME+"X", 0, 360, &_pos.x, length/2., dim)->setShowValue(false);
+        gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+        gui->addMinimalSlider(_NAME+"Y", 0, 360, &_pos.y, length/2., dim)->setShowValue(false);
+    } else {
+        gui->addMinimalSlider(_NAME+"X", -180, 180, &_pos.x, length/3., dim)->setShowValue(false);
+        gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+        gui->addMinimalSlider(_NAME+"Y", -180, 180, &_pos.y, length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Z", -180, 180, &_pos.z, length/3., dim)->setShowValue(false);
+    }
+    
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    gui->addSpacer();
+}
+
 void UIClass::addUIPos(string _NAME, ofPoint &_pos, bool _justXY){
     float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
     float dim = gui->getGlobalSliderHeight();
