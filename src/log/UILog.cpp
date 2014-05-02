@@ -72,7 +72,8 @@ UILog::~UILog(){
 void UILog::setupUI(){
     gui->addToggle("REC", false);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addToggle("ALL",&bRecordAll);
+//    gui->addToggle("ALL",&bRecordAll);
+    
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addSpacer();
     gui->addToggle("ANOTATE",&bNoteTaking);
@@ -222,33 +223,34 @@ void UILog::recordAddFrame(ofBaseHasTexture &_texBase){
 }
 
 void UILog::upload(){
-    
-    if (!flickrAPI.bAuthenticated){
-        flickrAPI.authenticate("6394ea9fdcad0043386fbfd07f57a419","abf7c1706ee0fd7f",Flickr::FLICKR_WRITE);
-    }
-    
-    if (flickrAPI.bAuthenticated){
-        
-        string fileToUpload;
-        
-        if(lastPicture!=""){
-            fileToUpload = lastPicture;
-            lastPicture = "";
-        } else {
-            if(bRecording){
-                record(false);
-            }
-            fileToUpload = lastRercord;
-            lastRercord = "";
+    if(bEnable){
+        if (!flickrAPI.bAuthenticated){
+            flickrAPI.authenticate("6394ea9fdcad0043386fbfd07f57a419","abf7c1706ee0fd7f",Flickr::FLICKR_WRITE);
         }
         
-        if(fileToUpload!=""){
-            FileUploader *file = flickrAPI.upload(fileToUpload);
+        if (flickrAPI.bAuthenticated){
             
-            if (file != NULL){
-                ofAddListener(file->isDone, this, &UILog::uploadCompleted);
-                uploadingFiles.push_back(file);
+            string fileToUpload;
+            
+            if(lastPicture!=""){
+                fileToUpload = lastPicture;
+                lastPicture = "";
+            } else {
+                if(bRecording){
+                    record(false);
+                }
+                fileToUpload = lastRercord;
                 lastRercord = "";
+            }
+            
+            if(fileToUpload!=""){
+                FileUploader *file = flickrAPI.upload(fileToUpload);
+                
+                if (file != NULL){
+                    ofAddListener(file->isDone, this, &UILog::uploadCompleted);
+                    uploadingFiles.push_back(file);
+                    lastRercord = "";
+                }
             }
         }
     }
