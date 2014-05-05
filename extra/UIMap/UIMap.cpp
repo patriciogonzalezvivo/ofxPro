@@ -293,7 +293,6 @@ void UIMap::draw(float _x, float _y,float _width, float _height) {
     }
     if (bEnable){
         ofPushStyle();
-        ofSetColor(255);
         fbo.draw(_x,_y,_width,_height);
         ofPopStyle();
     }

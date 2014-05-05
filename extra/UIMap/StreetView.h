@@ -71,6 +71,7 @@ public:
     
     int         getDepthMapWidth(){return mapWidth;}
     int         getDepthMapHeight(){return mapHeight;}
+    ofImage     getDepthMap();
     ofVboMesh&  getDethMesh(){return meshDepth;};
     vector<unsigned char> depthmapIndices;
     vector<DepthMapPlane> depthmapPlanes;

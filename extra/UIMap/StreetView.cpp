@@ -126,12 +126,13 @@ void StreetView::urlResponse(ofHttpResponse & response){
         region = XML.getValue("panorama:data_properties:region", "");
         country = XML.getValue("panorama:data_properties:country", "");
         
-//        loc.lat = XML.getAttribute("panorama:data_properties", "original_lat", 0.0);
-//        loc.lon = XML.getAttribute("panorama:data_properties", "original_lng", 0.0);
-        loc.lat = XML.getAttribute("panorama:data_properties", "lat", 0.0);
-        loc.lon = XML.getAttribute("panorama:data_properties", "lng", 0.0);
-        elevation = XML.getAttribute("panorama:data_properties", "elevation_wgs84_m", 0.0);
-        num_zoom_levels = XML.getAttribute("panorama:data_properties", "num_zoom_levels", 0);
+        loc.lat = XML.getAttribute("panorama:data_properties", "original_lat", 0.0);
+        loc.lon = XML.getAttribute("panorama:data_properties", "original_lng", 0.0);
+//        loc.lat = XML.getAttribute("panorama:data_properties", "lat", 0.0);
+//        loc.lon = XML.getAttribute("panorama:data_properties", "lng", 0.0);
+        elevation = XML.getAttribute("panorama:data_properties", "elevation_wgs84_m", -1);
+        cout << "Elevation: " << elevation << endl;
+        num_zoom_levels = XML.getAttribute("panorama:data_properties", "num_zoom_levels", 1);
         if(zoom>num_zoom_levels){
             zoom = num_zoom_levels;
         }
@@ -214,6 +215,46 @@ void StreetView::downloadPanorama(){
             makeDepthMesh();
         }
     }
+}
+
+
+ofImage StreetView::getDepthMap(){
+    ofImage depthImage;
+    if(bDataLoaded){
+        
+        ofPixels depthPixels;
+        depthImage.allocate(mapWidth, mapHeight, OF_IMAGE_GRAYSCALE);
+        depthPixels.allocate(mapWidth, mapHeight, 1);
+        for (int x = 0; x < mapWidth; x++) {
+            for(int y = 0; y < mapHeight; y++){
+                int planeId = depthmapIndices[y * mapWidth + x];
+                if(planeId>0){
+                    float rad_azimuth = x / (float) (mapWidth - 1.0f) * TWO_PI;
+                    float rad_elevation = y / (float) (mapHeight - 1.0f) * PI;
+                    
+                    ofPoint pos;
+                    pos.x = sin(rad_elevation) * sin(rad_azimuth);
+                    pos.y = sin(rad_elevation) * cos(rad_azimuth);
+                    pos.z = cos(rad_elevation);
+                    
+                    DepthMapPlane plane = depthmapPlanes[planeId];
+                    float dist = plane.d / (pos.x*plane.x + pos.y*plane.y + pos.z*plane.z);
+                    
+                    pos *= dist;
+                    
+                    if(pos.length() > maxDistance){
+                        depthPixels.setColor(x, y,ofColor(0));
+                    } else {
+                        depthPixels.setColor(x, y,ofColor(maxDistance-pos.length()));
+                    }
+                } else {
+                    depthPixels.setColor(x, y,ofColor(0.0));
+                }
+            }
+        }
+        depthImage.setFromPixels(depthPixels);
+    }
+    return depthImage;
 }
 
 void StreetView::makeDepthMesh(){
