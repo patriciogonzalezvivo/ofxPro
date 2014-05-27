@@ -29,6 +29,7 @@ public:
     void        move(ofPoint _pos);
     void        scale(float _scale);
     void        rotate(float _angle);
+    void        reset();
     
     void        draw( ofBaseHasTexture &_texture );
     void        draw( ofTexture &_texture );

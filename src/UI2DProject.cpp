@@ -1,9 +1,10 @@
 //
 //  UI2DProject.cpp
 //
-//  Created by Patricio Gonzalez Vivo on 10/15/13.
+//  Copyright (c) 2013 Patricio Gonzalez Vivo <http://patriciogonzalezvivo.com>
 //
 //
+
 #include "UI2DProject.h"
 
 string UI2DProject::getDataPath(){
@@ -264,9 +265,9 @@ void UI2DProject::keyPressed(ofKeyEventArgs & args){
         }
     } else {
         if(args.key == 'h'){
-#ifndef PACKED_APP
+//#ifndef PACKED_APP
             guiToggle();
-#endif
+//#endif
         } else {
             selfKeyPressed(args);
         }

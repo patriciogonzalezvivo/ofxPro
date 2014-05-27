@@ -1,9 +1,10 @@
 //
 //  UI2DProject.h
 //
-//  Created by Patricio Gonzalez Vivo on 10/15/13.
+//  Copyright (c) 2013 Patricio Gonzalez Vivo <http://patriciogonzalezvivo.com>
 //
 //
+
 //#define PACKED_APP
 
 #pragma once

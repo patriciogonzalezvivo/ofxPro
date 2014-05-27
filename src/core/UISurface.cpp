@@ -54,14 +54,20 @@ void UISurface::guiEvent(ofxUIEventArgs &e){
             ofRemoveListener(ofEvents().mouseReleased, this, &UISurface::_mouseReleased);
         }
     } else if(name == "RESTORE"){
-        textureCorners[0].set(0,0);
-        textureCorners[1].set(width,0);
-        textureCorners[2].set(width,height);
-        textureCorners[3].set(0,height);
-        bUpdate = true;
+        reset();
     } else {
         bUpdate = true;
     }
+}
+
+void UISurface::reset(){
+    ofPoint center = ofPoint(ofGetWidth()*0.5,ofGetHeight()*0.5);
+    
+    textureCorners[0].set(center.x-width*0.5,center.y-height*0.5);
+    textureCorners[1].set(center.x+width*0.5,center.y-height*0.5);
+    textureCorners[2].set(center.x+width*0.5,center.y+height*0.5);
+    textureCorners[3].set(center.x-width*0.5,center.y+height*0.5);
+    bUpdate = true;
 }
 
 void UISurface::setCoorners(ofPoint _coorners[4]){
