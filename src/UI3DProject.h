@@ -69,7 +69,9 @@ protected:
     //  BACKGROUND GUI
     //
     virtual void    cameraSet(UICamera *_cam);
+    virtual void    cameraEnable(bool enable=true);
     UICamera        *camera;
+    bool            cameraEnabled;
     
     UIFog           fog;
     

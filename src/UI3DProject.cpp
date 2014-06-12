@@ -57,7 +57,9 @@ void UI3DProject::draw(ofEventArgs & args){
         //  Start 3D scene
         //
         {
-            getCameraRef().begin();
+            if(cameraEnabled){
+                getCameraRef().begin();
+            }
             fog.begin();
             
             //  Scene Setup
@@ -137,7 +139,9 @@ void UI3DProject::draw(ofEventArgs & args){
 //                ofDisableDepthTest();
 //            }
             
-            getCameraRef().end();
+            if(cameraEnabled){
+                getCameraRef().end();
+            }
         }
         
         //  Draw Overlay
@@ -315,6 +319,7 @@ void UI3DProject::setupCoreGuis(){
     setupGui();
     
     cameraSet(new UIEasyCamera());
+    cameraEnable();
     
     logGui.linkDataPath(getDataPath());
     guiAdd(logGui);
@@ -349,6 +354,10 @@ void UI3DProject::cameraSet(UICamera *_cam){
     guiAdd(*_cam);
     camera->loadLocations(getDataPath()+"cameras/");
     logGui.linkCamera(camera);
+}
+
+void UI3DProject::cameraEnable(bool enable){
+    cameraEnabled = enable;
 }
 
 //------------------------------------------------------------ 3D SPECIFIC SETUP
