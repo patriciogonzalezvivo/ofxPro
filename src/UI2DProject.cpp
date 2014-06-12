@@ -115,72 +115,82 @@ void UI2DProject::draw(ofEventArgs & args){
     ofPushStyle();
     if(bRenderSystem){
         
+        for(int viewNum=0;viewNum<numViewports;viewNum++){
 #ifdef TARGET_RASPBERRY_PI
-        //  a full screen FBO is to much for RPI
-        //
+            //  a full screen FBO is to much for RPI
+            //
 #else
-        UI2DProject::getRenderTarget().begin();
+            UI2DProject::getRenderTarget(viewNum).begin();
 #endif
-        {
-            //  Background
-            //
-            if ( background != NULL ){
-                background->draw();
-            }
-            
-            //  Draw Scene
-            //
             {
-                ofPushStyle();
-                ofPushMatrix();
-                selfDraw();
-                ofPopMatrix();
-                ofPopStyle();
+                //  Background
+                //
+                if ( background != NULL ){
+                    background->draw();
+                }
+                
+                //  Draw Scene
+                //
+                {
+                    ofPushStyle();
+                    ofPushMatrix();
+                    selfDraw();
+                    ofPopMatrix();
+                    ofPopStyle();
+                }
+                
+                //  Draw Debug
+                //
+                if( bDebug ){
+                    ofPushStyle();
+                    ofPushMatrix();
+                    selfDrawDebug();
+                    ofPopMatrix();
+                    ofPopStyle();
+                }
+                
+                //  Draw Overlay
+                //
+                {
+                    ofPushStyle();
+                    ofPushMatrix();
+                    selfDrawOverlay();
+                    ofPopMatrix();
+                    ofPopStyle();
+                }
+                
+                //  Draw Log
+                //
+                {
+                    ofPushStyle();
+                    ofPushMatrix();
+                    ofSetColor(background->getUIBrightness()*255);
+                    logGui.draw();
+                    ofPopMatrix();
+                    ofPopStyle();
+                }
             }
-            
-            //  Draw Debug
+#ifdef TARGET_RASPBERRY_PI
+            //  a full screen FBO is to much for RPI
             //
-            if( bDebug ){
-                ofPushStyle();
-                ofPushMatrix();
-                selfDrawDebug();
-                ofPopMatrix();
-                ofPopStyle();
-            }
-            
-            //  Draw Overlay
-            //
-            {
-                ofPushStyle();
-                ofPushMatrix();
-                selfDrawOverlay();
-                ofPopMatrix();
-                ofPopStyle();
-            }
-            
-            //  Draw Log
-            //
-            {
-                ofPushStyle();
-                ofPushMatrix();
-                ofSetColor(background->getUIBrightness()*255);
-                logGui.draw();
-                ofPopMatrix();
-                ofPopStyle();
-            }
+#else
+            UI2DProject::getRenderTarget(viewNum).end();
+            selfPostDraw();
+#endif
         }
-#ifdef TARGET_RASPBERRY_PI
-        //  a full screen FBO is to much for RPI
-        //
-#else
-        UI2DProject::getRenderTarget().end();
-        selfPostDraw();
-#endif
         
         logGui.drawStatus();
 	}
     
     ofPopStyle();
+}
+
+void UI2DProject::setupNumViewports(int num){
+    numViewports = num;
+    
+    while(renderTargets.size() < num){
+        renderTargets.push_back(ofFbo());
+    }
 }
 
 void UI2DProject::exit(ofEventArgs & args){
@@ -677,11 +687,14 @@ void UI2DProject::guiArrange(int _type){
     }
 }
 
-ofFbo& UI2DProject::getRenderTarget(){
-    if(!renderTarget.isAllocated() || renderTarget.getWidth() != ofGetWidth() || renderTarget.getHeight() != ofGetHeight()){
+ofFbo& UI2DProject::getRenderTarget(int viewNumber){
+    ofFbo *renderTarget = &renderTargets[viewNumber];
+    int width = ofGetWidth() / numViewports;
+    int height = ofGetHeight();
+    if(!renderTarget->isAllocated() || renderTarget->getWidth() != width || renderTarget->getHeight() != height){
         ofFbo::Settings settings;
-        settings.width = ofGetWidth();
-        settings.height = ofGetHeight();
+        settings.width = width;
+        settings.height = height;
         settings.internalformat = GL_RGB;
         settings.numSamples = 0;
         settings.useDepth = true;
@@ -691,18 +704,21 @@ ofFbo& UI2DProject::getRenderTarget(){
         settings.textureTarget = GL_TEXTURE_2D;
 #else
         settings.textureTarget = ofGetUsingArbTex() ? GL_TEXTURE_RECTANGLE_ARB : GL_TEXTURE_2D;
-        renderTarget.allocate(settings);
+        renderTarget->allocate(settings);
 #endif
-		renderTarget.begin();
+		renderTarget->begin();
 		ofClear(0,0,0,0);
-		renderTarget.end();
+		renderTarget->end();
     }
     
-    return renderTarget;
+    return *renderTarget;
 }
 
 void UI2DProject::selfPostDraw(){
-	UI2DProject::getRenderTarget().draw(0, 0,UI2DProject::getRenderTarget().getWidth(), UI2DProject::getRenderTarget().getHeight());
+    int offsetX = UI2DProject::getRenderTarget().getWidth();
+    for(int i=0;i<numViewports;i++){
+        UI2DProject::getRenderTarget(i).draw(offsetX*i, 0,UI2DProject::getRenderTarget(i).getWidth(), UI2DProject::getRenderTarget(i).getHeight());
+    }
 }
 
 void UI2DProject::windowResized(ofResizeEventArgs &args){

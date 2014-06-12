@@ -34,131 +34,139 @@ void UI3DProject::stop(){
 
 void UI3DProject::draw(ofEventArgs & args){
     if(bRenderSystem){
-        ofPushStyle();
+        
+        for(int viewNum=0;viewNum<numViewports;viewNum++){
+            currentViewPort = viewNum;
+            ofPushStyle();
 #ifdef TARGET_RASPBERRY_PI
             
 #else
-        getRenderTarget().begin();
+            getRenderTarget(viewNum).begin();
 #endif
-        //  Background
-        //
-        if ( background != NULL ){
-            background->draw();
-        }
-        
-        //  2D scene
-        //
-        ofPushStyle();
-        ofPushMatrix();
-        selfDrawBackground();
-        ofPopMatrix();
-        ofPopStyle();
-        
-        //  Start 3D scene
-        //
-        {
-            if(cameraEnabled){
-                getCameraRef().begin();
-            }
-            fog.begin();
-            
-            //  Scene Setup
+            //  Background
             //
-            selfSceneTransformation();
+            if ( background != NULL ){
+                background->draw();
+            }
             
-            //  Cached Values
+            //  2D scene
             //
-            glGetFloatv(GL_MODELVIEW_MATRIX, viewMatrix.getPtr());
-            glGetFloatv(GL_PROJECTION_MATRIX, projectionMatrix.getPtr());
-            glGetDoublev(GL_PROJECTION_MATRIX, matP);
-            glGetDoublev(GL_MODELVIEW_MATRIX, matM);
-            glGetIntegerv(GL_VIEWPORT, viewport);
-            
-//            glEnable(GL_DEPTH_TEST);
-            ofEnableDepthTest();
-//            glDepthMask(false);
-            
-            if (bEdit){
-                lightsDraw();
-            }
-            
-            //  Draw Debug
-            //
-            if( bDebug ){
-                ofPushStyle();
-                ofPushMatrix();
-                
-                selfDrawDebug();
-                
-                ofPopMatrix();
-                ofPopStyle();
-            }
-            
-            //  Draw Scene
-            //
-            {
-                lightsBegin();
-                ofPushStyle();
-                ofPushMatrix();
-                
-                selfDraw();
-                
-                ofPopMatrix();
-                ofPopStyle();
-                lightsEnd();
-            }
-            
-            //  Draw Log
-            //
-            {
-                ofPushStyle();
-                ofDisableLighting();
-                ofSetColor(background->getUIBrightness()*255.0);
-                logGui.draw();
-                ofPopStyle();
-            }
-            
-//            glDepthMask(true);
-            ofDisableDepthTest();
-//            glDisable(GL_DEPTH_TEST);
-            fog.end();
-            
-            //  Update Mouse
-            //
-            if (bUpdateCursor){
-                unprojectCursor(cursor, ofGetMouseX(), ofGetMouseY());
-                bUpdateCursor = false;
-            }
-            
-//            if (bEdit){
-//                ofEnableDepthTest();
-//                ofPushStyle();
-//                ofSetColor(255);
-//                ofSphere(cursor.world, 10);
-//                ofPopStyle();
-//                ofDisableDepthTest();
-//            }
-            
-            if(cameraEnabled){
-                getCameraRef().end();
-            }
-        }
-        
-        //  Draw Overlay
-        //
-        {
             ofPushStyle();
             ofPushMatrix();
-            selfDrawOverlay();
+            selfDrawBackground();
             ofPopMatrix();
             ofPopStyle();
+            
+            //  Start 3D scene
+            //
+            {
+                if(cameraEnabled){
+                    getCameraRef().begin();
+                }
+                fog.begin();
+                
+                //  Scene Setup
+                //
+                selfSceneTransformation();
+                
+                //  Cached Values
+                //
+                glGetFloatv(GL_MODELVIEW_MATRIX, viewMatrix.getPtr());
+                glGetFloatv(GL_PROJECTION_MATRIX, projectionMatrix.getPtr());
+                glGetDoublev(GL_PROJECTION_MATRIX, matP);
+                glGetDoublev(GL_MODELVIEW_MATRIX, matM);
+                glGetIntegerv(GL_VIEWPORT, viewport);
+                
+                //            glEnable(GL_DEPTH_TEST);
+                ofEnableDepthTest();
+                //            glDepthMask(false);
+                
+                if (bEdit){
+                    lightsDraw();
+                }
+                
+                //  Draw Debug
+                //
+                if( bDebug ){
+                    ofPushStyle();
+                    ofPushMatrix();
+                    
+                    selfDrawDebug();
+                    
+                    ofPopMatrix();
+                    ofPopStyle();
+                }
+                
+                //  Draw Scene
+                //
+                {
+                    lightsBegin();
+                    ofPushStyle();
+                    ofPushMatrix();
+                    
+                    selfDraw();
+                    
+                    ofPopMatrix();
+                    ofPopStyle();
+                    lightsEnd();
+                }
+                
+                //  Draw Log
+                //
+                {
+                    ofPushStyle();
+                    ofDisableLighting();
+                    ofSetColor(background->getUIBrightness()*255.0);
+                    logGui.draw();
+                    ofPopStyle();
+                }
+                
+                //            glDepthMask(true);
+                ofDisableDepthTest();
+                //            glDisable(GL_DEPTH_TEST);
+                fog.end();
+                
+                //  Update Mouse
+                //
+                if (bUpdateCursor){
+                    unprojectCursor(cursor, ofGetMouseX(), ofGetMouseY());
+                    bUpdateCursor = false;
+                }
+                
+                //            if (bEdit){
+                //                ofEnableDepthTest();
+                //                ofPushStyle();
+                //                ofSetColor(255);
+                //                ofSphere(cursor.world, 10);
+                //                ofPopStyle();
+                //                ofDisableDepthTest();
+                //            }
+                
+                if(cameraEnabled){
+                    getCameraRef().end();
+                }
+            }
+            
+            //  Draw Overlay
+            //
+            {
+                ofPushStyle();
+                ofPushMatrix();
+                selfDrawOverlay();
+                ofPopMatrix();
+                ofPopStyle();
+            }
+            
+#ifdef TARGET_RASPBERRY_PI
+            
+#else
+            getRenderTarget(viewNum).end();
+#endif
+            
         }
         
 #ifdef TARGET_RASPBERRY_PI
-        
 #else
-        getRenderTarget().end();
-        
         //  Post-Draw ( shader time )
         //
         ofDisableLighting();
@@ -320,6 +328,7 @@ void UI3DProject::setupCoreGuis(){
     
     cameraSet(new UIEasyCamera());
     cameraEnable();
+    setupNumViewports(1);
     
     logGui.linkDataPath(getDataPath());
     guiAdd(logGui);

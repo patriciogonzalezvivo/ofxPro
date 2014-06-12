@@ -101,7 +101,7 @@ public:
     //  Data Folder Path
     //
     string  getDataPath();
-    virtual ofFbo& getRenderTarget();
+    virtual ofFbo& getRenderTarget(int viewNumber=0);
 
 	//  These events are registered to be call automatically
     //
@@ -165,7 +165,11 @@ protected:
     virtual void    setupRenderGui();
     UIReference     rdrGui;
     bool            bRenderSystem;
-    ofFbo           renderTarget;
+
+    virtual void    setupNumViewports(int num);
+    int             numViewports;
+    int             currentViewPort;
+    vector<ofFbo>   renderTargets;
     
     //  BACKGROUND GUI
     //
