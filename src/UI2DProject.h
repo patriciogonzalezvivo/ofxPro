@@ -169,6 +169,9 @@ protected:
     virtual void    setupNumViewports(int num);
     int             numViewports;
     int             currentViewPort;
+    
+    virtual void    setupRenderIsFlipped(bool flipped=true);
+    bool            renderFlipped;
     vector<ofFbo>   renderTargets;
     
     //  BACKGROUND GUI

@@ -193,6 +193,10 @@ void UI2DProject::setupNumViewports(int num){
     }
 }
 
+void UI2DProject::setupRenderIsFlipped(bool flipped){
+    renderFlipped = flipped;
+}
+
 void UI2DProject::exit(ofEventArgs & args){
     if(logGui.isRecording()){
         logGui.record(false);
@@ -717,7 +721,17 @@ ofFbo& UI2DProject::getRenderTarget(int viewNumber){
 void UI2DProject::selfPostDraw(){
     int offsetX = UI2DProject::getRenderTarget().getWidth();
     for(int i=0;i<numViewports;i++){
-        UI2DProject::getRenderTarget(i).draw(offsetX*i, 0,UI2DProject::getRenderTarget(i).getWidth(), UI2DProject::getRenderTarget(i).getHeight());
+        if(!renderFlipped){
+            UI2DProject::getRenderTarget(i).draw(offsetX*i
+                                                 , 0
+                                                 , UI2DProject::getRenderTarget(i).getWidth()
+                                                 , UI2DProject::getRenderTarget(i).getHeight());
+        } else {
+            UI2DProject::getRenderTarget(i).draw(offsetX*i
+                                                 , UI2DProject::getRenderTarget(i).getHeight()
+                                                 , UI2DProject::getRenderTarget(i).getWidth()
+                                                 , -UI2DProject::getRenderTarget(i).getHeight());
+        }
     }
 }
 
