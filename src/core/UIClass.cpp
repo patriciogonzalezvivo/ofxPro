@@ -30,9 +30,10 @@ UIReference UIClass::getUIReference( ofxUICanvas *_parent ){
     gui->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
     gui->addWidgetToHeader(toggle);
     gui->addSpacer();
-
+    
     setupUI();
 
+    gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent, this, &UIClass::guiEvent);
 
     return gui;
