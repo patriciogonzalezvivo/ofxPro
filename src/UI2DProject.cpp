@@ -69,7 +69,6 @@ void UI2DProject::play(){
         ofAddListener(ofEvents().update,this,&UI2DProject::update);
         ofAddListener(ofEvents().draw,this,&UI2DProject::draw);
         ofAddListener(ofEvents().exit,this,&UI2DProject::exit);
-        
         ofAddListener(ofEvents().windowResized, this, &UI2DProject::windowResized);
         
         guiLoad();
@@ -93,6 +92,7 @@ void UI2DProject::stop(){
         ofRemoveListener(ofEvents().update, this, &UI2DProject::update);
         ofRemoveListener(ofEvents().draw, this, &UI2DProject::draw);
         ofRemoveListener(ofEvents().exit, this, &UI2DProject::exit);
+        ofRemoveListener(ofEvents().windowResized, this, &UI2DProject::windowResized);
         
         selfEnd();
         
