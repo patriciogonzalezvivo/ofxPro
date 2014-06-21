@@ -1,13 +1,13 @@
 //
-//  UI3DProject.cpp
+//  ofx3DPro.cpp
 //
 //  Copyright (c) 2013 Patricio Gonzalez Vivo <http://patriciogonzalezvivo.com>
 //
 //
 
-#include "UI3DProject.h"
+#include "ofx3DPro.h"
 
-void UI3DProject::play(){
+void ofx3DPro::play(){
     if (!bPlaying){
         
         if(camera->bEnable){
@@ -18,21 +18,21 @@ void UI3DProject::play(){
             it->second->play();
         }
         selectedLigth = "NULL";
-        UI2DProject::play();
+        ofx2DPro::play();
     }
 }
 
-void UI3DProject::stop(){
+void ofx3DPro::stop(){
     if(bPlaying){
         camera->disableMouseInput();
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->stop();
         }
-        UI2DProject::stop();
+        ofx2DPro::stop();
     }
 }
 
-void UI3DProject::draw(ofEventArgs & args){
+void ofx3DPro::draw(ofEventArgs & args){
     if(bRenderSystem){
         
         for(int viewNum=0;viewNum<numViewports;viewNum++){
@@ -179,7 +179,7 @@ void UI3DProject::draw(ofEventArgs & args){
     
 }
 
-void UI3DProject::exit(ofEventArgs & args){
+void ofx3DPro::exit(ofEventArgs & args){
     if(logGui.isRecording()){
         logGui.record(false);
     }
@@ -195,7 +195,7 @@ void UI3DProject::exit(ofEventArgs & args){
 
 //-------------------- Mouse events + camera interaction
 //
-ofPoint UI3DProject::unproject(ofPoint _screen){
+ofPoint ofx3DPro::unproject(ofPoint _screen){
     float depth;
     //read z value from depth buffer at mouse coords
     getRenderTarget().getDepthTexture().bind();
@@ -211,7 +211,7 @@ ofPoint UI3DProject::unproject(ofPoint _screen){
     }
 }
 
-void UI3DProject::unprojectCursor(MovingCursor &_cursor, float _x, float _y){
+void ofx3DPro::unprojectCursor(MovingCursor &_cursor, float _x, float _y){
     _cursor.lastFrame = _cursor;
     
     //consider that these should be in viewport space
@@ -237,15 +237,15 @@ void UI3DProject::unprojectCursor(MovingCursor &_cursor, float _x, float _y){
     _cursor.lastUpdate = ofGetFrameNum();
 }
 
-void UI3DProject::mouseMoved(ofMouseEventArgs & args){
+void ofx3DPro::mouseMoved(ofMouseEventArgs & args){
     if (bEdit){
         bUpdateCursor = true;
     }
     
-    UI2DProject::mouseMoved(args);
+    ofx2DPro::mouseMoved(args);
 };
 
-void UI3DProject::mousePressed(ofMouseEventArgs & args){
+void ofx3DPro::mousePressed(ofMouseEventArgs & args){
 	if( cursorIsOverGUI() ){
 		camera->disableMouseInput();
 	}
@@ -282,7 +282,7 @@ void UI3DProject::mousePressed(ofMouseEventArgs & args){
     }
 }
 
-void UI3DProject::mouseDragged(ofMouseEventArgs & args){
+void ofx3DPro::mouseDragged(ofMouseEventArgs & args){
     if (bEdit){
         bUpdateCursor = true;
     }
@@ -302,11 +302,11 @@ void UI3DProject::mouseDragged(ofMouseEventArgs & args){
         }
     }
     else {
-        UI2DProject::mouseDragged(args);
+        ofx2DPro::mouseDragged(args);
     }
 };
 
-void UI3DProject::mouseReleased(ofMouseEventArgs & args){
+void ofx3DPro::mouseReleased(ofMouseEventArgs & args){
     
     if(camera->bEnable){
         camera->enableMouseInput();
@@ -323,7 +323,7 @@ void UI3DProject::mouseReleased(ofMouseEventArgs & args){
 
 //------------------------------------------------------------ CORE SETUP
 
-void UI3DProject::setupCoreGuis(){
+void ofx3DPro::setupCoreGuis(){
     setupGui();
     
     cameraSet(new UIEasyCamera());
@@ -345,7 +345,7 @@ void UI3DProject::setupCoreGuis(){
     lightAdd("POINT LIGHT 1", OF_LIGHT_POINT);
 }
 
-void UI3DProject::cameraSet(UICamera *_cam){
+void ofx3DPro::cameraSet(UICamera *_cam){
     if(camera != NULL){
         
         for(int i = 0; i<guis.size(); i++){
@@ -365,18 +365,18 @@ void UI3DProject::cameraSet(UICamera *_cam){
     logGui.linkCamera(camera);
 }
 
-void UI3DProject::cameraEnable(bool enable){
+void ofx3DPro::cameraEnable(bool enable){
     cameraEnabled = enable;
 }
 
 //------------------------------------------------------------ 3D SPECIFIC SETUP
 
-void UI3DProject::backgroundSet(UIBackground *_bg){
-    UI2DProject::backgroundSet(_bg);
+void ofx3DPro::backgroundSet(UIBackground *_bg){
+    ofx2DPro::backgroundSet(_bg);
     fog.linkColor(background);
 }
 
-void UI3DProject::setupLightingGui(){
+void ofx3DPro::setupLightingGui(){
     bSmoothLighting = true;
     bEnableLights = true;
     globalAmbientColor = new float[4];
@@ -411,11 +411,11 @@ void UI3DProject::setupLightingGui(){
     lightsGui->addMinimalSlider("B", 0.0, 1.0, &globalAmbientColor[2], length, dim)->setShowValue(false);
     lightsGui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     lightsGui->autoSizeToFitWidgets();
-    ofAddListener(lightsGui->newGUIEvent,this,&UI3DProject::guiLightingEvent);
+    ofAddListener(lightsGui->newGUIEvent,this,&ofx3DPro::guiLightingEvent);
     guis.push_back(lightsGui);
 }
 
-void UI3DProject::guiLightingEvent(ofxUIEventArgs &e){
+void ofx3DPro::guiLightingEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
     if(name == "R"){
         glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbientColor);
@@ -426,13 +426,13 @@ void UI3DProject::guiLightingEvent(ofxUIEventArgs &e){
     }
 }
 
-void UI3DProject::lightAdd( string _name, ofLightType _type ){
+void ofx3DPro::lightAdd( string _name, ofLightType _type ){
     UILightReference newLight(new UILight(_name, _type));
     lights[_name] = newLight;
 	guis.push_back(newLight->getUIReference(guiTemplate));
 }
 
-string UI3DProject::cursorIsOverLight(){
+string ofx3DPro::cursorIsOverLight(){
     if(bEnableLights){
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             if ( it->second->distance(cursor.world) < 10 ){
@@ -444,7 +444,7 @@ string UI3DProject::cursorIsOverLight(){
     return "NULL";
 }
 
-void UI3DProject::lightsBegin(){
+void ofx3DPro::lightsBegin(){
     if(bEnableLights){
         ofSetSmoothLighting(bSmoothLighting);
         ofEnableLighting();
@@ -454,7 +454,7 @@ void UI3DProject::lightsBegin(){
     }
 }
 
-void UI3DProject::lightsEnd(){
+void ofx3DPro::lightsEnd(){
     if(!bEnableLights){
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->disable();
@@ -463,7 +463,7 @@ void UI3DProject::lightsEnd(){
     }
 }
 
-void UI3DProject::lightsDraw(){
+void ofx3DPro::lightsDraw(){
     if(bEnableLights){
         ofPushStyle();
         ofDisableLighting();
@@ -492,7 +492,7 @@ void UI3DProject::lightsDraw(){
     }
 }
 
-void UI3DProject::materialAdd( string _name ){
+void ofx3DPro::materialAdd( string _name ){
     UIMaterialReference newMaterial( new UIMaterial() );
     
     if ( _name == "MATERIAL" ){
@@ -506,25 +506,25 @@ void UI3DProject::materialAdd( string _name ){
 
 //------------------------------------------------------ Save & Load + CAMERA
 
-void UI3DProject::guiLoad(){
-    UI2DProject::guiLoad();
+void ofx3DPro::guiLoad(){
+    ofx2DPro::guiLoad();
     camera->load(getDataPath()+"Presets/Working/"+"current.cam");
 }
 
-void UI3DProject::guiSave(){
-    UI2DProject::guiSave();
+void ofx3DPro::guiSave(){
+    ofx2DPro::guiSave();
     camera->save(getDataPath()+"Presets/Working/"+"current.cam");
 }
 
-void UI3DProject::guiLoadPresetFromPath(string presetPath){
+void ofx3DPro::guiLoadPresetFromPath(string presetPath){
     cout << "PRESET PATH: " << presetPath << endl;
-    UI2DProject::guiLoadPresetFromPath(presetPath);
+    ofx2DPro::guiLoadPresetFromPath(presetPath);
     camera->load(presetPath+"/current.cam");
-    UI2DProject::guiLoadPresetFromPath(presetPath);
+    ofx2DPro::guiLoadPresetFromPath(presetPath);
 }
 
-void UI3DProject::guiSavePreset(string presetName){
-    UI2DProject::guiSavePreset(presetName);
+void ofx3DPro::guiSavePreset(string presetName){
+    ofx2DPro::guiSavePreset(presetName);
 
     camera->save(getDataPath()+"Presets/"+presetName+"/current.cam");
     
@@ -533,6 +533,6 @@ void UI3DProject::guiSavePreset(string presetName){
     }
 }
 
-ofCamera& UI3DProject::getCameraRef(){
+ofCamera& ofx3DPro::getCameraRef(){
 	return (*camera->getCameraPtn());
 }

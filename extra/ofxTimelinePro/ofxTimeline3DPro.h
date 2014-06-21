@@ -1,22 +1,22 @@
 #pragma once
 
 #include "ofMain.h"
-#include "UIProject.h"
+#include "ofxPro.h"
 
 //  ADDONS
 //
 #include "ofxTimeline.h"
 #include "ofxTLCameraTrack.h"
 
-class UITime3DProject : public UI3DProject {
+class ofxTimeline3DPro : public ofx3DPro {
   public:
 	   
-	UITime3DProject():timeline(NULL),cameraTrack(NULL),bUseCameraTrack(true),bEnableTimeline(true){};
-	virtual ~UITime3DProject(){};
+	ofxTimeline3DPro():timeline(NULL),cameraTrack(NULL),bUseCameraTrack(true),bEnableTimeline(true){};
+	virtual ~ofxTimeline3DPro(){};
 
     //--------------------- VIRTUAL CLASSES TO EDIT
     //
-    virtual string getSystemName(){ return "TIME_ABSTRACT_3DPROJECT"; };
+    virtual string getSystemName(){ return "TIMELINE_ABSTRACT_3DPROJECT"; };
     
     virtual void selfSetupTimeline(){};
     virtual void selfSetupTimelineGui(){};

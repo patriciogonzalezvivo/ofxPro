@@ -1,21 +1,21 @@
 #pragma once
 
 #include "ofMain.h"
-#include "UIProject.h"
+#include "ofxPro.h"
 
 //  ADDONS
 //
 #include "ofxTimeline.h"
 
-class UITime2DProject : public UI2DProject {
+class ofxTimeline2DPro : public ofx2DPro {
   public:
 	   
-	UITime2DProject():timeline(NULL),bEnableTimeline(true){};
-	virtual ~UITime2DProject(){};
+	ofxTimeline2DPro():timeline(NULL),bEnableTimeline(true){};
+	virtual ~ofxTimeline2DPro(){};
 
     //--------------------- VIRTUAL CLASSES TO EDIT
     //
-    virtual string getSystemName(){ return "TIME_ABSTRACT_2DPROJECT"; };
+    virtual string getSystemName(){ return "TIMELINE_ABSTRACT_2DPROJECT"; };
     
     virtual void selfSetupTimeline(){};
     virtual void selfSetupTimelineGui(){};

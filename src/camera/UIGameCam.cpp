@@ -1,8 +1,7 @@
 //
 //  UIGameCam.cpp
-//  05-Skyline
 //
-//  Created by Patricio Gonzalez Vivo on 3/16/14.
+//  Based on https://github.com/Flightphase/ofxGameCamera
 //
 //
 

@@ -1,5 +1,5 @@
 //
-//  UI3DProject.h
+//  ofx3DPro.h
 //
 //  Copyright (c) 2013 Patricio Gonzalez Vivo <http://patriciogonzalezvivo.com>.
 //
@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "UI2DProject.h"
+#include "ofx2DPro.h"
 
 #include "UIFog.h"
 #include "UILight.h"
@@ -19,11 +19,11 @@
 
 #include "Cursor.h"
 
-class UI3DProject : public UI2DProject {
+class ofx3DPro : public ofx2DPro {
 public:
     
-	UI3DProject(){};
-	virtual ~UI3DProject(){};
+	ofx3DPro(){};
+	virtual ~ofx3DPro(){};
 	
 	//--------------------- VIRTUAL CLASSES TO EDIT
     //

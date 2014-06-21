@@ -1,5 +1,5 @@
 //
-//  GuiClass.h
+//  UIClass.h
 //
 //  Created by Patricio Gonzalez Vivo on 9/9/13.
 //
@@ -21,7 +21,7 @@ public:
     UIClass(){};
     virtual ~UIClass();
 
-    virtual string      getClassName(){return "GUICLASS_DEFAULT";};
+    virtual string      getClassName(){return "GUIClass_DEFAULT";};
     UIReference         getUIReference(ofxUICanvas *_parent);
     bool                bEnable;
 

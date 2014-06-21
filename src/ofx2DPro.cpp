@@ -1,13 +1,13 @@
 //
-//  UI2DProject.cpp
+//  ofx2DPro.cpp
 //
 //  Copyright (c) 2013 Patricio Gonzalez Vivo <http://patriciogonzalezvivo.com>
 //
 //
 
-#include "UI2DProject.h"
+#include "ofx2DPro.h"
 
-string UI2DProject::getDataPath(){
+string ofx2DPro::getDataPath(){
 #ifdef TARGET_OSX
     
 #ifdef PACKED_APP
@@ -23,7 +23,7 @@ string UI2DProject::getDataPath(){
     return path;
 }
 
-void UI2DProject::setup(){
+void ofx2DPro::setup(){
 	cout << "SETTING UP SYSTEM " << getSystemName() << endl;
 #ifdef PACKED_APP
     ofSetDataPathRoot("data/");
@@ -52,7 +52,7 @@ void UI2DProject::setup(){
     selfSetupGuis();
 }
 
-void UI2DProject::play(){
+void ofx2DPro::play(){
     
     if (!bPlaying){
         selfBegin();
@@ -66,10 +66,10 @@ void UI2DProject::play(){
 #endif
         ofRegisterMouseEvents(this);
         ofRegisterKeyEvents(this);
-        ofAddListener(ofEvents().update,this,&UI2DProject::update);
-        ofAddListener(ofEvents().draw,this,&UI2DProject::draw);
-        ofAddListener(ofEvents().exit,this,&UI2DProject::exit);
-        ofAddListener(ofEvents().windowResized, this, &UI2DProject::windowResized);
+        ofAddListener(ofEvents().update,this,&ofx2DPro::update);
+        ofAddListener(ofEvents().draw,this,&ofx2DPro::draw);
+        ofAddListener(ofEvents().exit,this,&ofx2DPro::exit);
+        ofAddListener(ofEvents().windowResized, this, &ofx2DPro::windowResized);
         
         guiLoad();
         guiHide();
@@ -78,7 +78,7 @@ void UI2DProject::play(){
     }
 }
 
-void UI2DProject::stop(){
+void ofx2DPro::stop(){
     if (bPlaying){
         if(logGui.isRecording()){
             logGui.record(false);
@@ -89,10 +89,10 @@ void UI2DProject::stop(){
         
         ofUnregisterMouseEvents(this);
         ofUnregisterKeyEvents(this);
-        ofRemoveListener(ofEvents().update, this, &UI2DProject::update);
-        ofRemoveListener(ofEvents().draw, this, &UI2DProject::draw);
-        ofRemoveListener(ofEvents().exit, this, &UI2DProject::exit);
-        ofRemoveListener(ofEvents().windowResized, this, &UI2DProject::windowResized);
+        ofRemoveListener(ofEvents().update, this, &ofx2DPro::update);
+        ofRemoveListener(ofEvents().draw, this, &ofx2DPro::draw);
+        ofRemoveListener(ofEvents().exit, this, &ofx2DPro::exit);
+        ofRemoveListener(ofEvents().windowResized, this, &ofx2DPro::windowResized);
         
         selfEnd();
         
@@ -102,7 +102,7 @@ void UI2DProject::stop(){
     }
 }
 
-void UI2DProject::update(ofEventArgs & args){
+void ofx2DPro::update(ofEventArgs & args){
     if(bUpdateSystem){
         selfUpdate();
         if(logGui.isRecording()){
@@ -111,7 +111,7 @@ void UI2DProject::update(ofEventArgs & args){
     }
 }
 
-void UI2DProject::draw(ofEventArgs & args){
+void ofx2DPro::draw(ofEventArgs & args){
     ofPushStyle();
     if(bRenderSystem){
         
@@ -120,7 +120,7 @@ void UI2DProject::draw(ofEventArgs & args){
             //  a full screen FBO is to much for RPI
             //
 #else
-            UI2DProject::getRenderTarget(viewNum).begin();
+            ofx2DPro::getRenderTarget(viewNum).begin();
 #endif
             {
                 //  Background
@@ -174,7 +174,7 @@ void UI2DProject::draw(ofEventArgs & args){
             //  a full screen FBO is to much for RPI
             //
 #else
-            UI2DProject::getRenderTarget(viewNum).end();
+            ofx2DPro::getRenderTarget(viewNum).end();
             selfPostDraw();
 #endif
         }
@@ -185,7 +185,7 @@ void UI2DProject::draw(ofEventArgs & args){
     ofPopStyle();
 }
 
-void UI2DProject::setupNumViewports(int num){
+void ofx2DPro::setupNumViewports(int num){
     numViewports = num;
     
     while(renderTargets.size() < num){
@@ -193,11 +193,11 @@ void UI2DProject::setupNumViewports(int num){
     }
 }
 
-void UI2DProject::setupRenderIsFlipped(bool flipped){
+void ofx2DPro::setupRenderIsFlipped(bool flipped){
     renderFlipped = flipped;
 }
 
-void UI2DProject::exit(ofEventArgs & args){
+void ofx2DPro::exit(ofEventArgs & args){
     if(logGui.isRecording()){
         logGui.record(false);
     }
@@ -208,7 +208,7 @@ void UI2DProject::exit(ofEventArgs & args){
 }
 
 //------------------------------------------------------- KEYBOARD
-void UI2DProject::keyPressed(ofKeyEventArgs & args){
+void ofx2DPro::keyPressed(ofKeyEventArgs & args){
     
     if (bGui){
         for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
@@ -288,7 +288,7 @@ void UI2DProject::keyPressed(ofKeyEventArgs & args){
     }
 }
 
-void UI2DProject::keyReleased(ofKeyEventArgs & args){
+void ofx2DPro::keyReleased(ofKeyEventArgs & args){
     switch (args.key){
         default:
             selfKeyReleased(args);
@@ -298,7 +298,7 @@ void UI2DProject::keyReleased(ofKeyEventArgs & args){
 
 //-------------------------------------------------------- MOUSE
 
-bool UI2DProject::cursorIsOverGUI(){
+bool ofx2DPro::cursorIsOverGUI(){
     if (bGui){
         for(int i = 0; i < guis.size(); i++){
             if(guis[i]->isHit(ofGetMouseX(), ofGetMouseY())){
@@ -309,11 +309,11 @@ bool UI2DProject::cursorIsOverGUI(){
 	return false;
 }
 
-void UI2DProject::mouseMoved(ofMouseEventArgs& data){
+void ofx2DPro::mouseMoved(ofMouseEventArgs& data){
     selfMouseMoved(data);
 }
 
-void UI2DProject::mousePressed(ofMouseEventArgs & args){
+void ofx2DPro::mousePressed(ofMouseEventArgs & args){
     if(cursorIsOverGUI()){
         return;
     }
@@ -329,7 +329,7 @@ void UI2DProject::mousePressed(ofMouseEventArgs & args){
         selfMousePressed(args);
 }
 
-void UI2DProject::mouseDragged(ofMouseEventArgs& args){
+void ofx2DPro::mouseDragged(ofMouseEventArgs& args){
     if(cursorIsOverGUI())
         return;
     
@@ -341,7 +341,7 @@ void UI2DProject::mouseDragged(ofMouseEventArgs& args){
     selfMouseDragged(args);
 }
 
-void UI2DProject::mouseReleased(ofMouseEventArgs & args){
+void ofx2DPro::mouseReleased(ofMouseEventArgs & args){
     if(cursorIsOverGUI())
         return;
     
@@ -356,7 +356,7 @@ void UI2DProject::mouseReleased(ofMouseEventArgs & args){
 
 //------------------------------------------------------------ SETUP
 
-void UI2DProject::setupCoreGuis(){
+void ofx2DPro::setupCoreGuis(){
     setupGui();
     
     logGui.linkDataPath(getDataPath());
@@ -368,7 +368,7 @@ void UI2DProject::setupCoreGuis(){
     backgroundSet(new UIBackground());
 }
 
-void UI2DProject::setupGui(){
+void ofx2DPro::setupGui(){
     
     guiTemplate = new ofxUISuperCanvas(ofToUpper(getSystemName()));
     guiTemplate->setName("TEMPLATE");
@@ -407,12 +407,12 @@ void UI2DProject::setupGui(){
     
     gui->autoSizeToFitWidgets();
     
-    ofAddListener(gui->newGUIEvent,this,&UI2DProject::guiEvent);
+    ofAddListener(gui->newGUIEvent,this,&ofx2DPro::guiEvent);
     
     guis.push_back(gui);
 }
 
-void UI2DProject::guiEvent(ofxUIEventArgs &e){
+void ofx2DPro::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
 
     if(name == "SAVE"){
@@ -453,7 +453,7 @@ void UI2DProject::guiEvent(ofxUIEventArgs &e){
     selfGuiEvent(e);
 }
 
-vector<string> UI2DProject::getPresets(){
+vector<string> ofx2DPro::getPresets(){
 	vector<string> presets;
 	string presetPath = getDataPath()+"Presets/";
 	ofDirectory presetsFolder = ofDirectory(presetPath);
@@ -472,7 +472,7 @@ vector<string> UI2DProject::getPresets(){
 	return presets;
 }
 
-void UI2DProject::setupSystemGui(){
+void ofx2DPro::setupSystemGui(){
     UIReference tmp( new ofxUISuperCanvas("SYSTEM", guiTemplate) );
     
     sysGui = tmp;
@@ -491,11 +491,11 @@ void UI2DProject::setupSystemGui(){
     
     selfSetupSystemGui();
     sysGui->autoSizeToFitWidgets();
-    ofAddListener(sysGui->newGUIEvent,this,&UI2DProject::guiSystemEvent);
+    ofAddListener(sysGui->newGUIEvent,this,&ofx2DPro::guiSystemEvent);
     guis.push_back(sysGui);
 }
 
-void UI2DProject::setupRenderGui(){
+void ofx2DPro::setupRenderGui(){
     UIReference tmp( new ofxUISuperCanvas("RENDER", guiTemplate ) );
     rdrGui = tmp;
     rdrGui->copyCanvasStyle( guiTemplate );
@@ -513,11 +513,11 @@ void UI2DProject::setupRenderGui(){
     selfSetupRenderGui();
     
     rdrGui->autoSizeToFitWidgets();
-    ofAddListener(rdrGui->newGUIEvent,this,&UI2DProject::guiRenderEvent);
+    ofAddListener(rdrGui->newGUIEvent,this,&ofx2DPro::guiRenderEvent);
     guis.push_back(rdrGui);
 }
 
-void UI2DProject::backgroundSet(UIBackground *_bg){
+void ofx2DPro::backgroundSet(UIBackground *_bg){
     if(background != NULL){
         
         for(int i = 0; i<guis.size(); i++){
@@ -536,28 +536,28 @@ void UI2DProject::backgroundSet(UIBackground *_bg){
     guiAdd( *background );
 }
 
-void UI2DProject::guiAdd(UIClass &_uiClass){
-    UIReference uiClass = _uiClass.getUIReference(guiTemplate);
-	guis.push_back(uiClass);
+void ofx2DPro::guiAdd(UIClass &_UIClass){
+    UIReference UIClass = _UIClass.getUIReference(guiTemplate);
+	guis.push_back(UIClass);
 }
 
-void UI2DProject::guiAllEvents(ofxUIEventArgs &e){
+void ofx2DPro::guiAllEvents(ofxUIEventArgs &e){
     
 }
 
 // LOAD
 //
-void UI2DProject::guiLoad(){
+void ofx2DPro::guiLoad(){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
     }
 }
 
-void UI2DProject::guiLoadPresetFromName(string presetName){
+void ofx2DPro::guiLoadPresetFromName(string presetName){
     guiLoadPresetFromPath(getDataPath()+"Presets/"+ presetName);
 }
     
-void UI2DProject::guiLoadPresetFromPath(string presetPath){
+void ofx2DPro::guiLoadPresetFromPath(string presetPath){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(presetPath+"/"+guis[i]->getName()+".xml");
     }
@@ -567,14 +567,14 @@ void UI2DProject::guiLoadPresetFromPath(string presetPath){
 
 //  SAVE
 //
-void UI2DProject::guiSave(){
+void ofx2DPro::guiSave(){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->saveSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
     }
 }
 
 
-void UI2DProject::guiSavePreset(string presetName){
+void ofx2DPro::guiSavePreset(string presetName){
     ofDirectory dir;
     string presetDirectory = getDataPath()+"Presets/"+presetName+"/";
     if(!dir.doesDirectoryExist(presetDirectory)){
@@ -590,28 +590,28 @@ void UI2DProject::guiSavePreset(string presetName){
 
 //  Others
 //
-void UI2DProject::guiShow(){
+void ofx2DPro::guiShow(){
     for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         (*it)->enable();
     }
     bGui = true;
 }
 
-void UI2DProject::guiHide(){
+void ofx2DPro::guiHide(){
     for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         (*it)->disable();
     }
     bGui = false;
 }
 
-void UI2DProject::guiToggle(){
+void ofx2DPro::guiToggle(){
     for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
         (*it)->toggleVisible();
     }
     bGui = !bGui;
 }
 
-void UI2DProject::guiArrange(int _type){
+void ofx2DPro::guiArrange(int _type){
     if (_type == 0){
         for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
             (*it)->toggleMinified();
@@ -691,7 +691,7 @@ void UI2DProject::guiArrange(int _type){
     }
 }
 
-ofFbo& UI2DProject::getRenderTarget(int viewNumber){
+ofFbo& ofx2DPro::getRenderTarget(int viewNumber){
     ofFbo *renderTarget = &renderTargets[viewNumber];
     int width = ofGetWidth() / numViewports;
     int height = ofGetHeight();
@@ -718,23 +718,23 @@ ofFbo& UI2DProject::getRenderTarget(int viewNumber){
     return *renderTarget;
 }
 
-void UI2DProject::selfPostDraw(){
-    int offsetX = UI2DProject::getRenderTarget().getWidth();
+void ofx2DPro::selfPostDraw(){
+    int offsetX = ofx2DPro::getRenderTarget().getWidth();
     for(int i=0;i<numViewports;i++){
         if(!renderFlipped){
-            UI2DProject::getRenderTarget(i).draw(offsetX*i
+            ofx2DPro::getRenderTarget(i).draw(offsetX*i
                                                  , 0
-                                                 , UI2DProject::getRenderTarget(i).getWidth()
-                                                 , UI2DProject::getRenderTarget(i).getHeight());
+                                                 , ofx2DPro::getRenderTarget(i).getWidth()
+                                                 , ofx2DPro::getRenderTarget(i).getHeight());
         } else {
-            UI2DProject::getRenderTarget(i).draw(offsetX*i
-                                                 , UI2DProject::getRenderTarget(i).getHeight()
-                                                 , UI2DProject::getRenderTarget(i).getWidth()
-                                                 , -UI2DProject::getRenderTarget(i).getHeight());
+            ofx2DPro::getRenderTarget(i).draw(offsetX*i
+                                                 , ofx2DPro::getRenderTarget(i).getHeight()
+                                                 , ofx2DPro::getRenderTarget(i).getWidth()
+                                                 , -ofx2DPro::getRenderTarget(i).getHeight());
         }
     }
 }
 
-void UI2DProject::windowResized(ofResizeEventArgs &args){
+void ofx2DPro::windowResized(ofResizeEventArgs &args){
     selfWindowResized(args);
 }

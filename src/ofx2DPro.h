@@ -1,5 +1,5 @@
 //
-//  UI2DProject.h
+//  ofx2DPro.h
 //
 //  Copyright (c) 2013 Patricio Gonzalez Vivo <http://patriciogonzalezvivo.com>
 //
@@ -35,14 +35,14 @@
 #endif
 
 #ifdef TARGET_RASPBERRY_PI
-class UI2DProject : public SSHKeyListener {
+class ofx2DPro : public SSHKeyListener {
 #else 
-class UI2DProject {
+class ofx2DPro {
 #endif
 public:
     
-	UI2DProject():background(NULL),bPlaying(false){};
-	virtual ~UI2DProject(){};
+	ofx2DPro():background(NULL),bPlaying(false){};
+	virtual ~ofx2DPro(){};
 	
 	//--------------------- VIRTUAL CLASSES TO EDIT
     //
@@ -131,7 +131,7 @@ protected:
     virtual void    guiHide();
     virtual void    guiToggle();
     virtual void    guiArrange( int _order_type );
-    virtual void    guiAdd(UIClass &_uiClass);
+    virtual void    guiAdd(UIClass &_UIClass);
     virtual void    guiEvent(ofxUIEventArgs &e);
     virtual void    guiAllEvents(ofxUIEventArgs &e);
     

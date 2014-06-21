@@ -1,28 +1,33 @@
-#include "UITime2DProject.h"
+#include "ofxTimeline3DPro.h"
 
-void UITime2DProject::play(){
+void ofxTimeline3DPro::play(){
 	if(!bPlaying){
-        UI2DProject::play();
+        ofx3DPro::play();
+        
         timeline->setCurrentFrame(0);
+		if(cameraTrack->getKeyframes().size() > 0){
+			cameraTrack->lockCameraToTrack = true;
+		}
 		timeline->play();
 	}
 }
 
-void UITime2DProject::stop(){
+void ofxTimeline3DPro::stop(){
 	if(bPlaying){
 		timeline->stop();
-        UI2DProject::stop();
+		cameraTrack->lockCameraToTrack = false;
+        ofx3DPro::stop();
 	}
 }
 
 #define REZANATOR_GUI_ALPHA_MULTIPLIER 4
 
-void UITime2DProject::update(ofEventArgs & args){
+void ofxTimeline3DPro::update(ofEventArgs & args){
     if(bEnableTimeline){
         updateTimelineUIParams();
     }
     
-    UI2DProject::update(args);
+    ofx3DPro::update(args);
 	
 	//Make this happen only when the timeline is modified by the user or when a new track is added.
 	if(!ofGetMousePressed()){
@@ -31,34 +36,45 @@ void UITime2DProject::update(ofEventArgs & args){
 	}
 }
 
-void UITime2DProject::draw(ofEventArgs & args){
+void ofxTimeline3DPro::draw(ofEventArgs & args){
     
-    UI2DProject::draw(args);
+    ofx3DPro::draw(args);
     
 	if(timeline != NULL){
         
         if ( timeline->getIsShowing() ){
             glDisable(GL_DEPTH_TEST);
             glDisable(GL_LIGHTING);
-            ofEnableAlphaBlending();
             ofPushStyle();
             ofFill();
-            ofSetColor(0,50);
+            ofSetColor(0,100);
             ofRect(4, ofGetHeight() - timeline->getHeight() - 4, ofGetWidth() - 8, timeline->getHeight());
             ofPopStyle();
         }
-    
+        
 		timeline->draw();
 	}
 }
 
-void UITime2DProject::exit(ofEventArgs & args){
+void ofxTimeline3DPro::exit(ofEventArgs & args){
     if(logGui.isRecording()){
         logGui.record(false);
     }
     
     guiSave();
     
+    //  3D Scene
+    //
+    lights.clear();
+    materials.clear();
+    guis.clear();
+	
+    //  TimeLine
+    //
+	if(cameraTrack != NULL){
+        delete cameraTrack;
+        cameraTrack = NULL;
+    }
     if(timeline != NULL){
         delete timeline;
         timeline = NULL;
@@ -67,35 +83,42 @@ void UITime2DProject::exit(ofEventArgs & args){
     selfExit();
 }
 
-void UITime2DProject::keyPressed(ofKeyEventArgs & args){
+void ofxTimeline3DPro::keyPressed(ofKeyEventArgs & args){
     
 	if(timeline->isModal()){
 		return;
 	}
     
-    UI2DProject::keyPressed(args);
+    ofx3DPro::keyPressed(args);
 	
     switch (args.key){
         case ' ':{
 			timeline->togglePlay();
-//            ((ofxUIToggle *) tlGui->getWidget("ENABLE"))->setValue(timeline->getIsPlaying());
-//            ((ofxUIToggle *) tlGui->getWidget("ENABLE"))->triggerSelf();
+            ((ofxUIToggle *) tlGui->getWidget("ENABLE"))->setValue(timeline->getIsPlaying());
+            ((ofxUIToggle *) tlGui->getWidget("ENABLE"))->triggerSelf();
         }
+            break;
+		case 'T':
+			cameraTrack->addKeyframe();
+			break;
+		case 'L':
+			cameraTrack->lockCameraToTrack = !cameraTrack->lockCameraToTrack;
+			break;
     }
 }
 
 //-------------------------------------------------
 
-bool UITime2DProject::cursorIsOverGUI(){
+bool ofxTimeline3DPro::cursorIsOverGUI(){
 	if(timeline->getDrawRect().inside(ofGetMouseX(),ofGetMouseY())){
 		return true;
 	}
 
-    return UI2DProject::cursorIsOverGUI();
+    return ofx2DPro::cursorIsOverGUI();
 }
 
-void UITime2DProject::setupCoreGuis(){
-    UI2DProject::setupCoreGuis();
+void ofxTimeline3DPro::setupCoreGuis(){
+    ofx3DPro::setupCoreGuis();
     
     //  This is the specific of TIMELINE
     //
@@ -104,17 +127,17 @@ void UITime2DProject::setupCoreGuis(){
     setupTimelineGui();
 }
 
-void UITime2DProject::setupTimeLineParams(){
+void ofxTimeline3DPro::setupTimeLineParams(){
 	timeline = NULL;
     bShowTimeline = false;
 	bTimelineIsIndefinite = true;
     bDeleteTimelineTrack = false;
     timelineDuration = 60;
-//    bEnableTimeline = true;
+    bEnableTimeline = false;
     bEnableTimelineTrackCreation = false;
 }
 
-void UITime2DProject::setupTimeline(){
+void ofxTimeline3DPro::setupTimeline(){
     if(timeline != NULL){
         delete timeline;
         timeline = NULL;
@@ -132,7 +155,16 @@ void UITime2DProject::setupTimeline(){
 	timeline->setDurationInSeconds(60);
 	timeline->setLoopType(OF_LOOP_NONE);
     timeline->setPageName(ofToUpper(getSystemName()));
-		
+	
+    if(cameraTrack!=NULL){
+        delete cameraTrack;
+    }
+    
+	cameraTrack = new ofxTLCameraTrack();
+	cameraTrack->setCamera(getCameraRef());
+	cameraTrack->setXMLFileName(getDataPath()+"Presets/Working/Timeline/cameraTrack.xml");
+    timeline->addTrack("Camera", cameraTrack);
+	
     ofDirectory dir;
     string workingDirectoryName = getDataPath()+"Presets/Working/Timeline/";
     if(!dir.doesDirectoryExist(workingDirectoryName)){
@@ -140,7 +172,7 @@ void UITime2DProject::setupTimeline(){
     }
     
     timeline->setWorkingFolder(getDataPath()+"Presets/Working/Timeline/");
-    ofAddListener(timeline->events().bangFired, this, &UITime2DProject::timelineBangEvent);
+    ofAddListener(timeline->events().bangFired, this, &ofxTimeline3DPro::timelineBangEvent);
     
     if(bShowTimeline){
         timeline->show();
@@ -151,17 +183,24 @@ void UITime2DProject::setupTimeline(){
     selfSetupTimeline();
 }
 
-void UITime2DProject::resetTimeline(){
+void ofxTimeline3DPro::resetTimeline(){
     
     if(timeline != NULL){
-        ofRemoveListener(timeline->events().bangFired, this, &UITime2DProject::timelineBangEvent);
+        ofRemoveListener(timeline->events().bangFired, this, &ofxTimeline3DPro::timelineBangEvent);
         timeline->reset();
+    }
+    
+    if(cameraTrack != NULL){
+        cameraTrack->disable();
+        cameraTrack->lockCameraToTrack = false;
+        delete cameraTrack;
+        cameraTrack = NULL;
     }
     
     setupTimeline();
 }
 
-void UITime2DProject::timelineBangEvent(ofxTLBangEventArgs& args){
+void ofxTimeline3DPro::timelineBangEvent(ofxTLBangEventArgs& args){
 	
     if(bEnableTimeline){
         map<ofxTLBangs*, ofxUIButton*>::iterator it = tlButtonMap.find((ofxTLBangs *)args.track);
@@ -174,7 +213,7 @@ void UITime2DProject::timelineBangEvent(ofxTLBangEventArgs& args){
     }
 }
 
-void UITime2DProject::setupTimelineGui(){
+void ofxTimeline3DPro::setupTimelineGui(){
     
     UIReference tmp( new ofxUISuperCanvas("TIMELINE", guiTemplate) );
     tlGui = tmp;
@@ -191,7 +230,7 @@ void UITime2DProject::setupTimelineGui(){
     tlGui->addWidgetToHeader(toggle);
     tlGui->addSpacer();
     
-//    tlGui->addNumberDialer("DURATION", 0.0, 60*5, &timelineDuration, 0.0)->setDisplayLabel(true);
+    tlGui->addNumberDialer("DURATION", 0.0, 60*5, &timelineDuration, 1);//->setDisplayLabel(true);
     tlGui->addToggle("INDEFINITE", &bTimelineIsIndefinite);
     
     tlGui->addToggle("ANIMATE", &bEnableTimelineTrackCreation);
@@ -201,11 +240,11 @@ void UITime2DProject::setupTimelineGui(){
     
     selfSetupTimelineGui();
     tlGui->autoSizeToFitWidgets();
-    ofAddListener(tlGui->newGUIEvent,this,&UITime2DProject::guiTimelineEvent);
+    ofAddListener(tlGui->newGUIEvent,this,&ofxTimeline3DPro::guiTimelineEvent);
     guis.push_back(tlGui);
 }
 
-void UITime2DProject::guiTimelineEvent(ofxUIEventArgs &e){
+void ofxTimeline3DPro::guiTimelineEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
     if(name == "DURATION"){
 //		cout << "****** TL duration changed " << timelineDuration << endl;
@@ -243,43 +282,43 @@ void UITime2DProject::guiTimelineEvent(ofxUIEventArgs &e){
     }
 }
 
-void UITime2DProject::setTimelineTrackDeletion(bool state){
+void ofxTimeline3DPro::setTimelineTrackDeletion(bool state){
     bDeleteTimelineTrack = state;
     if(bDeleteTimelineTrack){
         bEnableTimeline = false;
         for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
             if((*it)->getName() != "TimelineSettings"){
-                ofAddListener((*it)->newGUIEvent,this,&UITime2DProject::guiAllEvents);
+                ofAddListener((*it)->newGUIEvent,this,&ofxTimeline3DPro::guiAllEvents);
             }
         }
     } else {
         for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
             if((*it)->getName() != "TimelineSettings"){
-                ofRemoveListener((*it)->newGUIEvent,this,&UITime2DProject::guiAllEvents);
+                ofRemoveListener((*it)->newGUIEvent,this,&ofxTimeline3DPro::guiAllEvents);
             }
         }
     }
 }
 
-void UITime2DProject::setTimelineTrackCreation(bool state){
+void ofxTimeline3DPro::setTimelineTrackCreation(bool state){
     bEnableTimelineTrackCreation = state;
     if(bEnableTimelineTrackCreation){
         bEnableTimeline = false;
         for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
             if((*it)->getName() != "TimelineSettings"){
-                ofAddListener((*it)->newGUIEvent,this,&UITime2DProject::guiAllEvents);
+                ofAddListener((*it)->newGUIEvent,this,&ofxTimeline3DPro::guiAllEvents);
             }
         }
     } else {
         for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
             if((*it)->getName() != "TimelineSettings"){
-                ofRemoveListener((*it)->newGUIEvent,this,&UITime2DProject::guiAllEvents);
+                ofRemoveListener((*it)->newGUIEvent,this,&ofxTimeline3DPro::guiAllEvents);
             }
         }
     }
 }
 
-void UITime2DProject::guiAllEvents(ofxUIEventArgs &e){
+void ofxTimeline3DPro::guiAllEvents(ofxUIEventArgs &e){
     //All GUIS except for the Timeline UI will send events to this function
     if(bEnableTimelineTrackCreation){
         bindWidgetToTimeline(e.widget);
@@ -291,8 +330,7 @@ void UITime2DProject::guiAllEvents(ofxUIEventArgs &e){
         setTimelineTrackDeletion(false);
     }
 }
-
-void UITime2DProject::bindWidgetToTimeline(ofxUIWidget* widget){
+void ofxTimeline3DPro::bindWidgetToTimeline(ofxUIWidget* widget){
     string parentName = ((ofxUISuperCanvas *) widget->getCanvasParent())->getCanvasTitle()->getLabel();
     timeline->addPage(parentName, true);
     timeline->setCurrentPage(parentName);
@@ -361,10 +399,10 @@ void UITime2DProject::bindWidgetToTimeline(ofxUIWidget* widget){
         default:
             break;
     }
-
+    
 }
 
-void UITime2DProject::unBindWidgetFromTimeline(ofxUIWidget* widget){
+void ofxTimeline3DPro::unBindWidgetFromTimeline(ofxUIWidget* widget){
     string parentName = ((ofxUISuperCanvas *) widget->getCanvasParent())->getCanvasTitle()->getLabel();
     timeline->setCurrentPage(parentName);
     
@@ -440,7 +478,8 @@ void UITime2DProject::unBindWidgetFromTimeline(ofxUIWidget* widget){
     }
 }
 
-void UITime2DProject::updateTimelineUIParams(){
+void ofxTimeline3DPro::updateTimelineUIParams()
+{
     for(map<ofxUIToggle*, ofxTLSwitches*>::iterator it = tlToggleMap.begin(); it != tlToggleMap.end(); ++it){
         ofxUIToggle *t = it->first;
         ofxTLSwitches *tls = it->second;
@@ -465,9 +504,8 @@ void UITime2DProject::updateTimelineUIParams(){
     }
 }
 
-void UITime2DProject::saveTimelineUIMappings(string path){
-    if(ofFile::doesFileExist(path))
-    {
+void ofxTimeline3DPro::saveTimelineUIMappings(string path){
+    if(ofFile::doesFileExist(path)){
 		//        cout << "DELETING OLD MAPPING FILE" << endl;
         ofFile::removeFile(path);
     }
@@ -479,24 +517,19 @@ void UITime2DProject::saveTimelineUIMappings(string path){
     XML->pushTag("Map", mapIndex);
     
     int bangsIndex = XML->addTag("Bangs");
-    if(XML->pushTag("Bangs", bangsIndex))
-    {
-        for(map<ofxTLBangs*, ofxUIButton*>::iterator it = tlButtonMap.begin(); it != tlButtonMap.end(); ++it)
-        {
+    if(XML->pushTag("Bangs", bangsIndex)){
+        for(map<ofxTLBangs*, ofxUIButton*>::iterator it = tlButtonMap.begin(); it != tlButtonMap.end(); ++it){
             int index = XML->addTag("Mapping");
-            if(XML->pushTag("Mapping", index))
-            {
+            if(XML->pushTag("Mapping", index)){
                 int wIndex = XML->addTag("Widget");
-                if(XML->pushTag("Widget", wIndex))
-                {
+                if(XML->pushTag("Widget", wIndex)){
                     XML->setValue("WidgetName", it->second->getName(), 0);
                     XML->setValue("WidgetID", it->second->getID(), 0);
                     XML->setValue("WidgetCanvasParent", it->second->getCanvasParent()->getName(), 0);
                     XML->popTag();
                 }
                 int tlIndex = XML->addTag("Track");
-                if(XML->pushTag("Track", tlIndex))
-                {
+                if(XML->pushTag("Track", tlIndex)){
                     XML->popTag();
                 }
                 XML->popTag();
@@ -506,24 +539,19 @@ void UITime2DProject::saveTimelineUIMappings(string path){
     }
     
     int switchesIndex = XML->addTag("Switches");
-    if(XML->pushTag("Switches", switchesIndex))
-    {
-        for(map<ofxUIToggle*, ofxTLSwitches*>::iterator it = tlToggleMap.begin(); it != tlToggleMap.end(); ++it)
-        {
+    if(XML->pushTag("Switches", switchesIndex)){
+        for(map<ofxUIToggle*, ofxTLSwitches*>::iterator it = tlToggleMap.begin(); it != tlToggleMap.end(); ++it){
             int index = XML->addTag("Mapping");
-            if(XML->pushTag("Mapping", index))
-            {
+            if(XML->pushTag("Mapping", index)){
                 int wIndex = XML->addTag("Widget");
-                if(XML->pushTag("Widget", wIndex))
-                {
+                if(XML->pushTag("Widget", wIndex)){
                     XML->setValue("WidgetName", it->first->getName(), 0);
                     XML->setValue("WidgetID", it->first->getID(), 0);
                     XML->setValue("WidgetCanvasParent", it->first->getCanvasParent()->getName(), 0);
                     XML->popTag();
                 }
                 int tlIndex = XML->addTag("Track");
-                if(XML->pushTag("Track", tlIndex))
-                {
+                if(XML->pushTag("Track", tlIndex)){
                     XML->popTag();
                 }
                 XML->popTag();
@@ -533,24 +561,19 @@ void UITime2DProject::saveTimelineUIMappings(string path){
     }
     
     int sliderCurvesIndex = XML->addTag("SliderCurves");
-    if(XML->pushTag("SliderCurves", sliderCurvesIndex))
-    {
-        for(map<ofxUISlider*, ofxTLCurves*>::iterator it = tlSliderMap.begin(); it != tlSliderMap.end(); ++it)
-        {
+    if(XML->pushTag("SliderCurves", sliderCurvesIndex)){
+        for(map<ofxUISlider*, ofxTLCurves*>::iterator it = tlSliderMap.begin(); it != tlSliderMap.end(); ++it){
             int index = XML->addTag("Mapping");
-            if(XML->pushTag("Mapping", index))
-            {
+            if(XML->pushTag("Mapping", index)){
                 int wIndex = XML->addTag("Widget");
-                if(XML->pushTag("Widget", wIndex))
-                {
+                if(XML->pushTag("Widget", wIndex)){
                     XML->setValue("WidgetName", it->first->getName(), 0);
                     XML->setValue("WidgetID", it->first->getID(), 0);
                     XML->setValue("WidgetCanvasParent", it->first->getCanvasParent()->getName(), 0);
                     XML->popTag();
                 }
                 int tlIndex = XML->addTag("Track");
-                if(XML->pushTag("Track", tlIndex))
-                {
+                if(XML->pushTag("Track", tlIndex)){
                     XML->popTag();
                 }
                 XML->popTag();
@@ -560,24 +583,19 @@ void UITime2DProject::saveTimelineUIMappings(string path){
     }
     
     int numberDialerCurvesIndex = XML->addTag("NumberDialerCurves");
-    if(XML->pushTag("NumberDialerCurves", numberDialerCurvesIndex))
-    {
-        for(map<ofxUINumberDialer*, ofxTLCurves*>::iterator it = tlDialerMap.begin(); it != tlDialerMap.end(); ++it)
-        {
+    if(XML->pushTag("NumberDialerCurves", numberDialerCurvesIndex)){
+        for(map<ofxUINumberDialer*, ofxTLCurves*>::iterator it = tlDialerMap.begin(); it != tlDialerMap.end(); ++it){
             int index = XML->addTag("Mapping");
-            if(XML->pushTag("Mapping", index))
-            {
+            if(XML->pushTag("Mapping", index)){
                 int wIndex = XML->addTag("Widget");
-                if(XML->pushTag("Widget", wIndex))
-                {
+                if(XML->pushTag("Widget", wIndex)){
                     XML->setValue("WidgetName", it->first->getName(), 0);
                     XML->setValue("WidgetID", it->first->getID(), 0);
                     XML->setValue("WidgetCanvasParent", it->first->getCanvasParent()->getName(), 0);
                     XML->popTag();
                 }
                 int tlIndex = XML->addTag("Track");
-                if(XML->pushTag("Track", tlIndex))
-                {
+                if(XML->pushTag("Track", tlIndex)){
                     XML->popTag();
                 }
                 XML->popTag();
@@ -591,7 +609,7 @@ void UITime2DProject::saveTimelineUIMappings(string path){
     delete XML;
 }
 
-void UITime2DProject::loadTimelineUIMappings(string path){
+void ofxTimeline3DPro::loadTimelineUIMappings(string path){
     tlButtonMap.clear();
     tlToggleMap.clear();
     tlSliderMap.clear();
@@ -600,17 +618,13 @@ void UITime2DProject::loadTimelineUIMappings(string path){
 	//    cout << "LOADING TIMELINE UI MAPPINGS" << endl;
     ofxXmlSettings *XML = new ofxXmlSettings();
     XML->loadFile(path);
-    if(XML->tagExists("Map",0) && XML->pushTag("Map", 0))
-    {
-        if(XML->pushTag("Bangs", 0))
-        {
+    if(XML->tagExists("Map",0) && XML->pushTag("Map", 0)){
+        if(XML->pushTag("Bangs", 0)){
             int widgetTags = XML->getNumTags("Mapping");
-            for(int i = 0; i < widgetTags; i++)
-            {
-                if(XML->pushTag("Mapping", i))
-                {
-                    if(XML->pushTag("Widget", 0))
-                    {
+            for(int i = 0; i < widgetTags; i++){
+                if(XML->pushTag("Mapping", i)){
+                    if(XML->pushTag("Widget", 0)){
+                        
                         string widgetname = XML->getValue("WidgetName", "NULL", 0);
                         int widgetID = XML->getValue("WidgetID", -1, 0);
                         string widgetCanvasParent = XML->getValue("WidgetCanvasParent", "NULL", 0);
@@ -620,7 +634,6 @@ void UITime2DProject::loadTimelineUIMappings(string path){
                                 ofxUIWidget *w = guis[i]->getWidget(widgetname, widgetID);
                                 if(w != NULL){
                                     bindWidgetToTimeline(w);
-                                    break;
                                 }
                             }
                         }
@@ -651,11 +664,10 @@ void UITime2DProject::loadTimelineUIMappings(string path){
                                 ofxUIWidget *w = guis[i]->getWidget(widgetname, widgetID);
                                 if(w != NULL){
                                     bindWidgetToTimeline(w);
-                                    break;
                                 }
                             }
                         }
-
+                        
                         XML->popTag();
                     }
                     XML->popTag();
@@ -682,7 +694,6 @@ void UITime2DProject::loadTimelineUIMappings(string path){
                                 ofxUIWidget *w = guis[i]->getWidget(widgetname, widgetID);
                                 if(w != NULL){
                                     bindWidgetToTimeline(w);
-                                    break;
                                 }
                             }
                         }
@@ -695,25 +706,20 @@ void UITime2DProject::loadTimelineUIMappings(string path){
             XML->popTag();
         }
         
-        if(XML->pushTag("NumberDialerCurves", 0))
-        {
+        if(XML->pushTag("NumberDialerCurves", 0)){
             int widgetTags = XML->getNumTags("Mapping");
-            for(int i = 0; i < widgetTags; i++)
-            {
-                if(XML->pushTag("Mapping", i))
-                {
-                    if(XML->pushTag("Widget", 0))
-                    {
+            for(int i = 0; i < widgetTags; i++){
+                if(XML->pushTag("Mapping", i)){
+                    if(XML->pushTag("Widget", 0)){
                         string widgetname = XML->getValue("WidgetName", "NULL", 0);
                         int widgetID = XML->getValue("WidgetID", -1, 0);
                         string widgetCanvasParent = XML->getValue("WidgetCanvasParent", "NULL", 0);
-
+                        
                         for (int i = 0 ; i < guis.size(); i++) {
                             if (guis[i]->getName() == widgetCanvasParent ){
                                 ofxUIWidget *w = guis[i]->getWidget(widgetname, widgetID);
                                 if(w != NULL){
                                     bindWidgetToTimeline(w);
-                                    break;
                                 }
                             }
                         }
@@ -731,260 +737,33 @@ void UITime2DProject::loadTimelineUIMappings(string path){
 	timeline->setCurrentPage(0);
 }
 
-//void UITime2DProject::saveTimelineUIMappings(string path){
-//    if(ofFile::doesFileExist(path)){
-//		//        cout << "DELETING OLD MAPPING FILE" << endl;
-//        ofFile::removeFile(path);
-//    }
-//	//    cout << "TIMELINE UI MAPPER SAVING" << endl;
-//    ofxXmlSettings *XML = new ofxXmlSettings(path);
-//    XML->clear();
-//    
-//    int mapIndex = XML->addTag("Map");
-//    XML->pushTag("Map", mapIndex);
-//    
-//    int bangsIndex = XML->addTag("Bangs");
-//    if(XML->pushTag("Bangs", bangsIndex)){
-//        for(map<ofxTLBangs*, ofxUIButton*>::iterator it = tlButtonMap.begin(); it != tlButtonMap.end(); ++it){
-//            int index = XML->addTag("Mapping");
-//            if(XML->pushTag("Mapping", index)){
-//                int wIndex = XML->addTag("Widget");
-//                if(XML->pushTag("Widget", wIndex)){
-//                    XML->setValue("WidgetName", it->second->getName(), 0);
-//                    XML->setValue("WidgetID", it->second->getID(), 0);
-//                    XML->setValue("WidgetCanvasParent", it->second->getCanvasParent()->getName(), 0);
-//                    XML->popTag();
-//                }
-//                int tlIndex = XML->addTag("Track");
-//                if(XML->pushTag("Track", tlIndex)){
-//                    XML->popTag();
-//                }
-//                XML->popTag();
-//            }
-//        }
-//        XML->popTag();
-//    }
-//    
-//    int switchesIndex = XML->addTag("Switches");
-//    if(XML->pushTag("Switches", switchesIndex)){
-//        for(map<ofxUIToggle*, ofxTLSwitches*>::iterator it = tlToggleMap.begin(); it != tlToggleMap.end(); ++it){
-//            int index = XML->addTag("Mapping");
-//            if(XML->pushTag("Mapping", index)){
-//                int wIndex = XML->addTag("Widget");
-//                if(XML->pushTag("Widget", wIndex)){
-//                    XML->setValue("WidgetName", it->first->getName(), 0);
-//                    XML->setValue("WidgetID", it->first->getID(), 0);
-//                    XML->setValue("WidgetCanvasParent", it->first->getCanvasParent()->getName(), 0);
-//                    XML->popTag();
-//                }
-//                int tlIndex = XML->addTag("Track");
-//                if(XML->pushTag("Track", tlIndex)){
-//                    XML->popTag();
-//                }
-//                XML->popTag();
-//            }
-//        }
-//        XML->popTag();
-//    }
-//    
-//    int sliderCurvesIndex = XML->addTag("SliderCurves");
-//    if(XML->pushTag("SliderCurves", sliderCurvesIndex)){
-//        for(map<ofxUISlider*, ofxTLCurves*>::iterator it = tlSliderMap.begin(); it != tlSliderMap.end(); ++it){
-//            int index = XML->addTag("Mapping");
-//            if(XML->pushTag("Mapping", index)){
-//                int wIndex = XML->addTag("Widget");
-//                if(XML->pushTag("Widget", wIndex)){
-//                    XML->setValue("WidgetName", it->first->getName(), 0);
-//                    XML->setValue("WidgetID", it->first->getID(), 0);
-//                    XML->setValue("WidgetCanvasParent", it->first->getCanvasParent()->getName(), 0);
-//                    XML->popTag();
-//                }
-//                int tlIndex = XML->addTag("Track");
-//                if(XML->pushTag("Track", tlIndex)){
-//                    XML->popTag();
-//                }
-//                XML->popTag();
-//            }
-//        }
-//        XML->popTag();
-//    }
-//    
-//    int numberDialerCurvesIndex = XML->addTag("NumberDialerCurves");
-//    if(XML->pushTag("NumberDialerCurves", numberDialerCurvesIndex)){
-//        for(map<ofxUINumberDialer*, ofxTLCurves*>::iterator it = tlDialerMap.begin(); it != tlDialerMap.end(); ++it){
-//            int index = XML->addTag("Mapping");
-//            if(XML->pushTag("Mapping", index)){
-//                int wIndex = XML->addTag("Widget");
-//                if(XML->pushTag("Widget", wIndex)){
-//                    XML->setValue("WidgetName", it->first->getName(), 0);
-//                    XML->setValue("WidgetID", it->first->getID(), 0);
-//                    XML->setValue("WidgetCanvasParent", it->first->getCanvasParent()->getName(), 0);
-//                    XML->popTag();
-//                }
-//                int tlIndex = XML->addTag("Track");
-//                if(XML->pushTag("Track", tlIndex)){
-//                    XML->popTag();
-//                }
-//                XML->popTag();
-//            }
-//        }
-//        XML->popTag();
-//    }
-//    
-//    XML->popTag();
-//    XML->saveFile(path);
-//    delete XML;
-//}
-//
-//void UITime2DProject::loadTimelineUIMappings(string path){
-//    tlButtonMap.clear();
-//    tlToggleMap.clear();
-//    tlSliderMap.clear();
-//    tlDialerMap.clear();
-//    
-//	//    cout << "LOADING TIMELINE UI MAPPINGS" << endl;
-//    ofxXmlSettings *XML = new ofxXmlSettings();
-//    XML->loadFile(path);
-//    if(XML->tagExists("Map",0) && XML->pushTag("Map", 0)){
-//        if(XML->pushTag("Bangs", 0)){
-//            int widgetTags = XML->getNumTags("Mapping");
-//            for(int i = 0; i < widgetTags; i++){
-//                if(XML->pushTag("Mapping", i)){
-//                    if(XML->pushTag("Widget", 0)){
-//                        
-//                        string widgetname = XML->getValue("WidgetName", "NULL", 0);
-//                        int widgetID = XML->getValue("WidgetID", -1, 0);
-//                        string widgetCanvasParent = XML->getValue("WidgetCanvasParent", "NULL", 0);
-//                        
-//                        for (int i = 0 ; i < guis.size(); i++) {
-//                            if (guis[i]->getName() == widgetCanvasParent ){
-//                                ofxUIWidget *w = guis[i]->getWidget(widgetname, widgetID);
-//                                if(w != NULL){
-//                                    bindWidgetToTimeline(w);
-//                                }
-//                            }
-//                        }
-//
-//                        XML->popTag();
-//                    }
-//                    XML->popTag();
-//                }
-//            }
-//            XML->popTag();
-//        }
-//        
-//        if(XML->pushTag("Switches", 0))
-//        {
-//            int widgetTags = XML->getNumTags("Mapping");
-//            for(int i = 0; i < widgetTags; i++)
-//            {
-//                if(XML->pushTag("Mapping", i))
-//                {
-//                    if(XML->pushTag("Widget", 0))
-//                    {
-//                        string widgetname = XML->getValue("WidgetName", "NULL", 0);
-//                        int widgetID = XML->getValue("WidgetID", -1, 0);
-//                        string widgetCanvasParent = XML->getValue("WidgetCanvasParent", "NULL", 0);
-//                        cout << widgetCanvasParent << endl;
-//                        
-//                        for (int i = 0 ; i < guis.size(); i++) {
-//                            if (guis[i]->getName() == widgetCanvasParent ){
-//                                ofxUIWidget *w = guis[i]->getWidget(widgetname, widgetID);
-//                                if(w != NULL){
-//                                    bindWidgetToTimeline(w);
-//                                }
-//                                break;
-//                            }
-//                        }
-//                        
-//                        XML->popTag();
-//                    }
-//                    XML->popTag();
-//                }
-//            }
-//            XML->popTag();
-//        }
-//        
-//        if(XML->pushTag("SliderCurves", 0))
-//        {
-//            int widgetTags = XML->getNumTags("Mapping");
-//            for(int i = 0; i < widgetTags; i++)
-//            {
-//                if(XML->pushTag("Mapping", i))
-//                {
-//                    if(XML->pushTag("Widget", 0))
-//                    {
-//                        string widgetname = XML->getValue("WidgetName", "NULL", 0);
-//                        int widgetID = XML->getValue("WidgetID", -1, 0);
-//                        string widgetCanvasParent = XML->getValue("WidgetCanvasParent", "NULL", 0);
-//                        
-//                        for (int i = 0 ; i < guis.size(); i++) {
-//                            if (guis[i]->getName() == widgetCanvasParent ){
-//                                ofxUIWidget *w = guis[i]->getWidget(widgetname, widgetID);
-//                                if(w != NULL){
-//                                    bindWidgetToTimeline(w);
-//                                }
-//                            }
-//                        }
-//                        
-//                        XML->popTag();
-//                    }
-//                    XML->popTag();
-//                }
-//            }
-//            XML->popTag();
-//        }
-//        
-//        if(XML->pushTag("NumberDialerCurves", 0)){
-//            int widgetTags = XML->getNumTags("Mapping");
-//            for(int i = 0; i < widgetTags; i++){
-//                if(XML->pushTag("Mapping", i)){
-//                    if(XML->pushTag("Widget", 0)){
-//                        string widgetname = XML->getValue("WidgetName", "NULL", 0);
-//                        int widgetID = XML->getValue("WidgetID", -1, 0);
-//                        string widgetCanvasParent = XML->getValue("WidgetCanvasParent", "NULL", 0);
-//                        
-//                        for (int i = 0 ; i < guis.size(); i++) {
-//                            if (guis[i]->getName() == widgetCanvasParent ){
-//                                ofxUIWidget *w = guis[i]->getWidget(widgetname, widgetID);
-//                                if(w != NULL){
-//                                    bindWidgetToTimeline(w);
-//                                }
-//                            }
-//                        }
-//                        
-//                        XML->popTag();
-//                    }
-//                    XML->popTag();
-//                }
-//            }
-//            XML->popTag();
-//        }
-//        XML->popTag();
-//    }
-//	
-//	timeline->setCurrentPage(0);
-//}
 
-
-void UITime2DProject::guiLoad(){
+void ofxTimeline3DPro::guiLoad(){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
     }
+    camera->load(getDataPath()+"Presets/Working/"+"ofEasyCamSettings");
     
     resetTimeline();
     loadTimelineUIMappings(getDataPath()+"Presets/Working/UITimelineMappings.xml");
     timeline->loadTracksFromFolder(getDataPath()+"Presets/Working/Timeline/");
 }
 
-void UITime2DProject::guiLoadPresetFromPath(string presetPath){
+void ofxTimeline3DPro::guiSave(){
+    ofx3DPro::guiSave();
+
+    saveTimelineUIMappings(getDataPath()+"Presets/Working/UITimelineMappings.xml");
+    timeline->saveTracksToFolder(getDataPath()+"Presets/Working/Timeline/");
+}
+
+void ofxTimeline3DPro::guiLoadPresetFromPath(string presetPath){
     resetTimeline();
     
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(presetPath+"/"+guis[i]->getName()+".xml");
     }
+    camera->load(presetPath+"/ofEasyCamSettings");
 	
-    cout << "LOAD TIMELINE UI MAPPING" << endl;
     loadTimelineUIMappings(presetPath+"/UITimelineMappings.xml");
 	timeline->setName( ofFilePath::getBaseName( presetPath ) );
     timeline->loadTracksFromFolder(presetPath+"/Timeline/");
@@ -1024,15 +803,8 @@ void UITime2DProject::guiLoadPresetFromPath(string presetPath){
 	}
 }
 
-void UITime2DProject::guiSave(){
-    UI2DProject::guiSave();
-    
-    saveTimelineUIMappings(getDataPath()+"Presets/Working/UITimelineMappings.xml");
-    timeline->saveTracksToFolder(getDataPath()+"Presets/Working/Timeline/");
-}
-
-void UITime2DProject::guiSavePreset(string presetName){
-    UI2DProject::guiSavePreset(presetName);
+void ofxTimeline3DPro::guiSavePreset(string presetName){
+    ofx3DPro::guiSavePreset(presetName);
 	
     //  TimeLine specifics
     //
@@ -1051,18 +823,18 @@ void UITime2DProject::guiSavePreset(string presetName){
 	timeInfo.saveFile(getDataPath()+"Presets/"+presetName+"/"+"TimeInfo.xml");
 }
 
-void UITime2DProject::guiShow(){
-    UI2DProject::guiShow();
+void ofxTimeline3DPro::guiShow(){
+    ofx3DPro::guiShow();
 	timeline->show();
 }
 
-void UITime2DProject::guiHide(){
-    UI2DProject::guiHide();
+void ofxTimeline3DPro::guiHide(){
+    ofx3DPro::guiHide();
 	timeline->hide();
 }
 
-void UITime2DProject::guiToggle(){
-    UI2DProject::guiToggle();
+void ofxTimeline3DPro::guiToggle(){
+    ofx3DPro::guiToggle();
     
     bShowTimeline = !timeline->getIsShowing();
     

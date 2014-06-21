@@ -1,6 +1,5 @@
 //
 //  UICamera.h
-//  example
 //
 //  Created by Patricio Gonzalez Vivo on 11/4/13.
 //
