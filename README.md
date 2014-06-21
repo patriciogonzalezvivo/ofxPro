@@ -1,6 +1,6 @@
 # ofxPro for openFrameworks
 
-Prototyping tool for OpenFrameworks based on the core environment of CLOUDS's VisualSystems that we work together with [James George](http://www.jamesgeorge.org/) and [Reza Ali](http://www.syedrezaali.com/). **ofxPro** Is an integrations of Reza's **Rezonator** with James **ofxTimeline**, put together in  a hight modular structure, that let you:
+Prototyping tool for OpenFrameworks based on the core environment of [CLOUDS](http://www.cloudsdocumentary.com/)'s VisualSystems that we work together with [James George](http://www.jamesgeorge.org/) and [Reza Ali](http://www.syedrezaali.com/). **ofxPro** Is an integrations of Reza's **Rezonator** with James **ofxTimeline**, put together in  a hight modular structure, that let you:
 
 - record, load and animate presets on the fly.
 
