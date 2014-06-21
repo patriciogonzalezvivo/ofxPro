@@ -19,7 +19,7 @@ Prototyping tool for OpenFrameworks based on the core environment of CLOUDS's Vi
 		
 Require by core:
 
-	git clone https://github.com/rezaali/ofxUI.git
+	git clone --depth 1 https://github.com/rezaali/ofxUI.git
 
 ## USE
 
@@ -42,17 +42,17 @@ Require by core:
 
 Require by ofxTimeline: 
 
-	git clone https://github.com/Flightphase/ofxTextInputField.git
+	git clone --depth 1 https://github.com/Flightphase/ofxTextInputField.git
 
-	git clone https://github.com/YCAMInterlab/ofxTimecode.git
+	git clone --depth 1 https://github.com/YCAMInterlab/ofxTimecode.git
   
-	git clone https://github.com/ofxMSATimer/ofxMSATimer.git
+	git clone --depth 1 https://github.com/ofxMSATimer/ofxMSATimer.git
   
-	git clone https://github.com/Flightphase/ofxRange.git
+	git clone --depth 1 https://github.com/Flightphase/ofxRange.git
   
-	git clone https://github.com/arturoc/ofxTween.git
+	git clone --depth 1 https://github.com/arturoc/ofxTween.git
   
-	git clone https://github.com/YCAMInterlab/ofxTimeline.git
+	git clone --depth 1 https://github.com/YCAMInterlab/ofxTimeline.git
 
 
 ### How to Animate with timelinePro?
