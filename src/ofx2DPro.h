@@ -101,7 +101,7 @@ public:
     //  Data Folder Path
     //
     string  getDataPath();
-    virtual ofFbo& getRenderTarget(int viewNumber=0);
+    virtual ofFbo& getRenderTarget(int _viewNumber=0);
 
 	//  These events are registered to be call automatically
     //

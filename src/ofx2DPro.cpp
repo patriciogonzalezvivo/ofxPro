@@ -185,16 +185,16 @@ void ofx2DPro::draw(ofEventArgs & args){
     ofPopStyle();
 }
 
-void ofx2DPro::setupNumViewports(int num){
-    numViewports = num;
+void ofx2DPro::setupNumViewports(int _num){
+    numViewports = _num;
     
-    while(renderTargets.size() < num){
+    while(renderTargets.size() < _num){
         renderTargets.push_back(ofFbo());
     }
 }
 
-void ofx2DPro::setupRenderIsFlipped(bool flipped){
-    renderFlipped = flipped;
+void ofx2DPro::setupRenderIsFlipped(bool _flipped){
+    renderFlipped = _flipped;
 }
 
 void ofx2DPro::exit(ofEventArgs & args){
@@ -691,8 +691,12 @@ void ofx2DPro::guiArrange(int _type){
     }
 }
 
-ofFbo& ofx2DPro::getRenderTarget(int viewNumber){
-    ofFbo *renderTarget = &renderTargets[viewNumber];
+ofFbo& ofx2DPro::getRenderTarget(int _viewNumber){
+    if (_viewNumber>=numViewports) {
+        setupNumViewports(_viewNumber+1);
+    }
+    
+    ofFbo *renderTarget = &renderTargets[_viewNumber];
     int width = ofGetWidth() / numViewports;
     int height = ofGetHeight();
     if(!renderTarget->isAllocated() || renderTarget->getWidth() != width || renderTarget->getHeight() != height){
