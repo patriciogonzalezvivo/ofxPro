@@ -446,6 +446,8 @@ string ofx3DPro::cursorIsOverLight(){
 
 void ofx3DPro::lightsBegin(){
     if(bEnableLights){
+        
+        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbientColor);
         ofSetSmoothLighting(bSmoothLighting);
         ofEnableLighting();
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
