@@ -1,9 +1,10 @@
 #pragma once
 
 #include "ofMain.h"
-#include "UI2DProject.h"
+#include "ofxPro.h"
 
-#include "ProjectExample.h"
+#include "example2D.h"
+#include "example3D.h"
 
 class ofApp : public ofBaseApp{
 public:
@@ -21,5 +22,5 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    UI2DProject* project;
+    ofxPro* project;
 };

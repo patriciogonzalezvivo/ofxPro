@@ -17,11 +17,6 @@
 </Widget>
 <Widget>
     <Kind>2</Kind>
-    <Name>ALL</Name>
-    <Value>0</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
     <Name>ANOTATE</Name>
     <Value>0</Value>
 </Widget>

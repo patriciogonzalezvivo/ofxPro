@@ -1,53 +1,49 @@
 //
-//  ProjectExample.h
+//  example2D.h
 //
-//  Created by Patricio Gonzalez Vivo on 9/6/13.
+//  Created by Patricio Gonzalez Vivo on 6/21/14.
 //
 //
 
 #pragma once
 
-#include "UI3DGrid.h"
-#include "UIProject.h"
+#include "ofxPro.h"
 
-class ProjectExample : public UI3DProject {
+class example2D : public ofx2DPro {
 public:
-
+    
     string getSystemName(){
-		return "ProjectExample";
+		return "example2D";
 	}
-
+    
     void selfSetupGuis();
     void selfGuiEvent(ofxUIEventArgs &e);
-
+    
     void selfSetupSystemGui();
     void guiSystemEvent(ofxUIEventArgs &e);
 
     void selfSetupRenderGui();
     void guiRenderEvent(ofxUIEventArgs &e);
-
+    
     void selfSetup();
-
+    
     void selfBegin();
-	void selfPresetLoaded(string presetPath);
-    void selfSceneTransformation();
-
+    
     void selfUpdate();
-
+    
     void selfDraw();
-    void selfDrawOverlay();
-
+    
 	void selfEnd();
     void selfExit();
-
+    
     void selfKeyPressed(ofKeyEventArgs & args);
     void selfKeyReleased(ofKeyEventArgs & args);
-
+    
     void selfMouseDragged(ofMouseEventArgs& data);
     void selfMouseMoved(ofMouseEventArgs& data);
     void selfMousePressed(ofMouseEventArgs& data);
     void selfMouseReleased(ofMouseEventArgs& data);
-
-protected:
-    UI3DGrid grid;
+    
+    
+    float radius;
 };

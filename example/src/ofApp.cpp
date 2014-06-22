@@ -4,7 +4,7 @@
 void ofApp::setup(){
     ofSetVerticalSync(true);
 	
-	project = new ProjectExample();
+	project = new example2D();
     project->setup();
     project->play();
     
@@ -27,10 +27,17 @@ void ofApp::keyPressed(int key){
         project->stop();
         project = NULL;
         
-        project = new ProjectExample();
+        project = new example2D();
         project->setup();
         project->play();
-    } 
+    } else if( key == OF_KEY_F2){
+        project->stop();
+        project = NULL;
+        
+        project = new example3D();
+        project->setup();
+        project->play();
+    }
 }
 
 //--------------------------------------------------------------

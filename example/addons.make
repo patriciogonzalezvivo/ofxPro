@@ -1,3 +1,3 @@
+ofxPro
 ofxUI
-ofxUIProject
 ofxXmlSettings

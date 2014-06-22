@@ -47,6 +47,8 @@ void ofx2DPro::setup(){
     
     doublClickThreshold = 0.2;
     
+    setupNumViewports(1);
+    
     selfSetup();
     setupCoreGuis();
     selfSetupGuis();
