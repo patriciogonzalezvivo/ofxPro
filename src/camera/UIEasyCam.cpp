@@ -1,8 +1,7 @@
 //
 //  UIEasyCam.cpp
-//  05-Skyline
 //
-//  Created by Patricio Gonzalez Vivo on 3/16/14.
+//  Copyright (C) 2013 Patricio Gonzalez Vivo ( http://www.patriciogonzalezvivo.com )
 //
 //
 

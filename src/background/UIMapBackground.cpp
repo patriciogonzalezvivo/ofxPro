@@ -1,7 +1,7 @@
 //
 //  UIMapBackground.cpp
 //
-//  Created by Patricio Gonzalez Vivo on 1/21/14.
+//  Copyright (C) 2013 Patricio Gonzalez Vivo ( http://www.patriciogonzalezvivo.com )
 //
 //
 

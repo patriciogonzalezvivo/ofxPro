@@ -1,7 +1,7 @@
 //
 //  UIEasyCam.h
 //
-//  Created by Patricio Gonzalez Vivo on 3/16/14.
+//  Copyright (C) 2013 Patricio Gonzalez Vivo ( http://www.patriciogonzalezvivo.com )
 //
 //
 

@@ -46,7 +46,7 @@ Require by ofxTimeline:
 
 	git clone --depth 1 https://github.com/YCAMInterlab/ofxTimecode.git
   
-	git clone --depth 1 https://github.com/ofxMSATimer/ofxMSATimer.git
+	git clone --depth 1 https://github.com/obviousjim/ofxMSATimer.git
   
 	git clone --depth 1 https://github.com/Flightphase/ofxRange.git
   

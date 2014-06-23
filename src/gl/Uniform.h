@@ -1,8 +1,7 @@
 //
 //  Uniform.h
-//  Thesis
 //
-//  Created by Patricio Gonzalez Vivo on 9/20/13.
+//  Copyright (C) 2013 Patricio Gonzalez Vivo ( http://www.patriciogonzalezvivo.com )
 //
 //
 

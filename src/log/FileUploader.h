@@ -1,9 +1,5 @@
 //
 //  FileUploader.h
-//  example
-//
-//  Created by Patricio Gonzalez Vivo on 11/17/13.
-//
 //
 
 #pragma once

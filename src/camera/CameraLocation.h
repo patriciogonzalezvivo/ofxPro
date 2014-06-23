@@ -1,7 +1,7 @@
 //
 //  CameraLocation.h
 //
-//  Created by Patricio Gonzalez Vivo on 11/8/13.
+//  Copyright (C) 2013 Patricio Gonzalez Vivo ( http://www.patriciogonzalezvivo.com )
 //
 //
 

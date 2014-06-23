@@ -1,8 +1,7 @@
 //
 //  UIShader.cpp
-//  Thesis
 //
-//  Created by Patricio Gonzalez Vivo on 9/15/13.
+//  Copyright (C) 2013 Patricio Gonzalez Vivo ( http://www.patriciogonzalezvivo.com )
 //
 //
 

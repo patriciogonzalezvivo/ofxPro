@@ -1,7 +1,7 @@
 //
 //  PingPong.h
 //
-//  Created by Patricio Gonzalez Vivo on 5/16/13.
+//  Copyright (C) 2013 Patricio Gonzalez Vivo ( http://www.patriciogonzalezvivo.com )
 //
 //
 

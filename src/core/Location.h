@@ -1,7 +1,8 @@
 //
 //  Location.h
 //
-//  Created by Patricio Gonzalez Vivo on 9/24/13.
+//  Copyright (C) 2013 Patricio Gonzalez Vivo ( http://www.patriciogonzalezvivo.com )
+//
 //  Credits to:
 //              Paul Wagener https://github.com/PaulWagener/Streetview-Explorer
 //              Tom Carden https://github.com/RandomEtc/modestmaps-of

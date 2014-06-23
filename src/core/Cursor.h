@@ -1,7 +1,8 @@
 //
 //  Cursor.h
 //
-//  Created by Patricio Gonzalez Vivo on 1/27/14.
+//  Based on Elliot Woods http://www.kimchiandchips.com
+//  From https://github.com/elliotwoods/ofxGrabScene/blob/master/src/ofxGrabScene/Cursor.h
 //
 //
 

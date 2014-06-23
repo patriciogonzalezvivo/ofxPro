@@ -1,6 +1,9 @@
 //
 //  DraggableRectangle.cpp
 //
+//  Copyright (C) 2013 Patricio Gonzalez Vivo ( http://www.patriciogonzalezvivo.com )
+//
+//
 
 #include "DraggableRectangle.h"
 

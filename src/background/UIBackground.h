@@ -1,7 +1,7 @@
 //
-//  Background.h
+//  UIBackground.h
 //
-//  Created by Patricio Gonzalez Vivo on 9/14/13.
+//  Copyright (C) 2013 Patricio Gonzalez Vivo ( http://www.patriciogonzalezvivo.com )
 //
 //
 

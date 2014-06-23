@@ -1,8 +1,7 @@
 //
-//  RectangleBooks.h
+//  DraggableRectangle.h
 //
-//  This is a class that extends from ofRectangle to deal with
-//  the boxes and books (points).
+//  Copyright (C) 2013 Patricio Gonzalez Vivo ( http://www.patriciogonzalezvivo.com )
 //
 
 #pragma once
