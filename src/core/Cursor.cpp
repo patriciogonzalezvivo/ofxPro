@@ -9,14 +9,14 @@
 #include "Cursor.h"
 
 //----------
-Cursor::Cursor() {
+Cursor3D::Cursor3D() {
     memset(this->button, 0, 3);
     this->captured = false;
     this->worldValid = false;
 }
 
 //----------
-void Cursor::draw() const {
+void Cursor3D::draw() const {
     ofPushMatrix();
     ofTranslate(world);
     ofDrawBox(0.1);
@@ -51,7 +51,7 @@ void MovingCursor::end(int button) {
 
 //----------
 void MovingCursor::draw() const {
-    Cursor::draw();
+    Cursor3D::draw();
     ofLine(this->world, this->lastFrame.world);
 }
 

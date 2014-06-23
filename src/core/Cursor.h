@@ -10,9 +10,9 @@
 #include "ofMain.h"
 
 //----------
-class Cursor {
+class Cursor3D {
 public:
-    Cursor();
+    Cursor3D();
     ofVec2f screen;
     ofVec3f world;
     bool worldValid;
@@ -23,7 +23,7 @@ public:
 };
 
 //----------
-class MovingCursor : public Cursor {
+class MovingCursor : public Cursor3D {
 public:
     MovingCursor();
     
@@ -35,7 +35,7 @@ public:
     float startTime; ///< time of birth
     ofVec2f startScreen;
     ofVec3f startWorld;
-    Cursor lastFrame;
+    Cursor3D lastFrame;
     int lastUpdate;
     bool dragged;
     
