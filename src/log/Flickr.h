@@ -59,7 +59,7 @@ namespace Flickr {
         FLICKR_SIZE_B,
     };
     
-    static string getSizeURLParam( Size size );
+    string getSizeURLParam( Size size );
     
     enum MediaType {
         FLICKR_PHOTO = 0,
@@ -128,7 +128,7 @@ namespace Flickr {
         FLICKR_SORT_RELEVANCE
     };
     
-    static string getSortString( Sort sort );
+    string getSortString( Sort sort );
     
     enum PrivacyFilter {
         FLICKR_PRIVACY_PUBLIC = 0,
@@ -138,7 +138,7 @@ namespace Flickr {
         FLICKR_PRIVACY_PRIVATE
     };
     
-    static string getPrivacyString( PrivacyFilter filter );
+    string getPrivacyString( PrivacyFilter filter );
     
     // see http://www.flickr.com/services/api/flickr.photos.search.html
     
