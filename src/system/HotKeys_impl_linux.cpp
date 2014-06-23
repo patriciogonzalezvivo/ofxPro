@@ -1,6 +1,6 @@
 #include "HotKeys.h"
 
-#ifdef TARGET_LINUX
+#if defined(TARGET_LINUX) || defined(OF_TARGET_LINUX64)
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/X.h>
