@@ -7,13 +7,15 @@
 
 #pragma once
 
-#include "UIClass.h"
+#include "UIShader.h"
 
-class UISEM : public UIClass {
+class UISEM : public UIShader {
 public:
     UISEM();
     
     void    setupUI();
+    
+    bool    load(string _path);
     void    loadTexture(string _path);
     
     string  getClassName(){return "SEM";}
@@ -27,5 +29,6 @@ protected:
     
     ofxUIRadio  *textures;
     ofTexture   texture;
-    ofShader    shader;
+    
+    string  vertexShader, fragmentShader;
 };

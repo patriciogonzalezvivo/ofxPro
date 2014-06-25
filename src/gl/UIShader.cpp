@@ -45,17 +45,17 @@ void UIShader::setupUI(){
                 gui->addSlider( uniforms[i]->name, 0.0, 1.0, &uniforms[i]->value.x );
             } else if (uniforms[i]->type == UNIFORM_VEC2){
                 gui->addLabel( uniforms[i]->name, OFX_UI_FONT_SMALL);
-                gui->addMinimalSlider("x", 0.0, 1.0, &uniforms[i]->value.x,length/2.0, dim);//->setShowValue(false);
+                gui->addMinimalSlider("x", 0.0, 1.0, &uniforms[i]->value.x,length/2.0, dim);
                 gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-                gui->addMinimalSlider("y", 0.0, 1.0, &uniforms[i]->value.y, length/2.0, dim);//->setShowValue(false);
+                gui->addMinimalSlider("y", 0.0, 1.0, &uniforms[i]->value.y, length/2.0, dim);
                 gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
                 gui->addSpacer();
             } else if (uniforms[i]->type == UNIFORM_VEC3){
                 gui->addLabel( uniforms[i]->name, OFX_UI_FONT_SMALL);
-                gui->addMinimalSlider("x", 0.0, 1.0, &uniforms[i]->value.x,length/3.0, dim);//->setShowValue(false);
+                gui->addMinimalSlider("x", 0.0, 1.0, &uniforms[i]->value.x,length/3.0, dim);
                 gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-                gui->addMinimalSlider("y", 0.0, 1.0, &uniforms[i]->value.y, length/3.0, dim);//->setShowValue(false);
-                gui->addMinimalSlider("z", 0.0, 1.0, &uniforms[i]->value.z, length/3.0, dim);//->setShowValue(false);
+                gui->addMinimalSlider("y", 0.0, 1.0, &uniforms[i]->value.y, length/3.0, dim);
+                gui->addMinimalSlider("z", 0.0, 1.0, &uniforms[i]->value.z, length/3.0, dim);
                 gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
                 gui->addSpacer();
             }
@@ -65,22 +65,23 @@ void UIShader::setupUI(){
     gui->addButton("OPEN",&bOpen);
 }
 
-void UIShader::load(string _name){
+bool UIShader::load(string _name){
     ofFile gShaderFile = ofFile( ofToDataPath(_name+".geom") );
     if(gShaderFile.exists()){
-        load(_name+".frag",_name+".vert",_name+".geom");
+        return load(_name+".frag",_name+".vert",_name+".geom");
     } else {
-        load(_name+".frag",_name+".vert");
+        return load(_name+".frag",_name+".vert");
     }
 }
 
-void UIShader::load(string _fragShader, string _vertShader, string _geomShader){
-    reloadShader(_fragShader,_vertShader, _geomShader);
+bool UIShader::load(string _fragShader, string _vertShader, string _geomShader){
+    return reloadShader(_fragShader,_vertShader, _geomShader);
 }
 
-void UIShader::loadFrag(string _fragShader){
-    reloadShader( _fragShader );
+bool UIShader::loadFrag(string _fragShader){
     bVertex = false;
+    
+    return reloadShader( _fragShader );
 }
 
 void UIShader::setGeometryShaderValues(GLenum _in, GLenum _out, int _numOut){
@@ -91,10 +92,6 @@ void UIShader::setGeometryShaderValues(GLenum _in, GLenum _out, int _numOut){
 
 string UIShader::getClassName(){
     return fragFile.getBaseName();
-}
-
-ofShader& UIShader::getShader(){
-    return shader;
 }
 
 void UIShader::guiEvent(ofxUIEventArgs &e){
@@ -120,7 +117,7 @@ void UIShader::guiEvent(ofxUIEventArgs &e){
 }
 
 bool UIShader::reloadShader(string _fragPath, string _vertPath, string _geomPath){
-    shader.unload();
+    ofShader::unload();
 	
 	// hackety hack, clear errors or shader will fail to compile
 	GLuint err = glGetError();
@@ -131,7 +128,7 @@ bool UIShader::reloadShader(string _fragPath, string _vertPath, string _geomPath
     fragChangedTimes = getLastModified( fragFile );
     ofBuffer fragBuffer = ofBufferFromFile( fragFilename );
     if( fragBuffer.size() > 0 ){
-        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragBuffer.getText());
+        setupShaderFromSource(GL_FRAGMENT_SHADER, fragBuffer.getText());
     }
     
     
@@ -143,7 +140,7 @@ bool UIShader::reloadShader(string _fragPath, string _vertPath, string _geomPath
         ofBuffer vertBuffer = ofBufferFromFile( vertFilename );
         
         if( vertBuffer.size() > 0 ){
-            shader.setupShaderFromSource(GL_VERTEX_SHADER, vertBuffer.getText());
+            setupShaderFromSource(GL_VERTEX_SHADER, vertBuffer.getText());
         }
         
         bVertex = true;
@@ -157,19 +154,19 @@ bool UIShader::reloadShader(string _fragPath, string _vertPath, string _geomPath
         ofBuffer geomBuffer = ofBufferFromFile( geomFilename );
         
         if( geomBuffer.size() > 0 ){
-            shader.setupShaderFromSource(GL_GEOMETRY_SHADER, geomBuffer.getText());
+            setupShaderFromSource(GL_GEOMETRY_SHADER, geomBuffer.getText());
         }
         
-        shader.setGeometryInputType(geomInType);
-        shader.setGeometryOutputType(geomOutType);
-        shader.setGeometryOutputCount(geomOutCount);
+        setGeometryInputType(geomInType);
+        setGeometryOutputType(geomOutType);
+        setGeometryOutputCount(geomOutCount);
         
         bGeometry = true;
     }
     
 	lastTimeCheckMillis = ofGetElapsedTimeMillis();
     
-    if (shader.linkProgram()){
+    if (linkProgram()){
         
         //  Prepear the uniform to be checked
         //
@@ -248,7 +245,9 @@ void UIShader::addUniform(UniformType _type, string _name){
         
         //  Predefine uniforms
         //
-        if (_name == "time" && _type == UNIFORM_FLOAT){
+        if (_name.find('_') == 0){
+            newUniform->bNeedUI = false;
+        } else if (_name == "time" && _type == UNIFORM_FLOAT){
             newUniform->bNeedUI = false;
         } else if (_name == "mouse" && _type == UNIFORM_VEC2){
             newUniform->bNeedUI = false;
@@ -256,6 +255,33 @@ void UIShader::addUniform(UniformType _type, string _name){
             newUniform->bNeedUI = false;
         } else if ( _name == "screen" && _type == UNIFORM_VEC2 ){
             newUniform->bNeedUI = false;
+        } else {
+            
+            if(gui != NULL){
+                float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
+                float dim = gui->getGlobalSliderHeight();
+                
+                if (newUniform->type == UNIFORM_FLOAT){
+                    gui->addSlider( newUniform->name, 0.0, 1.0, &newUniform->value.x );
+                } else if (newUniform->type == UNIFORM_VEC2){
+                    gui->addLabel( newUniform->name, OFX_UI_FONT_SMALL);
+                    gui->addMinimalSlider("x", 0.0, 1.0, &newUniform->value.x,length/2.0, dim);
+                    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+                    gui->addMinimalSlider("y", 0.0, 1.0, &newUniform->value.y, length/2.0, dim);
+                    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+                    gui->addSpacer();
+                } else if (newUniform->type == UNIFORM_VEC3){
+                    gui->addLabel( newUniform->name, OFX_UI_FONT_SMALL);
+                    gui->addMinimalSlider("x", 0.0, 1.0, &newUniform->value.x,length/3.0, dim);
+                    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+                    gui->addMinimalSlider("y", 0.0, 1.0, &newUniform->value.y, length/3.0, dim);
+                    gui->addMinimalSlider("z", 0.0, 1.0, &newUniform->value.z, length/3.0, dim);
+                    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+                    gui->addSpacer();
+                }
+                
+                gui->autoSizeToFitWidgets();
+            }
         }
         
         uniforms.push_back(newUniform);
@@ -309,33 +335,33 @@ void UIShader::begin(){
     if (bEnable){
         checkShaderFile();
         
-        shader.begin();
+        ofShader::begin();
         
         for (int i = 0; i < uniforms.size(); i++){
             
             if (uniforms[i]->type == UNIFORM_FLOAT){
                 
                 if (uniforms[i]->name == "time"){
-                    shader.setUniform1f(uniforms[i]->name.c_str(), ofGetElapsedTimef());
+                    setUniform1f(uniforms[i]->name.c_str(), ofGetElapsedTimef());
                 } else {
-                    shader.setUniform1f(uniforms[i]->name.c_str(), uniforms[i]->value.x );
+                    setUniform1f(uniforms[i]->name.c_str(), uniforms[i]->value.x );
                 }
                
             } else if (uniforms[i]->type == UNIFORM_VEC2){
                 
                 if (uniforms[i]->name == "mouse"){
-                    shader.setUniform2f(uniforms[i]->name.c_str(), ofGetMouseX(), ofGetMouseY() );
+                    setUniform2f(uniforms[i]->name.c_str(), ofGetMouseX(), ofGetMouseY() );
                 } else if (uniforms[i]->name == "screen"){
-                    shader.setUniform2f(uniforms[i]->name.c_str(), ofGetScreenWidth(), ofGetScreenHeight() );
+                    setUniform2f(uniforms[i]->name.c_str(), ofGetScreenWidth(), ofGetScreenHeight() );
                 } else if (uniforms[i]->name == "windows" || uniforms[i]->name == "resolution" ){
-                    shader.setUniform2f(uniforms[i]->name.c_str(), ofGetWidth(), ofGetHeight() );
+                    setUniform2f(uniforms[i]->name.c_str(), ofGetWidth(), ofGetHeight() );
                 } else {
-                    shader.setUniform2f(uniforms[i]->name.c_str(), uniforms[i]->value.x, uniforms[i]->value.y );
+                    setUniform2f(uniforms[i]->name.c_str(), uniforms[i]->value.x, uniforms[i]->value.y );
                 }
                 
             } else if (uniforms[i]->type == UNIFORM_VEC3){
                 
-                shader.setUniform3f(uniforms[i]->name.c_str(), uniforms[i]->value.x, uniforms[i]->value.y, uniforms[i]->value.z );
+                setUniform3f(uniforms[i]->name.c_str(), uniforms[i]->value.x, uniforms[i]->value.y, uniforms[i]->value.z );
                 
             }
         }
@@ -344,6 +370,6 @@ void UIShader::begin(){
 
 void UIShader::end(){
     if (bEnable){
-        shader.end();
+        ofShader::end();
     }
 }

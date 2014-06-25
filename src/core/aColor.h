@@ -19,6 +19,7 @@ public:
         hue=0.0;
         sat=0.0;
         bri=0.0;
+        alpha=1.0;
     };
     virtual ~aColor(){};
     
@@ -26,18 +27,21 @@ public:
         hue = _color.getHue();
         sat = _color.getSaturation();
         bri = _color.getBrightness();
+        alpha = _color.a;
     }
     
     virtual void update(){
         ofPoint HSBTarget(hue,sat,bri);
         
-        if (HSB!=HSBTarget){
+        if (HSB!=HSBTarget || a != alpha){
             HSB.goTo(HSBTarget,0.09);
             setHsb(HSB.x, HSB.y, HSB.z);
+            a += (alpha - a)*0.01;
         }
     }
     
-    float       hue,sat,bri;
+    float   hue,sat,bri;
+    float   alpha;
     
 protected:
     aPoint    HSB;
