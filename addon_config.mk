@@ -2,7 +2,7 @@ meta:
 	ADDON_NAME = ofxPro
 	ADDON_DESCRIPTION = Prototyping Enviroment
 	ADDON_AUTHOR = Patricio Gonzalez Vivo
-	ADDON_TAGS = UI Animation Record timeline
+	ADDON_TAGS = UI shaders interactive record document save load 
 	ADDON_URL = http://github.com/patriciogonzalezvivo/ofxPro
 
 common:

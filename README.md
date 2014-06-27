@@ -1,8 +1,8 @@
 # ofxPro for openFrameworks
 
-Prototyping tool for OpenFrameworks based on the core environment of [CLOUDS](http://www.cloudsdocumentary.com/)'s VisualSystems that we work together with [James George](http://www.jamesgeorge.org/) and [Reza Ali](http://www.syedrezaali.com/). **ofxPro** Is an integrations of Reza's **Rezonator** with James **ofxTimeline**, put together in  a hight modular structure, that let you:
+Prototyping tool for OpenFrameworks based on the core environment of [CLOUDS](http://www.cloudsdocumentary.com/)'s VisualSystems that we work together with [James George](http://www.jamesgeorge.org/) and [Reza Ali](http://www.syedrezaali.com/). **ofxPro** is a highly modular implementation of Reza's **Rezonator**, that:
 
-- record, load and animate presets on the fly.
+- save and load presets on the fly.
 
 - make your own UI modules and integrate them easily to the prototyping environment to animate it. 
 
@@ -24,8 +24,6 @@ Require by core:
 ## USE
 
 
-
-
 ## Hot Keys
 
 * h : show/hide the UI
@@ -35,31 +33,3 @@ Require by core:
 * Ctrl + r : start/stop recording (if LOG is enable uploads the video to flickr)
 * Ctrl + d : enable/disable DebugMode
 * Ctrl + e : enable/disable EditMode (let you drag lights)
-
-## TIMELINE-PRO extension
-
-### Install
-
-Require by ofxTimeline: 
-
-	git clone --depth 1 https://github.com/Flightphase/ofxTextInputField.git
-
-	git clone --depth 1 https://github.com/YCAMInterlab/ofxTimecode.git
-  
-	git clone --depth 1 https://github.com/obviousjim/ofxMSATimer.git
-  
-	git clone --depth 1 https://github.com/Flightphase/ofxRange.git
-  
-	git clone --depth 1 https://github.com/arturoc/ofxTween.git
-  
-	git clone --depth 1 https://github.com/YCAMInterlab/ofxTimeline.git
-
-
-### How to Animate with timelinePro?
-
-1. Enable the TIMELINE TAB
-2. Click on "Animate"
-3. Click any UI element
-4. A timeline will apear. Edit it.
-5. Check that TIMELINE TAB is enable
-6. Position the starting time on the timeline and hit SPACEBAR
