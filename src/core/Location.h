@@ -6,6 +6,7 @@
 //  Credits to:
 //              Paul Wagener https://github.com/PaulWagener/Streetview-Explorer
 //              Tom Carden https://github.com/RandomEtc/modestmaps-of
+//              http://wiki.openstreetmap.org/wiki/Mercator
 
 #pragma once
 #include "ofMain.h"
@@ -35,10 +36,11 @@ public:
     };
     
     UtmPosition getUTM();
-
-    double       getRadTo(Location _loc);
-    double       getDegTo(Location _loc);
-    double       getDistanceTo(Location _loc); // In Meters
+    ofPoint     getMercator();
+    
+    double      getRadTo(Location _loc);
+    double      getDegTo(Location _loc);
+    double      getDistanceTo(Location _loc); // In Meters
     
     ofQuaternion getQuaternion();
     ofPoint     getSpherePosition(float _radius);

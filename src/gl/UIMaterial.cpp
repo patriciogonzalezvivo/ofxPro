@@ -60,9 +60,6 @@ void UIMaterial::setName(string _name){
 }
 
 void UIMaterial::setupUI(){
-    float length = ( gui->getGlobalCanvasWidth()- gui->getWidgetSpacing()*5)/3.;
-    float dim = gui->getGlobalSliderHeight();
-
     addUIColor("AMBIENT", ambient);
     addUIColor("DIFFUSE", diffuse);
     addUIColor("EMISSIVE", emissive);

@@ -6,15 +6,17 @@
 //
 
 #pragma once
-#include "UIClass.h"
+#include "UIShader.h"
 
-class UILUT : public UIClass {
+class UILUT : public UIShader {
 public:
     
     UILUT();
     
     void    setupUI();
-    void    loadCube(string _path);
+    
+    bool    load(string _path);
+    bool    loadCube(string _path);
     
     string  getClassName(){return "LUT";}
     ofTexture& getCube();
@@ -27,5 +29,6 @@ protected:
     
     ofxUIRadio  *cubes;
     ofTexture   cube;
-    ofShader    shader;
+    
+    string  vertexShader, fragmentShader;
 };

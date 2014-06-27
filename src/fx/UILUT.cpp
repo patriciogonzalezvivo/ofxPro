@@ -11,7 +11,7 @@
 UILUT::UILUT(){
 #ifdef TARGET_OPENGLES
     //  OpenGL ES
-    string  vertexShader = STRINGIFY(
+    vertexShader = STRINGIFY(
                                      attribute vec4 position;
                                      uniform mat4 modelViewMatrix;
                                      uniform mat4 projectionMatrix;
@@ -22,9 +22,9 @@ UILUT::UILUT(){
                                      }
                                      );
     
-    shader.setupShaderFromSource(GL_VERTEX_SHADER, vertexShader);
+    setupShaderFromSource(GL_VERTEX_SHADER, vertexShader);
     
-    string fragmentShader = STRINGIFY(precision highp float;
+    fragmentShader = STRINGIFY(precision highp float;
                                       uniform sampler2D tex0;
                                       uniform sampler2D tex1;
                                
@@ -62,12 +62,12 @@ UILUT::UILUT(){
                                           gl_FragColor.a = srcColor.a;
                                       }
                                       );
-    shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragmentShader);
+    setupShaderFromSource(GL_FRAGMENT_SHADER, fragmentShader);
 #else
     if( ofIsGLProgrammableRenderer() ){
         
         //  OpenGL 3.0
-        string  vertexShader = "#version 150\n";
+        vertexShader = "#version 150\n";
         vertexShader += STRINGIFY(
                                   uniform mat4 modelViewProjectionMatrix;
                                   uniform mat4 textureMatrix;
@@ -82,9 +82,9 @@ UILUT::UILUT(){
                                       gl_Position = modelViewProjectionMatrix * position;
                                   });
         
-        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertexShader);
+        setupShaderFromSource(GL_VERTEX_SHADER, vertexShader);
         
-        string fragmentShader = "#version 150\n";
+        fragmentShader = "#version 150\n";
         fragmentShader += STRINGIFY(
                                     uniform sampler2DRect tex0;
                                     uniform sampler2DRect tex1;
@@ -123,12 +123,12 @@ UILUT::UILUT(){
                                         outputColor.a = srcColor.a;
                                     }
                                     );
-        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragmentShader);
+        setupShaderFromSource(GL_FRAGMENT_SHADER, fragmentShader);
         
     } else {
         //  OpenGL 2.0
         
-        string  vertexShader = "#version 120\n";
+        vertexShader = "#version 120\n";
         vertexShader += STRINGIFY(
                                   void main(){
                                       // gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
@@ -137,9 +137,9 @@ UILUT::UILUT(){
                                   }
                                   );
         
-        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertexShader);
+        setupShaderFromSource(GL_VERTEX_SHADER, vertexShader);
         
-        string fragmentShader = "#version 120\n";
+        fragmentShader = "#version 120\n";
         fragmentShader += STRINGIFY(
                                     uniform sampler2DRect tex0;
                                     uniform sampler2DRect tex1;
@@ -159,10 +159,10 @@ UILUT::UILUT(){
                                         
                                         gl_FragColor = vec4(color,srcColor.a);
                                     });
-        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragmentShader);
+        setupShaderFromSource(GL_FRAGMENT_SHADER, fragmentShader);
     }
 #endif
-    shader.linkProgram();
+    linkProgram();
     
     cubes = NULL;
 }
@@ -186,11 +186,11 @@ void UILUT::setupUI(){
 
 void UILUT::begin(){
     if (cube.isAllocated()&&bEnable){
-        shader.begin();
-        shader.setUniformTexture("tex1", cube, 1);
-        shader.setUniform1f("size", (float)cube.getHeight());
+        UIShader::begin();
+        setUniformTexture("tex1", cube, 1);
+        setUniform1f("size", (float)cube.getHeight());
 #ifdef TARGET_OPENGLES
-        shader.setUniform2f("resolution", (float)width, (float)height);
+        setUniform2f("resolution", (float)width, (float)height);
 #endif
     }
 }
@@ -208,8 +208,27 @@ void UILUT::guiEvent(ofxUIEventArgs &e){
     }
 }
 
-void UILUT::loadCube(string _path){
-    ofLoadImage(cube, _path);
+bool UILUT::load(string _path){
+    ofFile fragFile = ofFile(_path+".frag");
+    ofFile vertFile = ofFile(_path+".vert");
+    
+    if( !vertFile.exists()){
+        ofBuffer vert;
+        vert.append(vertexShader);
+        ofBufferToFile(_path+".vert", vert);
+    }
+    
+    if (!fragFile.exists() ){
+        ofBuffer frag;
+        frag.append(fragmentShader);
+        ofBufferToFile(_path+".frag", frag);
+    }
+    
+    return UIShader::load(_path);
+}
+
+bool UILUT::loadCube(string _path){
+    return ofLoadImage(cube, _path);
 }
 
 ofTexture& UILUT::getCube(){
@@ -218,7 +237,7 @@ ofTexture& UILUT::getCube(){
 
 void UILUT::end(){
     if (cube.isAllocated()&&bEnable) {
-        shader.end();
+        UIShader::end();
     }
 }
 

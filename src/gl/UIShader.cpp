@@ -27,6 +27,36 @@ UIShader::UIShader(){
     vertFilename = "";
     geomFilename = "";
     
+    vertexShader = "#version 120\n\n";
+    
+    vertexShader += "varying vec4 ambientGlobal, eyeSpaceVertexPos;\n";
+    vertexShader += "varying vec4 vertexPos;\n";
+    vertexShader += "varying vec3 vertexNormal;\n\n";
+    
+    vertexShader += "void main() {\n";
+    vertexShader += "\tgl_TexCoord[0] = gl_MultiTexCoord0;\n";
+    vertexShader += "\tvertexPos = gl_Vertex;\n";
+	vertexShader += "\tvertexNormal = normalize(gl_NormalMatrix * gl_Normal);\n";
+	vertexShader += "\teyeSpaceVertexPos = gl_ModelViewMatrix * vertexPos;\n";
+    vertexShader += "\tambientGlobal = gl_LightModel.ambient * gl_FrontMaterial.ambient + gl_FrontMaterial.emission;\n";
+    vertexShader += "\tgl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;\n";
+    vertexShader += "}\n";
+    
+    fragmentShader = "#version 120\n\n";
+    fragmentShader += "uniform sampler2DRect tex;\n\n";
+    
+    fragmentShader += "varying vec4 ambientGlobal, eyeSpaceVertexPos;\n";
+    fragmentShader += "varying vec4 vertexPos;\n";
+    fragmentShader += "varying vec3 vertexNormal;\n\n";
+    
+    fragmentShader += "void main() {\n";
+    fragmentShader += "\tvec2 st = gl_TexCoord[0].st;\n";
+	fragmentShader += "\tvec4 color = texture2DRect( tex, st );\n";
+	fragmentShader += "\tgl_FragColor = gl_Color;\n";
+    fragmentShader += "}\n";
+    
+    geometryShader = "";
+    
     geomInType = GL_POINTS;
     geomOutType = GL_TRIANGLES;
     geomOutCount = 6;
@@ -62,12 +92,35 @@ void UIShader::setupUI(){
         }
     }
     
-    gui->addButton("OPEN",&bOpen);
+    if(fragFilename != ""){
+        gui->addButton("OPEN",&bOpen);
+    }
 }
 
 bool UIShader::load(string _name){
-    ofFile gShaderFile = ofFile( ofToDataPath(_name+".geom") );
-    if(gShaderFile.exists()){
+    ofFile fragFile = ofFile(_name+".frag");
+    ofFile vertFile = ofFile(_name+".vert");
+    ofFile geomFile = ofFile(_name+".geom");
+    
+    if( !vertFile.exists()){
+        ofBuffer vert;
+        vert.append(vertexShader);
+        ofBufferToFile(_name+".vert", vert);
+    }
+    
+    if (!fragFile.exists() ){
+        ofBuffer frag;
+        frag.append(fragmentShader);
+        ofBufferToFile(_name+".frag", frag);
+    }
+    
+    if(geomFile.exists()){
+        return load(_name+".frag",_name+".vert",_name+".geom");
+    } else if (geometryShader.size() > 2){
+        ofBuffer geom;
+        geom.append(geometryShader);
+        ofBufferToFile(_name+".geom", geom);
+        
         return load(_name+".frag",_name+".vert",_name+".geom");
     } else {
         return load(_name+".frag",_name+".vert");
@@ -167,63 +220,60 @@ bool UIShader::reloadShader(string _fragPath, string _vertPath, string _geomPath
 	lastTimeCheckMillis = ofGetElapsedTimeMillis();
     
     if (linkProgram()){
-        
-        //  Prepear the uniform to be checked
-        //
-        for (int i = 0; i < uniforms.size(); i++) {
-            uniforms[i]->bUpdated = false;
-        }
-        
-        //  Read the shader and check what needs to be added;
-        //
-        string fragmentShaderText = fragBuffer.getText();
-        vector<string> lines = ofSplitString(fragBuffer.getText(), "\n");
-
-        for(int i = 0; i<lines.size(); i++){
-            vector<string> words = ofSplitString( lines[i], " ");
-
-            for(int j = 0; j < words.size(); j++){
-                if (words[j] == "uniform"){
-                    jumpNextWord(j,words);
-
-                    if (words[j] == "vec3"){
-                        jumpNextWord(j,words);
-                        eraseSemiColon(words[j]);
-                        addUniform(UNIFORM_VEC3,words[j]);
-                    } else if (words[j] == "vec2"){
-                        jumpNextWord(j,words);
-                        eraseSemiColon(words[j]);
-                        addUniform(UNIFORM_VEC2,words[j]);
-                    } else if (words[j] == "float"){
-                        jumpNextWord(j,words);
-                        eraseSemiColon(words[j]);
-                        addUniform(UNIFORM_FLOAT,words[j]);
-                    }
-                    
-                } else {
-                    break;
-                }
-            }
-        }
-        
-        //  TODO:
-        //          - Read Vertex Shaders uniforms
-        
-        //  Get rid of extra uniforms
-        //
-        for (int i = uniforms.size()-1; i >= 0; i--) {
-            if (!uniforms[i]->bUpdated){
-                
-                gui->removeWidget( uniforms[i]->name );
-                delete uniforms[i];
-                uniforms.erase(uniforms.begin()+i);
-            }
-        }
-        
+        extractUniforms(fragBuffer.getText());
         return true;
     } else {
         return false;
     }
+}
+
+void UIShader::extractUniforms(string _shaderCode){
+    //  Prepear the uniform to be checked
+    //
+    for (int i = 0; i < uniforms.size(); i++) {
+        uniforms[i]->bUpdated = false;
+    }
+    
+    //  Read the shader and check what needs to be added;
+    //
+    vector<string> lines = ofSplitString(_shaderCode, "\n");
+    for(int i = 0; i<lines.size(); i++){
+        vector<string> words = ofSplitString( lines[i], " ");
+        
+        for(int j = 0; j < words.size(); j++){
+            if (words[j] == "uniform"){
+                jumpNextWord(j,words);
+                
+                if (words[j] == "vec3"){
+                    jumpNextWord(j,words);
+                    eraseSemiColon(words[j]);
+                    addUniform(UNIFORM_VEC3,words[j]);
+                } else if (words[j] == "vec2"){
+                    jumpNextWord(j,words);
+                    eraseSemiColon(words[j]);
+                    addUniform(UNIFORM_VEC2,words[j]);
+                } else if (words[j] == "float"){
+                    jumpNextWord(j,words);
+                    eraseSemiColon(words[j]);
+                    addUniform(UNIFORM_FLOAT,words[j]);
+                }
+                
+            } else {
+                break;
+            }
+        }
+    }
+    
+//    //  Get rid of extra uniforms
+//    //
+//    for (int i = uniforms.size()-1; i >= 0; i--) {
+//        if (!uniforms[i]->bUpdated){
+//            
+//            gui->removeWidget( uniforms[i]->name );
+//            delete uniforms[i];
+//            uniforms.erase(uniforms.begin()+i);
+//        }
+//    }
 }
 
 void UIShader::addUniform(UniformType _type, string _name){
