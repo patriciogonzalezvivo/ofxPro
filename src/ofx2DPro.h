@@ -53,7 +53,6 @@ public:
     
     virtual void selfUpdate(){};
     virtual void selfDraw(){};
-    virtual void selfDrawDebug(){};
 	virtual void selfDrawOverlay(){};
 	virtual void selfPostDraw();
 	virtual void selfPresetLoaded(string presetPath){};
@@ -167,7 +166,6 @@ protected:
     bool            bRenderSystem;
 
     virtual void    setupNumViewports(int num);
-    int             numViewports;
     int             currentViewPort;
     
     virtual void    setupRenderIsFlipped(bool flipped=true);

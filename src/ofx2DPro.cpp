@@ -117,12 +117,13 @@ void ofx2DPro::draw(ofEventArgs & args){
     ofPushStyle();
     if(bRenderSystem){
         
-        for(int viewNum=0;viewNum<numViewports;viewNum++){
+        for(int i=0; i < renderTargets.size();i++){
+            currentViewPort = i;
 #ifdef TARGET_RASPBERRY_PI
             //  a full screen FBO is to much for RPI
             //
 #else
-            ofx2DPro::getRenderTarget(viewNum).begin();
+            ofx2DPro::getRenderTarget(currentViewPort).begin();
 #endif
             {
                 //  Background
@@ -140,17 +141,7 @@ void ofx2DPro::draw(ofEventArgs & args){
                     ofPopMatrix();
                     ofPopStyle();
                 }
-                
-                //  Draw Debug
-                //
-                if( bDebug ){
-                    ofPushStyle();
-                    ofPushMatrix();
-                    selfDrawDebug();
-                    ofPopMatrix();
-                    ofPopStyle();
-                }
-                
+                                
                 //  Draw Overlay
                 //
                 {
@@ -176,7 +167,7 @@ void ofx2DPro::draw(ofEventArgs & args){
             //  a full screen FBO is to much for RPI
             //
 #else
-            ofx2DPro::getRenderTarget(viewNum).end();
+            ofx2DPro::getRenderTarget(currentViewPort).end();
             selfPostDraw();
 #endif
         }
@@ -187,9 +178,7 @@ void ofx2DPro::draw(ofEventArgs & args){
     ofPopStyle();
 }
 
-void ofx2DPro::setupNumViewports(int _num){
-    numViewports = _num;
-    
+void ofx2DPro::setupNumViewports(int _num){    
     while(renderTargets.size() < _num){
         renderTargets.push_back(ofFbo());
     }
@@ -512,6 +501,7 @@ void ofx2DPro::setupRenderGui(){
     rdrGui->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
     rdrGui->addWidgetToHeader(toggle);
     rdrGui->addSpacer();
+    
     selfSetupRenderGui();
     
     rdrGui->autoSizeToFitWidgets();
@@ -694,12 +684,12 @@ void ofx2DPro::guiArrange(int _type){
 }
 
 ofFbo& ofx2DPro::getRenderTarget(int _viewNumber){
-    if (_viewNumber>=numViewports) {
+    if (_viewNumber>=renderTargets.size()) {
         setupNumViewports(_viewNumber+1);
     }
     
     ofFbo *renderTarget = &renderTargets[_viewNumber];
-    int width = ofGetWidth() / numViewports;
+    int width = ofGetWidth() / renderTargets.size();
     int height = ofGetHeight();
     if(!renderTarget->isAllocated() || renderTarget->getWidth() != width || renderTarget->getHeight() != height){
         ofFbo::Settings settings;
@@ -726,7 +716,7 @@ ofFbo& ofx2DPro::getRenderTarget(int _viewNumber){
 
 void ofx2DPro::selfPostDraw(){
     int offsetX = ofx2DPro::getRenderTarget().getWidth();
-    for(int i=0;i<numViewports;i++){
+    for(int i=0;i<renderTargets.size();i++){
         if(!renderFlipped){
             ofx2DPro::getRenderTarget(i).draw(offsetX*i
                                                  , 0

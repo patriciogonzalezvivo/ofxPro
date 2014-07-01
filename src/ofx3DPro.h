@@ -29,8 +29,7 @@ public:
     //
     virtual string getSystemName(){ return "3D_ABSTRACT_PROJECT"; };
     
-    virtual void selfDrawBackground(){};        //  2D Scene here
-    virtual void selfSceneTransformation(){};   //  3D Previus sceen transformations
+    virtual void selfSceneTransformation(int _viewNum){};   //  3D Previus sceen transformations
     //
 	//---------------------
     
@@ -105,4 +104,6 @@ protected:
     //
     virtual void    materialAdd( string _name );
     map<string,UIMaterialReference> materials;
+    
+    bool            bBackCull,bFrontCull;
 };

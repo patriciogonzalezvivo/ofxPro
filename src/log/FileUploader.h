@@ -25,7 +25,7 @@ using namespace Poco;
 
 class FileUploader: public ofThread{
 public:
-    
+
     FileUploader():req(HTTPMessage::HTTP_1_0){
         result = "";
         fps = NULL;
@@ -40,7 +40,7 @@ public:
     
     void start(){
         req.setMethod(HTTPRequest::HTTP_POST);
-        req.setURI("/services/upload/");
+        req.setURI("https://up.flickr.com/services/upload/");
         req.setContentType("multipart/form-data");
         
         form.prepareSubmit( req);

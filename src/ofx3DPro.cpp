@@ -35,27 +35,20 @@ void ofx3DPro::stop(){
 void ofx3DPro::draw(ofEventArgs & args){
     if(bRenderSystem){
         
-        for(int viewNum=0;viewNum<numViewports;viewNum++){
-            currentViewPort = viewNum;
+        for(int i = 0; i<renderTargets.size();i++){
+            currentViewPort = i;
+            
             ofPushStyle();
 #ifdef TARGET_RASPBERRY_PI
             
 #else
-            getRenderTarget(viewNum).begin();
+            getRenderTarget(currentViewPort).begin();
 #endif
             //  Background
             //
             if ( background != NULL ){
                 background->draw();
             }
-            
-            //  2D scene
-            //
-            ofPushStyle();
-            ofPushMatrix();
-            selfDrawBackground();
-            ofPopMatrix();
-            ofPopStyle();
             
             //  Start 3D scene
             //
@@ -67,7 +60,7 @@ void ofx3DPro::draw(ofEventArgs & args){
                 
                 //  Scene Setup
                 //
-                selfSceneTransformation();
+                selfSceneTransformation(currentViewPort);
                 
                 //  Cached Values
                 //
@@ -77,38 +70,54 @@ void ofx3DPro::draw(ofEventArgs & args){
                 glGetDoublev(GL_MODELVIEW_MATRIX, matM);
                 glGetIntegerv(GL_VIEWPORT, viewport);
                 
-                //            glEnable(GL_DEPTH_TEST);
                 ofEnableDepthTest();
-                //            glDepthMask(false);
                 
                 if (bEdit){
                     lightsDraw();
                 }
                 
-                //  Draw Debug
-                //
-                if( bDebug ){
-                    ofPushStyle();
-                    ofPushMatrix();
-                    
-                    selfDrawDebug();
-                    
-                    ofPopMatrix();
-                    ofPopStyle();
-                }
-                
                 //  Draw Scene
                 //
                 {
+                    
                     lightsBegin();
-                    ofPushStyle();
-                    ofPushMatrix();
                     
-                    selfDraw();
+                    if(bBackCull||bFrontCull){
+                        
+                        glEnable(GL_CULL_FACE);
+                        
+                        if(bBackCull){
+                            glCullFace(GL_BACK);
+                            
+                            ofPushStyle();
+                            ofPushMatrix();
+                            selfDraw();
+                            ofPopMatrix();
+                            ofPopStyle();
+                        }
+                        
+                        if(bFrontCull){
+                            glCullFace(GL_FRONT);
+                            
+                            ofPushStyle();
+                            ofPushMatrix();
+                            selfDraw();
+                            ofPopMatrix();
+                            ofPopStyle();
+                        }
+                        
+                        glDisable(GL_CULL_FACE);
+                        
+                    } else {
+                        ofPushStyle();
+                        ofPushMatrix();
+                        selfDraw();
+                        ofPopMatrix();
+                        ofPopStyle();
+                    }
                     
-                    ofPopMatrix();
-                    ofPopStyle();
                     lightsEnd();
+                    
                 }
                 
                 //  Draw Log
@@ -121,9 +130,7 @@ void ofx3DPro::draw(ofEventArgs & args){
                     ofPopStyle();
                 }
                 
-                //            glDepthMask(true);
                 ofDisableDepthTest();
-                //            glDisable(GL_DEPTH_TEST);
                 fog.end();
                 
                 //  Update Mouse
@@ -132,15 +139,6 @@ void ofx3DPro::draw(ofEventArgs & args){
                     unprojectCursor(cursor, ofGetMouseX(), ofGetMouseY());
                     bUpdateCursor = false;
                 }
-                
-                //            if (bEdit){
-                //                ofEnableDepthTest();
-                //                ofPushStyle();
-                //                ofSetColor(255);
-                //                ofSphere(cursor.world, 10);
-                //                ofPopStyle();
-                //                ofDisableDepthTest();
-                //            }
                 
                 if(cameraEnabled){
                     getCameraRef().end();
@@ -160,7 +158,7 @@ void ofx3DPro::draw(ofEventArgs & args){
 #ifdef TARGET_RASPBERRY_PI
             
 #else
-            getRenderTarget(viewNum).end();
+            getRenderTarget(currentViewPort).end();
 #endif
             
         }
@@ -335,6 +333,13 @@ void ofx3DPro::setupCoreGuis(){
     
     setupSystemGui();
     setupRenderGui();
+    rdrGui->addSpacer();
+    
+    rdrGui->addToggle("Back CULL", &bBackCull);
+    rdrGui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    rdrGui->addToggle("Front CULL", &bFrontCull);
+    rdrGui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    rdrGui->autoSizeToFitWidgets();
     
     backgroundSet(new UIBackground());
     

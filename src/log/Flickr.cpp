@@ -51,11 +51,11 @@ namespace Flickr {
     //--------------------------------------------------------------
     string Media::getURL( Size size ){
         if ( size == FLICKR_SIZE_DEFAULT ){
-            return "http://farm" + farm +".staticflickr.com/" + server +"/" + id +"_" + secret +".jpg";
+            return "https://farm" + farm +".staticflickr.com/" + server +"/" + id +"_" + secret +".jpg";
         } else if ( size == FLICKR_SIZE_ORIGINAL ){
-            return "http://farm" + farm +".staticflickr.com/" + server +"/" + id +"_" + originalsecret +"_o." + originalformat;
+            return "https://farm" + farm +".staticflickr.com/" + server +"/" + id +"_" + originalsecret +"_o." + originalformat;
         } else {
-            return "http://farm" + farm +".staticflickr.com/" + server +"/" + id +"_" + secret +"_" + getSizeURLParam( size ) +".jpg";
+            return "https://farm" + farm +".staticflickr.com/" + server +"/" + id +"_" + secret +"_" + getSizeURLParam( size ) +".jpg";
         }
     }
     
@@ -82,7 +82,7 @@ namespace Flickr {
             encoded += toBase58[i];
         }
         
-        return "http://flic.kr/p/" + encoded;
+        return "https://flic.kr/p/" + encoded;
     }
     
     
@@ -466,7 +466,7 @@ namespace Flickr {
         try
         {
             // Get REST style xml as string from flickr
-            std::auto_ptr<std::istream> pStr(URIStreamOpener::defaultOpener().open( "http://" + api_base + path ));
+            std::auto_ptr<std::istream> pStr(URIStreamOpener::defaultOpener().open( "https://" + api_base + path ));
             StreamCopier::copyToString(*pStr.get(), result);
         }
         catch (Exception &ex)

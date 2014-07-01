@@ -225,7 +225,8 @@ void UILog::recordAddFrame(ofBaseHasTexture &_texBase){
 void UILog::upload(){
     if(bEnable){
         if (!flickrAPI.bAuthenticated){
-            flickrAPI.authenticate("6394ea9fdcad0043386fbfd07f57a419","abf7c1706ee0fd7f",Flickr::FLICKR_WRITE);
+//            flickrAPI.authenticate("6394ea9fdcad0043386fbfd07f57a419","abf7c1706ee0fd7f",Flickr::FLICKR_WRITE);
+            flickrAPI.authenticate("c8219f379ec3cdd264e5aab216e98f5a","d7e8d3f12300d0e9",Flickr::FLICKR_WRITE);
         }
         
         if (flickrAPI.bAuthenticated){
