@@ -204,8 +204,12 @@ string UIMatCap::getClassName(){
 
 void UIMatCap::setupUI(){
     
+    int w = gui->getGlobalButtonDimension();
+    
+    
     {
         gui->addLabel("Materials");
+        gui->setGlobalButtonDimension(34);
         vector<string> list;
         string path = "GUI/materials";
         ofDirectory dir(path);
@@ -218,7 +222,7 @@ void UIMatCap::setupUI(){
                 gui->addImageToggle("materials/"+dir.getName(i), "GUI/materials/"+dir.getName(i),false);
                 gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
                 count++;
-                if(count == 9){
+                if(count == 5){
                     count = 0;
                     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
                 }
@@ -228,12 +232,14 @@ void UIMatCap::setupUI(){
         gui->addSpacer();
     }
     
+    gui->setGlobalButtonDimension(w);
     {
         gui->addLabel("Normals");
         
         ofxUIToggle *toggle = gui->addToggle("'", &bNormals);
         gui->addWidgetUp(toggle, OFX_UI_ALIGN_RIGHT, true);
         
+        gui->setGlobalButtonDimension(34);
         vector<string> list;
         string path = "GUI/normals";
         ofDirectory dir(path);
@@ -246,7 +252,7 @@ void UIMatCap::setupUI(){
                 gui->addImageToggle("normals/"+dir.getName(i), "GUI/normals/"+dir.getName(i), false);
                 gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
                 count++;
-                if(count == 9){
+                if(count == 5){
                     count = 0;
                     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
                 }
@@ -255,7 +261,7 @@ void UIMatCap::setupUI(){
         gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
         gui->addSpacer();
     }
-    
+    gui->setGlobalButtonDimension(w);
     UIShader::setupUI();
 }
 

@@ -6,32 +6,30 @@
 //
 
 #include "UIMapBackground.h"
-#define STRINGIFY(A) #A
 
 UIMapBackground::UIMapBackground(){
     UIBackground();
 
-    string vertShader = STRINGIFY(
-                                  varying vec2 oTexCoord;
-                                  void main(){
-                                      oTexCoord = gl_MultiTexCoord0.xy;
-                                      gl_Position = ftransform();
-                                  }
-                                  );
+    string vertexShader = "#version 120\n\n";
+    vertexShader += "varying vec2 oTexCoord;\n\n";
+    vertexShader += "void main(){\n";
+    vertexShader += "\toTexCoord = gl_MultiTexCoord0.xy;\n";
+    vertexShader += "\tgl_Position = ftransform();\n";
+    vertexShader += "}";
     
-    shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShader);
-    string fragShader = STRINGIFY(
-                                  uniform sampler2DRect image;
-                                  uniform vec3 colorOne;
-                                  uniform vec3 colorTwo;
-                                  uniform float gradientExponent;
-                                  varying vec2 oTexCoord;
-                                  
-                                  void main(){
-                                      gl_FragColor = vec4( mix(colorTwo,colorOne, pow(texture2DRect(image,oTexCoord).r, gradientExponent)), 1.0);
-                                  }
-                                  );
-    shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShader);
+    
+    string fragmentShader = "#version 120\n\n";
+    fragmentShader += "uniform sampler2DRect image;\n";
+    fragmentShader += "uniform vec3 colorOne;\n";
+    fragmentShader += "uniform vec3 colorTwo;\n";
+    fragmentShader += "uniform float gradientExponent;\n";
+    fragmentShader += "varying vec2 oTexCoord;\n\n";
+    fragmentShader += "void main(){\n";
+    fragmentShader += "\tgl_FragColor = vec4( mix(colorTwo,colorOne, pow(texture2DRect(image,oTexCoord).r, gradientExponent)), 1.0);\n";
+    fragmentShader += "}";
+    
+    shader.setupShaderFromSource(GL_VERTEX_SHADER, vertexShader);
+    shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragmentShader);
     shader.linkProgram();
     
     backgrounds = NULL;

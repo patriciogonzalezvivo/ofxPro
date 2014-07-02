@@ -91,7 +91,7 @@ void UIMaterial::begin(){
         glGetMaterialfv(GL_FRONT,GL_SPECULAR,&prev_specular.r);
         glGetMaterialfv(GL_FRONT,GL_AMBIENT,&prev_ambient.r);
         glGetMaterialfv(GL_FRONT,GL_EMISSION,&prev_emissive.r);
-        glGetMaterialfv(GL_FRONT, GL_SHININESS, &prev_shininess);
+        glGetMaterialfv(GL_FRONT,GL_SHININESS, &prev_shininess);
         
         glGetMaterialfv(GL_BACK,GL_DIFFUSE,&prev_diffuse_back.r);
         glGetMaterialfv(GL_BACK,GL_SPECULAR,&prev_specular_back.r);

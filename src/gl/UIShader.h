@@ -29,8 +29,8 @@ public:
     virtual void    end();
     
 protected:
-    void    setupUI();
-    void    guiEvent(ofxUIEventArgs &e);
+    virtual void    setupUI();
+    virtual void    guiEvent(ofxUIEventArgs &e);
     
     void    checkShaderFile();
     bool    reloadShader(string _fragPath, string _vertPath = "", string _geomPath = "");
