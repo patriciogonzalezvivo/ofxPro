@@ -3,7 +3,7 @@
     <Name>DIR LIGHT </Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>304.000000000</YPosition>
+    <YPosition>329.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -13,17 +13,17 @@
 <Widget>
     <Kind>25</Kind>
     <Name>ORIX</Name>
-    <Value>0.000000000</Value>
+    <Value>114.031410217</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>ORIY</Name>
-    <Value>0.000000000</Value>
+    <Value>8.481552124</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>ORIZ</Name>
-    <Value>0.000000000</Value>
+    <Value>180.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -48,12 +48,12 @@
 <Widget>
     <Kind>25</Kind>
     <Name>dSAT</Name>
-    <Value>0.649214685</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>dBRI</Name>
-    <Value>0.382198960</Value>
+    <Value>0.507853389</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>

@@ -8,7 +8,6 @@
 #pragma once
 
 #include "ofxPro.h"
-#include "UI3DGrid.h"
 
 class example3D : public ofx3DPro {
 public:
@@ -48,6 +47,5 @@ public:
     void selfMousePressed(ofMouseEventArgs& data);
     void selfMouseReleased(ofMouseEventArgs& data);
 
-protected:
-    UI3DGrid grid;
+    float radius1, radius2;
 };

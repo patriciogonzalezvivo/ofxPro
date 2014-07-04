@@ -3,7 +3,7 @@
     <Name>SPOT LIGHT</Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>329.000000000</YPosition>
+    <YPosition>354.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -13,37 +13,37 @@
 <Widget>
     <Kind>4</Kind>
     <Name>CUT OFF</Name>
-    <Value>46.995075226</Value>
+    <Value>27.487686157</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>EXPONENT</Name>
-    <Value>33.418720245</Value>
+    <Value>94.581283569</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>POSX</Name>
-    <Value>26.852424622</Value>
+    <Value>39.975402832</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>POSY</Name>
-    <Value>118.372306824</Value>
+    <Value>228.145950317</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>POSZ</Name>
-    <Value>838.817565918</Value>
+    <Value>788.851745605</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>ORIX</Name>
-    <Value>0.000000000</Value>
+    <Value>-16.020942688</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>ORIY</Name>
-    <Value>0.000000000</Value>
+    <Value>2.827112675</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -68,30 +68,30 @@
 <Widget>
     <Kind>25</Kind>
     <Name>dHUE</Name>
-    <Value>0.000000000</Value>
+    <Value>0.130890056</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>dSAT</Name>
-    <Value>0.795811534</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>dBRI</Name>
-    <Value>1.000000000</Value>
+    <Value>0.560209453</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>sHUE</Name>
-    <Value>0.209424078</Value>
+    <Value>0.109947644</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>sSAT</Name>
-    <Value>0.335078537</Value>
+    <Value>0.314136118</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>sBRI</Name>
-    <Value>1.000000000</Value>
+    <Value>0.643979073</Value>
 </Widget>

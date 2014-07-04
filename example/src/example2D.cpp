@@ -13,7 +13,6 @@ void example2D::selfSetup(){
 }
 
 void example2D::selfSetupGuis(){
-    backgroundSet(new UIMapBackground() );
 }
 
 void example2D::selfGuiEvent(ofxUIEventArgs &e){

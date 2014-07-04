@@ -3,7 +3,7 @@
     <Name>MATERIAL 1</Name>
     <IsMinified>1</IsMinified>
     <XPosition>1.000000000</XPosition>
-    <YPosition>229.000000000</YPosition>
+    <YPosition>254.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>2</Kind>
@@ -23,7 +23,7 @@
 <Widget>
     <Kind>25</Kind>
     <Name>aBRI</Name>
-    <Value>0.200000003</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -38,22 +38,22 @@
 <Widget>
     <Kind>25</Kind>
     <Name>dBRI</Name>
-    <Value>0.800000012</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>eHUE</Name>
-    <Value>0.000000000</Value>
+    <Value>0.104712039</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>eSAT</Name>
-    <Value>0.000000000</Value>
+    <Value>0.827225149</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>eBRI</Name>
-    <Value>0.000000000</Value>
+    <Value>0.120418847</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
@@ -73,5 +73,5 @@
 <Widget>
     <Kind>25</Kind>
     <Name>SHINY</Name>
-    <Value>0.778325140</Value>
+    <Value>1.000000000</Value>
 </Widget>

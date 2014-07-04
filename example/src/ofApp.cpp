@@ -4,7 +4,7 @@
 void ofApp::setup(){
     ofSetVerticalSync(true);
 	
-	project = new example2D();
+	project = new example3D();
     project->setup();
     project->play();
     

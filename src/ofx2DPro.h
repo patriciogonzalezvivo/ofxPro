@@ -18,7 +18,6 @@
 //
 #include "UIClass.h"
 #include "UIBackground.h"
-#include "UIMapBackground.h"
 #include "UILog.h"
 
 //  System

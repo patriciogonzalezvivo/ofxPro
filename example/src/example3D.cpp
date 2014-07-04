@@ -13,12 +13,9 @@ void example3D::selfSetup(){
 }
 
 void example3D::selfSetupGuis(){
-    backgroundSet(new UIMapBackground() );
-    
     lightAdd("DIR LIGHT ", OF_LIGHT_DIRECTIONAL );
     lightAdd("SPOT LIGHT", OF_LIGHT_SPOT);
-    
-    guiAdd(grid);
+    materialAdd("MATERIAL 2");
 }
 
 void example3D::selfGuiEvent(ofxUIEventArgs &e){
@@ -26,7 +23,8 @@ void example3D::selfGuiEvent(ofxUIEventArgs &e){
 }
 
 void example3D::selfSetupSystemGui(){
-    
+    sysGui->addSlider("Radius_1", 0, 300, &radius1);
+    sysGui->addSlider("Radius_2", 0, 50, &radius2);
 }
 
 void example3D::guiSystemEvent(ofxUIEventArgs &e){
@@ -57,23 +55,17 @@ void example3D::selfUpdate(){
 }
 
 void example3D::selfDraw(){
-    glEnable(GL_DEPTH_TEST);
-    {
-        ofPushMatrix();
-        ofPushStyle();
-        materials["MATERIAL 1"]->begin();
-        
-        ofSetColor(255);
-        grid.draw();
-        
-        ofSetColor(255);
-        ofDrawSphere(0, 0, 300);
-        
-        materials["MATERIAL 1"]->end();
-        ofPushStyle();
-        ofPopMatrix();
-    }
-    glDisable(GL_DEPTH_TEST);
+    materials["MATERIAL 1"]->begin();
+    ofSetColor(255);
+    ofDrawSphere(0, 0, radius1);
+    materials["MATERIAL 1"]->end();
+    
+    ofPushMatrix();
+    materials["MATERIAL 2"]->begin();
+    ofTranslate((radius1*1.5+radius2)*cos(ofGetElapsedTimef()*0.5),0,(radius1*1.5+radius2)*sin(ofGetElapsedTimef()*0.5));
+    ofDrawSphere(0, 0, radius2);
+    materials["MATERIAL 2"]->end();
+    ofPopMatrix();
 }
 
 void example3D::selfDrawOverlay(){
