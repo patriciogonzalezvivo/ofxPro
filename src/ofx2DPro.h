@@ -18,6 +18,7 @@
 //
 #include "UIClass.h"
 #include "UIBackground.h"
+#include "UIShader.h"
 #include "UILog.h"
 
 //  System

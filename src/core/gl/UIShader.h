@@ -6,12 +6,10 @@
 //
 
 #pragma once
-
 #include "UIClass.h"
 
-#include "PingPong.h"
 #include "Uniform.h"
-
+#include "PingPong.h"
 
 class UIShader : public UIClass , public ofShader {
 public:

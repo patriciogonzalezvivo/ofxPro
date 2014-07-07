@@ -28,8 +28,8 @@ public:
     bool    bGradient;
     
 protected:
-    virtual void    setupUI();
-    virtual void    guiEvent(ofxUIEventArgs &e);
+    virtual void setupUI();
+    virtual void guiEvent(ofxUIEventArgs &e);
     
     vector<UIReference> *guis;
 };
