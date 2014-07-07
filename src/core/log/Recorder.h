@@ -8,6 +8,8 @@
 #include "ofMain.h"
 #include <set>
 
+#include "Poco/Condition.h"
+
 template <typename T> struct lockFreeQueue {
     
     lockFreeQueue(){
