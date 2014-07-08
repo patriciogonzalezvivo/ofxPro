@@ -14,6 +14,7 @@
 class UIShader : public UIClass , public ofShader {
 public:
     UIShader();
+    virtual ~UIShader(){};
     
     virtual string  getClassName();
     
