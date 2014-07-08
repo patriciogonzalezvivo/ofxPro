@@ -296,6 +296,20 @@ void UIBackShader::setupUI(){
     }
 }
 
+void UIBackShader::guiEvent(ofxUIEventArgs &e){
+    if (gui != NULL){
+        string name = e.widget->getName();
+        
+        if( name == "OPEN"){
+            
+            string comand = "open " + fragFilename;
+
+            system(comand.c_str());
+            
+        }
+    }
+}
+
 void UIBackShader::update(ofEventArgs & args){
     if(bEnable){
         if(!bMeshReady){

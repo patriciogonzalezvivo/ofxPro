@@ -26,6 +26,8 @@ public:
     
 protected:
     virtual void setupUI();
+    virtual void guiEvent(ofxUIEventArgs &e);
+    
 	virtual void update(ofEventArgs & args);
     virtual void windowResized(ofResizeEventArgs & args);
     
