@@ -120,16 +120,6 @@ void ofx3DPro::draw(ofEventArgs & args){
                     
                 }
                 
-                //  Draw Log
-                //
-                {
-                    ofPushStyle();
-                    ofDisableLighting();
-                    ofSetColor(background->getUIBrightness()*255.0);
-                    logGui.draw();
-                    ofPopStyle();
-                }
-                
                 ofDisableDepthTest();
                 fog.end();
                 
@@ -247,10 +237,6 @@ void ofx3DPro::mousePressed(ofMouseEventArgs & args){
 	if( cursorIsOverGUI() ){
 		camera->disableMouseInput();
 	}
-    else if (logGui.isTakingNotes()){
-        camera->disableMouseInput();
-        logGui.penDown(ofPoint(args.x,args.y));
-    }
     else if(bEdit && cursorIsOverLight() != "NULL"){
         camera->disableMouseInput();
         selectedLigth = cursorIsOverLight();
@@ -288,9 +274,6 @@ void ofx3DPro::mouseDragged(ofMouseEventArgs & args){
     if (cursorIsOverGUI()){
         
     }
-    else if (logGui.isTakingNotes()){
-        logGui.penDown(ofPoint(args.x,args.y));
-    }
     else if(bEdit && selectedLigth != "NULL"){
         if(cursor.worldValid){
             ofPoint pmouse(ofGetPreviousMouseX(),-ofGetPreviousMouseY());
@@ -308,10 +291,6 @@ void ofx3DPro::mouseReleased(ofMouseEventArgs & args){
     
     if(camera->bEnable){
         camera->enableMouseInput();
-    }
-    
-    if(logGui.isTakingNotes()){
-        logGui.penUp();
     }
     
     selfMouseReleased(args);

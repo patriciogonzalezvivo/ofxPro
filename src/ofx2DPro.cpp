@@ -152,16 +152,6 @@ void ofx2DPro::draw(ofEventArgs & args){
                     ofPopStyle();
                 }
                 
-                //  Draw Log
-                //
-                {
-                    ofPushStyle();
-                    ofPushMatrix();
-                    ofSetColor(background->getUIBrightness()*255);
-                    logGui.draw();
-                    ofPopMatrix();
-                    ofPopStyle();
-                }
             }
 #ifdef TARGET_RASPBERRY_PI
             //  a full screen FBO is to much for RPI
@@ -309,11 +299,6 @@ void ofx2DPro::mousePressed(ofMouseEventArgs & args){
         return;
     }
     
-    if (logGui.isTakingNotes()){
-        logGui.penDown(ofPoint(args.x,args.y));
-        return;
-    }
-   
     if(ofGetElapsedTimef()-lastClick<doublClickThreshold)
         selfMouseDoublePressed(args);
     else
@@ -324,22 +309,12 @@ void ofx2DPro::mouseDragged(ofMouseEventArgs& args){
     if(cursorIsOverGUI())
         return;
     
-    if (logGui.isTakingNotes()){
-        logGui.penDown(ofPoint(args.x,args.y));
-        return;
-    }
-    
     selfMouseDragged(args);
 }
 
 void ofx2DPro::mouseReleased(ofMouseEventArgs & args){
     if(cursorIsOverGUI())
         return;
-    
-    if (logGui.isTakingNotes()){
-        logGui.penUp();
-        return;
-    }
     
     lastClick = ofGetElapsedTimef();
     selfMouseReleased(args);

@@ -9,18 +9,14 @@
 #include "UIClass.h"
 #include "UICamera.h"
 
-#include "Note.h"
 #include "Flickr.h"
 #include "Recorder.h"
-
 #include "FileUploader.h"
-#include "BrushedLine.h"
 
 class UILog : public UIClass {
 public:
     
     UILog();
-    virtual ~UILog();
 
     void    linkDataPath(string _path){dataPath=_path;}
     void    linkCamera(UICamera *_camera){camera=_camera;};
@@ -33,16 +29,8 @@ public:
     void    recordAddFrame(ofBaseHasTexture &_texBase);
     bool    isRecording(){return bRecording;};
     
-    bool    isTakingNotes(){return bEnable&&bNoteTaking;};
-    bool    penDown(ofPoint _mouse);
-    bool    penUp();
-    
     void    upload();
     
-    void    logSave(string _name);
-    void    logLoad(string _name);
-    
-    void    draw();
     void    drawStatus();
     
 protected:
@@ -60,15 +48,5 @@ protected:
     Recorder        recorder;
     string          lastPicture;
 	string          lastRercord;
-    bool            bRecording, bRecordAll;
-    
-    //  Notes
-    BrushedLine     BL;
-    ofTexture       BLTexture;
-    ofShader        shader;
-    vector<Note*>   notes;
-    Note            *actualNote;
-    ofxUITextInput  *textField;
-    bool            bNoteTaking;
-    bool            addNewNote;
+    bool            bRecording;
 };

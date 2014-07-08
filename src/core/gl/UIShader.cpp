@@ -134,6 +134,13 @@ bool UIShader::load(string _fragShader, string _vertShader, string _geomShader){
 bool UIShader::loadFrag(string _fragShader){
     bVertex = false;
     
+    ofFile fragFile = ofFile(_fragShader);
+    if (!fragFile.exists() ){
+        ofBuffer frag;
+        frag.append(fragmentShader);
+        ofBufferToFile(_fragShader, frag);
+    }
+    
     return reloadShader( _fragShader );
 }
 
