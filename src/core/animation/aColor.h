@@ -21,7 +21,7 @@ public:
         bri=0.0;
         alpha=1.0;
     };
-    virtual ~aColor(){};
+//    virtual ~aColor(){};
     
     virtual void set( ofFloatColor const & _color ){
         hue = _color.getHue();

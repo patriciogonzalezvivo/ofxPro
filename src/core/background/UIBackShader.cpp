@@ -7,7 +7,21 @@
 //
 
 #include "UIBackShader.h"
-#include "ParseTextTools.h"
+
+void bsJumpNextWord(int &_index, vector<string> &_words){
+    _index++;
+    
+    while( ((_words[ _index].size() <= 1) || (_words[ _index] == "\t")) && ( _index < _words.size())){
+        _index++;
+    }
+}
+
+void bsEraseSemiColon(string &_word){
+    int end = _word.find(';') ;
+    for(int i = _word.size()-1; i >= end ; i--){
+        _word.erase(_word.begin()+i);
+    }
+}
 
 UIBackShader::UIBackShader(){
     UIBackground();
@@ -137,19 +151,19 @@ void UIBackShader::extractUniforms(string _shaderCode){
         
         for(int j = 0; j < words.size(); j++){
             if (words[j] == "uniform"){
-                jumpNextWord(j,words);
+                bsJumpNextWord(j,words);
                 
                 if (words[j] == "vec3"){
-                    jumpNextWord(j,words);
-                    eraseSemiColon(words[j]);
+                    bsJumpNextWord(j,words);
+                    bsEraseSemiColon(words[j]);
                     addUniform(UNIFORM_VEC3,words[j]);
                 } else if (words[j] == "vec2"){
-                    jumpNextWord(j,words);
-                    eraseSemiColon(words[j]);
+                    bsJumpNextWord(j,words);
+                    bsEraseSemiColon(words[j]);
                     addUniform(UNIFORM_VEC2,words[j]);
                 } else if (words[j] == "float"){
-                    jumpNextWord(j,words);
-                    eraseSemiColon(words[j]);
+                    bsJumpNextWord(j,words);
+                    bsEraseSemiColon(words[j]);
                     addUniform(UNIFORM_FLOAT,words[j]);
                 }
                 

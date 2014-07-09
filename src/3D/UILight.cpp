@@ -154,6 +154,7 @@ void UILight::play(){
 
 void UILight::stop(){
 //    light.destroy();
+    light.disable();
 }
 
 void UILight::draw(){

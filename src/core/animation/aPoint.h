@@ -10,8 +10,6 @@
 
 class aPoint : public ofPoint {
 public:
-	aPoint(){};
-    virtual ~aPoint(){};
     
     virtual void goTo(const ofPoint &_target, float _speed = 0.1){
         if( ((ofPoint)*this) != _target){
