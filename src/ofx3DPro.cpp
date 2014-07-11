@@ -39,9 +39,7 @@ void ofx3DPro::draw(ofEventArgs & args){
             currentViewPort = i;
             
             ofPushStyle();
-#ifdef TARGET_RASPBERRY_PI
-            
-#else
+#ifndef TARGET_RASPBERRY_PI
             getRenderTarget(currentViewPort).begin();
 #endif
             //  Background
@@ -72,15 +70,16 @@ void ofx3DPro::draw(ofEventArgs & args){
                 
                 ofEnableDepthTest();
                 
-                if (bEdit){
+                if (bEdit&&bEnableLights){
                     lightsDraw();
                 }
                 
                 //  Draw Scene
                 //
                 {
-                    
-                    lightsBegin();
+                    if(bEnableLights){
+                        lightsBegin();
+                    }
                     
                     if(bBackCull||bFrontCull){
                         
@@ -116,8 +115,9 @@ void ofx3DPro::draw(ofEventArgs & args){
                         ofPopStyle();
                     }
                     
-                    lightsEnd();
-                    
+                    if(bEnableLights){
+                        lightsEnd();
+                    }
                 }
                 
                 ofDisableDepthTest();
@@ -145,19 +145,17 @@ void ofx3DPro::draw(ofEventArgs & args){
                 ofPopStyle();
             }
             
-#ifdef TARGET_RASPBERRY_PI
-            
-#else
+#ifndef TARGET_RASPBERRY_PI
             getRenderTarget(currentViewPort).end();
 #endif
-            
         }
         
-#ifdef TARGET_RASPBERRY_PI
-#else
+#ifndef TARGET_RASPBERRY_PI
         //  Post-Draw ( shader time )
         //
         ofDisableLighting();
+        
+        currentViewPort = 0;
         selfPostDraw();
 #endif
         logGui.drawStatus();
@@ -429,24 +427,20 @@ string ofx3DPro::cursorIsOverLight(){
 }
 
 void ofx3DPro::lightsBegin(){
-    if(bEnableLights){
-        
-        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbientColor);
-        ofSetSmoothLighting(bSmoothLighting);
-        ofEnableLighting();
-        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-            it->second->enable();
-        }
+    ofEnableLighting();
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbientColor);
+    ofSetSmoothLighting(bSmoothLighting);
+    
+    for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
+        it->second->enable();
     }
 }
 
 void ofx3DPro::lightsEnd(){
-    if(!bEnableLights){
-        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-            it->second->disable();
-        }
-        ofDisableLighting();
+    for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
+        it->second->disable();
     }
+    ofDisableLighting();
 }
 
 void ofx3DPro::lightsDraw(){

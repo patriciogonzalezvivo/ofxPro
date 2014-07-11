@@ -60,12 +60,12 @@ void UIMaterial::setName(string _name){
 }
 
 void UIMaterial::setupUI(){
-    addUIColor("AMBIENT", ambient);
-    addUIColor("DIFFUSE", diffuse);
-    addUIColor("EMISSIVE", emissive);
-    addUIColor("SPECULAR", specular);
+    addUIColor("AMBIENT", &ambient);
+    addUIColor("DIFFUSE", &diffuse);
+    addUIColor("EMISSIVE", &emissive);
+    addUIColor("SPECULAR", &specular);
 
-    gui->addMinimalSlider("SHINY", 0.0, 1.0, &shininess)->setShowValue(false);
+    gui->addMinimalSlider("SHINY", 0.0, 1.0, &shininess);
 }
 
 string UIMaterial::getClassName(){

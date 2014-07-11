@@ -16,12 +16,13 @@ public:
         r = 0.0;
         g = 0.0;
         b = 0.0;
+        a = 1.0;
+        
         hue=0.0;
         sat=0.0;
         bri=0.0;
         alpha=1.0;
     };
-//    virtual ~aColor(){};
     
     virtual void set( ofFloatColor const & _color ){
         hue = _color.getHue();
@@ -31,12 +32,12 @@ public:
     }
     
     virtual void update(){
-        ofPoint HSBTarget(hue,sat,bri);
+        float speed = 0.09;
         
-        if (HSB!=HSBTarget || a != alpha){
-            HSB.goTo(HSBTarget,0.09);
-            setHsb(HSB.x, HSB.y, HSB.z);
-            a += (alpha - a)*0.01;
+        ofPoint HSBTarget(hue,sat,bri);
+        if (HSB!=HSBTarget||a != alpha){
+            HSB.goTo(HSBTarget,speed);
+            setHsb(HSB.x, HSB.y, HSB.z,a+(alpha - a)*speed);
         }
     }
     

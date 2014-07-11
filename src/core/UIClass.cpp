@@ -39,100 +39,100 @@ UIReference UIClass::getUIReference( ofxUICanvas *_parent ){
     return gui;
 }
 
-void UIClass::addUIPos(string _NAME, aPoint &_pos, bool _justXY){
+void UIClass::addUIPos(string _NAME, aPoint *_pos, bool _justXY){
     float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
     float dim = gui->getGlobalSliderHeight();
     gui->addLabel(_NAME, OFX_UI_FONT_SMALL);
     
     if(_justXY){
         
-        gui->addMinimalSlider(_NAME+"X", 0, ofGetScreenWidth(), &_pos.x, length/2., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"X", 0, ofGetScreenWidth(), &(_pos->x), length/2., dim)->setShowValue(false);
         gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-        gui->addMinimalSlider(_NAME+"Y", 0, ofGetScreenHeight(), &_pos.y, length/2., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Y", 0, ofGetScreenHeight(), &(_pos->y), length/2., dim)->setShowValue(false);
     } else {
-        gui->addMinimalSlider(_NAME+"X", -1000.0, 1000.0, &_pos.x, length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"X", -1000.0, 1000.0, &(_pos->x), length/3., dim)->setShowValue(false);
         gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-        gui->addMinimalSlider(_NAME+"Y", -1000.0, 1000.0, &_pos.y, length/3., dim)->setShowValue(false);
-        gui->addMinimalSlider(_NAME+"Z", -1000.0, 1000.0, &_pos.z, length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Y", -1000.0, 1000.0, &(_pos->y), length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Z", -1000.0, 1000.0, &(_pos->z), length/3., dim)->setShowValue(false);
     }
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addSpacer();
 }
 
-void UIClass::addUIOri(string _NAME, aPoint &_pos, bool _justXY){
+void UIClass::addUIOri(string _NAME, aPoint *_pos, bool _justXY){
     float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
     float dim = gui->getGlobalSliderHeight();
     gui->addLabel(_NAME, OFX_UI_FONT_SMALL);
     
     if(_justXY){
         
-        gui->addMinimalSlider(_NAME+"X", 0, 360, &_pos.x, length/2., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"X", 0, 360, &(_pos->x), length/2., dim)->setShowValue(false);
         gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-        gui->addMinimalSlider(_NAME+"Y", 0, 360, &_pos.y, length/2., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Y", 0, 360, &(_pos->y), length/2., dim)->setShowValue(false);
     } else {
-        gui->addMinimalSlider(_NAME+"X", -180, 180, &_pos.x, length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"X", -180, 180, &(_pos->x), length/3., dim)->setShowValue(false);
         gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-        gui->addMinimalSlider(_NAME+"Y", -180, 180, &_pos.y, length/3., dim)->setShowValue(false);
-        gui->addMinimalSlider(_NAME+"Z", -180, 180, &_pos.z, length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Y", -180, 180, &(_pos->y), length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Z", -180, 180, &(_pos->z), length/3., dim)->setShowValue(false);
     }
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addSpacer();
 }
 
-void UIClass::addUIOri(string _NAME, ofPoint &_pos, bool _justXY){
+void UIClass::addUIOri(string _NAME, ofPoint *_pos, bool _justXY){
     float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
     float dim = gui->getGlobalSliderHeight();
     gui->addLabel(_NAME, OFX_UI_FONT_SMALL);
     
     if(_justXY){
         
-        gui->addMinimalSlider(_NAME+"X", 0, 360, &_pos.x, length/2., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"X", 0, 360, &(_pos->x), length/2., dim)->setShowValue(false);
         gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-        gui->addMinimalSlider(_NAME+"Y", 0, 360, &_pos.y, length/2., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Y", 0, 360, &(_pos->y), length/2., dim)->setShowValue(false);
     } else {
-        gui->addMinimalSlider(_NAME+"X", -180, 180, &_pos.x, length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"X", -180, 180, &(_pos->x), length/3., dim)->setShowValue(false);
         gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-        gui->addMinimalSlider(_NAME+"Y", -180, 180, &_pos.y, length/3., dim)->setShowValue(false);
-        gui->addMinimalSlider(_NAME+"Z", -180, 180, &_pos.z, length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Y", -180, 180, &(_pos->y), length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Z", -180, 180, &(_pos->z), length/3., dim)->setShowValue(false);
     }
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addSpacer();
 }
 
-void UIClass::addUIPos(string _NAME, ofPoint &_pos, bool _justXY){
+void UIClass::addUIPos(string _NAME, ofPoint *_pos, bool _justXY){
     float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
     float dim = gui->getGlobalSliderHeight();
     gui->addLabel(_NAME, OFX_UI_FONT_SMALL);
     
     if(_justXY){
-        gui->addMinimalSlider(_NAME+"X", 0, ofGetScreenWidth(), &_pos.x, length/2., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"X", 0, ofGetScreenWidth(), &(_pos->x), length/2., dim)->setShowValue(false);
         gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-        gui->addMinimalSlider(_NAME+"Y", 0, ofGetScreenHeight(), &_pos.y, length/2., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Y", 0, ofGetScreenHeight(), &(_pos->y), length/2., dim)->setShowValue(false);
         
     } else {
-        gui->addMinimalSlider(_NAME+"X", -1000.0, 1000.0, &_pos.x, length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"X", -1000.0, 1000.0, &(_pos->x), length/3., dim)->setShowValue(false);
         gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-        gui->addMinimalSlider(_NAME+"Y", -1000.0, 1000.0, &_pos.y, length/3., dim)->setShowValue(false);
-        gui->addMinimalSlider(_NAME+"Z", -1000.0, 1000.0, &_pos.z, length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Y", -1000.0, 1000.0, &(_pos->y), length/3., dim)->setShowValue(false);
+        gui->addMinimalSlider(_NAME+"Z", -1000.0, 1000.0, &(_pos->z), length/3., dim)->setShowValue(false);
     }
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addSpacer();
 }
 
-void UIClass::addUIColor(string _NAME, aColor &_color){
+void UIClass::addUIColor(string _NAME, aColor *_color){
     float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
     float dim = gui->getGlobalSliderHeight();
     string pre = ofToLower(ofToString(_NAME[0]));
     
     gui->addLabel(_NAME, OFX_UI_FONT_SMALL);
-    gui->addMinimalSlider(pre+"HUE", 0.0, 1.0, &_color.hue, length, dim)->setShowValue(false);
-    gui->addMinimalSlider(pre+"SAT", 0.0, 1.0, &_color.sat,length/2.0, dim)->setShowValue(false);
+    gui->addMinimalSlider(pre+"HUE", 0.0, 1.0, &(_color->hue), length, dim);//->setShowValue(false);
+    gui->addMinimalSlider(pre+"SAT", 0.0, 1.0, &(_color->sat),length/2.0, dim);//->setShowValue(false);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMinimalSlider(pre+"BRI", 0.0, 1.0, &_color.bri, length/2.0, dim)->setShowValue(false);
+    gui->addMinimalSlider(pre+"BRI", 0.0, 1.0, &(_color->bri), length/2.0, dim);//->setShowValue(false);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addSpacer();
 }

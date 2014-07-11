@@ -16,8 +16,8 @@ void UIBackground::linkUIs( vector<UIReference> *_guis ){
 }
 
 void UIBackground::setupUI(){
-    addUIColor("A COLOR", color);
-    addUIColor("B COLOR", color2);
+    addUIColor("A COLOR", &color);
+    addUIColor("B COLOR", &color2);
     gui->addToggle("GRADIENT", &bGradient);
 }
 

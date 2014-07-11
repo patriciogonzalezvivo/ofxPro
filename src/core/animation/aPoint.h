@@ -40,6 +40,6 @@ public:
         acc *= 0;
     }
     
-//protected:
+protected:
     ofPoint vel,acc;
 };

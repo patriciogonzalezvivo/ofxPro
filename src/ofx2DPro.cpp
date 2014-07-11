@@ -119,10 +119,7 @@ void ofx2DPro::draw(ofEventArgs & args){
         
         for(int i=0; i < renderTargets.size();i++){
             currentViewPort = i;
-#ifdef TARGET_RASPBERRY_PI
-            //  a full screen FBO is to much for RPI
-            //
-#else
+#ifndef TARGET_RASPBERRY_PI
             ofx2DPro::getRenderTarget(currentViewPort).begin();
 #endif
             {
@@ -153,14 +150,11 @@ void ofx2DPro::draw(ofEventArgs & args){
                 }
                 
             }
-#ifdef TARGET_RASPBERRY_PI
-            //  a full screen FBO is to much for RPI
-            //
-#else
+#ifndef TARGET_RASPBERRY_PI
             ofx2DPro::getRenderTarget(currentViewPort).end();
-            selfPostDraw();
 #endif
         }
+        selfPostDraw();
         
         logGui.drawStatus();
 	}
@@ -664,7 +658,7 @@ ofFbo& ofx2DPro::getRenderTarget(int _viewNumber){
     }
     
     ofFbo *renderTarget = &renderTargets[_viewNumber];
-    int width = ofGetWidth() / renderTargets.size();
+    int width = ofGetWidth();// / renderTargets.size();
     int height = ofGetHeight();
     if(!renderTarget->isAllocated() || renderTarget->getWidth() != width || renderTarget->getHeight() != height){
         ofFbo::Settings settings;
@@ -682,13 +676,13 @@ ofFbo& ofx2DPro::getRenderTarget(int _viewNumber){
         renderTarget->allocate(settings);
 #endif
 		renderTarget->begin();
-		ofClear(0,0,0,0);
-		renderTarget->end();
-    }
+        ofClear(0, 0,0,0);
+        renderTarget->end();
+    } 
     
-    return *renderTarget;
+    return *(renderTarget);
 }
-
+    
 void ofx2DPro::selfPostDraw(){
     int offsetX = ofx2DPro::getRenderTarget().getWidth();
     for(int i=0;i<renderTargets.size();i++){

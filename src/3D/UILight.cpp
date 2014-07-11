@@ -77,7 +77,7 @@ void UILight::setupUI(){
     
     switch( light.getType() ){
         case OF_LIGHT_POINT:{
-            addUIPos("POS", *this);
+            addUIPos("POS", this);
         }
             break;
             
@@ -86,20 +86,20 @@ void UILight::setupUI(){
             gui->addSlider("EXPONENT", 0.0, 128.0, &exponent);
             gui->addSpacer();
             
-            addUIPos("POS", *this);
-            addUIOri("ORI", oriTarget);
+            addUIPos("POS", this);
+            addUIOri("ORI", &oriTarget);
         }
             break;
             
         case OF_LIGHT_DIRECTIONAL:{
-            addUIOri("ORI", oriTarget);
+            addUIOri("ORI", &oriTarget);
         }
             break;
     }
     
-    addUIColor("AMBIENT", ambient);
-    addUIColor("DIFFUSE", diffuse);
-    addUIColor("SPECULAR", specular);
+    addUIColor("AMBIENT", &ambient);
+    addUIColor("DIFFUSE", &diffuse);
+    addUIColor("SPECULAR", &specular);
 }
 
 void UILight::guiEvent(ofxUIEventArgs &e){

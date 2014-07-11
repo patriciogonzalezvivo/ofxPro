@@ -29,11 +29,11 @@ protected:
     virtual void        setupUI( ) = 0;
     virtual void        guiEvent(ofxUIEventArgs &e){};
     
-    virtual void        addUIPos(string _NAME, aPoint &_pos, bool _justXY = false);
-    virtual void        addUIPos(string _NAME, ofPoint &_pos, bool _justXY = false);
-    virtual void        addUIOri(string _NAME, aPoint &_pos, bool _justXY = false);
-    virtual void        addUIOri(string _NAME, ofPoint &_pos, bool _justXY = false);
-    virtual void        addUIColor(string _NAME, aColor &_color);
+    virtual void        addUIPos(string _NAME, aPoint *_pos, bool _justXY = false);
+    virtual void        addUIPos(string _NAME, ofPoint *_pos, bool _justXY = false);
+    virtual void        addUIOri(string _NAME, aPoint *_pos, bool _justXY = false);
+    virtual void        addUIOri(string _NAME, ofPoint *_pos, bool _justXY = false);
+    virtual void        addUIColor(string _NAME, aColor *_color);
     
     UIReference         gui;
 };

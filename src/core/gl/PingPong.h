@@ -17,7 +17,24 @@ public:
         bAllocated = false;
     }
     
-    virtual void    allocate( int _width, int _height, int _internalformat = GL_RGBA){
+    virtual void allocate(ofFbo::Settings _settings){
+        for(int i = 0; i < 2; i++)
+            FBOs[i].allocate(_settings);
+        
+        // Clean
+        //
+        clear();
+        
+        // Set everything to 0
+        //
+        flag = 0;
+        swap();
+        flag = 0;
+        
+        bAllocated = true;
+    }
+    
+    virtual void allocate( int _width, int _height, int _internalformat = GL_RGBA){
         width = _width;
         height = _height;
         
@@ -39,29 +56,37 @@ public:
         bAllocated = true;
     }
 
-    virtual bool    isAllocated(){return bAllocated;}
+    virtual bool isAllocated(){return bAllocated;}
     
-    virtual int     getWidth(){return width;};
-    virtual int     getHeight(){return height;};
+    virtual int getWidth(){return width;};
+    virtual int getHeight(){return height;};
     
-    virtual void    setUseTexture(bool bUseTex){ };
+    virtual void setUseTexture(bool bUseTex){};
     virtual ofTexture& getTextureReference() { return dst->getTextureReference(); };
     
-    virtual void    swap(){
+    virtual void swap(){
         src = &(FBOs[(flag)%2]);
         dst = &(FBOs[++(flag)%2]);
     }
     
+    virtual void begin(bool _dst=false){
+        FBOs[_dst].begin();
+    }
+    
+    virtual void end(bool _dst=false){
+        FBOs[_dst].end();
+    }
+    
     virtual void beginBoth(){
-        FBOs[0].begin();
+        src->begin();
     }
     
     virtual void endBoth(){
-        FBOs[0].end();
+        src->end();
         
-        FBOs[1].begin();
-        FBOs[0].draw(0,0);
-        FBOs[1].end();
+        dst->begin();
+        src->draw(0,0);
+        dst->end();
     }
     
     virtual void clear(float _alpha = 0){
