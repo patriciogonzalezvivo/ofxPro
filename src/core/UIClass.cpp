@@ -57,7 +57,6 @@ void UIClass::addUIPos(string _NAME, aPoint *_pos, bool _justXY){
     }
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addSpacer();
 }
 
 void UIClass::addUIOri(string _NAME, aPoint *_pos, bool _justXY){
@@ -78,7 +77,6 @@ void UIClass::addUIOri(string _NAME, aPoint *_pos, bool _justXY){
     }
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addSpacer();
 }
 
 void UIClass::addUIOri(string _NAME, ofPoint *_pos, bool _justXY){
@@ -99,7 +97,6 @@ void UIClass::addUIOri(string _NAME, ofPoint *_pos, bool _justXY){
     }
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addSpacer();
 }
 
 void UIClass::addUIPos(string _NAME, ofPoint *_pos, bool _justXY){
@@ -120,7 +117,6 @@ void UIClass::addUIPos(string _NAME, ofPoint *_pos, bool _justXY){
     }
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addSpacer();
 }
 
 void UIClass::addUIColor(string _NAME, aColor *_color){
@@ -134,5 +130,4 @@ void UIClass::addUIColor(string _NAME, aColor *_color){
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     gui->addMinimalSlider(pre+"BRI", 0.0, 1.0, &(_color->bri), length/2.0, dim);//->setShowValue(false);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addSpacer();
 }

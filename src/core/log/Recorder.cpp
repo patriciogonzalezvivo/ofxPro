@@ -147,7 +147,7 @@ Recorder::Recorder()
 {
     bIsInitialized = false;
     ffmpegLocation = "ffmpeg";
-    videoCodec = "mpeg4";
+    videoCodec = "mpeg4";//"libx264";//"mpeg4";
     audioCodec = "pcm_s16le";
     videoBitrate = "20000k";
     audioBitrate = "128k";
@@ -170,6 +170,7 @@ bool Recorder::setup(string fname, int w, int h, float fps, int sampleRate, int 
     outputSettings
     << " -vcodec " << videoCodec
     << " -b:v " << videoBitrate
+//    << " -b 2M -bt 4M"
     << " -acodec " << audioCodec
     << " -ab " << audioBitrate
     << " " << absFilePath;
