@@ -20,13 +20,14 @@ public:
 
     void    linkDataPath(string _path){dataPath=_path;}
     void    linkCamera(UICamera *_camera){camera=_camera;};
+    void    linkRenderTarget(ofBaseHasTexture *_tex){renderTarget = _tex; };
     
     string  getClassName(){return "LOG";};
 
     void    screenShot(string _post = "");
 
     void    record(bool _state);
-    void    recordAddFrame(ofBaseHasTexture &_texBase);
+    void    recordAddFrame( ofBaseHasTexture *_texBase = NULL);
     bool    isRecording(){return bRecording;};
     
     void    upload();
@@ -41,7 +42,8 @@ protected:
     vector<FileUploader*> uploadingFiles;
     
     UICamera        *camera;
-    ofFbo           *renderTarget;
+    ofBaseHasTexture *renderTarget;
+    ofPixels        pixels;
     string          dataPath;
     
     Flickr::API     flickrAPI;

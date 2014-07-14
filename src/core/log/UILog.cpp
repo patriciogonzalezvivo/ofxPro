@@ -16,13 +16,14 @@ UILog::UILog(){
     dataPath = "";
 #endif
     
-    renderTarget = NULL;
     camera = NULL;
     
     bRecording = false;
     
     lastPicture = "";
     lastRercord = "";
+    
+    pixels.allocate(ofGetScreenWidth(),ofGetScreenHeight(),OF_IMAGE_COLOR);
 }
 
 void UILog::setupUI(){
@@ -72,11 +73,40 @@ void UILog::record(bool _state){
     }
 }
 
-void UILog::recordAddFrame(ofBaseHasTexture &_texBase){
-    ofPixels pixels;
-    pixels.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR_ALPHA);
-    _texBase.getTextureReference().readToPixels(pixels);
-    recorder.addFrame(pixels);
+void UILog::recordAddFrame(ofBaseHasTexture *_texBase){
+    
+    if(_texBase == NULL){
+        _texBase = renderTarget;
+    }
+    
+    if(_texBase != NULL){
+        
+        if(pixels.getWidth() != _texBase->getTextureReference().getWidth() ||
+           pixels.getHeight() != _texBase->getTextureReference().getHeight()){
+            pixels.allocate(_texBase->getTextureReference().getWidth(), _texBase->getTextureReference().getHeight(), OF_IMAGE_COLOR);
+        }
+        
+        if(_texBase->getTextureReference().getTextureData().glTypeInternal == GL_RGBA ){
+            
+//            ofPushStyle();
+//            ofSetColor(255);
+//            ofFbo nonAlpha;
+//            nonAlpha.allocate(_texBase->getTextureReference().getWidth(), _texBase->getTextureReference().getHeight(), GL_RGB);
+//            nonAlpha.begin();
+//            _texBase->getTextureReference().draw(0,0);
+//            nonAlpha.end();
+//            ofPopStyle();
+//            
+//            nonAlpha.getTextureReference().readToPixels(pixels);
+            
+            recorder.setPixelFormat("rgba");
+        } else {
+            recorder.setPixelFormat("rgb24");
+        }
+        
+        _texBase->getTextureReference().readToPixels(pixels);
+        recorder.addFrame(pixels);
+    }
 }
 
 void UILog::upload(){

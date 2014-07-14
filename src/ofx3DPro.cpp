@@ -306,6 +306,8 @@ void ofx3DPro::setupCoreGuis(){
     setupNumViewports(1);
     
     logGui.linkDataPath(getDataPath());
+    logGui.linkRenderTarget(&getRenderTarget());
+    
     guiAdd(logGui);
     
     setupSystemGui();

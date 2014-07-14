@@ -108,7 +108,7 @@ void ofx2DPro::update(ofEventArgs & args){
     if(bUpdateSystem){
         selfUpdate();
         if(logGui.isRecording()){
-            logGui.recordAddFrame(getRenderTarget());
+            logGui.recordAddFrame();
         }
     }
 }
@@ -320,6 +320,8 @@ void ofx2DPro::setupCoreGuis(){
     setupGui();
     
     logGui.linkDataPath(getDataPath());
+    logGui.linkRenderTarget(&getRenderTarget());
+    
     guiAdd(logGui);
     
     setupSystemGui();
@@ -664,7 +666,7 @@ ofFbo& ofx2DPro::getRenderTarget(int _viewNumber){
         ofFbo::Settings settings;
         settings.width = width;
         settings.height = height;
-        settings.internalformat = GL_RGB;
+        settings.internalformat = GL_RGBA;
         settings.numSamples = 0;
         settings.useDepth = true;
         settings.useStencil = true;

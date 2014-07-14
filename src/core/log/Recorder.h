@@ -134,6 +134,9 @@ public:
     
     void close();
 
+   
+
+    
 private:
     static set<int> openPipes;
     static int requestPipeNumber();

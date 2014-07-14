@@ -147,11 +147,11 @@ Recorder::Recorder()
 {
     bIsInitialized = false;
     ffmpegLocation = "ffmpeg";
-    videoCodec = "mpeg4";//"libx264";//"mpeg4";
+    videoCodec = "png";//"libx264";//"mpeg4";-vcodec png
     audioCodec = "pcm_s16le";
     videoBitrate = "20000k";
     audioBitrate = "128k";
-    pixelFormat = "rgb24";
+    pixelFormat = "rgba";//"rgb24";
 }
 
 bool Recorder::setup(string fname, int w, int h, float fps, int sampleRate, int channels)
@@ -267,10 +267,8 @@ bool Recorder::setupCustomOutput(int w, int h, float fps, int sampleRate, int ch
     return bIsInitialized;
 }
 
-void Recorder::addFrame(const ofPixels &pixels)
-{
-    if(bIsInitialized && bRecordVideo)
-    {
+void Recorder::addFrame(const ofPixels &pixels){
+    if(bIsInitialized && bRecordVideo){
         int framesToAdd = 1; //default add one frame per request
         if(bRecordAudio && !bFinishing){
             //if also recording audio, check the overall recorded time for audio and video to make sure audio is not going out of sync
