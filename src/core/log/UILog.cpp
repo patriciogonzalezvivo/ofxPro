@@ -73,38 +73,24 @@ void UILog::record(bool _state){
     }
 }
 
-void UILog::recordAddFrame(ofBaseHasTexture *_texBase){
-    
-    if(_texBase == NULL){
-        _texBase = renderTarget;
+void UILog::linkRenderTarget(ofBaseHasTexture *_tex){
+    renderTarget = _tex;
+    if(renderTarget->getTextureReference().getTextureData().glTypeInternal == GL_RGBA ){
+        recorder.setPixelFormat("rgba");
+    } else {
+        recorder.setPixelFormat("rgb24");
     }
-    
-    if(_texBase != NULL){
-        
-        if(pixels.getWidth() != _texBase->getTextureReference().getWidth() ||
-           pixels.getHeight() != _texBase->getTextureReference().getHeight()){
-            pixels.allocate(_texBase->getTextureReference().getWidth(), _texBase->getTextureReference().getHeight(), OF_IMAGE_COLOR);
+};
+
+void UILog::recordAddFrame(){
+    if(renderTarget != NULL){
+        if(pixels.getWidth() != renderTarget->getTextureReference().getWidth() ||
+           pixels.getHeight() != renderTarget->getTextureReference().getHeight()){
+            pixels.allocate(renderTarget->getTextureReference().getWidth(),
+                            renderTarget->getTextureReference().getHeight(),
+                            OF_IMAGE_COLOR);
         }
-        
-        if(_texBase->getTextureReference().getTextureData().glTypeInternal == GL_RGBA ){
-            
-//            ofPushStyle();
-//            ofSetColor(255);
-//            ofFbo nonAlpha;
-//            nonAlpha.allocate(_texBase->getTextureReference().getWidth(), _texBase->getTextureReference().getHeight(), GL_RGB);
-//            nonAlpha.begin();
-//            _texBase->getTextureReference().draw(0,0);
-//            nonAlpha.end();
-//            ofPopStyle();
-//            
-//            nonAlpha.getTextureReference().readToPixels(pixels);
-            
-            recorder.setPixelFormat("rgba");
-        } else {
-            recorder.setPixelFormat("rgb24");
-        }
-        
-        _texBase->getTextureReference().readToPixels(pixels);
+        renderTarget->getTextureReference().readToPixels(pixels);
         recorder.addFrame(pixels);
     }
 }

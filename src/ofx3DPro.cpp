@@ -144,10 +144,10 @@ void ofx3DPro::draw(ofEventArgs & args){
                 ofPopMatrix();
                 ofPopStyle();
             }
-            
 #ifndef TARGET_RASPBERRY_PI
             getRenderTarget(currentViewPort).end();
 #endif
+            ofPopStyle();
         }
         
 #ifndef TARGET_RASPBERRY_PI
@@ -159,8 +159,6 @@ void ofx3DPro::draw(ofEventArgs & args){
         selfPostDraw();
 #endif
         logGui.drawStatus();
-        
-        ofPopStyle();
 	}
     
 }

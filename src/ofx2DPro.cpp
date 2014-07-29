@@ -114,11 +114,10 @@ void ofx2DPro::update(ofEventArgs & args){
 }
 
 void ofx2DPro::draw(ofEventArgs & args){
-    ofPushStyle();
     if(bRenderSystem){
-        
         for(int i=0; i < renderTargets.size();i++){
             currentViewPort = i;
+            ofPushStyle();
 #ifndef TARGET_RASPBERRY_PI
             ofx2DPro::getRenderTarget(currentViewPort).begin();
 #endif
@@ -150,16 +149,18 @@ void ofx2DPro::draw(ofEventArgs & args){
                 }
                 
             }
+            
 #ifndef TARGET_RASPBERRY_PI
             ofx2DPro::getRenderTarget(currentViewPort).end();
 #endif
+            ofPopStyle();
         }
         selfPostDraw();
         
         logGui.drawStatus();
 	}
     
-    ofPopStyle();
+    
 }
 
 void ofx2DPro::setupNumViewports(int _num){    
@@ -217,7 +218,7 @@ void ofx2DPro::keyPressed(ofKeyEventArgs & args){
     }
     
 #ifdef TARGET_OSX
-    if( getModifierSpecialPressed()){
+    if( getModifierSpecialPressed() ){
 #else
     if( getModifierControlPressed() ){
 #endif
@@ -666,7 +667,7 @@ ofFbo& ofx2DPro::getRenderTarget(int _viewNumber){
         ofFbo::Settings settings;
         settings.width = width;
         settings.height = height;
-        settings.internalformat = GL_RGBA;
+        settings.internalformat = GL_RGB;
         settings.numSamples = 0;
         settings.useDepth = true;
         settings.useStencil = true;

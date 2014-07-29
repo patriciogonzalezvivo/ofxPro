@@ -20,14 +20,14 @@ public:
 
     void    linkDataPath(string _path){dataPath=_path;}
     void    linkCamera(UICamera *_camera){camera=_camera;};
-    void    linkRenderTarget(ofBaseHasTexture *_tex){renderTarget = _tex; };
+    void    linkRenderTarget(ofBaseHasTexture *_tex);
     
     string  getClassName(){return "LOG";};
 
     void    screenShot(string _post = "");
 
     void    record(bool _state);
-    void    recordAddFrame( ofBaseHasTexture *_texBase = NULL);
+    void    recordAddFrame();
     bool    isRecording(){return bRecording;};
     
     void    upload();

@@ -147,11 +147,11 @@ Recorder::Recorder()
 {
     bIsInitialized = false;
     ffmpegLocation = "ffmpeg";
-    videoCodec = "png";//"libx264";//"mpeg4";-vcodec png
+    videoCodec = "mpeg4";//"png";//"libx264";
     audioCodec = "pcm_s16le";
     videoBitrate = "20000k";
     audioBitrate = "128k";
-    pixelFormat = "rgba";//"rgb24";
+    pixelFormat = "rgb24";
 }
 
 bool Recorder::setup(string fname, int w, int h, float fps, int sampleRate, int channels)
