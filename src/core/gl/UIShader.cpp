@@ -69,6 +69,9 @@ void UIShader::setupUI(){
     float length = (gui->getGlobalCanvasWidth()-gui->getWidgetSpacing()*5);
     float dim = gui->getGlobalSliderHeight();
     
+    linkProgram();
+    extractUniforms(fragmentShader);
+    
     for(int i = 0; i < uniforms.size(); i++){
         if ( uniforms[i]->bNeedUI ){
             if (uniforms[i]->type == UNIFORM_FLOAT){
