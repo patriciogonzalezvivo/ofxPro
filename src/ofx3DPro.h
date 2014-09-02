@@ -22,8 +22,8 @@
 class ofx3DPro : public ofx2DPro {
 public:
     
-	ofx3DPro(){};
-	virtual ~ofx3DPro(){};
+	ofx3DPro();
+	virtual ~ofx3DPro();
 	
 	//--------------------- VIRTUAL CLASSES TO EDIT
     //
@@ -50,15 +50,14 @@ public:
 	virtual void mouseDragged(ofMouseEventArgs & args);
 	virtual void mouseReleased(ofMouseEventArgs & args);
 	
+    virtual void guiLoad(string presetPath = "Working");
+    virtual void guiLoadFromPath(string presetPath);
+    virtual void guiSave(string presetName = "Working");
+    
 protected:
     
     // CORE
     virtual void setupCoreGuis();
-    
-    virtual void guiLoad();
-    virtual void guiLoadPresetFromPath(string presetPath);
-    virtual void guiSave();
-    virtual void guiSavePreset(string presetName);
     
     virtual void    backgroundSet(UIBackground *_bg);
     virtual string  cursorIsOverLight();
@@ -69,10 +68,10 @@ protected:
     //
     virtual void    cameraSet(UICamera *_cam);
     virtual void    cameraEnable(bool enable=true);
-    UICamera        *camera;
+    UICameraReference camera;
     bool            cameraEnabled;
     
-    UIFog           fog;
+//    UIFog           fog;
     
     ofPoint         unproject(ofPoint _screen);
     void            unprojectCursor(MovingCursor &_cursor, float _x, float _y);
@@ -96,7 +95,7 @@ protected:
     map<string,UILightReference>    lights;
     UIReference     lightsGui;
     string          selectedLigth;
-    float           *globalAmbientColor;
+    ofFloatColor    globalAmbientColor;
     bool            bSmoothLighting;
     bool            bEnableLights;
     

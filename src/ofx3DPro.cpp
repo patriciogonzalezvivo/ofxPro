@@ -7,6 +7,22 @@
 
 #include "ofx3DPro.h"
 
+ofx3DPro::ofx3DPro():
+globalAmbientColor(0.25, 0.25, 0.25),
+selectedLigth("NULL")
+{
+    guiTemplate = new ofxUISuperCanvas(ofToUpper(getSystemName()));
+    guiTemplate->setName("TEMPLATE");
+    guiTemplate->setWidgetFontSize(OFX_UI_FONT_SMALL);
+    
+    setupNumViewports(1);
+
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, &globalAmbientColor.r);
+};
+
+ofx3DPro::~ofx3DPro(){
+};
+
 void ofx3DPro::play(){
     if (!bPlaying){
         
@@ -17,7 +33,6 @@ void ofx3DPro::play(){
         for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
             it->second->play();
         }
-        selectedLigth = "NULL";
         ofx2DPro::play();
     }
 }
@@ -54,7 +69,7 @@ void ofx3DPro::draw(ofEventArgs & args){
                 if(cameraEnabled){
                     getCameraRef().begin();
                 }
-                fog.begin();
+//                fog.begin();
                 
                 //  Scene Setup
                 //
@@ -121,7 +136,7 @@ void ofx3DPro::draw(ofEventArgs & args){
                 }
                 
                 ofDisableDepthTest();
-                fog.end();
+//                fog.end();
                 
                 //  Update Mouse
                 //
@@ -168,7 +183,7 @@ void ofx3DPro::exit(ofEventArgs & args){
         logGui.record(false);
     }
     
-    guiSave();
+    ofx3DPro::guiSave(currentPresetName);
     
     lights.clear();
     materials.clear();
@@ -299,19 +314,14 @@ void ofx3DPro::mouseReleased(ofMouseEventArgs & args){
 void ofx3DPro::setupCoreGuis(){
     setupGui();
     
-    cameraSet(new UIEasyCamera());
-    cameraEnable();
-    setupNumViewports(1);
-    
     logGui.linkDataPath(getDataPath());
     logGui.linkRenderTarget(&getRenderTarget());
-    
     guiAdd(logGui);
     
     setupSystemGui();
     setupRenderGui();
-    rdrGui->addSpacer();
     
+    rdrGui->addSpacer();
     rdrGui->addToggle("Back CULL", &bBackCull);
     rdrGui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     rdrGui->addToggle("Front CULL", &bFrontCull);
@@ -320,7 +330,10 @@ void ofx3DPro::setupCoreGuis(){
     
     backgroundSet(new UIBackground());
     
-    guiAdd(fog);
+    cameraSet(new UIEasyCamera());
+    cameraEnable();
+    
+//    guiAdd(fog);
     materialAdd( "MATERIAL" );
     
     setupLightingGui();
@@ -328,23 +341,19 @@ void ofx3DPro::setupCoreGuis(){
 }
 
 void ofx3DPro::cameraSet(UICamera *_cam){
+    
     if(camera != NULL){
-        
         for(int i = 0; i<guis.size(); i++){
-            if (guis[i]->getName() == "CAMERA" || guis[i]->getName() == "EASYCAM" || guis[i]->getName() == "GAMECAM"){
+            if (guis[i]->getName() == "CAMERA"){
                 guis.erase(guis.begin()+i);
                 break;
             }
         }
-        
-        delete camera;
-        camera = NULL;
     }
     
-    camera = _cam;
+    camera = UICameraReference(_cam);
     guiAdd(*_cam);
     camera->loadLocations(getDataPath()+"cameras/");
-    logGui.linkCamera(camera);
 }
 
 void ofx3DPro::cameraEnable(bool enable){
@@ -355,23 +364,18 @@ void ofx3DPro::cameraEnable(bool enable){
 
 void ofx3DPro::backgroundSet(UIBackground *_bg){
     ofx2DPro::backgroundSet(_bg);
-    fog.linkColor(background);
+//    fog.linkColor(background);
 }
 
 void ofx3DPro::setupLightingGui(){
     bSmoothLighting = true;
     bEnableLights = true;
-    globalAmbientColor = new float[4];
-    globalAmbientColor[0] = 0.5;
-    globalAmbientColor[1] = 0.5;
-    globalAmbientColor[2] = 0.5;
-    globalAmbientColor[3] = 1.0;
-    
+
     UIReference tmp( new ofxUISuperCanvas("LIGHT", guiTemplate) );
     lightsGui = tmp;
     lightsGui->copyCanvasStyle(guiTemplate);
     lightsGui->copyCanvasProperties(guiTemplate);
-    lightsGui->setName("LightSettings");
+    lightsGui->setName("LIGHT");
     lightsGui->setPosition(guis[guis.size()-1]->getRect()->x+guis[guis.size()-1]->getRect()->getWidth()+1, 0);
     lightsGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
     
@@ -387,10 +391,10 @@ void ofx3DPro::setupLightingGui(){
     float length = (lightsGui->getGlobalCanvasWidth()-lightsGui->getWidgetSpacing()*5)/3.;
     float dim = lightsGui->getGlobalSliderHeight();
     lightsGui->addLabel("GLOBAL AMBIENT COLOR", OFX_UI_FONT_SMALL);
-    lightsGui->addMinimalSlider("R", 0.0, 1.0, &globalAmbientColor[0], length, dim)->setShowValue(false);
+    lightsGui->addMinimalSlider("R", 0.0, 1.0, &(globalAmbientColor.r), length, dim)->setShowValue(false);
     lightsGui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    lightsGui->addMinimalSlider("G", 0.0, 1.0, &globalAmbientColor[1], length, dim)->setShowValue(false);
-    lightsGui->addMinimalSlider("B", 0.0, 1.0, &globalAmbientColor[2], length, dim)->setShowValue(false);
+    lightsGui->addMinimalSlider("G", 0.0, 1.0, &(globalAmbientColor.g), length, dim)->setShowValue(false);
+    lightsGui->addMinimalSlider("B", 0.0, 1.0, &(globalAmbientColor.b), length, dim)->setShowValue(false);
     lightsGui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     lightsGui->autoSizeToFitWidgets();
     ofAddListener(lightsGui->newGUIEvent,this,&ofx3DPro::guiLightingEvent);
@@ -399,12 +403,8 @@ void ofx3DPro::setupLightingGui(){
 
 void ofx3DPro::guiLightingEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
-    if(name == "R"){
-        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbientColor);
-    } else if(name == "G"){
-        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbientColor);
-    } else if(name == "B"){
-        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbientColor);
+    if(name == "R" || name == "G" || name == "B"){
+        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, &globalAmbientColor.r);
     }
 }
 
@@ -416,9 +416,9 @@ void ofx3DPro::lightAdd( string _name, ofLightType _type ){
 
 string ofx3DPro::cursorIsOverLight(){
     if(bEnableLights){
-        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-            if ( it->second->distance(cursor.world) < 10 ){
-                return it->first;
+        for( auto& it : lights ){
+            if ( it.second->distance(cursor.world) < 10 ){
+                return it.first;
             }
         }
     }
@@ -428,17 +428,17 @@ string ofx3DPro::cursorIsOverLight(){
 
 void ofx3DPro::lightsBegin(){
     ofEnableLighting();
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbientColor);
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, &globalAmbientColor.r);
     ofSetSmoothLighting(bSmoothLighting);
     
-    for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-        it->second->enable();
+    for( auto& it : lights ){
+        it.second->enable();
     }
 }
 
 void ofx3DPro::lightsEnd(){
-    for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-        it->second->disable();
+    for( auto& it : lights ){
+        it.second->disable();
     }
     ofDisableLighting();
 }
@@ -448,19 +448,20 @@ void ofx3DPro::lightsDraw(){
         ofPushStyle();
         ofDisableLighting();
         string overLight = cursorIsOverLight();
-        for(map<string, UILightReference>::iterator it = lights.begin(); it != lights.end(); ++it){
-            it->second->draw();
-            if( overLight == it->first){
+            
+        for( auto& it : lights ){
+            it.second->draw();
+            if( overLight == it.first){
                 
                 ofPushMatrix();
                 ofPushStyle();
                 ofNoFill();
                 float pulse = abs(sin(ofGetElapsedTimef()));
-                ofColor color = it->second->getColor();
+                ofColor color = it.second->getColor();
                 color.setBrightness(background->getUIBrightness()*255);
                 ofSetColor( color, pulse*255);
-                ofTranslate( it->second->getPosition() );
-                float size = it->second->getPosition().distance(getCameraRef().getPosition())*0.1;
+                ofTranslate( it.second->getPosition() );
+                float size = it.second->getPosition().distance(getCameraRef().getPosition())*0.1;
                 camera->billboard();
                 ofSetLineWidth(2);
                 ofEllipse(0,0, size, size);
@@ -486,25 +487,19 @@ void ofx3DPro::materialAdd( string _name ){
 
 //------------------------------------------------------ Save & Load + CAMERA
 
-void ofx3DPro::guiLoad(){
-    ofx2DPro::guiLoad();
-    camera->load(getDataPath()+"Presets/Working/"+"current.cam");
+void ofx3DPro::guiLoad(string _presetName){
+    ofx2DPro::guiLoad(_presetName);
+    camera->load(getDataPath()+"Presets/"+_presetName+"/"+"current.cam");
 }
 
-void ofx3DPro::guiSave(){
-    ofx2DPro::guiSave();
-    camera->save(getDataPath()+"Presets/Working/"+"current.cam");
-}
-
-void ofx3DPro::guiLoadPresetFromPath(string presetPath){
-    cout << "PRESET PATH: " << presetPath << endl;
-    ofx2DPro::guiLoadPresetFromPath(presetPath);
+void ofx3DPro::guiLoadFromPath(string presetPath){
+    ofx2DPro::guiLoadFromPath(presetPath);
     camera->load(presetPath+"/current.cam");
-    ofx2DPro::guiLoadPresetFromPath(presetPath);
+//    ofx2DPro::guiLoadFromPath(presetPath);
 }
 
-void ofx3DPro::guiSavePreset(string presetName){
-    ofx2DPro::guiSavePreset(presetName);
+void ofx3DPro::guiSave(string presetName){
+    ofx2DPro::guiSave(presetName);
 
     camera->save(getDataPath()+"Presets/"+presetName+"/current.cam");
     

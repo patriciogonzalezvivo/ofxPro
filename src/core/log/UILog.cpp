@@ -15,9 +15,6 @@ UILog::UILog(){
 #else
     dataPath = "";
 #endif
-    
-    camera = NULL;
-    
     bRecording = false;
     
     lastPicture = "";

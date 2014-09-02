@@ -11,6 +11,24 @@
 class aPoint : public ofPoint {
 public:
     
+    aPoint():
+    vel(0.0f,0.0f,0.0f),
+    acc(0.0f,0.0f,0.0f)
+    {
+        x = 0.0f;
+        y = 0.0f;
+        z = 0.0f;
+    }
+    
+    aPoint(const float &_x, const float &_y, const float &_z):
+    vel(0.0f,0.0f,0.0f),
+    acc(0.0f,0.0f,0.0f)
+    {
+        x = _x;
+        y = _y;
+        z = _z;
+    }
+    
     virtual void goTo(const ofPoint &_target, float _speed = 0.1){
         if( ((ofPoint)*this) != _target){
             

@@ -7,6 +7,24 @@
 
 #include "ofx2DPro.h"
 
+ofx2DPro::ofx2DPro():
+bPlaying(false),
+doublClickThreshold(0.2),
+currentPresetName("Working"),
+bDebug(false),
+bRenderSystem(true),
+bUpdateSystem(true)
+{
+    guiTemplate = new ofxUISuperCanvas(ofToUpper(getSystemName()));
+    guiTemplate->setName("TEMPLATE");
+    guiTemplate->setWidgetFontSize(OFX_UI_FONT_SMALL);
+    
+    setupNumViewports(1);
+};
+
+ofx2DPro::~ofx2DPro(){
+};
+
 string ofx2DPro::getDataPath(){
 #ifdef TARGET_OSX
     
@@ -43,12 +61,6 @@ void ofx2DPro::setup(){
         }
     }
     
-    ofSetSphereResolution(30);
-    
-    doublClickThreshold = 0.2;
-    
-    setupNumViewports(1);
-    
     selfSetup();
     setupCoreGuis();
     selfSetupGuis();
@@ -58,10 +70,6 @@ void ofx2DPro::play(){
     
     if (!bPlaying){
         selfBegin();
-        
-        bDebug = false;
-        bRenderSystem = true;
-        bUpdateSystem = true;
         
 #ifdef TARGET_RASPBERRY_PI
         consoleListener.setup(this);
@@ -76,6 +84,8 @@ void ofx2DPro::play(){
         guiLoad();
         guiHide();
         
+        bRenderSystem = true;
+        bUpdateSystem = true;
         bPlaying = true;
     }
 }
@@ -187,8 +197,8 @@ void ofx2DPro::exit(ofEventArgs & args){
 void ofx2DPro::keyPressed(ofKeyEventArgs & args){
     
     if (bGui){
-        for(vector<UIReference>::iterator it = guis.begin(); it != guis.end(); ++it){
-            if((*it)->hasKeyboardFocus()){
+        for (auto &it : guis) {
+            if(it->hasKeyboardFocus()){
                 return;
             }
         }
@@ -224,7 +234,7 @@ void ofx2DPro::keyPressed(ofKeyEventArgs & args){
 #endif
         switch (args.key){
             case 's':
-                guiSavePreset(currentPresetName);
+                guiSave(currentPresetName);
                 logGui.screenShot(currentPresetName);
                 break;
             case 'S':{
@@ -233,10 +243,8 @@ void ofx2DPro::keyPressed(ofKeyEventArgs & args){
 #else
                 string presetName = ofSystemTextBoxDialog("Save Preset As", currentPresetName);
 #endif
-                if(presetName != ""){
-                    guiSavePreset(presetName);
-                    currentPresetName = presetName;
-                }
+                guiSave(presetName);
+                currentPresetName = presetName;
             }
                 break;
             case 'r':{
@@ -276,8 +284,8 @@ void ofx2DPro::keyReleased(ofKeyEventArgs & args){
 
 bool ofx2DPro::cursorIsOverGUI(){
     if (bGui){
-        for(int i = 0; i < guis.size(); i++){
-            if(guis[i]->isHit(ofGetMouseX(), ofGetMouseY())){
+        for(auto &it: guis){
+            if(it->isHit(ofGetMouseX(), ofGetMouseY())){
                 return true;
             }
         }
@@ -332,11 +340,6 @@ void ofx2DPro::setupCoreGuis(){
 }
 
 void ofx2DPro::setupGui(){
-    
-    guiTemplate = new ofxUISuperCanvas(ofToUpper(getSystemName()));
-    guiTemplate->setName("TEMPLATE");
-    guiTemplate->setWidgetFontSize(OFX_UI_FONT_SMALL);
-    
     UIReference tmp( new ofxUISuperCanvas(getSystemName(), guiTemplate) );
     gui = tmp;
     ofxUIFPS *fps = gui->addFPS();
@@ -386,17 +389,15 @@ void ofx2DPro::guiEvent(ofxUIEventArgs &e){
 #else
 			string presetName = ofSystemTextBoxDialog("Save Preset As", currentPresetName);
 #endif
-            if(presetName != ""){
-                guiSavePreset(presetName);
-				currentPresetName = presetName;
-            }
+            guiSave(presetName);
+            currentPresetName = presetName;
         }
     } else if(name == "LOAD"){
         ofxUIButton *b = (ofxUIButton *) e.widget;
         if(b->getValue()){
             ofFileDialogResult result = ofSystemLoadDialog("Load Visual System Preset Folder", true, getDataPath()+"Presets/");
             if(result.bSuccess && result.fileName.length()){
-                guiLoadPresetFromPath(result.filePath);
+                guiLoadFromPath(result.filePath);
             } else {
                 guiLoad();
             }
@@ -409,7 +410,7 @@ void ofx2DPro::guiEvent(ofxUIEventArgs &e){
         ofxUIToggle *t = (ofxUIToggle *) e.widget;
         if(t != NULL){
             if(t->getValue()){
-                guiLoadPresetFromName(name);
+                guiLoad(name);
             }
         }
     }
@@ -483,19 +484,15 @@ void ofx2DPro::setupRenderGui(){
 
 void ofx2DPro::backgroundSet(UIBackground *_bg){
     if(background != NULL){
-        
         for(int i = 0; i<guis.size(); i++){
             if (guis[i]->getName() == "BACKGROUND"){
                 guis.erase(guis.begin()+i);
                 break;
             }
         }
-        
-        delete background;
-        background = NULL;
     }
     
-    background = _bg;
+    background = UIBackgroundReference(_bg);
     background->linkUIs( &guis );
     guiAdd( *background );
 }
@@ -511,17 +508,12 @@ void ofx2DPro::guiAllEvents(ofxUIEventArgs &e){
 
 // LOAD
 //
-void ofx2DPro::guiLoad(){
-    for(int i = 0; i < guis.size(); i++){
-        guis[i]->loadSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
-    }
-}
 
-void ofx2DPro::guiLoadPresetFromName(string presetName){
-    guiLoadPresetFromPath(getDataPath()+"Presets/"+ presetName);
+void ofx2DPro::guiLoad(string presetName){
+    guiLoadFromPath(getDataPath()+"Presets/"+presetName);
 }
     
-void ofx2DPro::guiLoadPresetFromPath(string presetPath){
+void ofx2DPro::guiLoadFromPath(string presetPath){
     for(int i = 0; i < guis.size(); i++){
         guis[i]->loadSettings(presetPath+"/"+guis[i]->getName()+".xml");
     }
@@ -531,14 +523,8 @@ void ofx2DPro::guiLoadPresetFromPath(string presetPath){
 
 //  SAVE
 //
-void ofx2DPro::guiSave(){
-    for(int i = 0; i < guis.size(); i++){
-        guis[i]->saveSettings(getDataPath()+"Presets/Working/"+guis[i]->getName()+".xml");
-    }
-}
 
-
-void ofx2DPro::guiSavePreset(string presetName){
+void ofx2DPro::guiSave(string presetName){
     ofDirectory dir;
     string presetDirectory = getDataPath()+"Presets/"+presetName+"/";
     if(!dir.doesDirectoryExist(presetDirectory)){
@@ -687,19 +673,16 @@ ofFbo& ofx2DPro::getRenderTarget(int _viewNumber){
 }
     
 void ofx2DPro::selfPostDraw(){
-    int offsetX = ofx2DPro::getRenderTarget().getWidth();
-    for(int i=0;i<renderTargets.size();i++){
+    int offsetX = 0;
+    for (auto &it : renderTargets) {
         if(!renderFlipped){
-            ofx2DPro::getRenderTarget(i).draw(offsetX*i
-                                                 , 0
-                                                 , ofx2DPro::getRenderTarget(i).getWidth()
-                                                 , ofx2DPro::getRenderTarget(i).getHeight());
+            it.draw(offsetX,0.0,
+                    it.getWidth(),it.getHeight());
         } else {
-            ofx2DPro::getRenderTarget(i).draw(offsetX*i
-                                                 , ofx2DPro::getRenderTarget(i).getHeight()
-                                                 , ofx2DPro::getRenderTarget(i).getWidth()
-                                                 , -ofx2DPro::getRenderTarget(i).getHeight());
+            it.draw(offsetX,it.getHeight(),
+                    it.getWidth(),-it.getHeight());
         }
+        offsetX += it.getWidth();
     }
 }
 

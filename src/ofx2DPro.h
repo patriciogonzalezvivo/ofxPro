@@ -41,8 +41,8 @@ class ofx2DPro {
 #endif
 public:
     
-	ofx2DPro():background(NULL),bPlaying(false){};
-	virtual ~ofx2DPro(){};
+	ofx2DPro();
+	virtual ~ofx2DPro();
 	
 	//--------------------- VIRTUAL CLASSES TO EDIT
     //
@@ -117,18 +117,17 @@ public:
 	virtual void mousePressed(ofMouseEventArgs & args);
 	virtual void mouseReleased(ofMouseEventArgs & args);
     
+    virtual void    guiLoad(string presetName = "Working");
+    virtual void    guiLoadFromPath(string presetPath);
+    virtual void    guiSave(string presetName = "Working");
+    virtual void    guiShow();
+    virtual void    guiHide();
+    virtual void    guiToggle();
+    
 protected:
     
     //  GENERAL UI stuff
     //
-    virtual void    guiLoad();
-    virtual void    guiLoadPresetFromName(string presetName);
-    virtual void    guiLoadPresetFromPath(string presetPath);
-    virtual void    guiSave();
-    virtual void    guiSavePreset(string presetName);
-    virtual void    guiShow();
-    virtual void    guiHide();
-    virtual void    guiToggle();
     virtual void    guiArrange( int _order_type );
     virtual void    guiAdd(UIClass &_UIClass);
     virtual void    guiEvent(ofxUIEventArgs &e);
@@ -175,7 +174,7 @@ protected:
     //  BACKGROUND GUI
     //
     virtual void    backgroundSet(UIBackground *_bg);
-    UIBackground    *background;
+    UIBackgroundReference background;
     
     //  LOG GUI
     //

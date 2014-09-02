@@ -60,4 +60,6 @@ protected:
     bool            bMouse;
 };
 
+typedef shared_ptr<UICamera> UICameraReference;
+
 

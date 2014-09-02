@@ -19,7 +19,6 @@ public:
     UILog();
 
     void    linkDataPath(string _path){dataPath=_path;}
-    void    linkCamera(UICamera *_camera){camera=_camera;};
     void    linkRenderTarget(ofBaseHasTexture *_tex);
     
     string  getClassName(){return "LOG";};
@@ -41,7 +40,6 @@ protected:
     void    uploadCompleted(string &_result);
     vector<FileUploader*> uploadingFiles;
     
-    UICamera        *camera;
     ofBaseHasTexture *renderTarget;
     ofPixels        pixels;
     string          dataPath;

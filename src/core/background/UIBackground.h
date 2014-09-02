@@ -33,3 +33,5 @@ protected:
     
     vector<UIReference> *guis;
 };
+
+typedef shared_ptr<UIBackground> UIBackgroundReference;

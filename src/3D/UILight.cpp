@@ -23,16 +23,17 @@
  **********************************************************************************/
 #include "UILight.h"
 
-UILight::UILight(){
+UILight::UILight():
+position(0.0f,0.0f,0.0f),
+oriTarget(0.0f,0.0f,0.0f),
+orientation(0.0f,0.0f,0.0f),
+ambient(.5f,.5f,.5f,1.f),
+diffuse(.5f,.5f,.5f,1.f),
+specular(.5f,.5f,.5f,1.f),
+spotCutOff(45.0f),
+exponent(0.0f)
+{
     light.setup();
-    position.set(0.0f,0.0f,0.0f);
-    oriTarget.set(0.0f,0.0f,0.0f);
-    orientation.set(0.0f,0.0f,0.0f);
-    ambient.set(ofFloatColor(.5f,.5f,.5f,1.f));
-    diffuse.set(ofFloatColor(.5f,.5f,.5f,1.f));
-    specular.set(ofFloatColor(.5f,.5f,.5f,1.f));
-    spotCutOff = 45.0f;
-    exponent = 0.0f;
 }
 
 UILight::UILight( string _name, ofLightType _type ){

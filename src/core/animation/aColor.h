@@ -12,16 +12,24 @@
 class aColor : public ofFloatColor{
 public:
     
-    aColor(){
+    aColor():
+    hue(0.0f),sat(0.0f),bri(0.0),alpha(0.0f),
+    HSB(0.0f,0.0f,0.0f)
+    {
         r = 0.0;
         g = 0.0;
         b = 0.0;
         a = 1.0;
-        
-        hue=0.0;
-        sat=0.0;
-        bri=0.0;
-        alpha=1.0;
+    };
+    
+    aColor(const float &_r, const float &_g, const float &_b, const float &_a):
+    hue(0.0f),sat(0.0f),bri(0.0),alpha(0.0f),
+    HSB(0.0f,0.0f,0.0f)
+    {
+        r = _r;
+        g = _g;
+        b = _b;
+        a = _a;
     };
     
     virtual void set( ofFloatColor const & _color ){
