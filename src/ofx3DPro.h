@@ -58,8 +58,6 @@ protected:
     
     // CORE
     virtual void setupCoreGuis();
-    
-    virtual void    backgroundSet(UIBackground *_bg);
     virtual string  cursorIsOverLight();
     
     // CAMERA
@@ -70,8 +68,6 @@ protected:
     virtual void    cameraEnable(bool enable=true);
     UICameraReference camera;
     bool            cameraEnabled;
-    
-//    UIFog           fog;
     
     ofPoint         unproject(ofPoint _screen);
     void            unprojectCursor(MovingCursor &_cursor, float _x, float _y);

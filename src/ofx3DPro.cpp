@@ -59,9 +59,7 @@ void ofx3DPro::draw(ofEventArgs & args){
 #endif
             //  Background
             //
-            if ( background != NULL ){
-                background->draw();
-            }
+            background->draw();
             
             //  Start 3D scene
             //
@@ -69,7 +67,6 @@ void ofx3DPro::draw(ofEventArgs & args){
                 if(cameraEnabled){
                     getCameraRef().begin();
                 }
-//                fog.begin();
                 
                 //  Scene Setup
                 //
@@ -136,7 +133,6 @@ void ofx3DPro::draw(ofEventArgs & args){
                 }
                 
                 ofDisableDepthTest();
-//                fog.end();
                 
                 //  Update Mouse
                 //
@@ -328,12 +324,11 @@ void ofx3DPro::setupCoreGuis(){
     rdrGui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     rdrGui->autoSizeToFitWidgets();
     
-    backgroundSet(new UIBackground());
+    backgroundSet(new UIBackground);
     
     cameraSet(new UIEasyCamera());
     cameraEnable();
     
-//    guiAdd(fog);
     materialAdd( "MATERIAL" );
     
     setupLightingGui();
@@ -361,11 +356,6 @@ void ofx3DPro::cameraEnable(bool enable){
 }
 
 //------------------------------------------------------------ 3D SPECIFIC SETUP
-
-void ofx3DPro::backgroundSet(UIBackground *_bg){
-    ofx2DPro::backgroundSet(_bg);
-//    fog.linkColor(background);
-}
 
 void ofx3DPro::setupLightingGui(){
     bSmoothLighting = true;

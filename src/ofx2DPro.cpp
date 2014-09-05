@@ -134,9 +134,7 @@ void ofx2DPro::draw(ofEventArgs & args){
             {
                 //  Background
                 //
-                if ( background != NULL ){
-                    background->draw();
-                }
+                background->draw();
                 
                 //  Draw Scene
                 //
@@ -188,7 +186,7 @@ void ofx2DPro::exit(ofEventArgs & args){
         logGui.record(false);
     }
     
-    guiSave();
+    guiSave("Working");
     guis.clear();
     selfExit();
 }
@@ -483,8 +481,8 @@ void ofx2DPro::setupRenderGui(){
 }
 
 void ofx2DPro::backgroundSet(UIBackground *_bg){
-    if(background != NULL){
-        for(int i = 0; i<guis.size(); i++){
+    if(background.get() != NULL){
+        for(int i = 0; i< guis.size(); i++){
             if (guis[i]->getName() == "BACKGROUND"){
                 guis.erase(guis.begin()+i);
                 break;
@@ -525,6 +523,9 @@ void ofx2DPro::guiLoadFromPath(string presetPath){
 //
 
 void ofx2DPro::guiSave(string presetName){
+    
+    cout << "Saving " << presetName << endl;    
+    
     ofDirectory dir;
     string presetDirectory = getDataPath()+"Presets/"+presetName+"/";
     if(!dir.doesDirectoryExist(presetDirectory)){

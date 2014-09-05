@@ -18,7 +18,7 @@ typedef shared_ptr<ofxUISuperCanvas> UIReference;
 class UIClass {
 public:
 
-    UIClass(){};
+    UIClass();
     virtual ~UIClass();
 
     virtual string      getClassName(){return "GUIClass_DEFAULT";};
@@ -36,5 +36,8 @@ protected:
     virtual void        addUIColor(string _NAME, aColor *_color);
     
     UIReference         gui;
+    
+private:
+    bool    bInit;
 };
 

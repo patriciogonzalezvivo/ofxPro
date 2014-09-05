@@ -13,27 +13,35 @@
 
 #include "UIMaterial.h"
 
-UIMaterial::UIMaterial(){
-    diffuse.set(ofFloatColor(0.8f, 0.8f, 0.8f, 1.0f));
-    specular.set(ofFloatColor(0.0f, 0.0f, 0.0f, 1.0f));
-    ambient.set(ofFloatColor(0.2f, 0.2f, 0.2f, 1.0f));
-    emissive.set(ofFloatColor(0.0f, 0.0f, 0.0f, 1.0f));
-    shininess = 0.2;
+UIMaterial::UIMaterial():
+diffuse(0.8f, 0.8f, 0.8f, 1.0f),
+ambient(0.0f, 0.0f, 0.0f, 1.0f),
+specular(0.2f, 0.2f, 0.2f, 1.0f),
+emissive(0.0f, 0.0f, 0.0f, 1.0f),
+name("MATERIAL"),
+prev_diffuse(0.0,0.0,0.0,1.0), prev_diffuse_back(0.0,0.0,0.0,1.0),
+prev_ambient(0.0,0.0,0.0,1.0), prev_ambient_back(0.0,0.0,0.0,1.0),
+prev_specular(0.0,0.0,0.0,1.0), prev_specular_back(0.0,0.0,0.0,1.0),
+prev_emissive(0.0,0.0,0.0,1.0), prev_emissive_back(0.0,0.0,0.0,1.0),
+prev_shininess(0.2), prev_shininess_back(0.2),
+shininess(0.2)
+{
 
-    name = "MATERIAL";
 };
 
-UIMaterial::UIMaterial(string _name){
-    diffuse.set(ofFloatColor(0.8f, 0.8f, 0.8f, 1.0f));
-    specular.set(ofFloatColor(0.0f, 0.0f, 0.0f, 1.0f));
-    ambient.set(ofFloatColor(0.2f, 0.2f, 0.2f, 1.0f));
-    emissive.set(ofFloatColor(0.0f, 0.0f, 0.0f, 1.0f));
-    shininess = 0.2;
-
-    setName(_name);
-};
-
-UIMaterial::~UIMaterial(){
+UIMaterial::UIMaterial(string _name):
+diffuse(0.8f, 0.8f, 0.8f, 1.0f),
+ambient(0.0f, 0.0f, 0.0f, 1.0f),
+specular(0.2f, 0.2f, 0.2f, 1.0f),
+emissive(0.0f, 0.0f, 0.0f, 1.0f),
+name(_name),
+prev_diffuse(0.0,0.0,0.0,1.0), prev_diffuse_back(0.0,0.0,0.0,1.0),
+prev_ambient(0.0,0.0,0.0,1.0), prev_ambient_back(0.0,0.0,0.0,1.0),
+prev_specular(0.0,0.0,0.0,1.0), prev_specular_back(0.0,0.0,0.0,1.0),
+prev_emissive(0.0,0.0,0.0,1.0), prev_emissive_back(0.0,0.0,0.0,1.0),
+prev_shininess(0.2), prev_shininess_back(0.2),
+shininess(0.2)
+{
 };
 
 void UIMaterial::operator = (ofMaterial &_mat){

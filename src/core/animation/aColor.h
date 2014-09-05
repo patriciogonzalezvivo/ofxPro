@@ -13,12 +13,12 @@ class aColor : public ofFloatColor{
 public:
     
     aColor():
-    hue(0.0f),sat(0.0f),bri(0.0),alpha(0.0f),
-    HSB(0.0f,0.0f,0.0f)
+    hue(1.0f),sat(0.1f),bri(0.1),alpha(1.0f),
+    HSB(1.0f,0.1f,0.1f)
     {
-        r = 0.0;
-        g = 0.0;
-        b = 0.0;
+        r = 1.0;
+        g = 1.0;
+        b = 1.0;
         a = 1.0;
     };
     

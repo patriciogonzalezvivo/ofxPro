@@ -7,8 +7,13 @@
 
 #include "UIClass.h"
 
+UIClass::UIClass():
+bInit(false)
+{
+};
+
 UIClass::~UIClass(){
-    if (gui != NULL){
+    if (bInit){
         gui->disable();
         ofRemoveListener(gui->newGUIEvent, this, &UIClass::guiEvent);
     }
@@ -16,26 +21,29 @@ UIClass::~UIClass(){
 
 UIReference UIClass::getUIReference( ofxUICanvas *_parent ){
 
-    UIReference tmp( new ofxUISuperCanvas(getClassName() , _parent) );
-    gui = tmp;
+    if(!bInit){
+        UIReference tmp( new ofxUISuperCanvas(getClassName() , _parent) );
+        gui = tmp;
+        
+        gui->copyCanvasStyle( _parent );
+        gui->copyCanvasProperties( _parent );
+        gui->setName( getClassName() );
+        gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
+        
+        ofxUIToggle *toggle = gui->addToggle("ENABLE", &bEnable);
+        toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
+        gui->resetPlacer();
+        gui->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
+        gui->addWidgetToHeader(toggle);
+        gui->addSpacer();
+        
+        setupUI();
+        
+        gui->autoSizeToFitWidgets();
+        ofAddListener(gui->newGUIEvent, this, &UIClass::guiEvent);
+        bInit = true;
+    }
     
-    gui->copyCanvasStyle( _parent );
-    gui->copyCanvasProperties( _parent );
-    gui->setName( getClassName() );
-    gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
-
-    ofxUIToggle *toggle = gui->addToggle("ENABLE", &bEnable);
-    toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
-    gui->resetPlacer();
-    gui->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
-    gui->addWidgetToHeader(toggle);
-    gui->addSpacer();
-    
-    setupUI();
-
-    gui->autoSizeToFitWidgets();
-    ofAddListener(gui->newGUIEvent, this, &UIClass::guiEvent);
-
     return gui;
 }
 

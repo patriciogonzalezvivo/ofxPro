@@ -9,7 +9,7 @@
 #include "Cursor.h"
 
 //----------
-Cursor3D::Cursor3D() {
+Cursor3D::Cursor3D(){
     memset(this->button, 0, 3);
     this->captured = false;
     this->worldValid = false;

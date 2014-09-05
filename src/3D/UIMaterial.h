@@ -19,7 +19,7 @@ class UIMaterial : public UIClass {
 public:
 	UIMaterial();
     UIMaterial( string _name );
-	virtual ~UIMaterial();
+	virtual ~UIMaterial(){}
 	
     void    set(ofMaterial &_mat);
     void    setName( string _name );
@@ -42,11 +42,6 @@ protected:
     void    setupUI();
     void    guiEvent(ofxUIEventArgs &e);
     string  name;
-    
-//	ofFloatColor diffuse;
-//	ofFloatColor ambient;
-//	ofFloatColor specular;
-//	ofFloatColor emissive;
 
 	ofFloatColor prev_diffuse, prev_diffuse_back;
 	ofFloatColor prev_ambient, prev_ambient_back;

@@ -14,6 +14,7 @@ class UIFog : public UIClass{
 public:
     
     UIFog();
+    virtual ~UIFog(){};
     
     void    setupUI();
     void    setColor( ofColor _color );

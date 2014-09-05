@@ -26,6 +26,7 @@ public:
 class MovingCursor : public Cursor3D {
 public:
     MovingCursor();
+    virtual ~MovingCursor(){};
     
     void start(int button);
     void end(int button);

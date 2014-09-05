@@ -7,8 +7,13 @@
 
 #include "UIFog.h"
 
-UIFog::UIFog(){
-    bgColor = NULL;
+UIFog::UIFog():
+hue(NULL),sat(NULL),bri(NULL),
+bgColor(NULL),
+color(0.,0.,0.,1.),
+bMachBackground(true)
+{
+
 }
 
 void UIFog::setupUI(){

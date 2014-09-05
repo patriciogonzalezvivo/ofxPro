@@ -15,9 +15,7 @@ public:
     vel(0.0f,0.0f,0.0f),
     acc(0.0f,0.0f,0.0f)
     {
-        x = 0.0f;
-        y = 0.0f;
-        z = 0.0f;
+        x = y = z = 0.1f;
     }
     
     aPoint(const float &_x, const float &_y, const float &_z):
@@ -32,20 +30,16 @@ public:
     virtual void goTo(const ofPoint &_target, float _speed = 0.1){
         if( ((ofPoint)*this) != _target){
             
-            ofPoint _steer;
-            ofPoint desired = _target - *this;
+            ofPoint desired = _target - (ofPoint)*this;
             float d = desired.length();
             if (d > 0.001) {
                 if (d < 1.0)
                     desired *= (d);
-                
-                _steer = desired - vel;
-                acc += _steer;
+                acc += desired - vel;
                 update(_speed);
             } else {
-                _steer = ofPoint(0,0,0);
-                acc *= 0;
-                vel *= 0;
+                acc *= 0.;
+                vel *= 0.;
                 set(_target);
             }
         }
