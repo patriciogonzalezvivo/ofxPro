@@ -179,11 +179,10 @@ void ofx3DPro::exit(ofEventArgs & args){
         logGui.record(false);
     }
     
-    ofx3DPro::guiSave(currentPresetName);
+    ofx3DPro::guiSave("Working");
     
-    lights.clear();
     materials.clear();
-    
+    lights.clear();
     guis.clear();
     selfExit();
 }
