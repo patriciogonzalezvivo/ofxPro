@@ -22,11 +22,8 @@ void eraseSemiColon(string &_word){
     }
 }
 
-UIShader::UIShader(){
-    fragFilename = "";
-    vertFilename = "";
-    geomFilename = "";
-    
+UIShader::UIShader():fragFilename(""),vertFilename(""),geomFilename(""),fragmentShader(""),vertexShader(""),geometryShader(""),geomOutCount(6),geomInType(GL_POINTS),geomOutType(GL_TRIANGLES),bVertex(false),bGeometry(false){
+
     vertexShader = "#version 120\n\n";
     
     vertexShader += "varying vec4 ambientGlobal, eyeSpaceVertexPos;\n";
@@ -54,15 +51,6 @@ UIShader::UIShader(){
 	fragmentShader += "\tvec4 color = texture2DRect( tex, st );\n";
 	fragmentShader += "\tgl_FragColor = gl_Color;\n";
     fragmentShader += "}\n";
-    
-    geometryShader = "";
-    
-    geomInType = GL_POINTS;
-    geomOutType = GL_TRIANGLES;
-    geomOutCount = 6;
-    
-    bVertex = false;
-    bGeometry = false;
 }
 
 void UIShader::setupUI(){
@@ -119,11 +107,11 @@ bool UIShader::load(string _name){
     
     if(geomFile.exists()){
         return load(_name+".frag",_name+".vert",_name+".geom");
-    } else if (geometryShader.size() > 2){
+    } else if (geometryShader.length() > 2){
         ofBuffer geom;
         geom.append(geometryShader);
         ofBufferToFile(_name+".geom", geom);
-        
+
         return load(_name+".frag",_name+".vert",_name+".geom");
     } else {
         return load(_name+".frag",_name+".vert");

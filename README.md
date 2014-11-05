@@ -21,7 +21,13 @@ Require by core:
 
 	git clone --depth 1 https://github.com/rezaali/ofxUI.git
 
+**NOTE:** currently there is a bug with the last version of ```ofxUI```. A work around is to detach the head of it to ```a04c286```
+
+	cd openFrameworks/addons/ofxUI
+	git checkout a04c286
+
 ## USE
+
 
 
 ## Hot Keys
