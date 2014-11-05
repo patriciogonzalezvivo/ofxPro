@@ -196,8 +196,8 @@ ofPoint ofx3DPro::unproject(ofPoint _screen){
     glReadPixels(_screen.x, _screen.y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
     getRenderTarget().getDepthTexture().unbind();
     
-    if (depth == 1.0f) {
-        return ofPoint(0,0,0);
+    if (depth == 1.0f || depth <= 0.0f) {
+        return ofPoint(0.,0.,0.);
     } else {
         GLdouble c[3];
         gluUnProject(_screen.x, _screen.y, depth, matM, matP, viewport, c, c+1, c+2);
