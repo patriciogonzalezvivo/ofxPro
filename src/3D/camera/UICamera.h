@@ -34,6 +34,8 @@ public:
     
     ofCamera*       getCameraPtn(){return camera;};
     ofMatrix4x4     getGlobalTransformMatrix(string _camLocName);
+    
+    virtual float   getPct();
 
     virtual void    enableMouseInput(){bMouse = true;};
     virtual void    disableMouseInput(){bMouse = false;};

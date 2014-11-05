@@ -139,6 +139,10 @@ CameraLocation UICamera::getCameraLocation(){
     return rta;
 }
 
+float UICamera::getPct(){
+    return pct;
+}
+
 void UICamera::update(ofEventArgs& args){
     if(bEnable&&camera!= NULL){
         if(pct>0.1){

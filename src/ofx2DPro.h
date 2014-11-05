@@ -5,7 +5,7 @@
 //
 //
 
-#define PACKED_APP
+//#define PACKED_APP
 
 #pragma once
 #include "ofMain.h"
